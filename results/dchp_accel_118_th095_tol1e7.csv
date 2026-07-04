@@ -1,0 +1,2 @@
+﻿load_scale,fmax_scale,threshold,method,crossover,coeff_tol,milp_obj,round,n_lines,obj,gap,elapsed,build_time,solver_time,n_viol_lines,max_violation,exact_by_check
+1.2,0.8,0.95,2,0,1e-07,2609091.7552858265,1,5,2608545.014349719,546.7409361074679,40.48669242858887,3.753977300133556,35.657999992370605,0,0.0,1

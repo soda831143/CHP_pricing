@@ -1,0 +1,2 @@
+max_loading_pct,critical_line,critical_hour,critical_flow_MW,critical_limit_MW,binding_line_hours
+100.0,29,19,-32.0,32.0,8

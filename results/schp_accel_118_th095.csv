@@ -1,0 +1,2 @@
+﻿load_scale,fmax_scale,threshold,n_lines,milp_obj,obj,gap,n_states,n_arcs,total_time,build_time,p2_time,dual_time,n_viol_lines,max_violation,exact_by_check
+1.2,0.8,0.95,5,2609091.7552858265,2608545.014879157,546.7404066696763,24316,186154,14.656216144561768,0.5701332092285156,4.620807647705078,9.465275287628174,0,2.287265488121193e-09,1
