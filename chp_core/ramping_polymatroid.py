@@ -98,20 +98,29 @@ class CHPConditionalGPolymatroid(ConditionalGPolymatroid):
         return u_min, u_max
 
     def _build_prefix_bounds(self):
-        x_min, x_max = super()._build_prefix_bounds()
+        # Rebuild the complete prefix recursion under the CHP start/stop
+        # limits.  Calling the base implementation and patching only its end
+        # points is insufficient: its recursion has already propagated the
+        # ordinary R_up start bound through all later prefix bounds, and it has
+        # already imposed the ordinary R_down bound at the terminal point.
         n = self._n
-        # 修正点 3：x_max[0] = min(P_max, SU_ramp)
-        # 基类设 x_max[0] = min(P_max, R_up)，但 CHP 中启动上界是 SU_ramp
-        x_max[0] = min(x_max[0], self._SU_ramp)
-        # 确保可行性：x_min[0] ≤ x_max[0]
-        # x_min[0] = P_min（基类已设），x_max[0] ≥ P_min 由 SU_ramp = max(SU_ramp, P_min) 保证
-        x_min[0] = min(x_min[0], x_max[0])
+        x_min = np.zeros(n, dtype=float)
+        x_max = np.zeros(n, dtype=float)
+        x_min[0] = self.params.P_min
+        x_max[0] = min(self.params.P_max, self._SU_ramp)
 
-        # 修正点 2：停机约束，最后时段总出力 ≤ SD_ramp。
-        # 仅当区间后确有停机事件时施加；若 b = T-1，则没有期末停机。
+        for tau in range(1, n):
+            x_min[tau] = max(x_min[tau - 1] - self.params.R_down,
+                             self.params.P_min)
+            x_max[tau] = min(x_max[tau - 1] + self.params.R_up,
+                             self.params.P_max)
+
+        # Only a genuine in-horizon shutdown is subject to SD_ramp.  For an
+        # interval ending at the pricing-horizon boundary, no artificial
+        # terminal shutdown cap is introduced.
         if self._include_shutdown:
             x_max[n - 1] = min(x_max[n - 1], self._SD_ramp)
-            x_min[n - 1] = min(x_min[n - 1], x_max[n - 1])
+        x_min[n - 1] = min(x_min[n - 1], x_max[n - 1])
         return x_min, x_max
 
 

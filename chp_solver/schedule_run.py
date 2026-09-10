@@ -189,8 +189,18 @@ class ScheduleRunMILP:
                 p_prev = p[i, t - 1] if t > 0 else float(g.initial_power)
                 u_prev = u[i, t - 1] if t > 0 else int(g.initial_status)
 
-                model.addConstr(su[i, t] >= u[i, t] - u_prev, name=f"su_logic_{i}_{t}")
-                model.addConstr(sd[i, t] >= u_prev - u[i, t], name=f"sd_logic_{i}_{t}")
+                # Exact state transition.  Lower bounds alone allow a unit
+                # that remains online to set a fictitious startup indicator
+                # to one and buy additional SU-ramp capability.  The equality
+                # and mutual-exclusion row make su/sd physical events.
+                model.addConstr(
+                    su[i, t] - sd[i, t] == u[i, t] - u_prev,
+                    name=f"state_transition_{i}_{t}",
+                )
+                model.addConstr(
+                    su[i, t] + sd[i, t] <= 1,
+                    name=f"transition_exclusive_{i}_{t}",
+                )
 
                 model.addConstr(
                     p[i, t] - p_prev <= g.R_up * u_prev + g.SU_ramp * su[i, t],

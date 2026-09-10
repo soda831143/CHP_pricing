@@ -13,7 +13,7 @@ from models.network import build_single_node_from_case6ww, build_single_node_fro
 from chp_core.graph_builder import DAGBuilder
 from chp_solver.chp_master_lp import _VarIndex
 
-def test_lp_structure(case_label, T=24, n_seg=3):
+def _check_lp_structure(case_label, T=24, n_seg=3):
     print(f"\n=== Test: case{case_label}, T={T}, segments={n_seg} ===")
     
     if case_label == "6":
@@ -75,9 +75,15 @@ def test_lp_structure(case_label, T=24, n_seg=3):
     print(f"  [PASS] All static checks passed for case{case_label} seg={n_seg} T={T}")
     return True
 
+
+def test_lp_structure():
+    for case_label in ("6", "30"):
+        for n_seg in (1, 3):
+            assert _check_lp_structure(case_label, T=24, n_seg=n_seg)
+
 if __name__ == "__main__":
     for T in [24]:
         for case in ["6", "30"]:
             for n_seg in [1, 3]:
-                test_lp_structure(case, T=T, n_seg=n_seg)
+                _check_lp_structure(case, T=T, n_seg=n_seg)
     print("\n=== ALL STATIC CHECKS PASSED ===")

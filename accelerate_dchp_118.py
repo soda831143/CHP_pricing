@@ -59,10 +59,24 @@ def candidate_lines_from_schedule(network: PTDFNetwork, p_dispatch: np.ndarray, 
     return np.sort(lines), max_util
 
 
-def solve_subset(gens, full_network: PTDFNetwork, lines: np.ndarray, method: int, crossover: int, coeff_tol: float):
+def solve_subset(
+    gens,
+    full_network: PTDFNetwork,
+    lines: np.ndarray,
+    method: int,
+    crossover: int,
+    coeff_tol: float,
+    use_output_vars: bool,
+):
     net = subset_network(full_network, lines, coeff_tol=coeff_tol)
     t0 = time.time()
-    chp = PrimalCHPLP(gens, net, method=method, crossover=crossover)
+    chp = PrimalCHPLP(
+        gens,
+        net,
+        method=method,
+        crossover=crossover,
+        use_output_vars=use_output_vars,
+    )
     _, obj, ok = chp.solve()
     elapsed = time.time() - t0
     p_lp = chp.lp_dispatch()
@@ -83,13 +97,24 @@ def solve_subset(gens, full_network: PTDFNetwork, lines: np.ndarray, method: int
     }
 
 
-def run_constraint_generation(gens, network: PTDFNetwork, init_lines: np.ndarray, method: int, crossover: int, coeff_tol: float, max_rounds: int):
+def run_constraint_generation(
+    gens,
+    network: PTDFNetwork,
+    init_lines: np.ndarray,
+    method: int,
+    crossover: int,
+    coeff_tol: float,
+    max_rounds: int,
+    use_output_vars: bool,
+):
     selected = set(int(x) for x in init_lines)
     rows = []
     final = None
     for rnd in range(1, max_rounds + 1):
         lines = np.array(sorted(selected), dtype=int)
-        res = solve_subset(gens, network, lines, method, crossover, coeff_tol)
+        res = solve_subset(
+            gens, network, lines, method, crossover, coeff_tol, use_output_vars
+        )
         res["round"] = rnd
         rows.append(res)
         final = res
@@ -114,6 +139,7 @@ def main():
     parser.add_argument("--crossover", type=int, default=0)
     parser.add_argument("--coeff-tol", type=float, default=0.0)
     parser.add_argument("--max-rounds", type=int, default=5)
+    parser.add_argument("--use-output-vars", action="store_true")
     parser.add_argument("--out", default="results/dchp_accel_118.csv")
     args = parser.parse_args()
 
@@ -127,7 +153,14 @@ def main():
     for threshold in args.thresholds:
         init_lines, max_util = candidate_lines_from_schedule(network, p_uc, threshold, args.min_lines)
         cg_rows, final = run_constraint_generation(
-            gens, network, init_lines, args.method, args.crossover, args.coeff_tol, args.max_rounds
+            gens,
+            network,
+            init_lines,
+            args.method,
+            args.crossover,
+            args.coeff_tol,
+            args.max_rounds,
+            args.use_output_vars,
         )
         for res in cg_rows:
             row = {
@@ -138,6 +171,7 @@ def main():
                 "method": args.method,
                 "crossover": args.crossover,
                 "coeff_tol": args.coeff_tol,
+                "use_output_vars": int(args.use_output_vars),
                 "milp_obj": milp_obj,
                 "round": res["round"],
                 "n_lines": res["n_lines"],

@@ -133,8 +133,17 @@ class UnitSelfScheduleMILP:
         for t in range(T):
             u_prev = u[t - 1] if t > 0 else float(params.initial_status)
             p_prev = p[t - 1] if t > 0 else float(params.initial_power)
-            model.addConstr(su[t] >= u[t] - u_prev, name=f"su_logic_{t}")
-            model.addConstr(sd[t] >= u_prev - u[t], name=f"sd_logic_{t}")
+            # Enforce physical startup/shutdown events exactly.  With only
+            # lower bounds, su=1 could be selected while u remains one in
+            # order to relax the startup-ramp row.
+            model.addConstr(
+                su[t] - sd[t] == u[t] - u_prev,
+                name=f"state_transition_{t}",
+            )
+            model.addConstr(
+                su[t] + sd[t] <= 1,
+                name=f"transition_exclusive_{t}",
+            )
             model.addConstr(
                 p[t] - p_prev <= params.R_up * u_prev + params.SU_ramp * su[t],
                 name=f"ramp_up_{t}",

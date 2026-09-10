@@ -12,17 +12,12 @@ Phase 2：极点抓取神谕（Vertex Oracle）。
   3. p* = cumsum(v*)
 
 **分段线性成本** (is_single_segment == False)：
-  Groenevelt 块级贪心（1991），在扩展索引空间 Ω = {(τ, k)} 上操作。
-  每个元素 (τ, k) 代表"在时段 τ 填充第 k 块"，边际利润 = λ*_{a+τ} - slope_k。
-  
-  由于 Groenevelt 贪心需要正确处理"为使高价时段达到最大出力而强制填充
-  负利润相邻时段"（爬坡传播）的情形，我们的实现采用以下策略：
-    (a) 区间规模小（典型 n ≤ 24，K ≤ 10）→ 精确小型区间 LP（Gurobi，毫秒级）
-    (b) 无 Gurobi 时 → 退化为 Abel 单段近似
-
-  **LP 正确性保证**：区间 LP 直接最大化分段线性凹函数 Σ_τ profit_pwl(p_τ)，
-  约束为爬坡多面体，是凸优化，结果严格等价于 Groenevelt 精确解。
-  LP 规模为 n + n·K 变量、O(n·K) 约束，对典型 n=24、K=3 的算例极快。
+  PWL profit is separable and concave, so one call to the linear
+  g-polymatroid greedy routine is not, in general, exact.  The production
+  route therefore uses the exact compact interval LP.  A certificate-based
+  conditional-greedy diagnostic is retained below for internal verification
+  of the linear g-polymatroid oracle, but it is not used to generate reported
+  settlement quantities.
 
 会计对齐保证 uplift ≥ 0
 -----------------------
@@ -64,21 +59,28 @@ class VertexOracle:
         a: int,
         b: int,
         lambda_star: np.ndarray,
+        *,
+        initial_online: bool = False,
+        c_fix: Optional[float] = None,
     ) -> Tuple[np.ndarray, float]:
         """
         在固定开机区间 [a, b] 内求最优出力极点。
 
         单段 → Abel 变换 + greedy_maximize（快速精确）
-        多段 → 区间 LP（精确，Gurobi 毫秒级）
+        多段 → exact compact interval LP
         """
-        if params.is_single_segment:
+        # Initial-online intervals use the previous physical output and normal
+        # ramp bounds at the left boundary.  The generic interval LP handles
+        # that boundary exactly for both single- and multi-segment costs.
+        if params.is_single_segment and not initial_online:
             return VertexOracle._solve_interval_single_segment(
                 params, a, b, lambda_star
             )
-        else:
-            return VertexOracle._solve_interval_pwl_lp(
-                params, a, b, lambda_star
-            )
+        return VertexOracle._solve_interval_pwl_lp(
+            params, a, b, lambda_star,
+            initial_online=initial_online,
+            c_fix=c_fix,
+        )
 
     # ── 单段线性：Abel 变换 + 广义多面体贪心 ─────────────────────────────────
 
@@ -117,6 +119,144 @@ class VertexOracle:
 
         return p_interval, W_e
 
+    # ── 多段线性：带证书的条件贪心 ──────────────────────────────────────────
+
+    @staticmethod
+    def _solve_interval_pwl_conditional_greedy(
+        params: GeneratorParams,
+        a: int,
+        b: int,
+        lambda_star: np.ndarray,
+        *,
+        c_fix: Optional[float] = None,
+        tolerance: float = 1e-10,
+        max_iterations: int = 200,
+    ) -> Optional[Tuple[np.ndarray, float, int, float]]:
+        """Solve a normal PWL ON interval by a certified greedy-oracle loop.
+
+        Let ``h(p)`` denote interval revenue minus convex PWL variable cost.
+        At a feasible iterate ``p``, a supergradient ``d`` of ``h`` gives the
+        global upper bound
+
+        ``h(y) - h(p) <= d @ (y - p)`` for every feasible ``y``.
+
+        The right-hand maximizer is obtained exactly by the linear
+        g-polymatroid greedy oracle after the usual cumulative-coordinate
+        transformation.  Consequently, a nonpositive linearization gap is a
+        sufficient certificate of global optimality for the concave PWL
+        interval problem.  Exact one-dimensional line search keeps every
+        iterate feasible and evaluates all PWL breakpoints on the segment.
+
+        The method is intentionally conservative: it returns ``None`` rather
+        than an uncertified point.  It is an internal diagnostic and does not
+        replace the production PWL interval LP.  It is not applied to
+        initially-online intervals because their inherited-output boundary
+        requires the more general interval formulation.
+        """
+        if params.is_single_segment:
+            return None
+
+        n = b - a + 1
+        prices = np.asarray(lambda_star[a : b + 1], dtype=float)
+        has_shutdown = b < params.T - 1
+        poly = RampingPolymatroid(
+            params, a, b, include_shutdown=has_shutdown
+        )
+
+        def _linear_greedy_profile(marginal_profit: np.ndarray) -> np.ndarray:
+            # p_tau = sum_{j<=tau} v_j.  Hence the coefficient of v_j is
+            # the suffix sum of the output-coordinate linear coefficient.
+            weights = np.cumsum(marginal_profit[::-1])[::-1]
+            profile = np.cumsum(poly.greedy_maximize(weights))
+            return np.asarray(profile, dtype=float)
+
+        def _profit(profile: np.ndarray) -> float:
+            return float(np.dot(prices, profile) -
+                         _compute_pwl_var_cost(params, profile))
+
+        def _supergradient(profile: np.ndarray) -> np.ndarray:
+            """Return one valid supergradient of PWL interval profit."""
+            q = np.asarray(profile, dtype=float) - params.P_min
+            segments = params.get_pwl_segments()
+            slopes = np.asarray([slope for slope, _ in segments], dtype=float)
+            widths = np.asarray([width for _, width in segments], dtype=float)
+            breaks = np.concatenate(([0.0], np.cumsum(widths)))
+            marginal_cost = np.empty(n, dtype=float)
+            kink_tol = 1e-8
+
+            for tau, value in enumerate(q):
+                # At an interior breakpoint the convex cost subdifferential is
+                # [s_left, s_right].  Choosing the projection of the price
+                # onto this interval supplies a valid, numerically balanced
+                # supergradient of revenue minus cost.
+                kink = np.flatnonzero(np.abs(breaks[1:-1] - value) <= kink_tol)
+                if kink.size:
+                    right = int(kink[0] + 1)
+                    marginal_cost[tau] = np.clip(
+                        prices[tau], slopes[right - 1], slopes[right]
+                    )
+                    continue
+
+                segment = int(np.searchsorted(breaks[1:], value, side="right"))
+                segment = min(max(segment, 0), len(slopes) - 1)
+                marginal_cost[tau] = slopes[segment]
+
+            return prices - marginal_cost
+
+        def _line_search(profile: np.ndarray, direction: np.ndarray) -> Tuple[float, float]:
+            """Maximize the concave PWL profit on ``profile + alpha*direction``."""
+            q = profile - params.P_min
+            breaks = np.concatenate(
+                ([0.0], np.cumsum([width for _, width in params.get_pwl_segments()]))
+            )
+            candidates = [0.0, 1.0]
+            for q_tau, d_tau in zip(q, direction):
+                if abs(d_tau) <= 1e-12:
+                    continue
+                for breakpoint in breaks:
+                    alpha = (breakpoint - q_tau) / d_tau
+                    if 1e-10 < alpha < 1.0 - 1e-10:
+                        candidates.append(float(alpha))
+
+            best_alpha = 0.0
+            best_value = _profit(profile)
+            for alpha in sorted(set(round(value, 14) for value in candidates)):
+                candidate = profile + alpha * direction
+                value = _profit(candidate)
+                if value > best_value + 1e-9:
+                    best_alpha, best_value = float(alpha), value
+            return best_alpha, best_value
+
+        # A zero-objective greedy vertex is feasible and gives a deterministic
+        # starting point without invoking an LP.
+        profile = _linear_greedy_profile(np.zeros(n, dtype=float))
+        objective_scale = max(
+            1.0,
+            float(np.sum(np.abs(prices)) * max(params.P_max, 1.0)),
+        )
+
+        for iteration in range(1, max_iterations + 1):
+            gradient = _supergradient(profile)
+            oracle_profile = _linear_greedy_profile(gradient)
+            gap = float(np.dot(gradient, oracle_profile - profile))
+            if gap <= tolerance * objective_scale:
+                fixed_cost = c_fix
+                if fixed_cost is None:
+                    fixed_cost = params.interval_fix_cost(
+                        n, include_shutdown=has_shutdown
+                    )
+                return profile, _profit(profile) - float(fixed_cost), iteration, gap
+
+            direction = oracle_profile - profile
+            alpha, candidate_value = _line_search(profile, direction)
+            if alpha <= 1e-10 or candidate_value <= _profit(profile) + 1e-9:
+                # A valid certificate was not reached with the chosen
+                # supergradient.  Preserve exactness by delegating to the LP.
+                return None
+            profile = profile + alpha * direction
+
+        return None
+
     # ── 多段线性：精确区间 LP ─────────────────────────────────────────────────
 
     @staticmethod
@@ -125,6 +265,9 @@ class VertexOracle:
         a: int,
         b: int,
         lambda_star: np.ndarray,
+        *,
+        initial_online: bool = False,
+        c_fix: Optional[float] = None,
     ) -> Tuple[np.ndarray, float]:
         """
         Groenevelt 等价精确解：通过小型 Gurobi LP 求解区间内分段线性利润最大化。
@@ -158,10 +301,14 @@ class VertexOracle:
         model.Params.OutputFlag = 0
         model.Params.Method     = 2   # Barrier，适合小型稠密 LP
 
-        # p[τ] ∈ [P_min, min(P_max, SU_ramp)] (τ=0) or [P_min, P_max] (τ>0)
-        p_ub = [min(params.P_max, params.SU_ramp)] + [params.P_max] * (n - 1)
-        if n > 1:
-            p_ub[-1] = min(p_ub[-1], params.SD_ramp)  # SD_ramp 作用于最后时段
+        # A normal interval begins with a physical start-up and therefore uses
+        # SU_ramp.  An initial-online interval instead ramps from the inherited
+        # initial output using the normal up/down limits.
+        first_ub = params.P_max if initial_online else min(params.P_max, params.SU_ramp)
+        p_ub = [first_ub] + [params.P_max] * (n - 1)
+        has_shutdown = (b < params.T - 1)
+        if has_shutdown:
+            p_ub[-1] = min(p_ub[-1], params.SD_ramp)
 
         p_vars = [
             model.addVar(lb=params.P_min, ub=p_ub[tau], name=f"p_{tau}")
@@ -186,6 +333,9 @@ class VertexOracle:
         for tau in range(1, n):
             model.addConstr(p_vars[tau] - p_vars[tau - 1] <= params.R_up)
             model.addConstr(p_vars[tau - 1] - p_vars[tau] <= params.R_down)
+        if initial_online:
+            model.addConstr(p_vars[0] - params.initial_power <= params.R_up)
+            model.addConstr(params.initial_power - p_vars[0] <= params.R_down)
 
         # 目标：max Σ_τ Σ_k (λ*_{a+τ} - slope_k) * x[k][τ]
         obj = gp.quicksum(
@@ -210,9 +360,12 @@ class VertexOracle:
             segs[k][0] * sum(x_vars[k][tau].X for tau in range(n))
             for k in range(K)
         )
-        has_shutdown = (b < params.T - 1)
-        c_fix = params.interval_fix_cost(n, include_shutdown=has_shutdown)
-        W_e   = revenue - var_cost - c_fix
+        interval_fixed_cost = c_fix
+        if interval_fixed_cost is None:
+            interval_fixed_cost = params.interval_fix_cost(
+                n, include_shutdown=has_shutdown
+            )
+        W_e = revenue - var_cost - float(interval_fixed_cost)
 
         return p_interval, W_e
 
@@ -246,19 +399,56 @@ class VertexOracle:
 
         for iv in on_intervals:
             p_iv, W_e = VertexOracle.solve_interval(
-                params, iv.a, iv.b, lambda_star
+                params,
+                iv.a,
+                iv.b,
+                lambda_star,
+                initial_online=iv.initial_online,
+                c_fix=iv.c_fix,
             )
             interval_profits[(iv.a, iv.b)] = W_e
             interval_outputs[(iv.a, iv.b)] = p_iv
 
         # Step 2：DAG DP 最长路径
         # W_e 已扣除完整 c_fix（含 C_SU），startup_cost_fn 传 0 避免重复扣除。
+        initial_interval_keys = {
+            (iv.a, iv.b) for iv in on_intervals if iv.initial_online
+        }
+        residual_on = max(0, params.T_on_min - int(params.initial_up_time))
+        immediate_shutdown_ok = (
+            params.initial_status == 1
+            and residual_on == 0
+            and params.initial_power <= params.SD_ramp + 1e-8
+        )
+
+        def source_allowed(a: int, b: int) -> bool:
+            if params.initial_status == 0:
+                return True
+            if (a, b) in initial_interval_keys:
+                return True
+            return immediate_shutdown_ok and a >= params.T_off_min
+
+        def source_extra_cost(a: int, b: int) -> float:
+            if params.initial_status == 1 and (a, b) not in initial_interval_keys:
+                return params.cost_sd
+            return 0.0
+
+        if params.initial_status == 0:
+            empty_path_profit: Optional[float] = 0.0
+        elif immediate_shutdown_ok:
+            empty_path_profit = -params.cost_sd
+        else:
+            empty_path_profit = None
+
         dp = DPShortestPath(
             T                = params.T,
             on_intervals     = [(iv.a, iv.b) for iv in on_intervals],
             interval_profits = interval_profits,
             startup_cost_fn  = lambda _: 0.0,
             T_off_min        = params.T_off_min,
+            source_allowed_fn= source_allowed,
+            source_extra_cost_fn=source_extra_cost,
+            empty_path_profit=empty_path_profit,
         )
         best_intervals, max_profit = dp.solve()
 
@@ -269,7 +459,7 @@ class VertexOracle:
         # 若最大利润在数值噪声范围内（< 1e-4 $），视为全停（利润 = 0）。
         # 这防止浮点误差导致"名义上 0 利润"的区间被错误地选为最优轨迹。
         _PROFIT_TOL = 1e-4
-        if max_profit > _PROFIT_TOL:
+        if params.initial_status == 1 or max_profit > _PROFIT_TOL:
             for (a, b) in sorted(best_intervals, key=lambda x: x[0]):
                 u_star[a : b + 1] = 1.0
                 p_star[a : b + 1] = interval_outputs[(a, b)]

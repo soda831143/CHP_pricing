@@ -4,9 +4,12 @@ DAG 构建器：为每台机组枚举合法的 ON 区间与 OFF 弧，
 
 DAG 节点语义
 ------------
-节点 t ∈ {0, 1, ..., T} 表示"机组在时段 t 之前处于 OFF 状态"。
-  - 节点 0：源节点（机组在调度开始前关机，初始状态为 OFF）
-  - 节点 T：汇节点（调度结束）
+代码仍用整数时间边界 t ∈ {0, 1, ..., T} 存储弧端点，但流模型在每个
+内部边界使用两个状态层：
+  - U_t：已完成 OFF 区间，下一段必须为 ON；
+  - D_t：刚结束 ON 区间，下一段必须为 OFF。
+ON 弧从 U 层进入 D 层，OFF 弧从 D 层进入 U 层。主问题使用按弧类型
+交叉的流守恒，因此不允许 ON→ON 或 OFF→OFF 的直接拼接。
 
 DAG 边类型
 ----------
@@ -24,8 +27,9 @@ OFF 弧 (t1, t2)：机组在时段 [t1, t2-1] 内保持关机。
 
 流量守恒
 --------
-对每个内部节点 t ∈ {1,...,T-1}：
-  Σ_{e 进入 t} z_e = Σ_{e 离开 t} z_e
+对每个内部时间边界 t ∈ {1,...,T-1}：
+  Σ进入 t 的 ON 流 = Σ离开 t 的 OFF 流
+  Σ进入 t 的 OFF 流 = Σ离开 t 的 ON 流
 源节点约束：
   Σ_{e 离开 0} z_e = 1
 """
@@ -188,6 +192,7 @@ class DAGBuilder:
         """
         T = params.T
         T_off = params.T_off_min
+        residual_on = max(0, params.T_on_min - int(params.initial_up_time))
 
         # 所有合法的 OFF 弧起始节点（ON 弧的终节点 b+1，加上源节点 0）
         # 所有合法的 OFF 弧终止节点（ON 弧的起始节点 a，加上汇节点 T）
@@ -205,6 +210,12 @@ class DAGBuilder:
                 # 零长度哑弧（t1 = t2 不会出现，gap ≥ 1）
                 c_fix = 0.0
                 if t1 == 0 and params.initial_status == 1:
+                    # An initially-online unit may shut down before period 0
+                    # only after its residual minimum-up obligation has been
+                    # completed.  Otherwise the source must select an
+                    # initial-ON interval of sufficient length.
+                    if residual_on > 0:
+                        continue
                     if params.initial_power > params.SD_ramp + 1e-8:
                         continue
                     if gap < T_off and t2 != T:

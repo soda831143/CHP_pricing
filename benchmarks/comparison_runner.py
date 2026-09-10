@@ -205,11 +205,16 @@ def timed_uplift_under_prices(
     return out
 
 
-def timing_fields(solver, fallback_total: float) -> dict:
+def timing_fields(solver, fallback_total: float, response_time: float = 0.0) -> dict:
+    pricing_time = float(getattr(solver, "total_time", fallback_total))
+    if not np.isfinite(pricing_time):
+        pricing_time = float(fallback_total)
     return {
         "build_time": getattr(solver, "build_time", ""),
         "solver_time": getattr(solver, "solver_time", ""),
-        "total_time": getattr(solver, "total_time", fallback_total),
+        "pricing_time": pricing_time,
+        "response_time": float(response_time),
+        "total_time": pricing_time + float(response_time),
     }
 
 
@@ -230,6 +235,8 @@ def run_comparison(
     xiao_max_states: int = 200000,
     xiao_state_step: float = 0.0,
     chp_solve_time: float = 0.0,
+    chp_build_time: float = float("nan"),
+    chp_solver_time: float = float("nan"),
 ) -> dict:
     """
     运行对比实验，调用选定的基准方法并输出对比表。
@@ -272,9 +279,11 @@ def run_comparison(
             "per_unit":    chp_oracle,
         }
         results["chp"].update({
-            "build_time": "",
-            "solver_time": "",
-            "total_time": chp_solve_time,
+            "build_time": chp_build_time,
+            "solver_time": chp_solver_time,
+            "pricing_time": chp_solve_time,
+            "response_time": chp_oracle.get("oracle_time", 0.0),
+            "total_time": chp_solve_time + chp_oracle.get("oracle_time", 0.0),
             "oracle_time": chp_oracle.get("oracle_time", ""),
         })
 
@@ -306,7 +315,7 @@ def run_comparison(
             "lmp_matrix":  mirp_lmp,
             "per_unit":    mirp_oracle,
         }
-        results["mirp"].update(timing_fields(mirp, mirp_time))
+        results["mirp"].update(timing_fields(mirp, mirp_time, mirp_oracle.get("oracle_time", 0.0)))
         results["mirp"]["oracle_time"] = mirp_oracle.get("oracle_time", "")
 
     # ── Plain Lagrangian-relaxation subgradient benchmark ────────────────
@@ -351,7 +360,9 @@ def run_comparison(
         results["lrp"].update({
             "build_time": "",
             "solver_time": "",
-            "total_time": lr_time,
+            "pricing_time": lr_time,
+            "response_time": lr_oracle.get("oracle_time", 0.0),
+            "total_time": lr_time + lr_oracle.get("oracle_time", 0.0),
             "oracle_time": lr_oracle.get("oracle_time", ""),
         })
 
@@ -393,7 +404,7 @@ def run_comparison(
             "stop_reason": level_out.get("stop_reason", "max_iter"),
             "upper_bound": level_out.get("upper_bound", float("nan")),
         }
-        results["level"].update(timing_fields(level_solver, level_time))
+        results["level"].update(timing_fields(level_solver, level_time, level_oracle.get("oracle_time", 0.0)))
         results["level"]["oracle_time"] = level_oracle.get("oracle_time", "")
 
     def _store_dwp_result(key: str, solver, display_name: str) -> None:
@@ -429,7 +440,7 @@ def run_comparison(
             "converged":    solver.converged,
             "stop_reason":  solver.stop_reason,
         }
-        results[key].update(timing_fields(solver, dwp_time))
+        results[key].update(timing_fields(solver, dwp_time, dwp_oracle.get("oracle_time", 0.0)))
         results[key]["oracle_time"] = dwp_oracle.get("oracle_time", "")
 
     # ── Dantzig-Wolfe / Column Generation ───────────────────────────────
@@ -496,7 +507,7 @@ def run_comparison(
             "n_states":    xiao_solver.n_states,
             "n_arcs":      xiao_solver.n_arcs,
         }
-        results["xiao"].update(timing_fields(xiao_solver, xiao_time))
+        results["xiao"].update(timing_fields(xiao_solver, xiao_time, xiao_oracle.get("oracle_time", 0.0)))
         results["xiao"]["oracle_time"] = xiao_oracle.get("oracle_time", "")
 
     # ── LMP（传统边际电价）────────────────────────────────────────────────
@@ -527,7 +538,7 @@ def run_comparison(
             "lmp_matrix":  lmp_lmp,
             "per_unit":    lmp_oracle,
         }
-        results["lmp"].update(timing_fields(lmp_solver, lmp_time))
+        results["lmp"].update(timing_fields(lmp_solver, lmp_time, lmp_oracle.get("oracle_time", 0.0)))
         results["lmp"]["oracle_time"] = lmp_oracle.get("oracle_time", "")
 
     _print_comparison_table(results, milp_obj, generators, network)

@@ -115,6 +115,8 @@ def run_scenario(name: str) -> tuple[list[dict], list[dict]]:
         lr_max_iter=500,
         lr_verbose=False,
         chp_solve_time=chp_time,
+        chp_build_time=chp.build_time,
+        chp_solver_time=chp.solver_time,
     )
 
     rows: list[dict] = []

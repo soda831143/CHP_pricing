@@ -324,6 +324,7 @@ def run_one(
     chp_feasibility_tol: Optional[float] = None,
     chp_optimality_tol: Optional[float] = None,
     chp_numeric_focus: Optional[int] = None,
+    chp_use_output_vars: bool = False,
 ):
     gens, network = load_case(case, network_mode, T, n_segments, congestion=congestion, fmax_scale=fmax_scale)
     gens = apply_ramp_scenario(gens, ramp_scenario)
@@ -376,6 +377,7 @@ def run_one(
             feasibility_tol=chp_feasibility_tol,
             optimality_tol=chp_optimality_tol,
             numeric_focus=chp_numeric_focus,
+            use_output_vars=chp_use_output_vars,
         )
         chp_lmp, chp_obj, ok = chp.solve()
         chp_time = time.time() - t0
@@ -401,6 +403,8 @@ def run_one(
         xiao_max_states=xiao_max_states,
         xiao_state_step=xiao_state_step,
         chp_solve_time=0.0 if skip_proposed else float(chp_time),
+        chp_build_time=float("nan") if skip_proposed else chp.build_time,
+        chp_solver_time=float("nan") if skip_proposed else chp.solver_time,
     )
     if skip_proposed:
         results.pop("chp", None)
@@ -437,13 +441,24 @@ def run_one(
                     chp.solver_time if key == "chp" and chp is not None
                     else r.get("solver_time", "")
                 ),
-                "total_time": (
-                    chp.total_time if key == "chp" and chp is not None
-                    else r.get("total_time", r["solve_time"])
-                ),
+                "pricing_time": r.get("pricing_time", r["solve_time"]),
+                "response_time": r.get("response_time", r.get("oracle_time", "")),
+                "total_time": r.get("total_time", r["solve_time"]),
                 "schedule_time": milp_time,
                 "chp_time": chp_time if key == "chp" else "",
                 "oracle_time": r.get("oracle_time", ""),
+                "n_variables": (
+                    chp.n_variables if key == "chp" and chp is not None else ""
+                ),
+                "n_constraints": (
+                    chp.n_constraints if key == "chp" and chp is not None else ""
+                ),
+                "n_nonzeros": (
+                    chp.n_nonzeros if key == "chp" and chp is not None else ""
+                ),
+                "primal_violation": (
+                    chp.primal_violation if key == "chp" and chp is not None else ""
+                ),
                 "on_arcs": size["on_arcs"],
                 "off_arcs": size["off_arcs"],
                 "dag_edges": size["dag_edges"],
@@ -497,6 +512,11 @@ def main() -> None:
     parser.add_argument("--chp-feasibility-tol", default=None, type=float)
     parser.add_argument("--chp-optimality-tol", default=None, type=float)
     parser.add_argument("--chp-numeric-focus", default=None, type=int)
+    parser.add_argument(
+        "--chp-use-output-vars",
+        action="store_true",
+        help="Use explicit p_g,t output variables in D-CHP balance/PTDF rows.",
+    )
     parser.add_argument(
         "--ramp-scenarios",
         nargs="+",
@@ -559,6 +579,7 @@ def main() -> None:
                                         args.chp_feasibility_tol,
                                         args.chp_optimality_tol,
                                         args.chp_numeric_focus,
+                                        args.chp_use_output_vars,
                                     )
                                     all_rows.extend(rows)
 

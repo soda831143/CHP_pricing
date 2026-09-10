@@ -1,9 +1,4 @@
-"""Run the current 30-bus fmax-scale benchmark and export paper-style plots.
-
-This script intentionally writes to a dated current-results directory instead of
-``results/paper_main`` so older paper artifacts are not mixed with the current
-data revision.  Only the segment-3 paper methods are exported.
-"""
+"""Run the paper-main 30-bus benchmark and export paper-style tables/plots."""
 
 from __future__ import annotations
 
@@ -35,21 +30,24 @@ FMAX_SCALE = 1.0
 WARM_START_FROM_UC = True
 WARMUP_LOAD_FACTOR = 0.98
 
-OUT_DIR = Path("results/current_30base_seg3")
-FIG_DIR = OUT_DIR / "figures"
+SCRIPT_DIR = Path(__file__).resolve().parent
+PAPER_DIR = SCRIPT_DIR.parent
 
-METHODS = ["lmp", "mirp", "level", "lrp", "dwp", "xiao"]
+OUT_DIR = SCRIPT_DIR / "results" / "paper_main"
+FIG_DIR = PAPER_DIR / "fig"
+
+METHODS = ["lmp", "mirp", "level", "dwp", "dwp_incremental", "xiao"]
 METHOD_LABEL = {
     "lmp": "LMP",
     "mirp": "IRP",
     "level": "LVM",
-    "lrp": "LRP",
     "dwp": "DWP",
+    "dwp_incremental": "DWP-inc",
     "xiao": "S-CHP",
     "chp": "D-CHP",
 }
-PLOT_ORDER = ["lmp", "mirp", "level", "lrp", "dwp", "xiao", "chp"]
-ITERATIVE_METHODS = ["level", "lrp", "dwp"]
+PLOT_ORDER = ["lmp", "mirp", "level", "dwp", "dwp_incremental", "xiao", "chp"]
+ITERATIVE_METHODS = ["level", "dwp", "dwp_incremental"]
 GEN_LABELS = ["G1", "G2", "G3", "G4", "G5", "G6"]
 
 
@@ -119,56 +117,108 @@ def _write_benchmark_table(rows: list[dict]) -> None:
             + r" \\"
         )
     lines.extend([r"\bottomrule", r"\end{tabular}", ""])
-    _write_text(OUT_DIR / f"table_benchmark_results_{CASE_TAG}.tex", "\n".join(lines))
+    text = "\n".join(lines)
+    _write_text(OUT_DIR / f"table_benchmark_results_{CASE_TAG}.tex", text)
+    _write_text(FIG_DIR / "table_benchmark_results.tex", text)
 
 
-def _write_unit_loc_table(rows: list[dict], method: str = "chp") -> None:
-    selected = [row for row in rows if row.get("method") == method]
+def _write_unit_loc_table(rows: list[dict]) -> None:
     lines = [
-        r"\begin{tabular}{lrrr}",
+        r"\begin{tabular}{llrrr}",
         r"\toprule",
-        r"Unit & Scheduled profit (\$) & Best-response profit (\$) & LOC (\$) \\",
+        r"Method & Unit & Scheduled profit (\$) & Best-response profit (\$) & LOC (\$) \\",
         r"\midrule",
     ]
-    for row in selected:
+    for method in PLOT_ORDER:
+        selected = [row for row in rows if row.get("method") == method]
+        if not selected:
+            continue
+        n = len(selected) + 1
+        first = True
+        total_sched = 0.0
+        total_best = 0.0
+        total_loc = 0.0
+        for row in selected:
+            total_sched += float(row.get("scheduled_profit", 0.0))
+            total_best += float(row.get("best_response_profit", 0.0))
+            total_loc += float(row.get("loc", 0.0))
+            method_cell = rf"\multirow{{{n}}}{{*}}{{{METHOD_LABEL[method]}}}" if first else ""
+            first = False
+            lines.append(
+                " & ".join(
+                    [
+                        method_cell,
+                        str(row["unit"]),
+                        _fmt_money(row.get("scheduled_profit")),
+                        _fmt_money(row.get("best_response_profit")),
+                        _fmt_money(row.get("loc")),
+                    ]
+                )
+                + r" \\"
+            )
         lines.append(
             " & ".join(
                 [
-                    str(row["unit"]),
-                    _fmt_money(row.get("scheduled_profit")),
-                    _fmt_money(row.get("best_response_profit")),
-                    _fmt_money(row.get("loc")),
+                    "",
+                    r"\textbf{Total}",
+                    rf"\textbf{{{_fmt_money(total_sched)}}}",
+                    rf"\textbf{{{_fmt_money(total_best)}}}",
+                    rf"\textbf{{{_fmt_money(total_loc)}}}",
                 ]
             )
             + r" \\"
         )
+        if method != PLOT_ORDER[-1]:
+            lines.append(r"\midrule")
     lines.extend([r"\bottomrule", r"\end{tabular}", ""])
-    _write_text(OUT_DIR / f"table_unit_profit_loc_{CASE_TAG}.tex", "\n".join(lines))
+    text = "\n".join(lines)
+    _write_text(OUT_DIR / f"table_unit_profit_loc_{CASE_TAG}.tex", text)
+    _write_text(FIG_DIR / "table_unit_opportunity_cost.tex", text)
 
 
 def _write_ramping_table(rows: list[dict]) -> None:
     lines = [
-        r"\begin{tabular}{lrrrrr}",
+        r"\begin{tabular}{lllrrrr}",
         r"\toprule",
-        r"Ramping case & S-CHP states & S-CHP arcs & D-CHP intervals & Arc growth & Time S/D (s) \\",
+        r"Ramping case & Method & Dominant object & Count & Growth & Total uplift (\$) & Time (s) \\",
         r"\midrule",
     ]
     for row in rows:
+        case = str(row["ramping_case"])
         lines.append(
             " & ".join(
                 [
-                    str(row["ramping_case"]),
-                    _fmt_int(row.get("s_chp_states")),
+                    rf"\multirow{{2}}{{*}}{{{case}}}",
+                    "S-CHP",
+                    "state-transition arcs",
                     _fmt_int(row.get("s_chp_transition_arcs")),
-                    _fmt_int(row.get("d_chp_on_intervals")),
                     f"{_fmt_float(row.get('s_chp_arc_growth'), 1)}$\\times$",
-                    f"{_fmt_float(row.get('s_chp_time_s'), 2)}/{_fmt_float(row.get('d_chp_time_s'), 2)}",
+                    _fmt_money(row.get("s_chp_total_uplift")),
+                    _fmt_float(row.get("s_chp_time_s"), 2),
                 ]
             )
             + r" \\"
         )
+        lines.append(
+            " & ".join(
+                [
+                    "",
+                    "D-CHP",
+                    "ON-interval arcs",
+                    _fmt_int(row.get("d_chp_on_intervals")),
+                    f"{_fmt_float(row.get('d_chp_arc_growth'), 1)}$\\times$",
+                    _fmt_money(row.get("d_chp_total_uplift")),
+                    _fmt_float(row.get("d_chp_time_s"), 2),
+                ]
+            )
+            + r" \\"
+        )
+        if row is not rows[-1]:
+            lines.append(r"\midrule")
     lines.extend([r"\bottomrule", r"\end{tabular}", ""])
-    _write_text(OUT_DIR / f"table_ramping_diagnostic_{CASE_TAG}.tex", "\n".join(lines))
+    text = "\n".join(lines)
+    _write_text(OUT_DIR / f"table_ramping_diagnostic_{CASE_TAG}.tex", text)
+    _write_text(FIG_DIR / "table_ramping_diagnostic.tex", text)
 
 
 def _history_rows(method: str, history, exact_value: float) -> list[dict]:
@@ -188,27 +238,7 @@ def _history_rows(method: str, history, exact_value: float) -> list[dict]:
                     "rel_gap": item.get("rel_gap", ""),
                 }
             )
-    elif method == "lrp":
-        iters = history.get("iter", [])
-        elapsed = history.get("elapsed_s", [])
-        best_dual = history.get("best_dual", history.get("dual_bound", []))
-        grad_norm = history.get("grad_norm", [])
-        step = history.get("step", [])
-        for idx, k in enumerate(iters):
-            obj = float(best_dual[idx])
-            rows.append(
-                {
-                    "method": method,
-                    "iteration": k,
-                    "elapsed_s": elapsed[idx] if idx < len(elapsed) else "",
-                    "objective": obj,
-                    "gap_to_exact": exact_value - obj,
-                    "trace": "best_lagrangian_dual",
-                    "grad_norm": grad_norm[idx] if idx < len(grad_norm) else "",
-                    "step": step[idx] if idx < len(step) else "",
-                }
-            )
-    elif method == "dwp":
+    elif method in {"dwp", "dwp_incremental"}:
         for item in history:
             obj = float(
                 item.get(
@@ -403,8 +433,8 @@ def _plot_price_profiles(price_rows: list[dict]) -> None:
         "lmp": "#4d4d4d",
         "mirp": "#0072B2",
         "level": "#009E73",
-        "lrp": "#CC79A7",
         "dwp": "#D55E00",
+        "dwp_incremental": "#CC79A7",
         "xiao": "#56B4E9",
         "chp": "#000000",
     }
@@ -412,8 +442,8 @@ def _plot_price_profiles(price_rows: list[dict]) -> None:
         "lmp": (0, (1, 1)),
         "mirp": "--",
         "level": "-.",
-        "lrp": (0, (3, 1, 1, 1)),
         "dwp": "-",
+        "dwp_incremental": (0, (3, 1, 1, 1)),
         "xiao": (0, (2, 2)),
         "chp": "-",
     }
@@ -421,8 +451,8 @@ def _plot_price_profiles(price_rows: list[dict]) -> None:
         "lmp": "o",
         "mirp": "s",
         "level": "^",
-        "lrp": "v",
         "dwp": "D",
+        "dwp_incremental": "v",
         "xiao": "x",
         "chp": ".",
     }
@@ -489,8 +519,8 @@ def _plot_price_profiles(price_rows: list[dict]) -> None:
         bbox_to_anchor=(0.5, 1.02),
     )
     fig.tight_layout(rect=(0, 0, 1, 0.96))
-    fig.savefig(FIG_DIR / f"prices_schedule_all_units_{CASE_TAG}_seg3.pdf", bbox_inches="tight")
-    fig.savefig(FIG_DIR / f"prices_schedule_all_units_{CASE_TAG}_seg3.png", dpi=240, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "prices_schedule_all_units_30bus.pdf", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "prices_schedule_all_units_30bus.png", dpi=240, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -527,8 +557,8 @@ def _plot_convergence(summary_rows: list[dict], history_rows: list[dict], exact_
 
     colors = {
         "level": "#009E73",
-        "lrp": "#CC79A7",
         "dwp": "#D55E00",
+        "dwp_incremental": "#CC79A7",
         "lmp": "#4d4d4d",
         "mirp": "#0072B2",
         "xiao": "#56B4E9",
@@ -539,8 +569,8 @@ def _plot_convergence(summary_rows: list[dict], history_rows: list[dict], exact_
 
     final_offsets = {
         "level": (8, -15),
-        "lrp": (8, 12),
         "dwp": (-42, 8),
+        "dwp_incremental": (-42, -18),
     }
     for method in ITERATIVE_METHODS:
         mrows = sorted([r for r in rows if r["method"] == method], key=lambda r: float(r["elapsed_s"]))
@@ -607,8 +637,8 @@ def _plot_convergence(summary_rows: list[dict], history_rows: list[dict], exact_
     ax.grid(True, linewidth=0.35, alpha=0.35)
     ax.legend(ncol=2, fontsize=8, frameon=False)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / f"convergence_time_{CASE_TAG}_seg3.pdf", bbox_inches="tight")
-    fig.savefig(FIG_DIR / f"convergence_time_{CASE_TAG}_seg3.png", dpi=240, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "convergence_profiles_30bus.pdf", bbox_inches="tight")
+    fig.savefig(FIG_DIR / "convergence_profiles_30bus.png", dpi=240, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -636,7 +666,7 @@ def _run_case(ramp_scenario: str, methods: list[str]) -> tuple:
     milp = ScheduleRunMILP(gens, network)
     p_dispatch, u_dispatch, milp_obj = milp.solve()
 
-    chp = PrimalCHPLP(gens, network)
+    chp = PrimalCHPLP(gens, network, use_output_vars=True)
     t0 = time.time()
     chp_lmp, chp_obj, ok = chp.solve()
     chp_solve_time = time.time() - t0
@@ -658,6 +688,8 @@ def _run_case(ramp_scenario: str, methods: list[str]) -> tuple:
         lr_max_iter=500,
         lr_verbose=False,
         chp_solve_time=chp_solve_time,
+        chp_build_time=chp.build_time,
+        chp_solver_time=chp.solver_time,
     )
     return gens, network, p_dispatch, u_dispatch, milp_obj, chp_obj, chp, results
 
@@ -684,6 +716,7 @@ def _ramping_diagnostic_rows(base_results: dict, base_chp: PrimalCHPLP) -> list[
                 "s_chp_arc_growth": (
                     xiao_arcs / base_xiao_arcs if base_xiao_arcs > 0 else ""
                 ),
+                "d_chp_arc_growth": 1.0,
                 "s_chp_time_s": xiao.get("solve_time", ""),
                 "d_chp_time_s": dchp.get("solve_time", ""),
                 "s_chp_total_uplift": xiao.get("total_uplift", ""),

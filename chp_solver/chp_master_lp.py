@@ -75,9 +75,11 @@ class _VarIndex:
     """记录所有变量的列偏移，供稀疏矩阵构建使用。"""
 
     def __init__(self, dags: List[GeneratorDAG],
-                 use_pwl: bool = False) -> None:
+                 use_pwl: bool = False,
+                 use_output_vars: bool = False) -> None:
         self.dags    = dags
         self.use_pwl = use_pwl
+        self.use_output_vars = use_output_vars
 
         # ── z 变量偏移 ────────────────────────────────────────────────────────
         self.z_on_offset:  List[List[int]] = []
@@ -115,6 +117,16 @@ class _VarIndex:
                 self.cvar_offset.append([])
 
         self.n_cvar  = col - self.n_z - self.n_v
+        self.p_offset: List[List[int]] = []
+        if use_output_vars:
+            for dag in dags:
+                p_cols = list(range(col, col + dag.T))
+                col += dag.T
+                self.p_offset.append(p_cols)
+        else:
+            for dag in dags:
+                self.p_offset.append([])
+        self.n_p = col - self.n_z - self.n_v - self.n_cvar
         self.n_total = col
 
     def z_on(self, i: int, k: int) -> int:
@@ -134,6 +146,10 @@ class _VarIndex:
 # ─────────────────────────────────────────────────────────────────────────────
 # 主问题 LP 类
 # ─────────────────────────────────────────────────────────────────────────────
+
+def _idx_p(idx: _VarIndex, i: int, tau: int) -> int:
+    return idx.p_offset[i][tau]
+
 
 class PrimalCHPLP:
     """
@@ -155,6 +171,7 @@ class PrimalCHPLP:
         feasibility_tol: Optional[float] = None,
         optimality_tol: Optional[float] = None,
         numeric_focus: Optional[int] = None,
+        use_output_vars: bool = False,
     ) -> None:
         self.generators = generators
         if isinstance(network, np.ndarray):
@@ -170,7 +187,12 @@ class PrimalCHPLP:
 
         # 若任意一台机组使用分段线性成本，启用 cvar 变量
         self._use_pwl = any(not g.is_single_segment for g in generators)
-        self._idx     = _VarIndex(self.dags, use_pwl=self._use_pwl)
+        self._use_output_vars = bool(use_output_vars)
+        self._idx     = _VarIndex(
+            self.dags,
+            use_pwl=self._use_pwl,
+            use_output_vars=self._use_output_vars,
+        )
         self._balance_constrs = None
         self._model           = None
         self._solution_x      = None
@@ -183,6 +205,10 @@ class PrimalCHPLP:
         self.build_time = float("nan")
         self.solver_time = float("nan")
         self.total_time = float("nan")
+        self.n_variables = 0
+        self.n_constraints = 0
+        self.n_nonzeros = 0
+        self.primal_violation = float("nan")
 
     # ── 对外接口 ──────────────────────────────────────────────────────────────
 
@@ -266,7 +292,6 @@ class PrimalCHPLP:
         A_ub_csr, b_ub = self._build_ineq_constraints(idx)
 
         # ── 5. Gurobi 求解 ─────────────────────────────────────────────────
-        build_done = time.perf_counter()
         model = gp.Model("PrimalCHP")
         model.Params.OutputFlag = 0
         model.Params.Method     = self.method
@@ -287,11 +312,17 @@ class PrimalCHPLP:
             ineq_constrs = model.addMConstr(A_ub_csr, x, '<', b_ub, name="ineq")
 
         model.setMObjective(None, c_obj, 0.0, sense=GRB.MINIMIZE)
+        model.update()
+        build_done = time.perf_counter()
+        self.build_time = build_done - solve_start
+        self.n_variables = int(model.NumVars)
+        self.n_constraints = int(model.NumConstrs)
+        self.n_nonzeros = int(model.NumNZs)
         model.optimize()
         self._model = model
-        self.build_time = build_done - solve_start
         self.solver_time = float(getattr(model, "Runtime", float("nan")))
         self.total_time = time.perf_counter() - solve_start
+        self.primal_violation = float(getattr(model, "ConstrVio", float("nan")))
 
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
             self._ptdf_alpha = None
@@ -308,11 +339,11 @@ class PrimalCHPLP:
         all_pi_eq  = np.array(eq_constrs.Pi)
         balance_pi = all_pi_eq[n_flow + n_src : n_flow + n_src + n_bal]   # (T,)
 
-        # 符号修正：barrier 内点法有时返回符号相反的对偶
+        # 保持原实现的价格清理口径。
         if np.all(balance_pi <= 1e-8) and np.any(balance_pi < -1e-6):
             balance_pi = -balance_pi
         balance_pi = np.where(np.abs(balance_pi) < 1e-8, 0.0, balance_pi)
-        balance_pi = np.clip(balance_pi, 0.0, None)    # 能量价格非负
+        balance_pi = np.clip(balance_pi, 0.0, None)
         lambda_t   = balance_pi                         # (T,)
 
         N_bus = self.network.N_bus
@@ -347,8 +378,8 @@ class PrimalCHPLP:
             # LMP[n,t] = λ[t] + Σ_l PTDF[l,n] * (α[l,t] − β[l,t])
             # (alpha ≤ 0, beta ≤ 0; their difference gives the congestion component)
             lmp_matrix = (
-                lambda_t[np.newaxis, :]                 # (1, T) broadcast
-                + PTDF.T @ (alpha - beta_)              # (N_bus, T)
+                lambda_t[np.newaxis, :]
+                + PTDF.T @ (alpha - beta_)
             )
 
         self._balance_constrs = eq_constrs
@@ -373,6 +404,14 @@ class PrimalCHPLP:
             raise RuntimeError("Call solve() before lp_dispatch().")
 
         idx = self._idx
+        if idx.use_output_vars:
+            return np.array(
+                [
+                    [self._solution_x[_idx_p(idx, i, tau)] for tau in range(self.T)]
+                    for i in range(self.N)
+                ],
+                dtype=float,
+            )
         p_lp = np.zeros((self.N, self.T), dtype=float)
         for i, dag in enumerate(self.dags):
             for k, iv in enumerate(dag.on_intervals):
@@ -395,21 +434,34 @@ class PrimalCHPLP:
         b_eq_list: List[float] = []
         row = 0
 
-        # (A) 节点流量守恒（内部节点 t=1,...,T-1）
+        # (A) 状态分层流量守恒（内部时间边界 t=1,...,T-1）
+        #
+        # Integer endpoints are retained for compact storage, but each time
+        # boundary has two conceptual states:
+        #   D_t: an ON interval has just ended; the next arc must be OFF;
+        #   U_t: an OFF interval has just ended; the next arc must be ON.
+        # These two incidence rows are the node balances of that state-split
+        # DAG.  They exclude both ON→ON ramp resets and redundant OFF→OFF
+        # chains while preserving total flow conservation and total
+        # unimodularity.
         for i, dag in enumerate(self.dags):
             for t in range(1, dag.T):
+                # D_t balance: incoming ON = outgoing OFF.
                 for k, iv in enumerate(dag.on_intervals):
                     if iv.node_to == t:
                         rows.append(row); cols.append(idx.z_on(i, k)); data.append(1.0)
+                for k, arc in enumerate(dag.off_arcs):
+                    if arc.t_from == t:
+                        rows.append(row); cols.append(idx.z_off(i, k)); data.append(-1.0)
+                b_eq_list.append(0.0); row += 1
+
+                # U_t balance: incoming OFF = outgoing ON.
                 for k, arc in enumerate(dag.off_arcs):
                     if arc.t_to == t:
                         rows.append(row); cols.append(idx.z_off(i, k)); data.append(1.0)
                 for k, iv in enumerate(dag.on_intervals):
                     if iv.node_from == t:
                         rows.append(row); cols.append(idx.z_on(i, k)); data.append(-1.0)
-                for k, arc in enumerate(dag.off_arcs):
-                    if arc.t_from == t:
-                        rows.append(row); cols.append(idx.z_off(i, k)); data.append(-1.0)
                 b_eq_list.append(0.0); row += 1
 
         n_flow = row
@@ -431,28 +483,60 @@ class PrimalCHPLP:
         # 多节点 LMP 通过 λ_t + 线路拥塞修正项（后处理）计算，而非通过节点等式对偶。
         for tau in range(self.T):
             for i, dag in enumerate(self.dags):
-                for k, iv in enumerate(dag.on_intervals):
-                    if iv.a <= tau <= iv.b:
-                        local_end = tau - iv.a
-                        if iv.initial_online:
-                            rows.append(row)
-                            cols.append(idx.z_on(i, k))
-                            data.append(dag.params.initial_power)
-                        for local_k in range(local_end + 1):
-                            rows.append(row)
-                            cols.append(idx.v(i, k, local_k))
-                            data.append(1.0)
+                if idx.use_output_vars:
+                    rows.append(row)
+                    cols.append(_idx_p(idx, i, tau))
+                    data.append(1.0)
+                else:
+                    for k, iv in enumerate(dag.on_intervals):
+                        if iv.a <= tau <= iv.b:
+                            local_end = tau - iv.a
+                            if iv.initial_online:
+                                rows.append(row)
+                                cols.append(idx.z_on(i, k))
+                                data.append(dag.params.initial_power)
+                            for local_k in range(local_end + 1):
+                                rows.append(row)
+                                cols.append(idx.v(i, k, local_k))
+                                data.append(1.0)
             b_eq_list.append(float(self.network.sys_demand[tau]))
             row += 1
 
         n_bal  = self.T
+
+        if idx.use_output_vars:
+            for i, dag in enumerate(self.dags):
+                for tau in range(self.T):
+                    rows.append(row)
+                    cols.append(_idx_p(idx, i, tau))
+                    data.append(1.0)
+                    for k, iv in enumerate(dag.on_intervals):
+                        if iv.a <= tau <= iv.b:
+                            local_end = tau - iv.a
+                            if iv.initial_online:
+                                rows.append(row)
+                                cols.append(idx.z_on(i, k))
+                                data.append(-dag.params.initial_power)
+                            for local_k in range(local_end + 1):
+                                rows.append(row)
+                                cols.append(idx.v(i, k, local_k))
+                                data.append(-1.0)
+                    b_eq_list.append(0.0)
+                    row += 1
+
         n_rows = row
         n_cols = idx.n_total
 
         A_eq_csr = sp.coo_matrix(
             (data, (rows, cols)), shape=(n_rows, n_cols)
         ).tocsr()
-        return A_eq_csr, np.array(b_eq_list, dtype=float), n_flow, n_src, n_bal
+        return (
+            A_eq_csr,
+            np.array(b_eq_list, dtype=float),
+            n_flow,
+            n_src,
+            n_bal,
+        )
 
     # ── 内部：不等式约束构建 ──────────────────────────────────────────────
 
@@ -590,6 +674,11 @@ class PrimalCHPLP:
                         coeff = float(ptdf_row[i])
                         if abs(coeff) < 1e-10:
                             continue
+                        if idx.use_output_vars:
+                            rows.append(row)
+                            cols.append(_idx_p(idx, i, tau))
+                            data.append(coeff)
+                            continue
                         for k, iv in enumerate(dag.on_intervals):
                             if iv.a <= tau <= iv.b:
                                 local_end = tau - iv.a
@@ -607,6 +696,11 @@ class PrimalCHPLP:
                     for i, dag in enumerate(self.dags):
                         coeff = float(ptdf_row[i])
                         if abs(coeff) < 1e-10:
+                            continue
+                        if idx.use_output_vars:
+                            rows.append(row)
+                            cols.append(_idx_p(idx, i, tau))
+                            data.append(-coeff)
                             continue
                         for k, iv in enumerate(dag.on_intervals):
                             if iv.a <= tau <= iv.b:

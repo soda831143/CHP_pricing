@@ -89,6 +89,9 @@ class DPShortestPath:
         interval_profits:  Dict[Tuple[int, int], float],
         startup_cost_fn:   Callable[[int], float],
         T_off_min: int,
+        source_allowed_fn: Optional[Callable[[int, int], bool]] = None,
+        source_extra_cost_fn: Optional[Callable[[int, int], float]] = None,
+        empty_path_profit: Optional[float] = 0.0,
     ):
         """
         Args
@@ -102,6 +105,9 @@ class DPShortestPath:
         self.T               = T
         self.T_off_min       = T_off_min
         self.startup_cost_fn = startup_cost_fn
+        self.source_allowed_fn = source_allowed_fn
+        self.source_extra_cost_fn = source_extra_cost_fn
+        self.empty_path_profit = empty_path_profit
 
         # 按区间起点 a 升序排列，保证拓扑有序（a 小的节点在前）
         sorted_ivls = sorted(on_intervals, key=lambda x: (x[0], x[1]))
@@ -129,7 +135,13 @@ class DPShortestPath:
         边权重 = profit(node) - startup_cost(off_duration=node.a)
         """
         off_dur = node.a   # 0 ~ node.a-1 共 node.a 个停机时段
-        return node.profit - self.startup_cost_fn(off_dur)
+        if self.source_allowed_fn is not None:
+            if not self.source_allowed_fn(node.a, node.b):
+                return None
+        extra_cost = 0.0
+        if self.source_extra_cost_fn is not None:
+            extra_cost = float(self.source_extra_cost_fn(node.a, node.b))
+        return node.profit - self.startup_cost_fn(off_dur) - extra_cost
 
     def _node_to_node_weight(
         self, src: IntervalNode, dst: IntervalNode
@@ -178,7 +190,10 @@ class DPShortestPath:
         # dp[i] 表示"到达区间节点 i 且已激活该区间"的最大累计净利润
         # dp_sink 表示到达 SINK 的最大累计净利润
         dp: List[DPState] = [DPState() for _ in range(n)]
-        dp_sink = DPState(best_profit=0.0)   # SINK 的初始利润=0（全程停机方案）
+        if self.empty_path_profit is None:
+            dp_sink = DPState(best_profit=-1e15)
+        else:
+            dp_sink = DPState(best_profit=float(self.empty_path_profit))
 
         # ── 从 SOURCE 出发，转入各区间节点 ──
         for i, node in enumerate(self.nodes):
