@@ -1,3 +1,0 @@
-ramping_case,s_chp_states,s_chp_transition_arcs,d_chp_on_intervals,s_chp_arc_growth,d_chp_arc_growth,s_chp_time_s,d_chp_time_s,s_chp_total_uplift,d_chp_total_uplift
-base,3400,25711,896,1.0,1.0,9.938840389251709,1.0088942050933838,2736.8003549509685,2736.8005295309836
-heterogeneous,19656,1307870,896,50.868110925284896,1.0,474.68971371650696,1.354412317276001,2741.937460785912,2741.9374634491896

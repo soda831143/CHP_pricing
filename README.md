@@ -1,55 +1,40 @@
-# CHP Project Code Guide
+# CHP Research Code
 
-This directory contains the executable code for the CHP experiments.  The
-current paper workflow uses 24 hours, 3-segment PWL costs, and the modified
-IEEE 30-bus UC case with PTDF constraints.
+This repository root contains the executable convex-hull-pricing research code.
 
-## Main Commands
-
-Generate the current paper tables and figures:
-
-```powershell
-python generate_current_30base_outputs.py
+```text
+chp_project/
+├── chp_energy/       # COPT-based UC and exact CHP engine
+└── chp_marketpower/  # price vulnerability, mechanism, and profit experiments
 ```
 
-Run the main 30-bus benchmark manually:
+`energy-reserve/` is a local legacy checkout of an earlier solver branch. It is
+kept on disk for comparison but ignored by this repository because the active
+market-power code does not import it and tracking it would duplicate the full
+CHP engine and data.
+
+## Branches
+
+- `master`: stable COPT CHP engine plus the finite-difference/profit
+  market-power baseline.
+- `research/market-power-parametric-regimes`: objective-parametric CHP,
+  price-impact regime analysis, and the proposed solver-assisted 1D oracle.
+
+The research branch must preserve the direct COPT solve as ground truth. A
+grid-level slope change is only a candidate breakpoint until a basis/reduced-
+cost calculation certifies the interval and direct solves reproduce its value
+and selected price within tolerance.
+
+## Minimal checks
 
 ```powershell
-python run_experiments.py --cases 30 --networks ptdf --segments 3 --T 24 --congestion tight --methods lmp mirp level dwp xiao --level-max-iter 500 --out results/manual_30_ptdf_tight.csv
+cd chp_energy
+python -m pytest -q tests/test_primal_lp_static.py tests/test_interval_coordinate_equivalence.py
+
+cd ..\chp_marketpower
+python -m pytest -q tests
+python tests/check_chp_integration.py
 ```
 
-Run the same benchmark with the incremental DWP diagnostic:
-
-```powershell
-python run_experiments.py --cases 30 --networks ptdf --segments 3 --T 24 --congestion tight --methods lmp mirp level dwp dwp_incremental xiao --level-max-iter 500 --out results/manual_30_ptdf_tight_with_incremental.csv
-```
-
-Run the no-congestion audit:
-
-```powershell
-python run_experiments.py --cases 30 --networks ptdf --segments 3 --T 24 --congestion relaxed --methods lmp mirp level dwp dwp_incremental xiao --level-max-iter 500 --out results/manual_30_ptdf_relaxed.csv
-```
-
-## Method Names
-
-| CLI method | Paper label | Description |
-|---|---|---|
-| `lmp` | LMP | fixed-commitment LMP |
-| `mirp` | IRP | integer-relaxation pricing |
-| `level` | LVM | level-method Lagrangian pricing |
-| `dwp` | DWP | rebuilt-RMP Dantzig-Wolfe with parallel unit pricing |
-| `dwp_incremental` | DWP-inc | incremental-RMP diagnostic variant |
-| `xiao` | S-CHP | Xiao et al. state-transition CHP |
-| automatic | D-CHP | proposed DAG--g-polymatroid LP |
-
-`run_experiments.py` includes D-CHP unless `--skip-proposed` is passed.
-
-## Kept Results
-
-The clean result directories are:
-
-- `results/current_30base_seg3`
-- `results/network_capacity_audit_30_seg3`
-
-Older single-segment, stress-sweep, and partial 118-bus outputs were removed to
-avoid accidental reuse.
+Generated `results/`, solver dumps, caches, and the legacy `energy-reserve/`
+checkout are intentionally not versioned.
