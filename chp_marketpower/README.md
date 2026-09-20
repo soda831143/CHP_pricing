@@ -1,6 +1,6 @@
 # CHP Market Power
 
-本目录研究“机组报价改变后，凸包电价在时间和空间上如何响应；这些响应何时能变成按真实成本计算的额外利润”。完整的背景、数学模型、受控实验、判断门槛和代码对应关系见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)。
+本目录研究“机组报价改变后，凸包电价在时间和空间上如何响应；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP 的命题、reduced-cost 符号、退化处理和精确 continuation 门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
 
 代码直接复用相邻的 `../chp_energy/` 的案例、物理 UC、exact DAG-CHP 和自调度求解器，不复制第二套市场模型。
 
@@ -14,11 +14,14 @@ python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization absolute --epsilon 0.1 --out-dir results/full_C3_absolute_eps01
 python run_profit_validation.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generators 0 1 2 --beta 0 0.05 0.10 --bid-cap 0.10 --out results/profit_c3_24h_pilot_strict.csv
 python run_parametric_regime_scan.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --grid 0 0.025 0.05 0.075 0.10 --out-dir results/regime_G2_direct
+python run_basis_dual_audit.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --deltas 0 0.04 0.06 0.10 --out results/basis_dual_G2.json
 ```
 
 诊断入口分别输出定价 LP 正流 ON/OFF 弧、活动爬坡、线路潮流与对偶，并可单独保存物理 UC；hourly 入口输出节点×价格小时×报价小时的 Jacobian、全矩阵及逐报价小时步长预警和热图，支持相对百分比及绝对美元/MWh 斜率扰动；利润入口逐点重求 UC/CHP/申报 uplift，并按不变的真实成本核算利润。`run_price_vulnerability.py` 用于整段相对或绝对加价快筛，**其分数不是 hourly VI**。利润网格的最大增益只是观察值，不是全局最优策略。
 
 `run_parametric_regime_scan.py` 是一维绝对报价加数的 **direct-solve validation baseline**：输出各网格点、相邻区间价格/目标斜率和候选切换点。绝对加数已改写为只进入目标函数，PWL 约束矩阵固定；但当前候选仍依赖网格，不能称为 exact breakpoint 或 parametric oracle。精确 continuation 必须再处理 basis/reduced cost 和 CHP 对偶不唯一时的固定价格选择规则。
+
+`run_basis_dual_audit.py` 用 simplex 与 barrier+crossover 检查 COPT 基状态、约化成本符号、零约化成本非基本变量、落在界上的基本变量和算法间价格差。它是 **R1.5 准入审计**，不是新的市场力指标：算法结果一致不能证明对偶唯一，存在零约化成本也不能单独证明对偶不唯一。
 
 候选切换点前后的 Phase-1 活动弧、爬坡和线路对偶直接复用诊断入口，例如 `--bid-adder 1 0.04`。该选项只诊断报价后的定价 LP；它不与 `--include-uc` 混用，物理 UC 与利润必须走 `run_profit_validation.py` 的完整重结算。
 

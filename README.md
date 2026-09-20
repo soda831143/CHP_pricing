@@ -25,6 +25,11 @@ grid-level slope change is only a candidate breakpoint until a basis/reduced-
 cost calculation certifies the interval and direct solves reproduce its value
 and selected price within tolerance.
 
+The parametric branch is intentionally gated: first run the basis/dual audit in
+`chp_marketpower/run_basis_dual_audit.py`; only then implement exact 1D
+continuation. The mathematical contract and stop criteria are documented in
+`chp_marketpower/PARAMETRIC_FORMULATION.md`.
+
 ## Minimal checks
 
 ```powershell

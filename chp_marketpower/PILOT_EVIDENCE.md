@@ -14,7 +14,9 @@
 
 为使报价参数真正成为固定约束矩阵下的 cost parameter，三段 PWL 的统一绝对边际报价加数已从 epigraph 斜率中移到目标函数。静态测试确认不同加数下不等式矩阵逐元素相同；现有集成检查进一步确认该写法与“直接把每段斜率增加同一数值”的目标和节点价格一致。相对百分比乘数仍会改变 PWL epigraph，不作为第一版 fixed-matrix continuation 参数。
 
-在 6 节点 C3、G2、$\delta\in\{0,0.05,0.10\}$ 美元/MWh 上运行 direct-solve regime baseline：两个相邻区间的节点价格斜率范数分别为 **37.4123** 和 **20.3230**，系统目标斜率分别为 **1680.6067** 和 **1652.8977**，因此粗网格把 $\delta=0.05$ 标为候选切换点。$\delta=0.04/0.06$ 两侧均有 13 条正流 ON interval 和 3 个 price-setting line-hours，且 ON/ramp 支撑字符串未变；相同三处线路对偶则连续变化。该证据说明切换可能来自尚未输出的 PWL/basis 变化、同一支撑内部的更细切换或退化对偶选择，**不能**据此宣称 0.05 是精确 breakpoint。原始筛查位于 `results/regime_smoke_G2/`；下一步是 basis/reduced-cost 与 canonical dual selection，而不是继续堆密集网格。
+在 6 节点 C3、G2、$\delta\in\{0,0.05,0.10\}$ 美元/MWh 上运行 direct-solve regime baseline：两个相邻区间的节点价格斜率范数分别为 **37.4123** 和 **20.3230**，系统目标斜率分别为 **1680.6067** 和 **1652.8977**，因此粗网格把 $\delta=0.05$ 标为候选切换点。$\delta=0.04/0.06$ 两侧均有 13 条正流 ON interval 和 3 个 price-setting line-hours，且 ON/ramp 支撑字符串未变；相同三处线路对偶则连续变化。该证据说明切换可能来自尚未输出的 PWL/basis 变化、同一支撑内部的更细切换或退化对偶选择，**不能**据此宣称 0.05 是精确 breakpoint。原始筛查位于 `results/regime_smoke_G2/`。
+
+R1.5 进一步在 $\delta\in\{0,0.04,0.06,0.10\}$ 上比较 simplex 与 barrier+crossover。四点的最大算法间节点价差均低于 $7.45\times10^{-13}$，目标差均低于 $6.55\times10^{-11}$，reduced-cost 状态符号违规数为 0；但每次求解有 **278–611** 个零 reduced-cost 非基本变量和 **3993–5268** 个落在界上的基本变量。结论是：当前四点的 COPT 价格选择数值稳定，但 LP 基高度退化；因此不需要立即发明 canonical price，也不能用一个固定基跨过退化事件。下一步采用 solver-assisted continuation，让 COPT 在断点右侧选基，再由解析 reduced-cost 斜率计算下一个候选端点。完整审计位于 `results/basis_dual_G2.json`，理论判据见 `PARAMETRIC_FORMULATION.md`。
 
 ## 1. 先确定定价层中真正活动的机制
 
