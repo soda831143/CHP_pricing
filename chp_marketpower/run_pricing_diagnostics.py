@@ -27,6 +27,8 @@ def main() -> None:
     parser.add_argument("--include-uc", action="store_true")
     parser.add_argument("--dual-audit", action="store_true",
                         help="Compare simplex/barrier prices; agreement is not a uniqueness proof")
+    parser.add_argument("--bid-adder", type=float, nargs=2, metavar=("GENERATOR", "VALUE"),
+                        help="Apply a uniform absolute $/MWh adder to one 0-based generator")
     parser.add_argument("--out-dir", type=Path, default=Path("results/mechanism_diagnostics"))
     args = parser.parse_args()
 
@@ -39,7 +41,19 @@ def main() -> None:
         args.case, args.scenario, args.T, args.segments, args.congestion, args.load_scale,
         load_shift, args.warmup_initial_state,
     )
-    result = pricing_mechanism_diagnostics(generators, network)
+    adders = None
+    bid_generator = ""
+    bid_adder = ""
+    if args.bid_adder is not None:
+        if args.include_uc:
+            raise ValueError("--include-uc is not available with --bid-adder; use profit re-clearing for physical UC")
+        generator, value = args.bid_adder
+        if not float(generator).is_integer() or not 0 <= int(generator) < len(generators):
+            raise ValueError("bid-adder generator must be a valid 0-based integer index")
+        bid_generator, bid_adder = int(generator), value
+        adders = np.zeros((len(generators), network.T))
+        adders[bid_generator] = bid_adder
+    result = pricing_mechanism_diagnostics(generators, network, bid_adders=adders)
     for key, name in (("arcs", "pricing_on_intervals.csv"),
                       ("off_arcs", "pricing_off_arcs.csv"),
                       ("lines", "pricing_lines.csv")):
@@ -50,7 +64,9 @@ def main() -> None:
         from gurobi_compat import GRB
         rows = []
         for method, crossover in ((-1, 0), (1, 0), (2, 1)):
-            solver = PrimalCHPLP(generators, network, method=method, crossover=crossover)
+            solver = PrimalCHPLP(
+                generators, network, method=method, crossover=crossover, bid_adders=adders
+            )
             price, obj, success = solver.solve()
             if not success or solver._model.Status != GRB.OPTIMAL:
                 raise RuntimeError(f"Dual audit failed with Method={method}, Crossover={crossover}")
@@ -66,6 +82,8 @@ def main() -> None:
         "load_shift_to_bus": "" if load_shift is None else int(load_shift[1]),
         "load_shift_fraction": "" if load_shift is None else load_shift[2],
         "warmup_initial_state": args.warmup_initial_state,
+        "bid_adder_generator": bid_generator,
+        "bid_adder_value": bid_adder,
         "congestion": "relaxed" if args.scenario == "C2N" else args.congestion,
         "chp_objective": result["objective"],
         "max_primal_violation": result["primal_violation"],

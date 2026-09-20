@@ -17,3 +17,9 @@
 2. 原模型令每台机组在整个三时段窗口内**始终 ON 或始终 OFF**，启动费至多收一次；本项目 DAG 模型允许窗口内 ON/OFF 转换，并显式区分启动／停机爬坡。即使录入同一张参数表，也不是同一可行域。
 
 因此下一步应先取得原始需求数组或作者计算脚本，再把“整段 ON/OFF”限制作为**基准专用模式**实现并检验成本/初始状态，随后比较原论文的 $T\times T$ Jacobian 与 VI。若只能读图得到近似负荷，结果只能标记为 *paper-inspired qualitative check*，不能标记为 exact replication。当前不向正式代码库注入猜测的需求数据。
+
+## 对新稿创新边界的直接影响
+
+这篇最近邻工作已经覆盖“报价参数 $\rightarrow$ CHP 价格 Jacobian $\rightarrow$ temporal VI”及其高效计算。因此当前项目已有的 finite-difference Jacobian 是复现/验证基线，不是论文终点；把输出从 $T\times T$ 扩到 $N_BT\times T$ 也不足以单独构成主贡献。
+
+新稿必须至少推进到两个层次：一是给出 derivative 在多大报价区间内有效、何处因 congestion/ramping/interval 活动集变化而切换，即 price-impact regimes；二是把价格影响与重新结算后的真实利润比较，解释为什么高 leverage 不必然对应高 exercisable market power。严格复现所缺数据不阻止这两项工作，但投稿前必须把本文件中的“精确复现缺口”保留为清楚边界。

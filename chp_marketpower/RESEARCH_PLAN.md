@@ -2,6 +2,69 @@
 
 > 研究定位：本文不是再提出一个 CHP 求解器，而是利用已完成的 exact DAG-CHP 求解能力，研究**报价如何改变凸包价格、影响如何传播、价格影响能否变成真实利润**。本文先以火电机组的可变成本报价为可控切口；灵活性资源、容量持留、合谋和随机性属于后续拓展，不把面上项目的所有目标压入同一篇论文。
 
+## 0. 2026-09-20 导师意见后的两篇论文分工
+
+当前工作不推倒重来，而是把已经混在一起的“表示、算法和应用”拆开。
+
+| 论文线 | 核心问题 | 现有成果如何处理 | 当前代码归属 |
+|---|---|---|---|
+| CHP 会议稿 | 既有 interval/DAG-CHP 实验中是否存在可重复、可解释的反直觉现象 | 弱化“新 formulation”主张，冻结方法，不追加大规模算法框架；只从现有结果筛选一个有物理解释的 counter-intuitive finding，面向 PES General Meeting 或 CDC | `../chp_energy` 的 `master` 检查点 `49b26de` |
+| Market-power 新稿 | 网络约束、多时段 CHP 中，局部价格影响何时切换 regime，以及它为何不等于可获利市场力 | 继续复用已经完成的 Jacobian、利润会计、活动集诊断和 P1 holdout；加入一维 parametric price-impact regime，而不是再发明 network-flow CHP | 分支 `research/market-power-parametric-regimes` |
+
+导师所说的 oracle 可分为两层，不能混为一谈：
+
+1. **local value oracle**：对某个 ON interval、arc 或离散状态，给定连续参数后返回条件最小成本；它回答 DP/network-flow 的 edge cost 如何快速查询。
+2. **system-level price oracle**：对整个 CHP LP，给定战略报价参数后返回系统目标、节点价格及活动 regime；它才能直接回答 market power 的价格传播问题。
+
+本稿先做第二层。原因是当前 exact CHP、节点价、利润重结算和 finite-difference baseline 已经齐备，可以用最少新代码检验核心命题。只有当系统级 critical-region 枚举确实过重时，才回到导师提出的 local oracle + DAG/master 分解。绝不机械地为所有 $2^{G\times T}$ commitment pattern 建 oracle；已有 interval DAG 继续负责压缩离散轨迹，parametric region 负责压缩重复连续求解。
+
+### 与最近邻工作的安全边界
+
+- Pan/Yu 一线已经给出 interval/network-flow extended representation；因此“把 CHP 写成图”不是新贡献。
+- Sun–Wu (2021) 已经研究多时段报价到 CHP 的 Jacobian/VI；因此“计算 derivative 或把 $T\times T$ 扩成 $N_BT\times T$”不能单独成为主贡献。
+- Sun–Gu–Wu (2020) 已经用策略报价后的利润定义 CHP 市场力；因此“第一次研究利润型 CHP market power”也不能宣称。
+- 本稿的候选贡献是：**network-constrained exact CHP 的 price-impact regimes、regime 阈值与 congestion/ramping/interval 切换的对应，以及 price leverage 与真实可获利润的系统性分离。**
+
+### 第一维参数为什么选绝对报价加数
+
+导师用需求 $D$ 说明 RHS parametric LP；market power 更自然的参数是报价。当前相对乘数会同时缩放 PWL 斜率和截距，使 PWL epigraph 的矩阵随参数变化，不适合作为第一版固定矩阵 continuation。第一版改用同一机组、全部 PWL 段统一增加的绝对边际报价 $\delta_g$：
+
+$$
+\widehat C_g(q;\delta_g)=C_g(q)+\delta_g q.
+$$
+
+因为
+
+$$
+\max_k\{(s_{gk}+\delta_g)q+b_{gk}\}
+=\delta_gq+\max_k\{s_{gk}q+b_{gk}\},
+$$
+
+exact CHP 可写为
+
+$$
+\min_x\;(c^0+\delta_g d_g)^\top x
+\quad\text{s.t.}\quad Ax=b,\;Gx\le h,
+$$
+
+其中 $A,G,b,h$ 与 $\delta_g$ 无关。固定一个最优基 $B$ 时，原始基本解保持不变，系统平衡/线路对偶和 CHP 节点价在该区间内为仿射函数；reduced cost 到达零给出候选 breakpoint。该接口已在 `../chp_energy/chp_solver/chp_master_lp.py` 实现，并由矩阵不变测试及原/改写定价等价检查验证。相对乘数仍作为经济稳健性口径，但不冒充第一版固定矩阵 parametric LP。
+
+### 分阶段路线与停止门槛
+
+| 阶段 | 目的 | 最小产出 | Go / No-Go |
+|---|---|---|---|
+| R0 最近邻对齐 | 防止再次与 Sun–Wu/Yu 撞车 | `REFERENCE_2021_AUDIT.md`；能取得原始需求时复现 pool/3-period，否则只做定性退化关系 | 说清楚 derivative/VI、profit 和 graph representation 已有到什么程度 |
+| R1 参数接口 | 建立真正固定 $A,b,G,h$ 的一维 cost parameter | objective-only 绝对报价加数；与原 PWL 加数重建的目标/价格一致 | 约束矩阵逐元素不随 $\delta$ 变化；集成检查通过 |
+| R2 一维 regime | 从离散差分升级到可认证的 critical intervals | direct-solve 网格 baseline；随后实现 basis/reduced-cost continuation | 随机查询点的目标和选定价格与 direct COPT 一致；退化点有明确价格选择规则 |
+| R3 机制解释 | 解释 breakpoint 而非只画折线 | 切换前后线路对偶、活动爬坡、ON/OFF interval、PWL segment | 切换能稳定对应至少一种物理/定价活动集变化 |
+| R4 可获利市场力 | 区分 potential price leverage 与 exercisable market power | 复用真实成本利润重结算；比较 leverage、最近 regime 距离和利润渠道 | 在 P1 holdout 中形成可解释的匹配或系统性背离 |
+| R5 计算价值 | 回答导师“多少空间换多少时间” | cold/warm direct solve、offline construction、query time、存储和 break-even $Q^\star$ | 只有 $Q^\star$ 合理才主张加速；否则 regime 结构是主贡献 |
+| R6 独立验证 | 检验结论能否离开样本内候选 | IEEE-30 主样本，必要时 IEEE-118 | 机制与经济结论稳定后才扩展；不为规模而规模 |
+
+当前完成到 R1，并建立了 R2 的 direct-solve 对照入口 `run_parametric_regime_scan.py`。它只把相邻网格上的价格/目标斜率变化标成 **candidate breakpoint**，不称 exact critical region。6 节点 G2 的三点 smoke 在 $\delta=0.05$ 美元/MWh 处发现候选切换：左右价格斜率范数为 37.41 和 20.32。下一步先细化该局部区间并核对活动约束、对偶选择和 COPT basis 接口；在这些条件满足前，不写一个名为 `parametric_chp.py` 但实质仍是网格扫描的伪 oracle。
+
+learning-to-optimize/神经网络不是当前任务。只有当一维 exact region 数量爆炸，或研究问题必须升到二维以上而显式枚举不可行时，才以 exact 1D oracle 作为 ground truth 考虑 learned extension。
+
 ## 1. 背景、问题和本文与已有工作的关系
 
 常规节点电价通常在给定机组组合后定价，难以直接反映启动、停机和最小运行时间等非凸成本。CHP 将价格与机组的非凸可行域联系起来，并以最小化总 uplift 为主要设计目标。然而，**最小 uplift 并不是策略报价激励相容性证明**：机组依然可能通过申报成本改变调度、价格和结算收入。
@@ -259,7 +322,7 @@ $$
 | scalar 快筛 | `price_vulnerability/scalar_markup.py`、`run_price_vulnerability.py` | 整段相对/绝对报价扰动用于便宜的全机组初筛；其分数是 scalar response，**不是**旧文献 hourly VI。 |
 | hourly Jacobian、指标和图 | `price_vulnerability/hourly.py`、`run_hourly_vulnerability.py` | 已实现相对/绝对斜率扰动、双侧重求、时间/空间描述量、长表、全矩阵和按报价小时的步长预警；30 节点相对全机组及绝对预筛机组双步长 VI 已完成，下一步只在独立场景复算预注册对象。 |
 | 获利验证 | `run_profit_validation.py`、`strategic_market_simulation/profit_sweep.py`，复用 `../chp_energy/chp_solver/schedule_run.py`、`benchmarks/unit_self_schedule.py` | 有限**标量**网格逐点重求 UC/CHP/申报 uplift，三者在此入口都要求证明最优；默认仅选基线发电机组，约束上调报价上限，并按真实成本分解增益；未实现 mitigation、全局最优和样本外指标检验。 |
-| 解析敏感度 | 当前求解器的 LP 矩阵和对偶 | 尚未实现；先证明参数进入目标/约束的正确形式，处理退化与基切换。 |
+| 参数区间与解析敏感度 | `../chp_energy/chp_solver/chp_master_lp.py`、`price_vulnerability/regime_scan.py`、`run_parametric_regime_scan.py` | R1 objective-only 绝对报价接口和 direct-solve regime baseline 已实现；下一步处理 basis/reduced cost、退化价格选择与 exact interval certification，不把网格候选误称精确断点。 |
 
 ### 当前可复现命令
 
@@ -277,6 +340,7 @@ python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization absolute --epsilon 0.1 --out-dir results/full_C3_absolute_eps01
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization absolute --epsilon 0.05 --out-dir results/full_C3_absolute_eps005
 python run_profit_validation.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generators 0 1 2 --beta 0 0.05 0.10 --bid-cap 0.10 --out results/profit_c3_24h_pilot_strict.csv
+python run_parametric_regime_scan.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --grid 0 0.025 0.05 0.075 0.10 --out-dir results/regime_G2_direct
 ```
 
 30 节点 P0 的最小复算集合如下；历史负荷缩放、单小时 probe 和 scalar 预筛命令不再列入主入口：
@@ -307,7 +371,7 @@ python run_profit_validation.py --case 30 --network ptdf --congestion tight --T 
 2. **P0 已完成：全部基线发电机组利润样本。** 同一有限加价网格和严格最优检查得到 G1/G3/G5 正观察增益、G2/G6 近零；完整 VI 与利润出现候选背离，但有限网格仍不称为最优操纵。
 3. **P1 两个 holdout 已完成。** 空间样本中 G1/G3 列范数下降而利润上升，G5 列范数近似不变而利润下降；warm-up 初态中 G1/G3 列范数近似不变而利润下降，G5 列范数下降约 24–25% 而利润上升 62.86%。两个样本都只使用冻结的 G1-23、G3-20、G5-8 和同一利润网格；P1 不再新增场景。
 4. **P1：解释临界列，而非增加汇总分数。** 对双步长不稳但信号质量显著的列，记录正/负侧的 ON 弧、活动爬坡和线路对偶，区分真正的活动集切换、退化价格选择和纯数值噪声。
-5. **P2：只有前三步形成稳定经济结论后才做解析导数。** 若有限差分时间已成为论文瓶颈，再研究式 (10) 的完整矩阵导数与临界区域；否则不建立解析框架，也不扩到 IEEE-118、容量持留、合谋或新的批处理系统。
+5. **P2/R1 已启动：先形成合法参数接口，再谈解析导数。** 导师意见使 regime structure 从可选加速升级为新稿的候选算法/机制主线。objective-only 绝对报价接口和 direct-solve baseline 已完成；下一步只做一维 basis/reduced-cost continuation、canonical dual selection 与 breakpoint 机制核对。local arc oracle、二维参数、NN、IEEE-118、容量持留和合谋仍不进入当前阶段。
 
 空间 holdout 的实际执行严格遵守预注册：令 $d'_{23,t}=(1-\rho)d_{23,t}$、$d'_{21,t}=d_{21,t}+\rho d_{23,t}$，其余节点不变。5% 场景因活动集与价格几乎不变而停止；20% 场景出现正流 OFF 弧支撑变化后，才计算 **G1-第23小时、G3-第20小时、G5-第8小时** 的相对 $0.005/0.001$、绝对 $0.1/0.05$ 和三台机组的利润网格。这里不补跑全矩阵，因为研究问题是预注册列在独立空间分布下是否保持经济解释，而不是重新筛选小时。
 

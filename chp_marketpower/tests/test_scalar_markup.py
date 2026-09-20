@@ -15,7 +15,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from engine import PrimalCHPLP, controlled_case, load_case  # noqa: E402
 from price_vulnerability import (  # noqa: E402
-    apply_generator_markup, central_difference, epsilon_stability, scalar_sensitivity, vulnerability_metrics,
+    apply_generator_markup, central_difference, epsilon_stability, regime_differences,
+    scalar_sensitivity, vulnerability_metrics,
 )
 
 
@@ -37,6 +38,19 @@ def test_central_difference() -> None:
     plus = np.array([[3.0, 7.0]])
     minus = np.array([[1.0, 3.0]])
     assert np.allclose(central_difference(plus, minus, 0.5), [[2.0, 4.0]])
+
+
+def test_regime_differences_detects_piecewise_affine_kink() -> None:
+    grid = np.array([0.0, 0.1, 0.2, 0.3])
+    prices = np.array([0.0, 0.1, 0.3, 0.5])[:, None, None]
+    objectives = np.array([0.0, 1.0, 3.0, 5.0])
+    _, _, price_jumps, objective_jumps, candidates = regime_differences(
+        grid, prices, objectives, absolute_tolerance=1e-10, relative_tolerance=1e-10
+    )
+
+    assert price_jumps == pytest.approx([1.0, 0.0])
+    assert objective_jumps == pytest.approx([10.0, 0.0])
+    assert candidates.tolist() == [True, False]
 
 
 def test_metrics_distinguish_common_energy_from_congestion() -> None:
@@ -132,6 +146,7 @@ def test_hourly_bid_multiplier_validation() -> None:
 if __name__ == "__main__":
     test_scalar_markup_is_immutable()
     test_central_difference()
+    test_regime_differences_detects_piecewise_affine_kink()
     test_metrics_distinguish_common_energy_from_congestion()
     test_controlled_case_removes_coupling_in_c0()
     test_network_pair_only_changes_line_limits()

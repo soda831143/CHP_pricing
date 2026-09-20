@@ -10,6 +10,12 @@
 
 因此，已严格同配置核验的 UC、CHP/Yu 目标、节点价格和结算量在浮点容差内相同，足以排除“换求解器改变本文经济结论”；这不等于文件逐比特相同。部分退化 ON/OFF 弧的流权重、LP 基和运行时间可以不同，故不把它们当作跨求解器不变量。6 节点原始核验表位于 `results/copt_validation_C3/`。
 
+### Parametric R1 接口与 R2 direct-solve smoke
+
+为使报价参数真正成为固定约束矩阵下的 cost parameter，三段 PWL 的统一绝对边际报价加数已从 epigraph 斜率中移到目标函数。静态测试确认不同加数下不等式矩阵逐元素相同；现有集成检查进一步确认该写法与“直接把每段斜率增加同一数值”的目标和节点价格一致。相对百分比乘数仍会改变 PWL epigraph，不作为第一版 fixed-matrix continuation 参数。
+
+在 6 节点 C3、G2、$\delta\in\{0,0.05,0.10\}$ 美元/MWh 上运行 direct-solve regime baseline：两个相邻区间的节点价格斜率范数分别为 **37.4123** 和 **20.3230**，系统目标斜率分别为 **1680.6067** 和 **1652.8977**，因此粗网格把 $\delta=0.05$ 标为候选切换点。$\delta=0.04/0.06$ 两侧均有 13 条正流 ON interval 和 3 个 price-setting line-hours，且 ON/ramp 支撑字符串未变；相同三处线路对偶则连续变化。该证据说明切换可能来自尚未输出的 PWL/basis 变化、同一支撑内部的更细切换或退化对偶选择，**不能**据此宣称 0.05 是精确 breakpoint。原始筛查位于 `results/regime_smoke_G2/`；下一步是 basis/reduced-cost 与 canonical dual selection，而不是继续堆密集网格。
+
 ## 1. 先确定定价层中真正活动的机制
 
 `run_pricing_diagnostics.py` 检查的是 CHP **定价 LP** 的正流 ON/OFF 区间弧和对应透视爬坡，而非把物理 UC 的在线小时误认为 CHP 活动集；物理 UC 单独输出。当前观测：

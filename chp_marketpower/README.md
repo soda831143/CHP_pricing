@@ -13,9 +13,14 @@ python run_pricing_diagnostics.py --case 6 --scenario C3 --T 24 --segments 3 --d
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization relative --epsilon 0.005 --out-dir results/full_C3_relative_eps0005
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization absolute --epsilon 0.1 --out-dir results/full_C3_absolute_eps01
 python run_profit_validation.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generators 0 1 2 --beta 0 0.05 0.10 --bid-cap 0.10 --out results/profit_c3_24h_pilot_strict.csv
+python run_parametric_regime_scan.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --grid 0 0.025 0.05 0.075 0.10 --out-dir results/regime_G2_direct
 ```
 
 诊断入口分别输出定价 LP 正流 ON/OFF 弧、活动爬坡、线路潮流与对偶，并可单独保存物理 UC；hourly 入口输出节点×价格小时×报价小时的 Jacobian、全矩阵及逐报价小时步长预警和热图，支持相对百分比及绝对美元/MWh 斜率扰动；利润入口逐点重求 UC/CHP/申报 uplift，并按不变的真实成本核算利润。`run_price_vulnerability.py` 用于整段相对或绝对加价快筛，**其分数不是 hourly VI**。利润网格的最大增益只是观察值，不是全局最优策略。
+
+`run_parametric_regime_scan.py` 是一维绝对报价加数的 **direct-solve validation baseline**：输出各网格点、相邻区间价格/目标斜率和候选切换点。绝对加数已改写为只进入目标函数，PWL 约束矩阵固定；但当前候选仍依赖网格，不能称为 exact breakpoint 或 parametric oracle。精确 continuation 必须再处理 basis/reduced cost 和 CHP 对偶不唯一时的固定价格选择规则。
+
+候选切换点前后的 Phase-1 活动弧、爬坡和线路对偶直接复用诊断入口，例如 `--bid-adder 1 0.04`。该选项只诊断报价后的定价 LP；它不与 `--include-uc` 混用，物理 UC 与利润必须走 `run_profit_validation.py` 的完整重结算。
 
 诊断与 hourly 入口接受 `--scenario C0/C1/C2/C2N/C3`，依次检验启停、正常爬坡、无拥塞网络表述和收紧线限网络。C2N/C3 使用相同 PTDF、负荷及机组，只有线限不同；`--load-scale` 同比例缩放节点负荷，`--load-shift FROM_BUS TO_BUS FRACTION` 在每小时总负荷不变时移动节点负荷，`--warmup-initial-state` 用一日前置物理 UC 的日末状态构造正式日初态。利润入口不接受 `--scenario`；其中 `--network ptdf --congestion tight` 对应 C3。更完整的数值、局限和后续检验见 [PILOT_EVIDENCE.md](PILOT_EVIDENCE.md)，复现命令见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)。旧文献可比性见 [REFERENCE_2021_AUDIT.md](REFERENCE_2021_AUDIT.md)。
 

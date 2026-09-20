@@ -344,9 +344,24 @@ class PrimalCHPLP:
                         for tau in range(iv.duration):
                             c_obj[idx.v(i, k, tau)] = float(np.sum(slopes_by_hour[tau:]))
                 else:
-                    # 分段：cvar 变量进目标，v 系数 = 0
-                    # cvar 上镜图约束中已用 (b_k - s_k*P_min)*z 正确扣减 P_min 基底
-                    c_obj[idx.z_on(i, k)] = iv.c_fix
+                    # 分段：基准 PWL 成本由 cvar 表示。统一边际报价加数 δ 满足
+                    # max_k {(s_k+δ)q+b_k z} = δq + max_k {s_kq+b_k z}，
+                    # 因而只进入目标，保持参数化 LP 的约束矩阵不变。
+                    adders_by_hour = self.bid_adders[i, iv.a : iv.b + 1]
+                    if self._absolute_power:
+                        c_obj[idx.z_on(i, k)] = (
+                            iv.c_fix - float(np.sum(adders_by_hour)) * params.P_min
+                        )
+                        for tau in range(iv.duration):
+                            c_obj[idx.v(i, k, tau)] = adders_by_hour[tau]
+                    else:
+                        p0 = params.initial_power if iv.initial_online else 0.0
+                        c_obj[idx.z_on(i, k)] = (
+                            iv.c_fix
+                            + float(np.sum(adders_by_hour)) * (p0 - params.P_min)
+                        )
+                        for tau in range(iv.duration):
+                            c_obj[idx.v(i, k, tau)] = float(np.sum(adders_by_hour[tau:]))
                     for tau in range(iv.duration):
                         c_obj[idx.cvar(i, k, tau)] = 1.0
             for k, arc in enumerate(dag.off_arcs):
@@ -703,10 +718,9 @@ class PrimalCHPLP:
                     for tau in range(n):
                         cv_col = idx.cvar(i, k, tau)
                         multiplier = self.bid_multipliers[i, iv.a + tau]
-                        adder = self.bid_adders[i, iv.a + tau]
                         for seg_k, (s_k, b_k) in enumerate(
                                 zip(slopes, intercepts)):
-                            s_k = s_k * multiplier + adder
+                            s_k = s_k * multiplier
                             b_k *= multiplier
                             rows.append(row); cols.append(cv_col); data.append(-1.0)
                             self._append_interval_output_terms(
@@ -721,10 +735,7 @@ class PrimalCHPLP:
                     Pmin = params.P_min
                     for tau in range(n):
                         cv_col = idx.cvar(i, k, tau)
-                        cost_var = (
-                            params.cost_var * self.bid_multipliers[i, iv.a + tau]
-                            + self.bid_adders[i, iv.a + tau]
-                        )
+                        cost_var = params.cost_var * self.bid_multipliers[i, iv.a + tau]
                         rows.append(row); cols.append(cv_col); data.append(-1.0)
                         self._append_interval_output_terms(
                             rows, cols, data, row, idx, i, k, iv, tau, cost_var
