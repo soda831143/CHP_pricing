@@ -42,7 +42,7 @@ def _generator(**overrides) -> GeneratorParams:
 
 def test_ramp_reset_on_to_on_counterexample_is_infeasible() -> None:
     """The former [0,1]->[2,2] ramp reset must not satisfy fixed demand."""
-    pytest.importorskip("gurobipy")
+    pytest.importorskip("gurobi_compat")
     params = _generator(R_up=5.0)
     model = PrimalCHPLP([params], np.array([100.0, 60.0, 100.0]))
     _, objective, success = model.solve()
@@ -147,14 +147,14 @@ def test_terminal_online_interval_has_no_artificial_shutdown_cost() -> None:
 
 
 def test_model_statistics_match_solver_counters() -> None:
-    pytest.importorskip("gurobipy")
+    pytest.importorskip("gurobi_compat")
     params = _generator()
     model = PrimalCHPLP([params], np.full(params.T, params.P_min))
     _, _, success = model.solve()
     assert success
     assert model.n_variables == model._model.NumVars
     assert model.n_constraints == model._model.NumConstrs
-    assert model.n_nonzeros == model._model.NumNZs
+    assert model.n_nonzeros == model._model.Elems
     assert model.build_time >= 0.0
     assert model.solver_time >= 0.0
     assert model.total_time >= model.build_time
@@ -162,7 +162,7 @@ def test_model_statistics_match_solver_counters() -> None:
 
 
 def test_interval_response_matches_exact_self_schedule_for_initial_online() -> None:
-    pytest.importorskip("gurobipy")
+    pytest.importorskip("gurobi_compat")
     params = _generator(
         T=5,
         T_on_min=3,
@@ -186,7 +186,7 @@ def test_interval_response_matches_exact_self_schedule_for_initial_online() -> N
 
 def test_pwl_conditional_greedy_matches_interval_lp_at_cost_kink() -> None:
     """A PWL optimum at a breakpoint must agree with the exact interval LP."""
-    pytest.importorskip("gurobipy")
+    pytest.importorskip("gurobi_compat")
     params = _generator(
         T=1,
         P_max=100.0,

@@ -1,7 +1,7 @@
 """
 调度运行（Schedule Run）——双轨制第一轨。
 
-使用 Gurobi 求解标准机组组合（UC）混合整数规划，
+使用 COPT 求解标准机组组合（UC）混合整数规划，
 输出物理强制调度的出力轨迹 p_dispatch 和启停状态 u_dispatch。
 这两个结果随后被传入 VertexOracle.compute_uplift() 用于结算 Uplift。
 
@@ -61,7 +61,7 @@ from models.network import NetworkModel, SingleNodeNetwork
 
 class ScheduleRunMILP:
     """
-    UC MILP 调度运行求解器（Gurobi）。
+    UC MILP 调度运行求解器（COPT）。
 
     使用分段线性成本（PWL）或单段线性成本，与 PrimalCHPLP 的成本口径严格一致，
     保证 Uplift 恒等式 Total_Uplift = MILP_obj - LP_obj 成立。
@@ -80,7 +80,7 @@ class ScheduleRunMILP:
         self.T = network.T
         self.N = len(generators)
 
-    def solve(self) -> Tuple[np.ndarray, np.ndarray, float]:
+    def solve(self, require_optimal: bool = False) -> Tuple[np.ndarray, np.ndarray, float]:
         """
         求解 UC MILP，返回物理调度结果。
 
@@ -91,10 +91,10 @@ class ScheduleRunMILP:
         obj_val    : float  MILP 目标值
         """
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError as e:
-            raise ImportError("需要安装 gurobipy 才能运行 ScheduleRunMILP。") from e
+            raise ImportError("需要安装 coptpy 和 gurobi_compat 才能运行 ScheduleRunMILP。") from e
 
         N, T = self.N, self.T
         gens = self.generators
@@ -123,7 +123,7 @@ class ScheduleRunMILP:
 
         # ── 目标函数 ──────────────────────────────────────────────────────────
         # Σ slope_k * x[i,k,t] + C_NL * u + C_SU * su + C_SD * sd
-        obj = gp.LinExpr()
+        obj = gp.cp.LinExpr()
         for i, g in enumerate(gens):
             segs = g.get_pwl_segments()
             for t in range(T):
@@ -251,11 +251,13 @@ class ScheduleRunMILP:
                 f"ScheduleRunMILP 求解失败，Status={model.Status}。"
                 "请检查需求是否可行（总装机容量是否满足峰值需求）。"
             )
+        if require_optimal and model.Status != GRB.OPTIMAL:
+            raise RuntimeError(f"ScheduleRunMILP 未证明最优，Status={model.Status}，MIPGap={model.BestGap}")
 
         # ── 提取结果 ──────────────────────────────────────────────────────────
         p_dispatch = np.array([[p[i, t].X for t in range(T)] for i in range(N)])
         u_dispatch = np.array([[round(u[i, t].X) for t in range(T)] for i in range(N)],
                                dtype=float)
-        obj_val = model.ObjVal
+        obj_val = model.objval
 
         return p_dispatch, u_dispatch, obj_val

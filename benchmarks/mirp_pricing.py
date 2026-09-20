@@ -80,10 +80,10 @@ class MIRPPricing:
         success    : bool
         """
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError as e:
-            raise ImportError("需要 gurobipy 才能运行 MIRPPricing。") from e
+            raise ImportError("需要 coptpy 和 gurobi_compat 才能运行 MIRPPricing。") from e
 
         t_start = time.perf_counter()
         N, T = self.N, self.T
@@ -108,7 +108,7 @@ class MIRPPricing:
                     x[i, k, t] = model.addVar(lb=0.0, ub=width_k, name=f"x_{i}_{k}_{t}")
 
         # ── 目标函数（与 ScheduleRunMILP 完全一致）───────────────────────
-        obj = gp.LinExpr()
+        obj = gp.cp.LinExpr()
         for i, g in enumerate(gens):
             segs = g.get_pwl_segments()
             for t in range(T):
@@ -221,7 +221,7 @@ class MIRPPricing:
         self.total_time = max(0.0, total_done - t_start)
 
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
-            raise RuntimeError(f"MIRPPricing 求解失败，Gurobi Status={model.Status}")
+            raise RuntimeError(f"MIRPPricing 求解失败，COPT Status={model.Status}")
 
         # ── 对偶提取（与 FixedULP / PrimalCHPLP 一致的后处理）────────────
         lambda_t = np.array([balance_constrs[t].Pi for t in range(T)])
@@ -250,4 +250,4 @@ class MIRPPricing:
             self._ptdf_alpha = alpha
             self._ptdf_beta_ = beta_
 
-        return lmp_matrix, model.ObjVal, True
+        return lmp_matrix, model.objval, True

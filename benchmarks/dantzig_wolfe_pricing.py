@@ -11,7 +11,7 @@ in CHP benchmark papers.  It is deliberately independent from the proposed
 GP-DAG oracle.
 
 The RMP is kept alive across column-generation iterations and new generator
-trajectory columns are injected with Gurobi's ``Column`` interface.  Unit
+trajectory columns are injected with COPT's ``Column`` interface.  Unit
 pricing subproblems can be solved in parallel.  This keeps the implementation
 faithful to the Dantzig-Wolfe benchmark while avoiding repeated RMP rebuilds.
 """
@@ -134,9 +134,9 @@ class DantzigWolfePricing:
 
     def solve(self) -> Tuple[np.ndarray, float, bool]:
         try:
-            import gurobipy as gp  # noqa: F401
+            import gurobi_compat as gp  # noqa: F401
         except ImportError as e:
-            raise ImportError("需要 gurobipy 才能运行 DantzigWolfePricing。") from e
+            raise ImportError("需要 coptpy 和 gurobi_compat 才能运行 DantzigWolfePricing。") from e
         self._timing = {
             "pricing_build": 0.0,
             "pricing_solver": 0.0,
@@ -389,8 +389,8 @@ class DantzigWolfePricing:
         return columns
 
     def _build_incremental_rmp(self, columns: List[List[DWColumn]]) -> dict:
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         model = gp.Model("DantzigWolfeRMP")
         model.Params.OutputFlag = 0
@@ -398,7 +398,7 @@ class DantzigWolfePricing:
         # reduced-cost pricing.  The model is persistent, so simplex warm starts
         # are reused across column additions.
         model.Params.Method = 1
-        model.ModelSense = GRB.MINIMIZE
+        model.setObjSense(GRB.MINIMIZE)
 
         theta = {}
         for i, cols in enumerate(columns):
@@ -456,15 +456,15 @@ class DantzigWolfePricing:
         }
 
     def _add_incremental_column(self, state: dict, i: int, j: int, column: DWColumn) -> None:
-        import gurobipy as gp
+        import gurobi_compat as gp
 
         model = state["model"]
-        col = gp.Column()
-        col.addTerms(1.0, state["convexity"][i])
+        col = gp.cp.Column()
+        col.addTerms(state["convexity"][i], 1.0)
         for t in range(self.T):
             coeff = float(column.p[t])
             if abs(coeff) > 1e-12:
-                col.addTerms(coeff, state["balance"][t])
+                col.addTerms(state["balance"][t], coeff)
 
         if not self.network.is_single_node:
             PTDF_Gen = self.network.PTDF_Gen
@@ -475,8 +475,8 @@ class DantzigWolfePricing:
                 for t in range(self.T):
                     coeff = base_coeff * float(column.p[t])
                     if abs(coeff) > 1e-12:
-                        col.addTerms(coeff, state["ptdf_ub"][l, t])
-                        col.addTerms(-coeff, state["ptdf_lb"][l, t])
+                        col.addTerms(state["ptdf_ub"][l, t], coeff)
+                        col.addTerms(state["ptdf_lb"][l, t], -coeff)
 
         state["theta"][i, j] = model.addVar(
             lb=0.0,
@@ -487,14 +487,14 @@ class DantzigWolfePricing:
         model.update()
 
     def _optimize_incremental_rmp(self, state: dict) -> dict:
-        from gurobipy import GRB
+        from gurobi_compat import GRB
 
         model = state["model"]
         model.optimize()
         if hasattr(self, "_timing"):
             self._timing["rmp_solver"] += float(getattr(model, "Runtime", 0.0))
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
-            raise RuntimeError(f"Dantzig-Wolfe RMP 求解失败，Gurobi Status={model.Status}")
+            raise RuntimeError(f"Dantzig-Wolfe RMP 求解失败，COPT Status={model.Status}")
 
         balance = state["balance"]
         convexity = state["convexity"]
@@ -521,7 +521,7 @@ class DantzigWolfePricing:
             lmp_matrix = lambda_t[np.newaxis, :] + self.network.PTDF.T @ (alpha - beta)
 
         return {
-            "obj": float(model.ObjVal),
+            "obj": float(model.objval),
             "runtime_s": float(getattr(model, "Runtime", float("nan"))),
             "lambda": lambda_t,
             "sigma": sigma,
@@ -535,8 +535,8 @@ class DantzigWolfePricing:
         }
 
     def _solve_rmp(self, columns: List[List[DWColumn]]) -> dict:
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         model = gp.Model("DantzigWolfeRMP")
         model.Params.OutputFlag = 0
@@ -601,7 +601,7 @@ class DantzigWolfePricing:
         if hasattr(self, "_timing"):
             self._timing["rmp_solver"] += float(getattr(model, "Runtime", 0.0))
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
-            raise RuntimeError(f"Dantzig-Wolfe RMP 求解失败，Gurobi Status={model.Status}")
+            raise RuntimeError(f"Dantzig-Wolfe RMP 求解失败，COPT Status={model.Status}")
 
         # Use raw RMP duals for column generation.  The Dantzig-Wolfe reduced
         # cost in Andrianesis et al. is c_i - lambda^T p_i - pi_i, and the
@@ -627,7 +627,7 @@ class DantzigWolfePricing:
             lmp_matrix = lambda_t[np.newaxis, :] + self.network.PTDF.T @ (alpha - beta)
 
         return {
-            "obj": float(model.ObjVal),
+            "obj": float(model.objval),
             "runtime_s": float(getattr(model, "Runtime", float("nan"))),
             "lambda": lambda_t,
             "sigma": sigma,

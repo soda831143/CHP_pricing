@@ -27,7 +27,7 @@ The default `dwp` method is the rebuilt-RMP implementation with parallel unit
 pricing.  It is slower than the incremental implementation but closer to the
 transparent column-generation reference used for paper comparison.
 
-The `dwp_incremental` method uses a persistent RMP and Gurobi `Column` objects.
+The `dwp_incremental` method uses a persistent RMP and COPT `Column` objects.
 It is useful for implementation diagnostics, but should be clearly labeled as
 an implementation variant rather than the main paper DWP benchmark.
 

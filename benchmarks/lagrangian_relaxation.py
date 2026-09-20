@@ -294,10 +294,10 @@ class LagrangianRelaxation:
         obj_val: float  子问题最优值 q_i(λ_eff)
         """
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError as e:
-            raise ImportError("需要 gurobipy。") from e
+            raise ImportError("需要 coptpy 和 gurobi_compat。") from e
 
         T = self.T
 
@@ -318,7 +318,7 @@ class LagrangianRelaxation:
                 x[k, t] = model.addVar(lb=0.0, ub=wk, name=f"x_{k}_{t}")
 
         # 目标：C_i(p,u) - λ_eff · p
-        obj = gp.LinExpr()
+        obj = gp.cp.LinExpr()
         for t in range(T):
             for k, (slope_k, _) in enumerate(segs):
                 obj += slope_k * x[k, t]
@@ -379,4 +379,4 @@ class LagrangianRelaxation:
             return np.zeros(T), 0.0
 
         p_star = np.array([p[t].X for t in range(T)])
-        return p_star, model.ObjVal
+        return p_star, model.objval

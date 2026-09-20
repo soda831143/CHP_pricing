@@ -1,5 +1,5 @@
 """
-Diagnostic test for PrimalCHPLP (no Gurobi needed).
+Diagnostic test for PrimalCHPLP (no solver license needed).
 Validates that the LP constraint matrices and variable layouts are internally consistent.
 """
 import sys, os

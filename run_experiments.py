@@ -320,10 +320,8 @@ def run_one(
     warmup_load_factor: float = 0.98,
     chp_method: int = 2,
     chp_crossover: int = 0,
-    chp_bar_conv_tol: Optional[float] = None,
     chp_feasibility_tol: Optional[float] = None,
     chp_optimality_tol: Optional[float] = None,
-    chp_numeric_focus: Optional[int] = None,
     chp_use_output_vars: bool = False,
 ):
     gens, network = load_case(case, network_mode, T, n_segments, congestion=congestion, fmax_scale=fmax_scale)
@@ -367,20 +365,18 @@ def run_one(
         chp_uplifts = []
         oracle_time = ""
     else:
-        t0 = time.time()
         chp = PrimalCHPLP(
             gens,
             network,
             method=chp_method,
             crossover=chp_crossover,
-            bar_conv_tol=chp_bar_conv_tol,
             feasibility_tol=chp_feasibility_tol,
             optimality_tol=chp_optimality_tol,
-            numeric_focus=chp_numeric_focus,
             use_output_vars=chp_use_output_vars,
+            collect_presolve_stats="yu" in methods,
         )
         chp_lmp, chp_obj, ok = chp.solve()
-        chp_time = time.time() - t0
+        chp_time = chp.total_time
         if not ok:
             raise RuntimeError("CHP LP failed")
         chp_uplifts = []
@@ -405,6 +401,25 @@ def run_one(
         chp_solve_time=0.0 if skip_proposed else float(chp_time),
         chp_build_time=float("nan") if skip_proposed else chp.build_time,
         chp_solver_time=float("nan") if skip_proposed else chp.solver_time,
+        chp_model_stats=None if chp is None else {
+            "n_variables": chp.n_variables,
+            "n_constraints": chp.n_constraints,
+            "n_nonzeros": chp.n_nonzeros,
+            "presolved_variables": chp.presolved_variables,
+            "presolved_constraints": chp.presolved_constraints,
+            "presolved_nonzeros": chp.presolved_nonzeros,
+            "presolve_stats_time": chp.presolve_stats_time,
+            "barrier_iterations": chp.barrier_iterations,
+            "primal_violation": chp.primal_violation,
+        },
+        yu_solver_options={
+            "method": chp_method,
+            "crossover": chp_crossover,
+            "feasibility_tol": chp_feasibility_tol,
+            "optimality_tol": chp_optimality_tol,
+            "use_output_vars": chp_use_output_vars,
+            "collect_presolve_stats": True,
+        },
     )
     if skip_proposed:
         results.pop("chp", None)
@@ -424,6 +439,7 @@ def run_one(
                 "fixed_cost_multiplier": fixed_cost_multiplier,
                 "method": key,
                 "method_name": r["name"],
+                "power_coordinates": r.get("power_coordinates", ""),
                 "milp_obj": milp_obj,
                 "pricing_obj": r["pricing_obj"],
                 "duality_gap": r["duality_gap"],
@@ -449,16 +465,24 @@ def run_one(
                 "oracle_time": r.get("oracle_time", ""),
                 "n_variables": (
                     chp.n_variables if key == "chp" and chp is not None else ""
-                ),
+                ) or r.get("n_variables", ""),
                 "n_constraints": (
                     chp.n_constraints if key == "chp" and chp is not None else ""
-                ),
+                ) or r.get("n_constraints", ""),
                 "n_nonzeros": (
                     chp.n_nonzeros if key == "chp" and chp is not None else ""
-                ),
+                ) or r.get("n_nonzeros", ""),
+                "presolved_variables": r.get("presolved_variables", ""),
+                "presolved_constraints": r.get("presolved_constraints", ""),
+                "presolved_nonzeros": r.get("presolved_nonzeros", ""),
+                "presolve_stats_time": r.get("presolve_stats_time", ""),
+                "barrier_iterations": r.get("barrier_iterations", ""),
                 "primal_violation": (
                     chp.primal_violation if key == "chp" and chp is not None else ""
-                ),
+                ) if key == "chp" else r.get("primal_violation", ""),
+                "objective_diff_vs_chp": r.get("objective_diff_vs_chp", ""),
+                "max_lmp_diff_vs_chp": r.get("max_lmp_diff_vs_chp", ""),
+                "uplift_diff_vs_chp": r.get("uplift_diff_vs_chp", ""),
                 "on_arcs": size["on_arcs"],
                 "off_arcs": size["off_arcs"],
                 "dag_edges": size["dag_edges"],
@@ -504,14 +528,12 @@ def main() -> None:
                         help="Run a two-day UC warm-up and use day-1 end states as initial conditions.")
     parser.add_argument("--warmup-load-factor", default=0.98, type=float,
                         help="Multiplier applied to the warm-up day load; the evaluation day is unchanged.")
-    parser.add_argument("--chp-method", default=2, type=int,
-                        help="Gurobi Method parameter for D-CHP; default 2 is barrier.")
-    parser.add_argument("--chp-crossover", default=0, type=int,
-                        help="Gurobi Crossover parameter for D-CHP; use 1 for dual-price diagnostics.")
-    parser.add_argument("--chp-bar-conv-tol", default=None, type=float)
+    parser.add_argument("--chp-method", default=2, type=int, choices=[-1, 1, 2],
+                        help="COPT LP method via compatibility mapping; default 2 is barrier.")
+    parser.add_argument("--chp-crossover", default=0, type=int, choices=[0, 1],
+                        help="COPT crossover setting; use 1 for dual-price diagnostics.")
     parser.add_argument("--chp-feasibility-tol", default=None, type=float)
     parser.add_argument("--chp-optimality-tol", default=None, type=float)
-    parser.add_argument("--chp-numeric-focus", default=None, type=int)
     parser.add_argument(
         "--chp-use-output-vars",
         action="store_true",
@@ -575,10 +597,8 @@ def main() -> None:
                                         args.warmup_load_factor,
                                         args.chp_method,
                                         args.chp_crossover,
-                                        args.chp_bar_conv_tol,
                                         args.chp_feasibility_tol,
                                         args.chp_optimality_tol,
-                                        args.chp_numeric_focus,
                                         args.chp_use_output_vars,
                                     )
                                     all_rows.extend(rows)

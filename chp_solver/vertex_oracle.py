@@ -270,7 +270,7 @@ class VertexOracle:
         c_fix: Optional[float] = None,
     ) -> Tuple[np.ndarray, float]:
         """
-        Groenevelt 等价精确解：通过小型 Gurobi LP 求解区间内分段线性利润最大化。
+        Groenevelt 等价精确解：通过小型 COPT LP 求解区间内分段线性利润最大化。
 
         变量：
           p[τ]    : 时段 τ 的总出力 ∈ [P_min, P_max]
@@ -287,12 +287,12 @@ class VertexOracle:
         segs = params.get_pwl_segments()   # [(slope_k, width_k), ...]
         K    = len(segs)
 
-        # ── Gurobi 构建 ──────────────────────────────────────────────────────
+        # ── COPT 构建 ────────────────────────────────────────────────────────
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError:
-            # 无 Gurobi → 退化为单段弦斜率近似
+            # 无 COPT → 退化为单段弦斜率近似
             return VertexOracle._solve_interval_single_segment(
                 params, a, b, lambda_star
             )

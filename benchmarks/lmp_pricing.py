@@ -81,10 +81,10 @@ class FixedULP:
         success    : bool
         """
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError as e:
-            raise ImportError("需要 gurobipy 才能运行 FixedULP。") from e
+            raise ImportError("需要 coptpy 和 gurobi_compat 才能运行 FixedULP。") from e
 
         t_start = time.perf_counter()
         N, T = self.N, self.T
@@ -117,7 +117,7 @@ class FixedULP:
         # ── 目标函数 ─────────────────────────────────────────────────────────
         # 可变成本进入 LP 优化；固定成本作为常数加入报告值（不影响对偶）
         fixed_cost_total = 0.0
-        obj = gp.LinExpr()
+        obj = gp.cp.LinExpr()
         for i, g in enumerate(gens):
             segs = g.get_pwl_segments()
             for t in range(T):
@@ -202,14 +202,14 @@ class FixedULP:
         self.total_time = max(0.0, total_done - t_start)
 
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
-            raise RuntimeError(f"FixedULP 求解失败，Gurobi Status={model.Status}")
+            raise RuntimeError(f"FixedULP 求解失败，COPT Status={model.Status}")
 
         # ── 对偶提取 ─────────────────────────────────────────────────────────
         # Gurobi 等式约束 Pi 的符号：对 min LP，功率平衡的 Pi ≥ 0
         lambda_t = np.array([balance_constrs[t].Pi for t in range(T)])
         lambda_t = np.clip(lambda_t, 0.0, None)   # 纯火电单节点 LMP ≥ 0
 
-        var_obj   = model.ObjVal
+        var_obj   = model.objval
         total_obj = var_obj + fixed_cost_total   # 与 MILP/CHP 口径一致的总成本
 
         self._ptdf_alpha = None

@@ -188,32 +188,19 @@ class ConditionalGPolymatroid(GPolymatroid):
         if not S:
             return 0.0
 
-        A   = set(S)
-        A_c = set(range(self._n)) - A   # 补集
+        mask = np.zeros(self._n, dtype=bool)
+        mask[list(S)] = True
+        upper_in = np.where(mask, self._u_max, 0.0)
+        lower_out = np.where(mask, 0.0, self._u_min)
+        upper_in_suffix = np.r_[np.cumsum(upper_in[::-1])[::-1], 0.0]
+        lower_out_suffix = np.r_[np.cumsum(lower_out[::-1])[::-1], 0.0]
 
-        b_val = float(np.sum(self._u_max[list(A)]))
-        p_c   = float(np.sum(self._u_min[list(A_c)])) if A_c else 0.0
-
-        t_set = set()
+        b_val = float(upper_in_suffix[0])
+        p_c = float(lower_out_suffix[0])
         for t in range(self._n):
-            t_set.add(t)
-            A_t_set_complement   = A_c - t_set
-            A_minus_t_set        = A - t_set
-
-            b_val = min(
-                b_val,
-                self._x_max[t]
-                - p_c
-                + (float(np.sum(self._u_min[list(A_t_set_complement)])) if A_t_set_complement else 0.0)
-                + (float(np.sum(self._u_max[list(A_minus_t_set)]))        if A_minus_t_set        else 0.0),
-            )
-            p_c = max(
-                p_c,
-                self._x_min[t]
-                - b_val
-                + (float(np.sum(self._u_max[list(A_minus_t_set)]))        if A_minus_t_set        else 0.0)
-                + (float(np.sum(self._u_min[list(A_t_set_complement)])) if A_t_set_complement else 0.0),
-            )
+            tail = float(upper_in_suffix[t + 1] + lower_out_suffix[t + 1])
+            b_val = min(b_val, self._x_max[t] - p_c + tail)
+            p_c = max(p_c, self._x_min[t] - b_val + tail)
 
         return float(b_val)
 
@@ -224,32 +211,19 @@ class ConditionalGPolymatroid(GPolymatroid):
         if not S:
             return 0.0
 
-        A   = set(S)
-        A_c = set(range(self._n)) - A
+        mask = np.zeros(self._n, dtype=bool)
+        mask[list(S)] = True
+        lower_in = np.where(mask, self._u_min, 0.0)
+        upper_out = np.where(mask, 0.0, self._u_max)
+        lower_in_suffix = np.r_[np.cumsum(lower_in[::-1])[::-1], 0.0]
+        upper_out_suffix = np.r_[np.cumsum(upper_out[::-1])[::-1], 0.0]
 
-        p_val = float(np.sum(self._u_min[list(A)]))
-        b_c   = float(np.sum(self._u_max[list(A_c)])) if A_c else 0.0
-
-        t_set = set()
+        p_val = float(lower_in_suffix[0])
+        b_c = float(upper_out_suffix[0])
         for t in range(self._n):
-            t_set.add(t)
-            A_t_set_complement   = A_c - t_set
-            A_minus_t_set        = A - t_set
-
-            p_val = max(
-                p_val,
-                self._x_min[t]
-                - b_c
-                + (float(np.sum(self._u_max[list(A_t_set_complement)])) if A_t_set_complement else 0.0)
-                + (float(np.sum(self._u_min[list(A_minus_t_set)]))       if A_minus_t_set       else 0.0),
-            )
-            b_c = min(
-                b_c,
-                self._x_max[t]
-                - p_val
-                + (float(np.sum(self._u_min[list(A_minus_t_set)]))       if A_minus_t_set       else 0.0)
-                + (float(np.sum(self._u_max[list(A_t_set_complement)])) if A_t_set_complement else 0.0),
-            )
+            tail = float(lower_in_suffix[t + 1] + upper_out_suffix[t + 1])
+            p_val = max(p_val, self._x_min[t] - b_c + tail)
+            b_c = min(b_c, self._x_max[t] - p_val + tail)
 
         return float(p_val)
 
@@ -265,11 +239,13 @@ class ThermalUnit:
     求解流程
     --------
     1. enumerate_on_intervals()  → 枚举所有合法 ON-interval [a,b]   O(T²)
-    2. solve_interval_greedy()   → 每个区间调用 v 空间贪心          O(T log T) / 区间
+    2. solve_interval_greedy()   → 每个区间调用 v 空间贪心          O(T²) / 区间
     3. DPShortestPath.solve()    → 区间节点 DAG 最长路径             O(I²)  I=区间数
     4. 重建 u*, p* 轨迹
 
     注意：步骤 1-4 整体对应 solve_subproblem() 的外部调用接口。
+    当前 Python 实现串行调用 O(T) 次、每次 O(T) 的秩函数；只有在秩函数
+    可 O(1) 增量更新或这些查询真正并行时，排序项 O(T log T) 才会主导。
     """
 
     def __init__(self, params: ThermalParameters, unit_id: str = ""):

@@ -26,7 +26,7 @@ if str(PROJECT) not in sys.path:
     sys.path.insert(0, str(PROJECT))
 
 from benchmarks.comparison_runner import (
-    compute_ftr_from_gurobi_duals,
+    compute_ftr_from_lp_duals,
     compute_milp_line_flows,
     timed_uplift_under_prices,
 )
@@ -62,7 +62,7 @@ def _relative_error(value: float, reference: float) -> float:
 def _settlement(gens, network, p_schedule, u_schedule, lmp, alpha, beta) -> dict[str, float]:
     unit = timed_uplift_under_prices(gens, network, p_schedule, u_schedule, lmp)
     flows = compute_milp_line_flows(network, p_schedule)
-    _, ftr = compute_ftr_from_gurobi_duals(alpha, beta, flows, network.F_max)
+    _, ftr = compute_ftr_from_lp_duals(alpha, beta, flows, network.F_max)
     return {
         "gen_uplift": float(unit["gen_uplift"]),
         "ftr_component": float(ftr),
@@ -162,7 +162,6 @@ def _run_one(delta: float, seed: int) -> list[dict[str, Any]]:
             crossover=0,
             feasibility_tol=1e-9,
             optimality_tol=1e-9,
-            numeric_focus=3,
             use_output_vars=True,
         ),
         gens, network, p_schedule, u_schedule,

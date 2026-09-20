@@ -26,7 +26,7 @@
 
 `u, su, sd` 为二进制；`p` 连续；`x[i,k,t]` 为分段填充。
 
-### Gurobi
+### COPT（经 `gurobi_compat`）
 
 ```text
 OutputFlag = 0
@@ -68,7 +68,7 @@ p_dispatch, u_dispatch, obj_val = ScheduleRunMILP(generators, network).solve()
 - 单段：`C_fix·z + Abel 化简后的 `C_var·(duration−k)·v`
 - 分段：`C_fix·z + Σ cvar`
 
-### Gurobi 与对偶
+### COPT 与对偶
 
 - `Method=2`, `Crossover=0`
 - 从 `eq_constrs.Pi` 取系统功率平衡段 → 能量基准价 `λ_t`，符号清理后 **单节点** `clip(λ, 0, None)`
@@ -86,7 +86,7 @@ p_dispatch, u_dispatch, obj_val = ScheduleRunMILP(generators, network).solve()
 
 ### 分段线性（PWL）
 
-- 区间内用 **Gurobi 凸 LP** 最大化 `Σ_t (λ_t p_t − PWL(p_t))`  subject to 爬坡多面体（与 Groenevelt 块级贪心等价）
+- 区间内用 **COPT 凸 LP** 最大化 `Σ_t (λ_t p_t − PWL(p_t))`  subject to 爬坡多面体（与 Groenevelt 块级贪心等价）
 
 ### `compute_uplift`
 

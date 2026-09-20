@@ -81,12 +81,13 @@ class UnitSelfScheduleMILP:
         lambda_star: np.ndarray,
         threads: Optional[int] = None,
         return_timing: bool = False,
+        require_optimal: bool = False,
     ) -> Tuple[np.ndarray, np.ndarray, float]:
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError as e:
-            raise ImportError("需要 gurobipy 才能运行 UnitSelfScheduleMILP。") from e
+            raise ImportError("需要 coptpy 和 gurobi_compat 才能运行 UnitSelfScheduleMILP。") from e
 
         t_start = time.perf_counter()
         T = params.T
@@ -110,7 +111,7 @@ class UnitSelfScheduleMILP:
             for t in range(T)
         }
 
-        profit = gp.LinExpr()
+        profit = gp.cp.LinExpr()
         for t in range(T):
             profit += float(lambda_star[t]) * p[t]
             profit -= params.cost_nl * u[t]
@@ -181,6 +182,8 @@ class UnitSelfScheduleMILP:
         total_done = time.perf_counter()
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
             raise RuntimeError(f"UnitSelfScheduleMILP 求解失败，Status={model.Status}")
+        if require_optimal and model.Status != GRB.OPTIMAL:
+            raise RuntimeError(f"UnitSelfScheduleMILP 未证明最优，Status={model.Status}，MIPGap={model.BestGap}")
 
         p_star = np.array([p[t].X for t in range(T)], dtype=float)
         u_star = np.array([round(u[t].X) for t in range(T)], dtype=float)
@@ -191,8 +194,8 @@ class UnitSelfScheduleMILP:
                 "solver_time": solver_time,
                 "total_time": max(0.0, total_done - t_start),
             }
-            return u_star, p_star, float(model.ObjVal), timing
-        return u_star, p_star, float(model.ObjVal)
+            return u_star, p_star, float(model.objval), timing
+        return u_star, p_star, float(model.objval)
 
     @staticmethod
     def uplift(

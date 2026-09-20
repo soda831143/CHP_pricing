@@ -1,7 +1,7 @@
 """
 Phase 1：定价运行主问题（Pricing Master Problem）。
 
-使用 Gurobi Matrix API 构建纯连续 LP，通过透视缩放约束精确刻画
+使用 COPT Matrix API 构建纯连续 LP，通过透视缩放约束精确刻画
 火电机组可行域的凸包，提取功率平衡约束的对偶变量作为凸包电价 λ*。
 
 支持单节点与多节点（PTDF 直流潮流）两种网络模式，
@@ -9,14 +9,14 @@ Phase 1：定价运行主问题（Pricing Master Problem）。
 
 变量布局
 --------
-x = [z_vars | v_vars | cvar_vars]
+x = [z_vars | interval_power_vars | cvar_vars]
 
 z_vars（共 Σ_i (n_on_i + n_off_i) 个）：
   每台机组每条 ON/OFF 弧的流量变量 z_{i,e} ∈ [0,1]
 
-v_vars（共 Σ_i Σ_e duration_e 个，仅 ON 弧）：
-  每台机组每条 ON 弧在每个时段的差分出力 v_{i,e,τ}（自由变量）
-  物理意义：p_{i,e,τ} = Σ_{k=0}^{τ} v_{i,e,k}（即总出力，非超出 P_min 部分）
+interval_power_vars（共 Σ_i Σ_e duration_e 个，仅 ON 弧）：
+  默认是差分出力 v_{i,e,τ}，物理出力由 prefix sum 重构；
+  power_coordinates="absolute" 时改为 Yu/Pan 区间绝对出力 q_{i,e,τ}。
 
 cvar_vars（与 v_vars 等数量）：
   每台机组每条 ON 弧每个时段的变动成本上镜图变量 c_var_{i,e,τ} ≥ 0
@@ -167,11 +167,13 @@ class PrimalCHPLP:
         *,
         method: int = 2,
         crossover: int = 0,
-        bar_conv_tol: Optional[float] = None,
         feasibility_tol: Optional[float] = None,
         optimality_tol: Optional[float] = None,
-        numeric_focus: Optional[int] = None,
         use_output_vars: bool = False,
+        power_coordinates: str = "differential",
+        collect_presolve_stats: bool = False,
+        bid_multipliers: Optional[np.ndarray] = None,
+        bid_adders: Optional[np.ndarray] = None,
     ) -> None:
         self.generators = generators
         if isinstance(network, np.ndarray):
@@ -180,6 +182,26 @@ class PrimalCHPLP:
         self.demand  = network.sys_demand
         self.T       = network.T
         self.N       = len(generators)
+        self.bid_multipliers = (
+            np.ones((self.N, self.T), dtype=float)
+            if bid_multipliers is None
+            else np.asarray(bid_multipliers, dtype=float).copy()
+        )
+        if self.bid_multipliers.shape != (self.N, self.T):
+            raise ValueError("bid_multipliers must have shape (N_gen, T)")
+        if not np.all(np.isfinite(self.bid_multipliers)) or np.any(self.bid_multipliers <= 0):
+            raise ValueError("bid_multipliers must be finite and positive")
+        self.bid_adders = (
+            np.zeros((self.N, self.T), dtype=float)
+            if bid_adders is None
+            else np.asarray(bid_adders, dtype=float).copy()
+        )
+        if self.bid_adders.shape != (self.N, self.T) or not np.all(np.isfinite(self.bid_adders)):
+            raise ValueError("bid_adders must be a finite (N_gen, T) array")
+        for i, g in enumerate(generators):
+            slopes = np.asarray([s for s, _ in g.get_pwl_segments()], dtype=float)
+            if np.any(slopes[:, None] * self.bid_multipliers[i] + self.bid_adders[i] < 0):
+                raise ValueError("Reported marginal-cost slopes must be nonnegative")
 
         self.dags: List[GeneratorDAG] = [
             DAGBuilder.build(g) for g in generators
@@ -188,6 +210,11 @@ class PrimalCHPLP:
         # 若任意一台机组使用分段线性成本，启用 cvar 变量
         self._use_pwl = any(not g.is_single_segment for g in generators)
         self._use_output_vars = bool(use_output_vars)
+        if power_coordinates not in {"differential", "absolute"}:
+            raise ValueError("power_coordinates must be 'differential' or 'absolute'")
+        self.power_coordinates = power_coordinates
+        self._absolute_power = power_coordinates == "absolute"
+        self.collect_presolve_stats = bool(collect_presolve_stats)
         self._idx     = _VarIndex(
             self.dags,
             use_pwl=self._use_pwl,
@@ -196,12 +223,12 @@ class PrimalCHPLP:
         self._balance_constrs = None
         self._model           = None
         self._solution_x      = None
+        if method not in {-1, 1, 2} or crossover not in {0, 1}:
+            raise ValueError("COPT method must be -1, 1, or 2; crossover must be 0 or 1")
         self.method = method
         self.crossover = crossover
-        self.bar_conv_tol = bar_conv_tol
         self.feasibility_tol = feasibility_tol
         self.optimality_tol = optimality_tol
-        self.numeric_focus = numeric_focus
         self.build_time = float("nan")
         self.solver_time = float("nan")
         self.total_time = float("nan")
@@ -209,6 +236,35 @@ class PrimalCHPLP:
         self.n_constraints = 0
         self.n_nonzeros = 0
         self.primal_violation = float("nan")
+        self.presolved_variables = ""
+        self.presolved_constraints = ""
+        self.presolved_nonzeros = ""
+        self.presolve_stats_time = 0.0
+        self.barrier_iterations = 0
+
+    def _append_interval_output_terms(
+        self,
+        rows: list,
+        cols: list,
+        data: list,
+        row: int,
+        idx: _VarIndex,
+        i: int,
+        k: int,
+        iv: OnInterval,
+        local_tau: int,
+        coefficient: float,
+    ) -> None:
+        """Append coefficients for q[e,t] in either interval coordinate system."""
+        if self._absolute_power:
+            rows.append(row); cols.append(idx.v(i, k, local_tau)); data.append(coefficient)
+            return
+        if iv.initial_online:
+            rows.append(row)
+            cols.append(idx.z_on(i, k))
+            data.append(coefficient * self.generators[i].initial_power)
+        for local_k in range(local_tau + 1):
+            rows.append(row); cols.append(idx.v(i, k, local_k)); data.append(coefficient)
 
     # ── 对外接口 ──────────────────────────────────────────────────────────────
 
@@ -225,10 +281,12 @@ class PrimalCHPLP:
         success    : bool
         """
         try:
-            import gurobipy as gp
-            from gurobipy import GRB
+            import gurobi_compat as gp
+            from gurobi_compat import GRB
         except ImportError as e:
-            raise ImportError("需要安装 gurobipy 才能运行 PrimalCHPLP。") from e
+            raise ImportError("需要安装 coptpy 和 gurobi_compat 才能运行 PrimalCHPLP。") from e
+        # addMConstr internally calls COPT's native addConstrs signature.
+        gp.cp.Model.addConstrs = gp._orig_addConstrs
 
         solve_start = time.perf_counter()
         idx    = self._idx
@@ -244,7 +302,7 @@ class PrimalCHPLP:
             for k in range(dag.n_off):
                 ub[idx.z_off(i, k)] = 1.0
 
-        # v 变量：自由变量
+        # v/q 变量：均由透视容量约束界定；保持自由界限以公平比较矩阵表示。
         for i, dag in enumerate(self.dags):
             for k, iv in enumerate(dag.on_intervals):
                 for tau in range(iv.duration):
@@ -267,15 +325,24 @@ class PrimalCHPLP:
         for i, (dag, params) in enumerate(zip(self.dags, self.generators)):
             for k, iv in enumerate(dag.on_intervals):
                 if not self._use_pwl or params.is_single_segment:
-                    # 单段 Abel 稀疏化：
-                    # Σ_τ cost_var*(p_τ - z*P_min) = cost_var*Σp_τ - cost_var*n*P_min*z
-                    # Abel of cost_var*Σp_τ = Σ_τ cost_var*(n-τ)*v_τ
-                    p0 = params.initial_power if iv.initial_online else 0.0
-                    c_obj[idx.z_on(i, k)] = (
-                        iv.c_fix + params.cost_var * iv.duration * (p0 - params.P_min)
+                    slopes_by_hour = (
+                        params.cost_var * self.bid_multipliers[i, iv.a : iv.b + 1]
+                        + self.bid_adders[i, iv.a : iv.b + 1]
                     )
-                    for tau in range(iv.duration):
-                        c_obj[idx.v(i, k, tau)] = params.cost_var * (iv.duration - tau)
+                    if self._absolute_power:
+                        c_obj[idx.z_on(i, k)] = (
+                            iv.c_fix - float(np.sum(slopes_by_hour)) * params.P_min
+                        )
+                        for tau in range(iv.duration):
+                            c_obj[idx.v(i, k, tau)] = slopes_by_hour[tau]
+                    else:
+                        # Abel transform of Σ cost_var*(q_τ - z*P_min).
+                        p0 = params.initial_power if iv.initial_online else 0.0
+                        c_obj[idx.z_on(i, k)] = (
+                            iv.c_fix + float(np.sum(slopes_by_hour)) * (p0 - params.P_min)
+                        )
+                        for tau in range(iv.duration):
+                            c_obj[idx.v(i, k, tau)] = float(np.sum(slopes_by_hour[tau:]))
                 else:
                     # 分段：cvar 变量进目标，v 系数 = 0
                     # cvar 上镜图约束中已用 (b_k - s_k*P_min)*z 正确扣减 P_min 基底
@@ -291,38 +358,46 @@ class PrimalCHPLP:
         # ── 4. 不等式约束（物理透视 + PWL 上镜图）─────────────────────────
         A_ub_csr, b_ub = self._build_ineq_constraints(idx)
 
-        # ── 5. Gurobi 求解 ─────────────────────────────────────────────────
-        model = gp.Model("PrimalCHP")
+        # ── 5. COPT 求解 ───────────────────────────────────────────────────
+        model = gp.Model("YuIntervalCHP" if self._absolute_power else "PrimalCHP")
         model.Params.OutputFlag = 0
         model.Params.Method     = self.method
         model.Params.Crossover  = self.crossover
-        if self.bar_conv_tol is not None:
-            model.Params.BarConvTol = self.bar_conv_tol
         if self.feasibility_tol is not None:
             model.Params.FeasibilityTol = self.feasibility_tol
         if self.optimality_tol is not None:
             model.Params.OptimalityTol = self.optimality_tol
-        if self.numeric_focus is not None:
-            model.Params.NumericFocus = self.numeric_focus
 
-        x = model.addMVar(shape=n_cols, lb=lb, ub=ub, name="x")
-        eq_constrs   = model.addMConstr(A_eq_csr, x, '=', b_eq, name="eq")
+        x = model.addMVar(shape=n_cols, lb=lb, ub=ub, nameprefix="x")
+        eq_constrs   = model.addMConstr(A_eq_csr, x, 'E', b_eq, nameprefix="eq")
         ineq_constrs = None
         if A_ub_csr.shape[0] > 0:
-            ineq_constrs = model.addMConstr(A_ub_csr, x, '<', b_ub, name="ineq")
+            ineq_constrs = model.addMConstr(A_ub_csr, x, 'L', b_ub, nameprefix="ineq")
 
-        model.setMObjective(None, c_obj, 0.0, sense=GRB.MINIMIZE)
+        model.setMObjective(None, c_obj, 0.0, xc=x, sense=GRB.MINIMIZE)
         model.update()
         build_done = time.perf_counter()
         self.build_time = build_done - solve_start
         self.n_variables = int(model.NumVars)
         self.n_constraints = int(model.NumConstrs)
-        self.n_nonzeros = int(model.NumNZs)
+        self.n_nonzeros = int(model.Elems)
         model.optimize()
         self._model = model
         self.solver_time = float(getattr(model, "Runtime", float("nan")))
         self.total_time = time.perf_counter() - solve_start
-        self.primal_violation = float(getattr(model, "ConstrVio", float("nan")))
+        self.primal_violation = float("nan")
+        self.barrier_iterations = int(round(float(getattr(model, "BarrierIter", 0))))
+
+        if self.collect_presolve_stats:
+            stats_start = time.perf_counter()
+            try:
+                presolved = model.presolve()
+                self.presolved_variables = int(presolved.NumVars)
+                self.presolved_constraints = int(presolved.NumConstrs)
+                self.presolved_nonzeros = int(presolved.NumNZs)
+            except Exception:
+                pass
+            self.presolve_stats_time = time.perf_counter() - stats_start
 
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
             self._ptdf_alpha = None
@@ -330,13 +405,20 @@ class PrimalCHPLP:
             N_bus = self.network.N_bus
             return np.zeros((N_bus, self.T)), float("inf"), False
 
-        obj_val = model.ObjVal
-        self._solution_x = np.array(x.X, dtype=float)
+        obj_val = model.objval
+        self._solution_x = x.x.tonumpy()
+        self.primal_violation = max(
+            float(np.max(np.abs(A_eq_csr @ self._solution_x - b_eq))),
+            float(np.max(np.maximum(A_ub_csr @ self._solution_x - b_ub, 0.0)))
+            if A_ub_csr.shape[0] else 0.0,
+            float(np.max(np.maximum(lb - self._solution_x, 0.0))),
+            float(np.max(np.maximum(self._solution_x - ub, 0.0))),
+        )
 
         # ── 6. 提取全局能量价格 λ（等式约束对偶）─────────────────────────
         # 等式约束行排列：[n_flow | n_src | n_bal]
         # n_bal = T，全局平衡约束，对偶 = 能量价格 λ_t（所有节点共享基准）
-        all_pi_eq  = np.array(eq_constrs.Pi)
+        all_pi_eq  = eq_constrs.getInfo(gp.cp.COPT.Info.Dual).tonumpy()
         balance_pi = all_pi_eq[n_flow + n_src : n_flow + n_src + n_bal]   # (T,)
 
         # 保持原实现的价格清理口径。
@@ -345,6 +427,7 @@ class PrimalCHPLP:
         balance_pi = np.where(np.abs(balance_pi) < 1e-8, 0.0, balance_pi)
         balance_pi = np.clip(balance_pi, 0.0, None)
         lambda_t   = balance_pi                         # (T,)
+        self.energy_price = lambda_t.copy()
 
         N_bus = self.network.N_bus
 
@@ -353,7 +436,7 @@ class PrimalCHPLP:
         # 多节点 PTDF 直流潮流公式：
         #   LMP_{n,t} = λ_t + Σ_l PTDF[l,n] * (α_{l,t} − β_{l,t})
         # 其中：
-        #   α_{l,t} = Pi of (PTDF_Gen @ p ≤ rhs_pos) constraint ≤ 0 (Gurobi min convention)
+        #   α_{l,t} = dual of (PTDF_Gen @ p ≤ rhs_pos) constraint ≤ 0 (min-LP convention)
         #   β_{l,t} = Pi of (-PTDF_Gen @ p ≤ -rhs_neg) constraint ≤ 0
         #   拥塞正向（线路达上限）：α < 0 → 发电侧节点 LMP 降低，负荷侧 LMP 升高
         if self.network.is_single_node or ineq_constrs is None:
@@ -362,7 +445,7 @@ class PrimalCHPLP:
             # 多节点 PTDF 直流潮流 LMP 后处理计算：
             # PTDF 不等式约束排列：物理/PWL 约束在前，PTDF 约束在后
             # PTDF 约束排列：l=0→T-1 upper; l=0→T-1 lower; l=1→T-1 upper; ...
-            all_pi_ub = np.array(ineq_constrs.Pi)       # (n_ineq,)
+            all_pi_ub = ineq_constrs.getInfo(gp.cp.COPT.Info.Dual).tonumpy()  # (n_ineq,)
             N_line    = self.network.N_line
             n_ptdf_rows = 2 * N_line * self.T
             n_unit_ineq = len(all_pi_ub) - n_ptdf_rows
@@ -384,7 +467,7 @@ class PrimalCHPLP:
 
         self._balance_constrs = eq_constrs
         # 保存 PTDF 对偶变量，供外部计算 FTR 成本（多节点 Eq.34 第二行）
-        # alpha ≤ 0：上限约束 Pi；beta_code ≤ 0：下限约束 Pi（Gurobi min LP 惯例）
+        # alpha ≤ 0：上限约束对偶；beta_code ≤ 0：下限约束对偶（min-LP 惯例）
         # 对应论文符号：γ_paper = -alpha ≥ 0，β_paper = -beta_code ≥ 0
         if not self.network.is_single_node and ineq_constrs is not None:
             self._ptdf_alpha  = alpha   # (N_line, T), ≤ 0
@@ -396,9 +479,7 @@ class PrimalCHPLP:
 
     def lp_dispatch(self) -> np.ndarray:
         """
-        Return the convexified LP dispatch reconstructed from the solved
-        differential variables.  This is a reporting helper for paper figures;
-        it is not used by the pricing LP itself.
+        Return the convexified LP dispatch reconstructed from interval variables.
         """
         if self._solution_x is None:
             raise RuntimeError("Call solve() before lp_dispatch().")
@@ -417,12 +498,15 @@ class PrimalCHPLP:
             for k, iv in enumerate(dag.on_intervals):
                 for tau in range(iv.a, iv.b + 1):
                     local_end = tau - iv.a
-                    if iv.initial_online:
-                        p_lp[i, tau] += self._solution_x[idx.z_on(i, k)] * dag.params.initial_power
-                    p_lp[i, tau] += sum(
-                        self._solution_x[idx.v(i, k, local_j)]
-                        for local_j in range(local_end + 1)
-                    )
+                    if self._absolute_power:
+                        p_lp[i, tau] += self._solution_x[idx.v(i, k, local_end)]
+                    else:
+                        if iv.initial_online:
+                            p_lp[i, tau] += self._solution_x[idx.z_on(i, k)] * dag.params.initial_power
+                        p_lp[i, tau] += sum(
+                            self._solution_x[idx.v(i, k, local_j)]
+                            for local_j in range(local_end + 1)
+                        )
         return p_lp
 
     # ── 内部：等式约束构建 ─────────────────────────────────────────────────
@@ -491,14 +575,9 @@ class PrimalCHPLP:
                     for k, iv in enumerate(dag.on_intervals):
                         if iv.a <= tau <= iv.b:
                             local_end = tau - iv.a
-                            if iv.initial_online:
-                                rows.append(row)
-                                cols.append(idx.z_on(i, k))
-                                data.append(dag.params.initial_power)
-                            for local_k in range(local_end + 1):
-                                rows.append(row)
-                                cols.append(idx.v(i, k, local_k))
-                                data.append(1.0)
+                            self._append_interval_output_terms(
+                                rows, cols, data, row, idx, i, k, iv, local_end, 1.0
+                            )
             b_eq_list.append(float(self.network.sys_demand[tau]))
             row += 1
 
@@ -513,14 +592,9 @@ class PrimalCHPLP:
                     for k, iv in enumerate(dag.on_intervals):
                         if iv.a <= tau <= iv.b:
                             local_end = tau - iv.a
-                            if iv.initial_online:
-                                rows.append(row)
-                                cols.append(idx.z_on(i, k))
-                                data.append(-dag.params.initial_power)
-                            for local_k in range(local_end + 1):
-                                rows.append(row)
-                                cols.append(idx.v(i, k, local_k))
-                                data.append(-1.0)
+                            self._append_interval_output_terms(
+                                rows, cols, data, row, idx, i, k, iv, local_end, -1.0
+                            )
                     b_eq_list.append(0.0)
                     row += 1
 
@@ -560,11 +634,13 @@ class PrimalCHPLP:
                 v0_col = idx.v(i, k, 0)
                 if iv.initial_online:
                     rows.append(row); cols.append(v0_col); data.append(1.0)
-                    rows.append(row); cols.append(z_col);  data.append(-params.R_up)
+                    z_coeff = -(params.initial_power + params.R_up) if self._absolute_power else -params.R_up
+                    rows.append(row); cols.append(z_col);  data.append(z_coeff)
                     b_ub_list.append(0.0); row += 1
 
                     rows.append(row); cols.append(v0_col); data.append(-1.0)
-                    rows.append(row); cols.append(z_col);  data.append(-params.R_down)
+                    z_coeff = params.initial_power - params.R_down if self._absolute_power else -params.R_down
+                    rows.append(row); cols.append(z_col);  data.append(z_coeff)
                     b_ub_list.append(0.0); row += 1
                 else:
                     rows.append(row); cols.append(v0_col); data.append(1.0)
@@ -576,30 +652,32 @@ class PrimalCHPLP:
                     b_ub_list.append(0.0); row += 1
 
                 # ── (2) 管内爬坡约束 τ=1..n-1 ───────────────────────────────
-                # 对照 main(4).tex Eq.(persp-ramp): -z_e·R_down ≤ v_τ ≤ z_e·R_up
                 for tau in range(1, n):
                     vt_col = idx.v(i, k, tau)
-                    # 上界：v_τ ≤ z_e·R_up → v_τ - R_up·z_e ≤ 0
                     rows.append(row); cols.append(vt_col); data.append(1.0)
+                    if self._absolute_power:
+                        rows.append(row); cols.append(idx.v(i, k, tau - 1)); data.append(-1.0)
                     rows.append(row); cols.append(z_col);  data.append(-params.R_up)
                     b_ub_list.append(0.0); row += 1
 
-                    # 下界：v_τ ≥ -z_e·R_down → -v_τ - R_down·z_e ≤ 0
                     rows.append(row); cols.append(vt_col); data.append(-1.0)
+                    if self._absolute_power:
+                        rows.append(row); cols.append(idx.v(i, k, tau - 1)); data.append(1.0)
                     rows.append(row); cols.append(z_col);  data.append(-params.R_down)
                     b_ub_list.append(0.0); row += 1
 
-                # ── (3) 容量前缀和约束 τ=0..n-1 ─────────────────────────────
+                # ── (3) 容量约束 τ=0..n-1 ───────────────────────────────────
                 for tau in range(n):
-                    p0 = params.initial_power if iv.initial_online else 0.0
-                    for local_k in range(tau + 1):
-                        rows.append(row); cols.append(idx.v(i, k, local_k)); data.append(1.0)
-                    rows.append(row); cols.append(z_col); data.append(p0 - params.P_max)
+                    self._append_interval_output_terms(
+                        rows, cols, data, row, idx, i, k, iv, tau, 1.0
+                    )
+                    rows.append(row); cols.append(z_col); data.append(-params.P_max)
                     b_ub_list.append(0.0); row += 1
 
-                    for local_k in range(tau + 1):
-                        rows.append(row); cols.append(idx.v(i, k, local_k)); data.append(-1.0)
-                    rows.append(row); cols.append(z_col); data.append(params.P_min - p0)
+                    self._append_interval_output_terms(
+                        rows, cols, data, row, idx, i, k, iv, tau, -1.0
+                    )
+                    rows.append(row); cols.append(z_col); data.append(params.P_min)
                     b_ub_list.append(0.0); row += 1
 
                 # ── (4) 停机脱网约束 ─────────────────────────────────────────
@@ -607,10 +685,10 @@ class PrimalCHPLP:
                 # 末端 (b = T-1)，DAG/固定成本口径均表示没有期末停机事件，
                 # 因而不应强迫最后一个在线时段满足 shutdown-ramp 上界。
                 if iv.b < params.T - 1:
-                    p0 = params.initial_power if iv.initial_online else 0.0
-                    for local_k in range(n):
-                        rows.append(row); cols.append(idx.v(i, k, local_k)); data.append(1.0)
-                    rows.append(row); cols.append(z_col); data.append(p0 - params.SD_ramp)
+                    self._append_interval_output_terms(
+                        rows, cols, data, row, idx, i, k, iv, n - 1, 1.0
+                    )
+                    rows.append(row); cols.append(z_col); data.append(-params.SD_ramp)
                     b_ub_list.append(0.0); row += 1
 
                 # ── (B) 分段线性上镜图约束（仅 PWL 模式且本机组分段）────────
@@ -622,33 +700,37 @@ class PrimalCHPLP:
                     slopes     = params.pwl_slopes
                     intercepts = params.pwl_intercepts()
                     Pmin       = params.P_min
-                    p0         = params.initial_power if iv.initial_online else 0.0
                     for tau in range(n):
                         cv_col = idx.cvar(i, k, tau)
+                        multiplier = self.bid_multipliers[i, iv.a + tau]
+                        adder = self.bid_adders[i, iv.a + tau]
                         for seg_k, (s_k, b_k) in enumerate(
                                 zip(slopes, intercepts)):
+                            s_k = s_k * multiplier + adder
+                            b_k *= multiplier
                             rows.append(row); cols.append(cv_col); data.append(-1.0)
-                            for local_j in range(tau + 1):
-                                rows.append(row)
-                                cols.append(idx.v(i, k, local_j))
-                                data.append(s_k)
+                            self._append_interval_output_terms(
+                                rows, cols, data, row, idx, i, k, iv, tau, s_k
+                            )
                             rows.append(row); cols.append(z_col)
-                            data.append(b_k + s_k * (p0 - Pmin))
+                            data.append(b_k - s_k * Pmin)
                             b_ub_list.append(0.0); row += 1
 
                 elif self._use_pwl and params.is_single_segment:
                     # 单段退化：c_var ≥ cost_var · (Σv - z·P_min)
                     Pmin = params.P_min
-                    p0 = params.initial_power if iv.initial_online else 0.0
                     for tau in range(n):
                         cv_col = idx.cvar(i, k, tau)
+                        cost_var = (
+                            params.cost_var * self.bid_multipliers[i, iv.a + tau]
+                            + self.bid_adders[i, iv.a + tau]
+                        )
                         rows.append(row); cols.append(cv_col); data.append(-1.0)
-                        for local_j in range(tau + 1):
-                            rows.append(row)
-                            cols.append(idx.v(i, k, local_j))
-                            data.append(params.cost_var)
+                        self._append_interval_output_terms(
+                            rows, cols, data, row, idx, i, k, iv, tau, cost_var
+                        )
                         rows.append(row); cols.append(z_col)
-                        data.append(params.cost_var * (p0 - Pmin))
+                        data.append(-cost_var * Pmin)
                         b_ub_list.append(0.0); row += 1
 
         # ── (C) PTDF 线路容量约束（多节点模式）────────────────────────────
@@ -682,14 +764,9 @@ class PrimalCHPLP:
                         for k, iv in enumerate(dag.on_intervals):
                             if iv.a <= tau <= iv.b:
                                 local_end = tau - iv.a
-                                if iv.initial_online:
-                                    rows.append(row)
-                                    cols.append(idx.z_on(i, k))
-                                    data.append(coeff * dag.params.initial_power)
-                                for local_k in range(local_end + 1):
-                                    rows.append(row)
-                                    cols.append(idx.v(i, k, local_k))
-                                    data.append(coeff)
+                                self._append_interval_output_terms(
+                                    rows, cols, data, row, idx, i, k, iv, local_end, coeff
+                                )
                     b_ub_list.append(rhs_p); row += 1
 
                     # Lower bound (negated): -Σ coeff * v ≤ -rhs_neg
@@ -705,14 +782,9 @@ class PrimalCHPLP:
                         for k, iv in enumerate(dag.on_intervals):
                             if iv.a <= tau <= iv.b:
                                 local_end = tau - iv.a
-                                if iv.initial_online:
-                                    rows.append(row)
-                                    cols.append(idx.z_on(i, k))
-                                    data.append(-coeff * dag.params.initial_power)
-                                for local_k in range(local_end + 1):
-                                    rows.append(row)
-                                    cols.append(idx.v(i, k, local_k))
-                                    data.append(-coeff)
+                                self._append_interval_output_terms(
+                                    rows, cols, data, row, idx, i, k, iv, local_end, -coeff
+                                )
                     b_ub_list.append(-rhs_n); row += 1
 
         if row == 0:

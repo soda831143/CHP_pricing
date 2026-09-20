@@ -307,8 +307,8 @@ class XiaoExplicitPricing:
             self.transitions.append(transitions)
 
     def solve(self) -> Tuple[np.ndarray, float, bool]:
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         t_start = time.perf_counter()
         p2 = self._solve_p2()
@@ -323,8 +323,8 @@ class XiaoExplicitPricing:
         return lmp_matrix, p2["obj"], True
 
     def _solve_p2(self) -> dict:
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         t_start = time.perf_counter()
         model = gp.Model("XiaoP2StateSpace")
@@ -333,7 +333,7 @@ class XiaoExplicitPricing:
         model.Params.Crossover = 0
 
         omega: List[List[gp.Var]] = []
-        obj = gp.LinExpr()
+        obj = gp.cp.LinExpr()
         for i, transitions in enumerate(self.transitions):
             omega_i = []
             for a, tr in enumerate(transitions):
@@ -404,7 +404,7 @@ class XiaoExplicitPricing:
         self.p2_build_time = max(0.0, build_done - t_start)
         self.p2_solver_time = float(getattr(model, "Runtime", total_done - build_done))
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
-            raise RuntimeError(f"Xiao P2 求解失败，Gurobi Status={model.Status}")
+            raise RuntimeError(f"Xiao P2 求解失败，COPT Status={model.Status}")
 
         omega_val: List[np.ndarray] = []
         p_star = np.zeros((self.N, self.T))
@@ -421,7 +421,7 @@ class XiaoExplicitPricing:
             flows = self.network.PTDF_Gen @ p_star - self.network.PTDF @ self.network.demand
 
         return {
-            "obj": float(model.ObjVal),
+            "obj": float(model.objval),
             "omega": omega_val,
             "p": p_star,
             "c": c_star,
@@ -430,8 +430,8 @@ class XiaoExplicitPricing:
 
     def _solve_step2_dual(self, p2: dict) -> Tuple[np.ndarray, Optional[np.ndarray], Optional[np.ndarray]]:
         """Solve Xiao Step 2 as the explicit dual LP of P2."""
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         t_start = time.perf_counter()
         model = gp.Model("XiaoStep2Dual")
@@ -466,7 +466,7 @@ class XiaoExplicitPricing:
         # to recover its fixed/start-up cost directly from the energy price.
         for i, transitions in enumerate(self.transitions):
             for a, tr in enumerate(transitions):
-                expr = gp.LinExpr()
+                expr = gp.cp.LinExpr()
                 if tr.t == 0:
                     expr += rho[i]
                 else:
@@ -482,7 +482,7 @@ class XiaoExplicitPricing:
                         expr += -coeff * beta_code[l, tr.t]
                 model.addConstr(expr <= tr.cost + 1e-8, name=f"dual_feas_{i}_{a}")
 
-        obj = gp.LinExpr()
+        obj = gp.cp.LinExpr()
         for i in range(self.N):
             obj += rho[i]
         for t in range(self.T):
@@ -503,7 +503,7 @@ class XiaoExplicitPricing:
         self.dual_build_time = max(0.0, build_done - t_start)
         self.dual_solver_time = float(getattr(model, "Runtime", total_done - build_done))
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
-            raise RuntimeError(f"Xiao Step-2 dual LP 求解失败，Gurobi Status={model.Status}")
+            raise RuntimeError(f"Xiao Step-2 dual LP 求解失败，COPT Status={model.Status}")
 
         lambda_t = np.array([lam[t].X for t in range(self.T)], dtype=float)
         lambda_t = np.where(np.abs(lambda_t) < 1e-8, 0.0, lambda_t)

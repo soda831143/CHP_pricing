@@ -93,9 +93,9 @@ class LevelMethodPricing:
         verbose: bool = False,
     ) -> dict:
         try:
-            import gurobipy as gp  # noqa: F401
+            import gurobi_compat as gp  # noqa: F401
         except ImportError as e:
-            raise ImportError("需要 gurobipy 才能运行 LevelMethodPricing。") from e
+            raise ImportError("需要 coptpy 和 gurobi_compat 才能运行 LevelMethodPricing。") from e
 
         y = self._initial_point()
         lb = -float("inf")
@@ -296,22 +296,19 @@ class LevelMethodPricing:
         lower: np.ndarray,
         upper: np.ndarray,
     ) -> tuple[float, np.ndarray]:
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         t_start = time.perf_counter()
         m = gp.Model("LevelMaster")
         m.Params.OutputFlag = 0
-        m.Params.DualReductions = 0
-        y = m.addVars(
-            len(lower),
-            lb={i: float(lower[i]) for i in range(len(lower))},
-            ub={i: float(upper[i]) for i in range(len(lower))},
-            name="y",
-        )
+        y = {
+            i: m.addVar(lb=float(lower[i]), ub=float(upper[i]), name=f"y_{i}")
+            for i in range(len(lower))
+        }
         theta = m.addVar(lb=-GRB.INFINITY, name="theta")
         for cut in cuts:
-            expr = gp.LinExpr(float(cut.intercept))
+            expr = gp.cp.LinExpr(float(cut.intercept))
             for i, coef in enumerate(cut.supergrad):
                 if abs(float(coef)) > 1e-12:
                     expr += float(coef) * y[i]
@@ -326,7 +323,7 @@ class LevelMethodPricing:
             self._timing["master_solver"] += solver_time
             self._timing["master_total"] += max(0.0, total_done - t_start)
         if m.Status != GRB.OPTIMAL:
-            raise RuntimeError(f"Level master failed with Gurobi status {m.Status}")
+            raise RuntimeError(f"Level master failed with COPT status {m.Status}")
         return float(theta.X), np.array([y[i].X for i in range(len(lower))], dtype=float)
 
     def _solve_projection(
@@ -337,26 +334,23 @@ class LevelMethodPricing:
         lower: np.ndarray,
         upper: np.ndarray,
     ) -> np.ndarray:
-        import gurobipy as gp
-        from gurobipy import GRB
+        import gurobi_compat as gp
+        from gurobi_compat import GRB
 
         t_start = time.perf_counter()
         m = gp.Model("LevelProjection")
         m.Params.OutputFlag = 0
-        m.Params.DualReductions = 0
-        y = m.addVars(
-            len(lower),
-            lb={i: float(lower[i]) for i in range(len(lower))},
-            ub={i: float(upper[i]) for i in range(len(lower))},
-            name="y",
-        )
+        y = {
+            i: m.addVar(lb=float(lower[i]), ub=float(upper[i]), name=f"y_{i}")
+            for i in range(len(lower))
+        }
         for cut in cuts:
-            expr = gp.LinExpr(float(cut.intercept))
+            expr = gp.cp.LinExpr(float(cut.intercept))
             for i, coef in enumerate(cut.supergrad):
                 if abs(float(coef)) > 1e-12:
                     expr += float(coef) * y[i]
             m.addConstr(expr >= float(level))
-        obj = gp.QuadExpr()
+        obj = gp.cp.QuadExpr()
         for i in range(len(lower)):
             diff_i = y[i] - float(current[i])
             obj += diff_i * diff_i
@@ -374,7 +368,7 @@ class LevelMethodPricing:
         if m.Status in (GRB.INFEASIBLE, GRB.INF_OR_UNBD):
             _, master_y = self._solve_master(cuts, lower, upper)
             return master_y
-        raise RuntimeError(f"Level projection failed with Gurobi status {m.Status}")
+        raise RuntimeError(f"Level projection failed with COPT status {m.Status}")
 
     def _lmp_matrix(self, lam: np.ndarray, mu_ub: np.ndarray, mu_lb: np.ndarray) -> np.ndarray:
         lam = np.clip(np.asarray(lam, dtype=float), 0.0, None)
