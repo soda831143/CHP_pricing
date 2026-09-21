@@ -266,6 +266,48 @@ class PrimalCHPLP:
         for local_k in range(local_tau + 1):
             rows.append(row); cols.append(idx.v(i, k, local_k)); data.append(coefficient)
 
+    def _bid_adder_coefficients(self, generator_index: int, adders: np.ndarray) -> np.ndarray:
+        """Return objective coefficients for above-minimum energy adders."""
+        if not 0 <= generator_index < self.N:
+            raise IndexError(f"generator_index out of range: {generator_index}")
+        adders = np.asarray(adders, dtype=float)
+        if adders.shape != (self.T,) or np.any(~np.isfinite(adders)):
+            raise ValueError(f"adders must be a finite ({self.T},) array")
+
+        coefficients = np.zeros(self._idx.n_total)
+        dag = self.dags[generator_index]
+        params = self.generators[generator_index]
+        for k, iv in enumerate(dag.on_intervals):
+            interval_adders = adders[iv.a : iv.b + 1]
+            if self._absolute_power:
+                coefficients[self._idx.z_on(generator_index, k)] -= (
+                    float(np.sum(interval_adders)) * params.P_min
+                )
+                for tau, adder in enumerate(interval_adders):
+                    coefficients[self._idx.v(generator_index, k, tau)] += adder
+            else:
+                p0 = params.initial_power if iv.initial_online else 0.0
+                coefficients[self._idx.z_on(generator_index, k)] += (
+                    float(np.sum(interval_adders)) * (p0 - params.P_min)
+                )
+                for tau in range(iv.duration):
+                    coefficients[self._idx.v(generator_index, k, tau)] += float(
+                        np.sum(interval_adders[tau:])
+                    )
+        return coefficients
+
+    def bid_adder_direction(
+        self, generator_index: int, hour: Optional[int] = None
+    ) -> np.ndarray:
+        """Direction d for a unit's all-day or one-hour above-P_min offer adder."""
+        if hour is not None and not 0 <= hour < self.T:
+            raise IndexError(f"hour out of range: {hour}")
+        adders = np.ones(self.T)
+        if hour is not None:
+            adders[:] = 0.0
+            adders[hour] = 1.0
+        return self._bid_adder_coefficients(generator_index, adders)
+
     # ── 对外接口 ──────────────────────────────────────────────────────────────
 
     def solve(self) -> Tuple[np.ndarray, float, bool]:
@@ -325,10 +367,9 @@ class PrimalCHPLP:
         for i, (dag, params) in enumerate(zip(self.dags, self.generators)):
             for k, iv in enumerate(dag.on_intervals):
                 if not self._use_pwl or params.is_single_segment:
-                    slopes_by_hour = (
-                        params.cost_var * self.bid_multipliers[i, iv.a : iv.b + 1]
-                        + self.bid_adders[i, iv.a : iv.b + 1]
-                    )
+                    slopes_by_hour = params.cost_var * self.bid_multipliers[
+                        i, iv.a : iv.b + 1
+                    ]
                     if self._absolute_power:
                         c_obj[idx.z_on(i, k)] = (
                             iv.c_fix - float(np.sum(slopes_by_hour)) * params.P_min
@@ -344,28 +385,13 @@ class PrimalCHPLP:
                         for tau in range(iv.duration):
                             c_obj[idx.v(i, k, tau)] = float(np.sum(slopes_by_hour[tau:]))
                 else:
-                    # 分段：基准 PWL 成本由 cvar 表示。统一边际报价加数 δ 满足
-                    # max_k {(s_k+δ)q+b_k z} = δq + max_k {s_kq+b_k z}，
-                    # 因而只进入目标，保持参数化 LP 的约束矩阵不变。
-                    adders_by_hour = self.bid_adders[i, iv.a : iv.b + 1]
-                    if self._absolute_power:
-                        c_obj[idx.z_on(i, k)] = (
-                            iv.c_fix - float(np.sum(adders_by_hour)) * params.P_min
-                        )
-                        for tau in range(iv.duration):
-                            c_obj[idx.v(i, k, tau)] = adders_by_hour[tau]
-                    else:
-                        p0 = params.initial_power if iv.initial_online else 0.0
-                        c_obj[idx.z_on(i, k)] = (
-                            iv.c_fix
-                            + float(np.sum(adders_by_hour)) * (p0 - params.P_min)
-                        )
-                        for tau in range(iv.duration):
-                            c_obj[idx.v(i, k, tau)] = float(np.sum(adders_by_hour[tau:]))
+                    # 基准 PWL 成本由 cvar 表示；绝对报价加数统一在下方加入。
+                    c_obj[idx.z_on(i, k)] = iv.c_fix
                     for tau in range(iv.duration):
                         c_obj[idx.cvar(i, k, tau)] = 1.0
             for k, arc in enumerate(dag.off_arcs):
                 c_obj[idx.z_off(i, k)] = arc.c_fix
+            c_obj += self._bid_adder_coefficients(i, self.bid_adders[i])
 
         # ── 3. 等式约束 ─────────────────────────────────────────────────────
         A_eq_csr, b_eq, n_flow, n_src, n_bal = self._build_eq_constraints(idx)
@@ -523,6 +549,33 @@ class PrimalCHPLP:
                             for local_j in range(local_end + 1)
                         )
         return p_lp
+
+    def lp_commitment(self) -> np.ndarray:
+        """Return aggregate convexified online mass u_ch from ON-interval flows."""
+        if self._solution_x is None:
+            raise RuntimeError("Call solve() before lp_commitment().")
+        commitment = np.zeros((self.N, self.T), dtype=float)
+        for i, dag in enumerate(self.dags):
+            for k, iv in enumerate(dag.on_intervals):
+                commitment[i, iv.a : iv.b + 1] += self._solution_x[
+                    self._idx.z_on(i, k)
+                ]
+        return commitment
+
+    def incremental_energy_exposure(
+        self, generator_index: int, hour: Optional[int] = None
+    ) -> float:
+        """Return p-P_min*u_ch for the selected unit and optional hour."""
+        if not 0 <= generator_index < self.N:
+            raise IndexError(f"generator_index out of range: {generator_index}")
+        if hour is not None and not 0 <= hour < self.T:
+            raise IndexError(f"hour out of range: {hour}")
+        exposure = (
+            self.lp_dispatch()[generator_index]
+            - self.generators[generator_index].P_min
+            * self.lp_commitment()[generator_index]
+        )
+        return float(np.sum(exposure) if hour is None else exposure[hour])
 
     # ── 内部：等式约束构建 ─────────────────────────────────────────────────
 

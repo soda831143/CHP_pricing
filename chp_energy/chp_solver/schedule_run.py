@@ -79,6 +79,7 @@ class ScheduleRunMILP:
         self.demand = network.sys_demand
         self.T = network.T
         self.N = len(generators)
+        self._incremental_dispatch = None
 
     def solve(self, require_optimal: bool = False) -> Tuple[np.ndarray, np.ndarray, float]:
         """
@@ -258,6 +259,19 @@ class ScheduleRunMILP:
         p_dispatch = np.array([[p[i, t].X for t in range(T)] for i in range(N)])
         u_dispatch = np.array([[round(u[i, t].X) for t in range(T)] for i in range(N)],
                                dtype=float)
+        self._incremental_dispatch = np.array([
+            [
+                sum(x[i, k, t].X for k in range(len(gens[i].get_pwl_segments())))
+                for t in range(T)
+            ]
+            for i in range(N)
+        ])
         obj_val = model.objval
 
         return p_dispatch, u_dispatch, obj_val
+
+    def incremental_dispatch(self) -> np.ndarray:
+        """Return the physical UC segment fill, equal to p-P_min*u."""
+        if self._incremental_dispatch is None:
+            raise RuntimeError("Call solve() before incremental_dispatch().")
+        return self._incremental_dispatch.copy()

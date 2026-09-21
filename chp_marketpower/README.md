@@ -1,6 +1,6 @@
 # CHP Market Power
 
-本目录研究“机组报价改变后，凸包电价在时间和空间上如何响应；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP 的命题、reduced-cost 符号、退化处理和精确 continuation 门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
+本目录研究“机组报价改变后，凸包定价的最优值与节点价格如何分区变化；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP、最优面左右导数、价值优先重构和价格层门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
 
 代码直接复用相邻的 `../chp_energy/` 的案例、物理 UC、exact DAG-CHP 和自调度求解器，不复制第二套市场模型。
 
@@ -15,13 +15,16 @@ python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --
 python run_profit_validation.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generators 0 1 2 --beta 0 0.05 0.10 --bid-cap 0.10 --out results/profit_c3_24h_pilot_strict.csv
 python run_parametric_regime_scan.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --grid 0 0.025 0.05 0.075 0.10 --out-dir results/regime_G2_direct
 python run_basis_dual_audit.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --deltas 0 0.04 0.06 0.10 --out results/basis_dual_G2.json
+python run_value_oracle.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --lower 0 --upper 0.1 --out-dir results/value_oracle_G2
 ```
 
 诊断入口分别输出定价 LP 正流 ON/OFF 弧、活动爬坡、线路潮流与对偶，并可单独保存物理 UC；hourly 入口输出节点×价格小时×报价小时的 Jacobian、全矩阵及逐报价小时步长预警和热图，支持相对百分比及绝对美元/MWh 斜率扰动；利润入口逐点重求 UC/CHP/申报 uplift，并按不变的真实成本核算利润。`run_price_vulnerability.py` 用于整段相对或绝对加价快筛，**其分数不是 hourly VI**。利润网格的最大增益只是观察值，不是全局最优策略。
 
-`run_parametric_regime_scan.py` 是一维绝对报价加数的 **direct-solve validation baseline**：输出各网格点、相邻区间价格/目标斜率和候选切换点。绝对加数已改写为只进入目标函数，PWL 约束矩阵固定；但当前候选仍依赖网格，不能称为 exact breakpoint 或 parametric oracle。精确 continuation 必须再处理 basis/reduced cost 和 CHP 对偶不唯一时的固定价格选择规则。
+`run_parametric_regime_scan.py` 是一维绝对报价加数的 **direct-solve grid baseline**：输出各网格点、相邻区间价格/目标斜率和候选切换点。这里的加数作用于战略机组的高于最小出力电量 \(p-P_{\min}u\)，已改写为只进入目标函数；网格候选仍不能称为精确断点。
 
-`run_basis_dual_audit.py` 用 simplex 与 barrier+crossover 检查 COPT 基状态、约化成本符号、零约化成本非基本变量、落在界上的基本变量和算法间价格差。它是 **R1.5 准入审计**，不是新的市场力指标：算法结果一致不能证明对偶唯一，存在零约化成本也不能单独证明对偶不唯一。
+`run_value_oracle.py` 先重构与基选择无关的凹分段线性价值函数。每个参数点除原 CHP 外，还在最优面上最小化/最大化增量电量暴露，以取得右/左导数；支撑线交点递归发现隐藏区间，最终在每个区间的 25%、50%、75% 处直接复算。6 节点 G2 的 \([0,0.1]\) 试点得到 5 个价值区间和 4 个断点（约 0.017679、0.018044、0.043396、0.084123），15 个内部验证点全部通过。它是**数值容差下的 value oracle**，尚不是 price oracle。
+
+`run_basis_dual_audit.py` 用 simplex 与 barrier+crossover 检查 COPT 基状态、约化成本符号、零约化成本非基本变量、落在界上的基本变量和算法间价格差。它是 **R1.5 退化审计**，不是新的市场力指标：基事件、价值事件、价格事件和物理/经济事件必须分层；算法结果一致不能证明对偶唯一，存在零约化成本也不能单独证明对偶不唯一。
 
 候选切换点前后的 Phase-1 活动弧、爬坡和线路对偶直接复用诊断入口，例如 `--bid-adder 1 0.04`。该选项只诊断报价后的定价 LP；它不与 `--include-uc` 混用，物理 UC 与利润必须走 `run_profit_validation.py` 的完整重结算。
 

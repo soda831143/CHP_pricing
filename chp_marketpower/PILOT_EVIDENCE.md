@@ -10,13 +10,15 @@
 
 因此，已严格同配置核验的 UC、CHP/Yu 目标、节点价格和结算量在浮点容差内相同，足以排除“换求解器改变本文经济结论”；这不等于文件逐比特相同。部分退化 ON/OFF 弧的流权重、LP 基和运行时间可以不同，故不把它们当作跨求解器不变量。6 节点原始核验表位于 `results/copt_validation_C3/`。
 
-### Parametric R1 接口与 R2 direct-solve smoke
+### Parametric R1 接口、网格 baseline 与 value oracle
 
-为使报价参数真正成为固定约束矩阵下的 cost parameter，三段 PWL 的统一绝对边际报价加数已从 epigraph 斜率中移到目标函数。静态测试确认不同加数下不等式矩阵逐元素相同；现有集成检查进一步确认该写法与“直接把每段斜率增加同一数值”的目标和节点价格一致。相对百分比乘数仍会改变 PWL epigraph，不作为第一版 fixed-matrix continuation 参数。
+为使报价参数真正成为固定约束矩阵下的 cost parameter，三段 PWL 的统一绝对边际报价加数已从 epigraph 斜率中移到目标函数。它乘的是高于最小出力的电量 $p-P_{\min}u$，不是总出力 $p$。新增回归分别核对目标方向 $d^Tx$、CHP 的 $p-P_{\min}u^{\rm ch}$ 和物理 UC 的 PWL 段填充，并在差分/绝对 interval 坐标下通过。相对百分比乘数在当前 epigraph 中仍会改变矩阵，故只保留为稳健性口径，不作为第一版 fixed-matrix 参数。
 
 在 6 节点 C3、G2、$\delta\in\{0,0.05,0.10\}$ 美元/MWh 上运行 direct-solve regime baseline：两个相邻区间的节点价格斜率范数分别为 **37.4123** 和 **20.3230**，系统目标斜率分别为 **1680.6067** 和 **1652.8977**，因此粗网格把 $\delta=0.05$ 标为候选切换点。$\delta=0.04/0.06$ 两侧均有 13 条正流 ON interval 和 3 个 price-setting line-hours，且 ON/ramp 支撑字符串未变；相同三处线路对偶则连续变化。该证据说明切换可能来自尚未输出的 PWL/basis 变化、同一支撑内部的更细切换或退化对偶选择，**不能**据此宣称 0.05 是精确 breakpoint。原始筛查位于 `results/regime_smoke_G2/`。
 
-R1.5 进一步在 $\delta\in\{0,0.04,0.06,0.10\}$ 上比较 simplex 与 barrier+crossover。四点的最大算法间节点价差均低于 $7.45\times10^{-13}$，目标差均低于 $6.55\times10^{-11}$，reduced-cost 状态符号违规数为 0；但每次求解有 **278–611** 个零 reduced-cost 非基本变量和 **3993–5268** 个落在界上的基本变量。结论是：当前四点的 COPT 价格选择数值稳定，但 LP 基高度退化；因此不需要立即发明 canonical price，也不能用一个固定基跨过退化事件。下一步采用 solver-assisted continuation，让 COPT 在断点右侧选基，再由解析 reduced-cost 斜率计算下一个候选端点。完整审计位于 `results/basis_dual_G2.json`，理论判据见 `PARAMETRIC_FORMULATION.md`。
+R1.5 进一步在 $\delta\in\{0,0.04,0.06,0.10\}$ 上比较 simplex 与 barrier+crossover。四点的最大算法间节点价差均低于 $7.45\times10^{-13}$，目标差均低于 $6.55\times10^{-11}$，reduced-cost 状态符号违规数为 0；但每次求解有 **278–611** 个零 reduced-cost 非基本变量和 **3993–5268** 个落在界上的基本变量。结论是：当前四点的 COPT 价格选择数值稳定，但 LP 基高度退化；因此不需要立即发明 canonical price，也不能把任一基切换直接解释成经济 regime。完整审计位于 `results/basis_dual_G2.json`。
+
+价值优先重构在同一 6 节点 C3、G2、$\delta\in[0,0.1]$ 上得到五段凹分段线性价值函数，断点为 **0.0176790537、0.0180442738、0.0433961122、0.0841226365** 美元/MWh；对应的高于最小出力电量暴露依次为 **1689.446195、1681.803664、1681.257722、1654.377413、1649.717576** MWh。9 个重构点外的 15 个区间内部点全部直接复算通过，最大价值误差 $3.86\times10^{-10}$ 美元，最大斜率误差 $1.98\times10^{-6}$ MWh。粗网格的 0.05 位于第四段内部，不是价值断点；它也漏掉了宽度仅约 $3.65\times10^{-4}$ 的第二段。原始输出位于 `results/value_oracle_G2/`（默认不纳入版本控制）。这只认证价值区间；下一步是在五个价值区间内识别、验证并合并价格子区间，而不是直接沿一个退化基做全局 continuation。
 
 ## 1. 先确定定价层中真正活动的机制
 

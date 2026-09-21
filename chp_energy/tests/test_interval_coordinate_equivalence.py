@@ -4,6 +4,7 @@ import pytest
 pytest.importorskip("gurobi_compat")
 
 from chp_solver.chp_master_lp import PrimalCHPLP
+from chp_solver.schedule_run import ScheduleRunMILP
 from models.generator import GeneratorParams
 from models.network import SingleNodeNetwork
 
@@ -75,3 +76,69 @@ def test_uniform_pwl_bid_adder_keeps_constraint_matrix_fixed():
 
     assert (base_A != shifted_A).nnz == 0
     assert shifted_b == pytest.approx(base_b)
+
+
+@pytest.mark.parametrize("power_coordinates", ["differential", "absolute"])
+def test_bid_adder_direction_is_above_minimum_energy(power_coordinates):
+    generator = GeneratorParams(
+        P_max=100.0,
+        P_min=20.0,
+        R_up=100.0,
+        R_down=100.0,
+        SU_ramp=100.0,
+        SD_ramp=100.0,
+        T_on_min=1,
+        T_off_min=1,
+        cost_var=10.0,
+        cost_su=0.0,
+        cost_sd=0.0,
+        cost_nl=5.0,
+        T=2,
+        pwl_slopes=[10.0, 18.0],
+        pwl_widths=[40.0, 40.0],
+    )
+    network = SingleNodeNetwork(np.array([50.0, 60.0]))
+    base = PrimalCHPLP([generator], network, power_coordinates=power_coordinates)
+    shifted = PrimalCHPLP(
+        [generator],
+        network,
+        power_coordinates=power_coordinates,
+        bid_adders=np.array([[0.5, 0.5]]),
+    )
+    assert base.solve()[2] and shifted.solve()[2]
+
+    direction = base.bid_adder_direction(0)
+    base_objective = np.array([variable.obj for variable in base._model.getVars()])
+    shifted_objective = np.array([variable.obj for variable in shifted._model.getVars()])
+    assert direction @ base._solution_x == pytest.approx(
+        base.incremental_energy_exposure(0), abs=1e-7
+    )
+    assert shifted_objective - base_objective == pytest.approx(0.5 * direction, abs=1e-12)
+    assert base.bid_adder_direction(0, hour=1) @ base._solution_x == pytest.approx(
+        base.incremental_energy_exposure(0, hour=1), abs=1e-7
+    )
+
+
+def test_physical_uc_segment_fill_is_above_minimum_energy():
+    generator = GeneratorParams(
+        P_max=100.0,
+        P_min=20.0,
+        R_up=100.0,
+        R_down=100.0,
+        SU_ramp=100.0,
+        SD_ramp=100.0,
+        T_on_min=1,
+        T_off_min=1,
+        cost_var=10.0,
+        cost_su=0.0,
+        cost_sd=0.0,
+        cost_nl=5.0,
+        T=2,
+        pwl_slopes=[10.0, 18.0],
+        pwl_widths=[40.0, 40.0],
+    )
+    run = ScheduleRunMILP([generator], SingleNodeNetwork(np.array([50.0, 60.0])))
+    dispatch, commitment, _ = run.solve(require_optimal=True)
+    assert run.incremental_dispatch() == pytest.approx(
+        dispatch - generator.P_min * commitment, abs=1e-7
+    )

@@ -16,7 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from engine import PrimalCHPLP, controlled_case, load_case  # noqa: E402
 from price_vulnerability import (  # noqa: E402
     apply_generator_markup, central_difference, epsilon_stability, regime_differences,
-    scalar_sensitivity, vulnerability_metrics,
+    reconstruct_value_regimes, scalar_sensitivity, ValuePoint, vulnerability_metrics,
 )
 
 
@@ -141,6 +141,41 @@ def test_hourly_bid_multiplier_validation() -> None:
         scalar_sensitivity(generators, network, -1, 0.1, "absolute")
     with pytest.raises(ValueError, match="COPT method"):
         PrimalCHPLP(generators, network, method=0)
+
+
+def test_value_oracle_finds_hidden_support_lines() -> None:
+    lines = [(0.0, 3.0), (0.5, 2.0), (1.3, 1.0)]
+
+    def solve(delta: float) -> ValuePoint:
+        values = np.array([intercept + slope * delta for intercept, slope in lines])
+        value = float(np.min(values))
+        active = [slope for (intercept, slope), result in zip(lines, values) if abs(result - value) < 1e-9]
+        return ValuePoint(delta, value, active[0], min(active), max(active))
+
+    regimes, points = reconstruct_value_regimes(solve, 0.0, 1.0)
+    assert len(points) >= 3
+    assert np.allclose([(item.left, item.right, item.slope) for item in regimes], [
+        (0.0, 0.5, 3.0),
+        (0.5, 0.8, 2.0),
+        (0.8, 1.0, 1.0),
+    ])
+
+
+def test_value_oracle_does_not_scale_tolerance_by_total_cost() -> None:
+    lines = [(50_000.0, 3.0), (50_000.499, 2.0), (50_001.0, 1.0)]
+
+    def solve(delta: float) -> ValuePoint:
+        values = np.array([intercept + slope * delta for intercept, slope in lines])
+        value = float(np.min(values))
+        active = [slope for (_, slope), result in zip(lines, values) if abs(result - value) < 1e-9]
+        return ValuePoint(delta, value, active[0], min(active), max(active))
+
+    regimes, _ = reconstruct_value_regimes(solve, 0.0, 1.0)
+    assert np.allclose([(item.left, item.right, item.slope) for item in regimes], [
+        (0.0, 0.499, 3.0),
+        (0.499, 0.501, 2.0),
+        (0.501, 1.0, 1.0),
+    ])
 
 
 if __name__ == "__main__":
