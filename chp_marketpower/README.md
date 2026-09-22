@@ -27,7 +27,7 @@ python run_price_probe.py --regimes results/value_oracle_G2_absolute_nominal/val
 
 `run_value_oracle.py` 先重构与基选择无关的凹分段线性价值函数。每个参数点除原 CHP 外，还在带显式美元容差的数值最优面上最小化/最大化增量电量暴露，以近似右/左导数；原 CHP 和两个辅助 LP 均须 `OPTIMAL`。支撑线交点递归发现隐藏区间，最终在每个区间的 25%、50%、75% 处直接复算。6 节点 G2 的 \([0,0.1]\) 绝对坐标在三档 COPT 容差下均得到 5 个价值区间和 4 个断点（约 0.017679、0.018044、0.043396、0.084123），每档 15 个内部验证点全部通过，最窄段在三档下保留。它们是 **numerically validated piecewise-linear value regimes under COPT optimality and declared tolerances**，不是数学精确证书，亦不是 price oracle。CLI 可设置 `--feasibility-tolerance`、`--optimality-tolerance`、`--face-tolerance`，输出包含各辅助 LP 运行时间。
 
-`run_price_probe.py` 仅在这五段各取 10%/50%/90% 三个内部点，用未经裁剪的全节点价格比较 simplex 与 barrier+crossover，并测中点仿射误差。它是 R3 的 Go/No-Go 探针，**不是**全局价格区间枚举；若出现算法选择分歧，先报告价格区间或退回价值区间加直接重求的经验价格，不强称精确 price oracle。
+`run_price_probe.py` 仅在这五段各取 10%/50%/90% 三个内部点，用未经裁剪的全节点价格比较 simplex 与 barrier+crossover，并在中点增加 barrier without crossover，测中点仿射误差。它是 R3 的 Go/No-Go 探针，**不是**全局价格区间枚举；若出现算法选择分歧，先报告价格区间或退回价值区间加直接重求的经验价格，不强称精确 price oracle。
 
 `run_basis_dual_audit.py` 用 simplex 与 barrier+crossover 检查 COPT 基状态、约化成本符号、零约化成本非基本变量、落在界上的基本变量和算法间价格差。它是 **R1.5 退化审计**，不是新的市场力指标：基事件、价值事件、价格事件和物理/经济事件必须分层；算法结果一致不能证明对偶唯一，存在零约化成本也不能单独证明对偶不唯一。
 
@@ -51,3 +51,20 @@ P1 主结果为 `p1_shift23to21_r020/` 和 `p1_warmup/`；`p1_shift23to21_r005_d
 ## COPT 迁移状态
 
 代码中已无 `gurobipy` 直接导入；现有代数模型通过全局 `gurobi_compat` 调用 COPT，矩阵 CHP 路径使用 COPT 原生的矩阵变量命名、约束方向和向量取值接口。迁移回归包括：`chp_energy` 12 项测试、上述市场力集成检查、6 节点全部定价方法 smoke，以及 6/30 节点同配置的目标、节点价、结算量和 UC 数值对照。30 节点比较中 UC 目标差 $5.82\times10^{-11}$ 美元、CHP 定价目标差 $2.13\times10^{-6}$ 美元，详细判据见 [PILOT_EVIDENCE.md](PILOT_EVIDENCE.md)。COPT 的 `auto/simplex/barrier+crossover` 审计只检查算法选择敏感性，不证明对偶唯一。
+
+## R2 残差审计与 R3 价格进展（6 节点 G2）
+
+继续工作只使用全日统一绝对报价加数 `δ∈[0,0.1]`，不扩 30 节点、利润或其他报价参数。复算顺序：
+
+```powershell
+python run_value_oracle.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --lower 0 --upper 0.1 --out-dir results/value_oracle_G2_absolute_residual_audit
+python tests/check_price_envelope.py
+python run_price_probe.py --regimes results/value_oracle_G2_absolute_residual_audit/value_regimes.csv --out-dir results/price_probe_G2_absolute_three_methods
+python run_price_oracle.py
+```
+
+最优面辅助 LP 现在逐点记录 `face_min_residual` 和 `face_max_residual`。原先把约束 RHS 放宽整整 `1e-10` 美元时，实际目标残差在 20/24 点超出该数（最大 `1.237e-10`），故那次运行不算通过。将 RHS 只放宽审计带的一半，另一半留给数值行误差后，仍得到五个价值区间、15 个内部点全部通过，24 个点的最大实测残差为 `8.004e-11` 美元。该半带是数值保护，不是符号证明；若换求解器或数据，必须重跑实测审计。
+
+节点负荷双侧差分对第 19 小时第 1、6 节点的 raw CHP 电价误差分别为 `1.76e-9`、`2.64e-9` 美元/MWh。simplex 与 barrier+crossover 的原始价格仍高度一致；新增 barrier without crossover 在五段中点相对 simplex 的最大差异为 `3.535e-6` 美元/MWh。这是额外稳定性信息，**不证明对偶唯一**，并提醒不要把求解器容差下的微小方法差异写成完全相同。
+
+R3 目前在五段中观察到五条不同的完整节点×小时 simplex 仿射价格线；各段 25%/50%/75% 和四个价值断点两侧共 23 次直接价格复核，最大误差 `2.52e-12` 美元/MWh（另有 10 次端内锚点求解）。`price_vulnerability/price_oracle.py` 已同时检查原变量约化成本和所有不等式行松弛/对偶，避免漏掉线路或爬坡行事件。但 COPT 在部分区间内部给出零距离退化事件，个别基反解还不可用，无法据此完成无遗漏的基延拓。因此 `run_price_oracle.py` 明确输出 `complete_price_regime_count: null`：**当前答案是五条不同且经数值复核的选定价格线，不是已经证明全域恰有五个真正价格区间**。下一步只需解决退化基下的完整延拓或改为明确定义的对偶价格选择/区间；在此之前不进入利润层。

@@ -76,13 +76,23 @@ def main() -> None:
     _write(args.out_dir / "value_points.csv", [asdict(item) for item in points])
     _write(args.out_dir / "validation_points.csv", [asdict(item) for item in validation])
     failures = sum(not item.passed for item in validation)
+    face_max = max(
+        [item.max_face_residual for item in validation]
+        + [max(abs(item.face_min_residual), abs(item.face_max_residual)) for item in points],
+        default=0.0,
+    )
+    face_failures = sum(not item.face_band_passed for item in points) + sum(
+        item.max_face_residual > args.face_tolerance for item in validation
+    )
     print(
         f"{len(regimes)} value regime(s), {len(points)} reconstruction solve(s), "
         f"{len(validation)} direct validation solve(s), {failures} failure(s); "
         f"total offline {sum(point.runtime for point in points) + sum(item.runtime for item in validation):.2f}s "
-        f"(face LPs {sum(point.face_min_runtime + point.face_max_runtime for point in points) + sum(item.face_runtime for item in validation):.2f}s)."
+        f"(face LPs {sum(point.face_min_runtime + point.face_max_runtime for point in points) + sum(item.face_runtime for item in validation):.2f}s); "
+        f"max measured face residual {face_max:.3e} USD, "
+        f"{face_failures} point(s) exceed the declared band {args.face_tolerance:.1e} USD."
     )
-    if failures:
+    if failures or face_failures:
         raise SystemExit("Value-regime validation failed")
 
 

@@ -36,7 +36,7 @@ def main() -> None:
 
     generators, network = load_case("6", "ptdf", 24, 3, "tight")
     summaries = []
-    deltas, raw_prices = [], []
+    deltas, raw_prices, barrier_midpoints = [], [], []
     previous_right = 0.0
     from gurobi_compat import GRB
 
@@ -68,6 +68,19 @@ def main() -> None:
             alternative.append(pair[1])
         selected = np.stack(selected)
         alternative = np.stack(alternative)
+        midpoint_adders = np.zeros((len(generators), network.T))
+        midpoint_adders[1] = samples[1]
+        barrier = PrimalCHPLP(
+            generators, network, bid_adders=midpoint_adders,
+            method=2, crossover=0, feasibility_tol=1e-9, optimality_tol=1e-9,
+        )
+        _, _, success = barrier.solve()
+        if not success or barrier._model.Status != GRB.OPTIMAL:
+            raise RuntimeError(f"barrier without crossover not OPTIMAL at delta={samples[1]:g}")
+        if not np.all(np.isfinite(barrier.raw_nodal_price)):
+            raise RuntimeError(f"nonfinite barrier price at delta={samples[1]:g}")
+        barrier_midpoints.append(barrier.raw_nodal_price.copy())
+        runtimes.append(barrier.total_time)
         deltas.append(samples)
         raw_prices.append(np.stack((selected, alternative)))
         summaries.append({
@@ -76,6 +89,9 @@ def main() -> None:
             "right": right,
             "max_full_price_midpoint_error": affine_midpoint_error(selected),
             "max_method_price_gap": float(np.max(np.abs(selected - alternative))),
+            "max_no_crossover_midpoint_gap": float(np.max(np.abs(
+                selected[1] - barrier.raw_nodal_price
+            ))),
             "price_slope_norm": float(np.linalg.norm(
                 (selected[2] - selected[0]) / (samples[2] - samples[0])
             )),
@@ -92,12 +108,14 @@ def main() -> None:
         args.out_dir / "raw_prices.npz",
         deltas=np.stack(deltas),
         prices=np.stack(raw_prices),  # regime, method, sample, bus, hour
+        barrier_no_crossover_midpoints=np.stack(barrier_midpoints),
     )
     for item in summaries:
         print(
             f"value regime {item['value_regime']}: midpoint error "
             f"{item['max_full_price_midpoint_error']:.3e}, method gap "
-            f"{item['max_method_price_gap']:.3e} $/MWh"
+            f"{item['max_method_price_gap']:.3e}, no-crossover midpoint gap "
+            f"{item['max_no_crossover_midpoint_gap']:.3e} $/MWh"
         )
     print("Targeted screening only: hidden price intervals and dual nonuniqueness remain open.")
 
