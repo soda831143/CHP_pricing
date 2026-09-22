@@ -45,7 +45,7 @@ p_dispatch, u_dispatch, obj_val = ScheduleRunMILP(generators, network).solve()
 
 ### 变量布局
 
-`x = [z_on | z_off | v_vars | (PWL 时) cvar_vars]`；`v` 为**自由变量**（下界 −∞）。
+`x = [z_on | z_off | q_vars | (PWL 时) cvar_vars | (可选) p_vars]`；`q_{e,t}` 是 ON 弧的绝对出力（Yu/Pan interval `p` 坐标），底层 LP 不再设差分出力 `v` 决策变量。
 
 ### 等式约束（行块顺序）
 
@@ -56,22 +56,22 @@ p_dispatch, u_dispatch, obj_val = ScheduleRunMILP(generators, network).solve()
 ### 不等式
 
 - 四类 **ON arc 透视约束**：
-  - 启动上限：`v_0 <= SU_ramp * z_e`
-  - 正常爬坡：`-R_down * z_e <= v_tau <= R_up * z_e`，代码标准形为 `v_tau - R_up*z_e <= 0` 与 `-v_tau - R_down*z_e <= 0`
-  - 前缀容量：`P_min*z_e <= sum_{k<=tau} v_k <= P_max*z_e`
-  - 停机上限：仅当 ON arc 在日内结束（`b<T-1`）时加入 `sum_k v_k <= SD_ramp*z_e`；若机组在线到最后时段，不强制关机，也不加停机爬坡约束
-- **PWL**：上镜图 `cvar ≥ slope·(prefix_sum v) + (b−s·Pmin)·z`
+  - 启动上限：`q_0 <= SU_ramp*z_e`；初始在线弧改按 `initial_power ± R_up/down` 约束
+  - 正常爬坡：`-R_down*z_e <= q_tau−q_(tau−1) <= R_up*z_e`
+  - 容量：`P_min*z_e <= q_tau <= P_max*z_e`
+  - 停机上限：仅当 ON arc 在日内结束（`b<T-1`）时加入 `q_last <= SD_ramp*z_e`；在线到末时不强制关机
+- **PWL**：上镜图 `cvar ≥ slope·q + (b−s·Pmin)·z`
 - **多节点**：PTDF 上下界（排在不等式矩阵尾部，便于提取对偶）
 
 ### 目标
 
-- 单段：`C_fix·z + Abel 化简后的 `C_var·(duration−k)·v`
+- 单段：`C_fix·z + C_var·Σ_t(q_t−P_min·z)`
 - 分段：`C_fix·z + Σ cvar`
 
 ### COPT 与对偶
 
 - `Method=2`, `Crossover=0`
-- 从 `eq_constrs.Pi` 取系统功率平衡段 → 能量基准价 `λ_t`，符号清理后 **单节点** `clip(λ, 0, None)`
+- 平衡行固定为 `Σ_g p[g,t] = D[t]`。原始 RHS 对偶直接为能量价 `raw_energy_dual`；`raw_nodal_price` 用未经裁剪的线路对偶经 PTDF 变换构造，供参数价格分析。旧 `energy_price` / `lmp_matrix` 仍保留历史清理口径。
 - **多节点 LMP**：代码采用 PTDF reduced form，不显式建立 `N_bus×T` 个节点平衡等式；节点价格由 `lmp[n,t] = λ_t + Σ_l PTDF[l,n](α_{l,t} − β_{l,t})` 恢复，其中 `α,β` 为 PTDF 两行不等式的 `Pi`（≤0）。这与显式 DC-OPF 节点平衡对偶等价
 - 求解后赋值 **`_ptdf_alpha`, `_ptdf_beta_`**（形状 `(N_line,T)`），供 `benchmarks/comparison_runner` 计算 **FTR 成本**（论文公式 34 第二行）
 

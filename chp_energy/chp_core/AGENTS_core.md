@@ -22,7 +22,7 @@ DAG 是整个原空间 LP 的骨架。其节点和边的含义如下：
 - 节点 `T`：汇节点（调度期末）
 
 **ON 弧** `e = (a, b+1)`：机组在全局区间 `[a, b]` 内持续运行。
-- 携带变量：`z_{i,e} ∈ [0,1]`（流量）+ `v_{i,e,τ}`（差分出力，每时段一个自由变量）
+- 携带变量：`z_{i,e} ∈ [0,1]`（流量）+ `q_{i,e,τ}`（绝对 interval 出力，每时段一个变量）；Phase-2 单机极点算法内部仍可使用差分坐标
 - 携带成本：`C_fix_e = C_SU + duration × C_NL + 1_{b<T-1} C_SD`
 - 合法条件：`duration ≥ MUT`，且前后停机空间满足 MDT
 
@@ -43,7 +43,7 @@ DAG 是整个原空间 LP 的骨架。其节点和边的含义如下：
 
 **`GeneratorDAG`**（`dataclass`）
 - 汇总字段：`params`、`on_intervals`、`off_arcs`
-- 统计属性：`n_on`、`n_off`、`n_v_vars`（所有 ON 弧差分变量总数）
+- 统计属性：`n_on`、`n_off`、`n_q_vars`（所有 ON 弧绝对出力变量总数）
 
 **`DAGBuilder`**（静态工厂类）
 

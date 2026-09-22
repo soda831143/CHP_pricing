@@ -2,6 +2,8 @@
 
 > 研究定位：本文不是再提出一个 CHP 求解器，而是利用已完成的 exact DAG-CHP 求解能力，研究**报价如何改变凸包价格、影响如何传播、价格影响能否变成真实利润**。本文先以火电机组的可变成本报价为可控切口；灵活性资源、容量持留、合谋和随机性属于后续拓展，不把面上项目的所有目标压入同一篇论文。
 
+> 2026-09-22 执行门槛：底层 CHP LP 已改用 Yu/Pan 式绝对 interval 出力 \(q\)（即区间 \(p\) 坐标），不再把差分/爬坡量 \(v\) 设为决策变量。这是坐标化简，不能作为论文创新。R2 的 6 节点 G2 五段与最窄区间现已通过三档 COPT 容差下各 15 个内部点的数值检验，可按约 85% 的数值原型看待，仍非数学证明。下一问题是五段价值区间对应多少真正价格区间；本轮不扩 30 节点、不扩 \(\delta\)、不做新利润实验。
+
 ## 0. 2026-09-20 导师意见后的两篇论文分工
 
 当前工作不推倒重来，而是把已经混在一起的“表示、算法和应用”拆开。
@@ -49,13 +51,13 @@ $$
 | R0 最近邻对齐 | 防止再次与 Sun–Wu/Yu 撞车 | `REFERENCE_2021_AUDIT.md`；能取得原始需求时复现 pool/3-period，否则只做定性退化关系 | 说清楚 derivative/VI、profit 和 graph representation 已有到什么程度 |
 | R1 参数接口 | 建立真正固定 $A,b,G,h$ 的一维 cost parameter | objective-only 绝对报价加数及暴露恒等式 | 目标方向等于 $p-P_{\min}u^{\rm ch}$；物理 UC 段填充一致；矩阵不变 |
 | R1.5 基/对偶审计 | 判断 price continuation 是否有良好定义 | `PARAMETRIC_FORMULATION.md`、`run_basis_dual_audit.py` | 区分下界/上界/自由变量的 reduced-cost 条件；量化退化和算法价格差异 |
-| R2 价值 regime | 从离散网格升级到全局价值区间 | 最优面左右导数、支撑线递归、确定性内部验证 | 每区间 25%/50%/75% 查询的值与斜率均和 direct COPT 一致 |
-| R3 价格子区间 | 在已认证价值区间内识别价格规律 | solver-assisted 基候选、直接价格查询、相同价格线合并 | 不把基事件冒充价格/经济事件；退化价格有明确处理规则 |
+| R2 价值 regime | 从离散网格升级到全局价值区间 | 最优面左右导数、支撑线递归、确定性内部验证与三档 COPT 容差 | 每区间 25%/50%/75% 查询的值与斜率均和 direct COPT 一致，窄段在容差变化下保留 |
+| R3 价格子区间 | 在已数值验证价值区间内识别价格规律 | solver-assisted 基候选、全节点原始价格直接查询、相同价格线合并 | 不把基事件冒充价格/经济事件；退化价格有明确处理规则 |
 | R4 机制解释 | 解释 breakpoint 而非只画折线 | 切换前后线路对偶、活动爬坡、ON/OFF interval、PWL segment | 切换能稳定对应至少一种物理/定价活动集变化，或明确报告负结果 |
 | R5 可获利市场力 | 区分 potential price leverage 与 exercisable market power | 复用真实成本利润重结算；比较 leverage、最近 regime 距离和利润渠道 | 能量收入、uplift、真实成本和调度渠道闭环 |
 | R6 计算价值 | 回答导师“多少空间换多少时间” | cold/warm direct solve、offline construction、query time、存储和 break-even $Q^\star$ | 只有 $Q^\star$ 合理才主张加速；否则 regime 结构是主贡献 |
 
-当前已完成 R1、R1.5 和 6 节点 G2 的 R2 价值试点。网格 baseline 曾把 $\delta=0.05$ 美元/MWh 标为候选切换，但 value oracle 发现真正的价值断点约为 0.017679、0.018044、0.043396、0.084123；0.05 位于同一价值区间内部。五个价值区间的 15 个内部查询全部通过，最大价值/斜率误差分别为 $3.86\times10^{-10}$ 美元和 $1.98\times10^{-6}$ MWh。下一步只在这五个外层区间内识别价格子区间、合并不改变价格规律的基事件，不预设 canonical dual，也不自写 pivot。
+当前已完成 R1、R1.5 和 6 节点 G2 的 R2 数值试点。网格 baseline 曾把 $\delta=0.05$ 美元/MWh 标为候选切换，但 value oracle 发现价值断点约为 0.017679、0.018044、0.043396、0.084123；0.05 位于同一价值区间内部。三档 COPT 容差均得到五段且各有 15 个内部查询通过，最窄段保留；默认最优面目标带宽为 $10^{-10}$ 美元，压到 $10^{-11}$ 美元会让交点附近辅助 LP 不可行。首个 R3 探针在五段各取 3 个内部点、比较两种算法的完整原始价格向量，观测到至少五条局部仿射且相邻斜率不同的价格线；这不排除隐藏价格子段。下一步只在这五个外层区间内用基/reduced-cost 信息生成候选事件并在右侧重求，不预设 canonical dual，也不自写 pivot。
 
 learning-to-optimize/神经网络不是当前任务。只有当一维 exact region 数量爆炸，或研究问题必须升到二维以上而显式枚举不可行时，才以 exact 1D oracle 作为 ground truth 考虑 learned extension。
 
@@ -253,7 +255,7 @@ B^\top\frac{\partial y}{\partial\beta}
 \tag{10}
 $$
 
-本分支第一版不用式 (10) 追踪相对乘数，而采用第 0 节定义的统一绝对加数 $\delta$。先利用 $v(\delta)=\min_{x\in\mathcal P}(c^0+\delta d)^Tx$ 的全局凹分段线性结构：在最优面上最小化/最大化 $d^Tx$ 得到右/左导数，再用支撑线交点递归重构价值区间。这个对象与基选择无关。只有进入某个已认证价值区间后，才使用具体基的对偶与 reduced-cost 关系识别价格子区间。相对乘数未来也可通过增量段表示尝试 objective-only；式 (10) 只是当前 epigraph 下的完整局部导数，不是“不可能参数化”的证明。
+本分支第一版不用式 (10) 追踪相对乘数，而采用第 0 节定义的统一绝对加数 $\delta$。先利用 $v(\delta)=\min_{x\in\mathcal P}(c^0+\delta d)^Tx$ 的全局凹分段线性结构：在数值最优面上最小化/最大化 $d^Tx$ 近似右/左导数，再用支撑线交点递归重构价值区间。这个对象与基选择无关。只有进入某个已数值验证价值区间后，才使用具体基的对偶与 reduced-cost 关系识别价格子区间。相对乘数未来也可通过增量段表示尝试 objective-only；式 (10) 只是当前 epigraph 下的完整局部导数，不是“不可能参数化”的证明。
 
 ## 3. 实验设计：每个对照只承担一个解释任务
 
@@ -318,7 +320,7 @@ $$
 | scalar 快筛 | `price_vulnerability/scalar_markup.py`、`run_price_vulnerability.py` | 整段相对/绝对报价扰动用于便宜的全机组初筛；其分数是 scalar response，**不是**旧文献 hourly VI。 |
 | hourly Jacobian、指标和图 | `price_vulnerability/hourly.py`、`run_hourly_vulnerability.py` | 已实现相对/绝对斜率扰动、双侧重求、时间/空间描述量、长表、全矩阵和按报价小时的步长预警；30 节点相对全机组及绝对预筛机组双步长 VI 已完成，下一步只在独立场景复算预注册对象。 |
 | 获利验证 | `run_profit_validation.py`、`strategic_market_simulation/profit_sweep.py`，复用 `../chp_energy/chp_solver/schedule_run.py`、`benchmarks/unit_self_schedule.py` | 有限**标量**网格逐点重求 UC/CHP/申报 uplift，三者在此入口都要求证明最优；默认仅选基线发电机组，约束上调报价上限，并按真实成本分解增益；未实现 mitigation、全局最优和样本外指标检验。 |
-| 参数区间与解析敏感度 | `PARAMETRIC_FORMULATION.md`、`../chp_energy/chp_solver/chp_master_lp.py`、`run_basis_dual_audit.py`、`price_vulnerability/value_oracle.py`、`run_value_oracle.py` | R1 恒等式、R1.5 退化审计和 R2 value oracle 已实现；下一步只在已认证价值区间内构造价格子区间。 |
+| 参数区间与解析敏感度 | `PARAMETRIC_FORMULATION.md`、`../chp_energy/chp_solver/chp_master_lp.py`、`run_basis_dual_audit.py`、`price_vulnerability/value_oracle.py`、`run_value_oracle.py` | R1 恒等式、R1.5 退化审计和 R2 value oracle 原型已实现；先完成容差压力测试，再进入价格子区间。 |
 
 ### 当前可复现命令
 
@@ -357,7 +359,7 @@ python run_profit_validation.py --case 30 --network ptdf --congestion tight --T 
 
 论文动机是 CHP 对非凸成本的价格设计与战略激励之间存在张力；方法是 exact DAG-CHP 支撑的**受控报价干预**；实验先证明可重复的时空传播，再问其经济含义。论文是否主打“时空传播”“vulnerability 与利润的背离”或“快速灵敏度”，由 G1–G4 的证据决定，不能由项目名称或初始设想决定。
 
-当前已有**活动线限与正线路对偶的受控拥塞配对**、6 节点全机组相对/绝对 $V_g$、全矩阵临界预警、30 节点 hourly VI、全部基线发电机组利润分解、两个 P1 holdout，以及 6 节点 G2 的五个数值认证价值区间。经验层面的重复扩展已停止；下一道门槛是在价值区间内完成价格子区间，再把价格断点与活动机制、真实利润连接。凡是没有重求 UC/结算和真实成本核算的结果，统一称为 *price influence / vulnerability*，不称为可获利市场力；有限利润网格也不称最优操纵。“高 VI 与利润背离”目前是候选经验现象，不写成一般定理。
+当前已有**活动线限与正线路对偶的受控拥塞配对**、6 节点全机组相对/绝对 $V_g$、全矩阵临界预警、30 节点 hourly VI、全部基线发电机组利润分解、两个 P1 holdout，以及 6 节点 G2 的五个初步数值验证价值区间。经验层面的重复扩展已停止；下一道门槛是容差稳健性和原始对偶接口，随后才是价格子区间。凡是没有重求 UC/结算和真实成本核算的结果，统一称为 *price influence / vulnerability*，不称为可获利市场力；有限利润网格也不称最优操纵。“高 VI 与利润背离”目前是候选经验现象，不写成一般定理。
 
 ## 7. COPT 迁移后的收敛路线：做什么、停止重复什么
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -18,6 +19,7 @@ from price_vulnerability import (  # noqa: E402
     apply_generator_markup, central_difference, epsilon_stability, regime_differences,
     reconstruct_value_regimes, scalar_sensitivity, ValuePoint, vulnerability_metrics,
 )
+from run_price_probe import affine_midpoint_error  # noqa: E402
 
 
 def test_scalar_markup_is_immutable() -> None:
@@ -176,6 +178,31 @@ def test_value_oracle_does_not_scale_tolerance_by_total_cost() -> None:
         (0.499, 0.501, 2.0),
         (0.501, 1.0, 1.0),
     ])
+
+
+def test_price_probe_checks_the_full_price_vector() -> None:
+    prices = np.zeros((3, 2, 2))
+    prices[2] = 2.0
+    prices[1] = 1.0
+    assert affine_midpoint_error(prices) == 0.0
+    prices[1, 1, 0] += 0.25
+    assert affine_midpoint_error(prices) == pytest.approx(0.25)
+
+
+def test_value_oracle_rejects_suboptimal_status(monkeypatch) -> None:
+    from gurobi_compat import GRB
+    from price_vulnerability import value_oracle
+
+    class SuboptimalSolver:
+        def __init__(self, *_args, **_kwargs):
+            self._model = SimpleNamespace(Status=GRB.SUBOPTIMAL)
+
+        def solve(self):
+            return None, 0.0, True
+
+    monkeypatch.setattr(value_oracle, "PrimalCHPLP", SuboptimalSolver)
+    with pytest.raises(RuntimeError, match="OPTIMAL"):
+        value_oracle.solve_value_point([object()], SimpleNamespace(T=1), 0, 0.0)
 
 
 if __name__ == "__main__":

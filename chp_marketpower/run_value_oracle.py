@@ -29,6 +29,10 @@ def _arguments() -> argparse.Namespace:
     parser.add_argument("--value-tolerance", type=float, default=1e-7)
     parser.add_argument("--slope-tolerance", type=float, default=1e-4)
     parser.add_argument("--max-points", type=int, default=100)
+    parser.add_argument("--feasibility-tolerance", type=float, default=1e-9)
+    parser.add_argument("--optimality-tolerance", type=float, default=1e-9)
+    parser.add_argument("--face-tolerance", type=float, default=1e-10,
+                        help="Absolute objective-unit band for the numerical optimal face")
     parser.add_argument("--out-dir", type=Path, default=Path("results/value_oracle"))
     return parser.parse_args()
 
@@ -49,7 +53,10 @@ def main() -> None:
         args.case, args.network, args.T, args.segments, args.congestion
     )
     solve = lambda delta: solve_value_point(  # noqa: E731
-        generators, network, args.generator, delta, args.hour
+        generators, network, args.generator, delta, args.hour,
+        feasibility_tolerance=args.feasibility_tolerance,
+        optimality_tolerance=args.optimality_tolerance,
+        face_tolerance=args.face_tolerance,
     )
     regimes, points = reconstruct_value_regimes(
         solve,
@@ -71,7 +78,9 @@ def main() -> None:
     failures = sum(not item.passed for item in validation)
     print(
         f"{len(regimes)} value regime(s), {len(points)} reconstruction solve(s), "
-        f"{len(validation)} direct validation solve(s), {failures} failure(s)."
+        f"{len(validation)} direct validation solve(s), {failures} failure(s); "
+        f"total offline {sum(point.runtime for point in points) + sum(item.runtime for item in validation):.2f}s "
+        f"(face LPs {sum(point.face_min_runtime + point.face_max_runtime for point in points) + sum(item.face_runtime for item in validation):.2f}s)."
     )
     if failures:
         raise SystemExit("Value-regime validation failed")

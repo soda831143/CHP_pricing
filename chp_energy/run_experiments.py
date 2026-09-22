@@ -296,7 +296,7 @@ def summarize_size(gens) -> dict:
         "on_arcs": sum(d.n_on for d in dags),
         "off_arcs": sum(d.n_off for d in dags),
         "dag_edges": sum(d.n_edges for d in dags),
-        "v_vars": sum(d.n_v_vars for d in dags),
+        "q_vars": sum(d.n_q_vars for d in dags),
     }
 
 
@@ -373,7 +373,6 @@ def run_one(
             feasibility_tol=chp_feasibility_tol,
             optimality_tol=chp_optimality_tol,
             use_output_vars=chp_use_output_vars,
-            collect_presolve_stats="yu" in methods,
         )
         chp_lmp, chp_obj, ok = chp.solve()
         chp_time = chp.total_time
@@ -411,14 +410,6 @@ def run_one(
             "presolve_stats_time": chp.presolve_stats_time,
             "barrier_iterations": chp.barrier_iterations,
             "primal_violation": chp.primal_violation,
-        },
-        yu_solver_options={
-            "method": chp_method,
-            "crossover": chp_crossover,
-            "feasibility_tol": chp_feasibility_tol,
-            "optimality_tol": chp_optimality_tol,
-            "use_output_vars": chp_use_output_vars,
-            "collect_presolve_stats": True,
         },
     )
     if skip_proposed:
@@ -480,13 +471,10 @@ def run_one(
                 "primal_violation": (
                     chp.primal_violation if key == "chp" and chp is not None else ""
                 ) if key == "chp" else r.get("primal_violation", ""),
-                "objective_diff_vs_chp": r.get("objective_diff_vs_chp", ""),
-                "max_lmp_diff_vs_chp": r.get("max_lmp_diff_vs_chp", ""),
-                "uplift_diff_vs_chp": r.get("uplift_diff_vs_chp", ""),
                 "on_arcs": size["on_arcs"],
                 "off_arcs": size["off_arcs"],
                 "dag_edges": size["dag_edges"],
-                "v_vars": size["v_vars"],
+                "q_vars": size["q_vars"],
                 "n_iter": r.get("n_iter", ""),
                 "n_columns": r.get("n_columns", ""),
                 "converged": r.get("converged", ""),

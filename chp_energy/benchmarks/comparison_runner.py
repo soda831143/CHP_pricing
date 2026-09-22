@@ -238,7 +238,6 @@ def run_comparison(
     chp_build_time: float = float("nan"),
     chp_solver_time: float = float("nan"),
     chp_model_stats: Optional[dict] = None,
-    yu_solver_options: Optional[dict] = None,
 ) -> dict:
     """
     运行对比实验，调用选定的基准方法并输出对比表。
@@ -250,6 +249,8 @@ def run_comparison(
     """
     if methods is None:
         methods = ["lmp", "mirp", "level", "dwp"]
+    if "yu" in methods:
+        raise ValueError("'yu' duplicates the CHP absolute-output formulation; use 'chp'")
 
     # 预计算 MILP 实际线路潮流（用于所有方法的 FTR 计算）
     f_actual = compute_milp_line_flows(network, p_dispatch)   # (N_line, T)
@@ -266,7 +267,7 @@ def run_comparison(
             chp_ptdf_alpha, chp_ptdf_beta_, f_actual, F_max
         )
         results["chp"] = {
-            "name":        "CHP 原空间精确 LP（本文）",
+            "name":        "CHP 绝对区间出力 LP",
             "pricing_obj": chp_lp_obj,
             "duality_gap": milp_obj - chp_lp_obj,
             "lmp_min":     float(chp_lmp_matrix.min()),
@@ -287,59 +288,10 @@ def run_comparison(
             "response_time": chp_oracle.get("oracle_time", 0.0),
             "total_time": chp_solve_time + chp_oracle.get("oracle_time", 0.0),
             "oracle_time": chp_oracle.get("oracle_time", ""),
-            "power_coordinates": "differential",
+            "power_coordinates": "absolute",
         })
         if chp_model_stats:
             results["chp"].update(chp_model_stats)
-
-    # ── Yu/Pan absolute-output ON-interval formulation ──────────────────
-    if "yu" in methods:
-        from chp_solver.chp_master_lp import PrimalCHPLP
-
-        yu = PrimalCHPLP(
-            generators,
-            network,
-            power_coordinates="absolute",
-            **(yu_solver_options or {}),
-        )
-        yu_lmp, yu_obj, ok = yu.solve()
-        if not ok:
-            raise RuntimeError("Yu/Pan interval-output LP failed")
-        yu_oracle = timed_uplift_under_prices(
-            generators, network, p_dispatch, u_dispatch, yu_lmp
-        )
-        _, yu_ftr = compute_ftr_from_lp_duals(
-            yu._ptdf_alpha, yu._ptdf_beta_, f_actual, F_max
-        )
-        results["yu"] = {
-            "name": "Absolute-q controlled interval LP (Yu/Pan style)",
-            "pricing_obj": yu_obj,
-            "duality_gap": milp_obj - yu_obj,
-            "lmp_min": float(yu_lmp.min()),
-            "lmp_max": float(yu_lmp.max()),
-            "gen_uplift": yu_oracle["gen_uplift"],
-            "ftr_cost": yu_ftr,
-            "total_uplift": yu_oracle["gen_uplift"] + yu_ftr,
-            "mw_uplift": yu_oracle["mw_uplift"],
-            "loc_uplift": yu_oracle["loc_uplift"],
-            "solve_time": yu.total_time,
-            "lmp_matrix": yu_lmp,
-            "per_unit": yu_oracle,
-            "power_coordinates": "absolute",
-            "n_variables": yu.n_variables,
-            "n_constraints": yu.n_constraints,
-            "n_nonzeros": yu.n_nonzeros,
-            "presolved_variables": yu.presolved_variables,
-            "presolved_constraints": yu.presolved_constraints,
-            "presolved_nonzeros": yu.presolved_nonzeros,
-            "presolve_stats_time": yu.presolve_stats_time,
-            "barrier_iterations": yu.barrier_iterations,
-            "primal_violation": yu.primal_violation,
-        }
-        results["yu"].update(
-            timing_fields(yu, yu.total_time, yu_oracle.get("oracle_time", 0.0))
-        )
-        results["yu"]["oracle_time"] = yu_oracle.get("oracle_time", "")
 
     # ── M-IRP ─────────────────────────────────────────────────────────────
     if "mirp" in methods:
@@ -595,17 +547,6 @@ def run_comparison(
         results["lmp"].update(timing_fields(lmp_solver, lmp_time, lmp_oracle.get("oracle_time", 0.0)))
         results["lmp"]["oracle_time"] = lmp_oracle.get("oracle_time", "")
 
-    if "chp" in results and "yu" in results:
-        yu = results["yu"]
-        chp = results["chp"]
-        objective_diff = yu["pricing_obj"] - chp["pricing_obj"]
-        max_lmp_diff = float(np.max(np.abs(yu["lmp_matrix"] - chp["lmp_matrix"])))
-        uplift_diff = yu["total_uplift"] - chp["total_uplift"]
-        for result in (chp, yu):
-            result["objective_diff_vs_chp"] = objective_diff
-            result["max_lmp_diff_vs_chp"] = max_lmp_diff
-            result["uplift_diff_vs_chp"] = uplift_diff
-
     _print_comparison_table(results, milp_obj, generators, network)
     return results
 
@@ -623,7 +564,7 @@ def _print_comparison_table(
     W    = 88
     sep  = "─" * W
     eq   = "═" * W
-    order = ["chp", "yu", "xiao", "dwp", "dwp_incremental", "mirp", "level", "lmp"]
+    order = ["chp", "xiao", "dwp", "dwp_incremental", "mirp", "level", "lmp"]
     keys  = [k for k in order if k in results]
 
     is_multi = not network.is_single_node
@@ -705,9 +646,6 @@ def _print_comparison_table(
     if "chp" in results and "xiao" in results:
         print(f"  [一致性]   CHP Gap={results['chp']['duality_gap']:,.2f}$  vs  "
               f"Xiao Gap={results['xiao']['duality_gap']:,.2f}$（同模型下 exact CHP 目标应一致）")
-    if "chp" in results and "yu" in results:
-        print(f"  [最近邻]   Yu/Pan objective difference={results['yu']['objective_diff_vs_chp']:.6g}$, "
-              f"max |price difference|={results['yu']['max_lmp_diff_vs_chp']:.6g}$/MWh")
     if "chp" in results and "mirp" in results:
         print(f"  [精确性]   CHP Gap={results['chp']['duality_gap']:,.2f}$  vs  "
               f"M-IRP Gap={results['mirp']['duality_gap']:,.2f}$（CHP 凸包约束更紧）")

@@ -4,6 +4,12 @@ This directory contains the executable code for the CHP experiments.  The
 current paper workflow uses 24 hours, 3-segment PWL costs, and the modified
 IEEE 30-bus UC case with PTDF constraints.
 
+The Phase-1 CHP LP now uses absolute ON-interval output (`q`, Yu/Pan's interval
+`p` coordinate) only; ramp differences are constraints, not decision variables.
+The old `yu` benchmark was the same LP in this coordinate and is no longer run
+as a separate method. Historical differential-coordinate result files remain
+for audit, not as a second active implementation.
+
 ## Main Commands
 
 Generate the current paper tables and figures:
@@ -40,9 +46,9 @@ python run_experiments.py --cases 30 --networks ptdf --segments 3 --T 24 --conge
 | `dwp` | DWP | rebuilt-RMP Dantzig-Wolfe with parallel unit pricing |
 | `dwp_incremental` | DWP-inc | incremental-RMP diagnostic variant |
 | `xiao` | S-CHP | Xiao et al. state-transition CHP |
-| automatic | D-CHP | proposed DAG--g-polymatroid LP |
+| automatic | CHP | DAG/interval LP in Yu/Pan-style absolute-output coordinates |
 
-`run_experiments.py` includes D-CHP unless `--skip-proposed` is passed.
+`run_experiments.py` includes CHP unless `--skip-proposed` is passed (legacy CLI flag).
 
 ## Kept Results
 

@@ -100,8 +100,8 @@ class GeneratorDAG:
         return self.n_on + self.n_off
 
     @property
-    def n_v_vars(self) -> int:
-        """所有 ON 弧上差分变量 v 的总数。"""
+    def n_q_vars(self) -> int:
+        """Number of absolute interval-output variables on ON arcs."""
         return sum(iv.duration for iv in self.on_intervals)
 
 

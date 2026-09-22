@@ -30,12 +30,12 @@ def _check_lp_structure(case_label, T=24, n_seg=3):
     # 1. Variable count sanity
     assert idx.n_z >= sum(d.n_on + d.n_off for d in dags), "z count mismatch"
     for i, dag in enumerate(dags):
-        n_v = sum(iv.duration for iv in dag.on_intervals)
-        # v_offset[i][-1] + last_duration should equal starting offset + total v count
+        n_q = sum(iv.duration for iv in dag.on_intervals)
+        # q_offset[i][-1] + last_duration should equal starting offset + total q count
         if dag.n_on > 0:
-            last_v_start = idx.v_offset[i][-1]
-            expected_total_v_for_i = sum(idx.v_offset[i][j+1] - idx.v_offset[i][j] for j in range(dag.n_on-1)) + dag.on_intervals[-1].duration
-    print(f"  [PASS] Variable layout: z={idx.n_z}, v={idx.n_v}, cvar={idx.n_cvar}, total={idx.n_total}")
+            last_q_start = idx.q_offset[i][-1]
+            expected_total_q_for_i = sum(idx.q_offset[i][j+1] - idx.q_offset[i][j] for j in range(dag.n_on-1)) + dag.on_intervals[-1].duration
+    print(f"  [PASS] Variable layout: z={idx.n_z}, q={idx.n_q}, cvar={idx.n_cvar}, total={idx.n_total}")
     
     # 2. ON arc constraints count
     n_perspective_rows = 0

@@ -266,7 +266,7 @@ def main() -> None:
     args = parser.parse_args()
     generators, network = load_case("30", args.network, args.T, 3, congestion="tight")
     p, u, _ = ScheduleRunMILP(generators, network).solve()
-    direct = PrimalCHPLP(generators, network, power_coordinates="absolute")
+    direct = PrimalCHPLP(generators, network)
     direct_started = time.perf_counter()
     direct_prices, direct_obj, direct_ok = direct.solve()
     if not direct_ok:

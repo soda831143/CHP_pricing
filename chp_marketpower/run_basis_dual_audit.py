@@ -94,14 +94,15 @@ def audit(generators, network, generator_index: int, deltas, tolerance: float) -
                 method=method,
                 crossover=crossover,
             )
-            prices, objective, success = solver.solve()
-            if not success:
-                raise RuntimeError(f"CHP solve failed at delta={delta:g}, method={method_name}")
+            _, objective, success = solver.solve()
+            from gurobi_compat import GRB
+            if not success or solver._model.Status != GRB.OPTIMAL:
+                raise RuntimeError(f"CHP did not reach OPTIMAL at delta={delta:g}, method={method_name}")
             records.append({
                 "delta": float(delta),
                 "method": method_name,
                 "objective": float(objective),
-                "lmp": np.asarray(prices, dtype=float).tolist(),
+                "lmp": solver.raw_nodal_price.tolist(),
                 **_basis_summary(solver, tolerance),
             })
 

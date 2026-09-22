@@ -10,7 +10,7 @@ from models.network import SingleNodeNetwork
 
 
 @pytest.mark.parametrize("use_output_vars", [False, True])
-def test_differential_and_absolute_interval_coordinates_are_equivalent(use_output_vars):
+def test_interval_output_with_or_without_aggregate_output_variables(use_output_vars):
     generator = GeneratorParams(
         P_max=100.0,
         P_min=20.0,
@@ -33,19 +33,14 @@ def test_differential_and_absolute_interval_coordinates_are_equivalent(use_outpu
     )
     network = SingleNodeNetwork(np.array([55.0, 70.0, 50.0, 30.0]))
 
-    differential = PrimalCHPLP([generator], network, use_output_vars=use_output_vars)
-    absolute = PrimalCHPLP(
-        [generator],
-        network,
-        use_output_vars=use_output_vars,
-        power_coordinates="absolute",
-    )
-    _, differential_obj, differential_ok = differential.solve()
-    _, absolute_obj, absolute_ok = absolute.solve()
+    solver = PrimalCHPLP([generator], network, use_output_vars=use_output_vars)
+    lmp, objective, success = solver.solve()
 
-    assert differential_ok and absolute_ok
-    assert absolute_obj == pytest.approx(differential_obj, abs=1e-6)
-    assert absolute.lp_dispatch() == pytest.approx(differential.lp_dispatch(), abs=1e-6)
+    assert success
+    assert np.isfinite(objective)
+    assert solver.lp_dispatch()[0] == pytest.approx(network.sys_demand, abs=1e-6)
+    assert np.all(solver.raw_energy_dual > 0)
+    assert solver.raw_nodal_price == pytest.approx(lmp, abs=1e-7)
 
 
 def test_uniform_pwl_bid_adder_keeps_constraint_matrix_fixed():
@@ -78,8 +73,8 @@ def test_uniform_pwl_bid_adder_keeps_constraint_matrix_fixed():
     assert shifted_b == pytest.approx(base_b)
 
 
-@pytest.mark.parametrize("power_coordinates", ["differential", "absolute"])
-def test_bid_adder_direction_is_above_minimum_energy(power_coordinates):
+@pytest.mark.parametrize("initial_online", [False, True])
+def test_bid_adder_direction_is_above_minimum_energy(initial_online):
     generator = GeneratorParams(
         P_max=100.0,
         P_min=20.0,
@@ -94,15 +89,17 @@ def test_bid_adder_direction_is_above_minimum_energy(power_coordinates):
         cost_sd=0.0,
         cost_nl=5.0,
         T=2,
+        initial_status=int(initial_online),
+        initial_power=50.0 if initial_online else 0.0,
+        initial_up_time=1 if initial_online else 0,
         pwl_slopes=[10.0, 18.0],
         pwl_widths=[40.0, 40.0],
     )
     network = SingleNodeNetwork(np.array([50.0, 60.0]))
-    base = PrimalCHPLP([generator], network, power_coordinates=power_coordinates)
+    base = PrimalCHPLP([generator], network)
     shifted = PrimalCHPLP(
         [generator],
         network,
-        power_coordinates=power_coordinates,
         bid_adders=np.array([[0.5, 0.5]]),
     )
     assert base.solve()[2] and shifted.solve()[2]

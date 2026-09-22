@@ -15,10 +15,9 @@ z_vars（共 Σ_i (n_on_i + n_off_i) 个）：
   每台机组每条 ON/OFF 弧的流量变量 z_{i,e} ∈ [0,1]
 
 interval_power_vars（共 Σ_i Σ_e duration_e 个，仅 ON 弧）：
-  默认是差分出力 v_{i,e,τ}，物理出力由 prefix sum 重构；
-  power_coordinates="absolute" 时改为 Yu/Pan 区间绝对出力 q_{i,e,τ}。
+  Yu/Pan 区间绝对出力 q_{i,e,τ}，爬坡由相邻 q 的差表示。
 
-cvar_vars（与 v_vars 等数量）：
+cvar_vars（与 q_vars 等数量）：
   每台机组每条 ON 弧每个时段的变动成本上镜图变量 c_var_{i,e,τ} ≥ 0
 
 等式约束顺序
@@ -40,7 +39,7 @@ cvar_vars（与 v_vars 等数量）：
 目标函数
 --------
 单段 (is_single_segment == True)：
-  Abel 稀疏化：C_var * (duration - τ) * v_{e,τ}  + C_fix * z_e
+  C_var * q_{e,τ} + C_fix * z_e
   （其中 C_fix 中 z_e 系数已扣减 C_var * n * P_min）
 
 分段 (is_single_segment == False)：
@@ -92,15 +91,15 @@ class _VarIndex:
             self.z_off_offset.append(off_cols)
         self.n_z = col
 
-        # ── v 变量偏移 ────────────────────────────────────────────────────────
-        self.v_offset: List[List[int]] = []
+        # ── 区间绝对出力 q 变量偏移 ─────────────────────────────────────────
+        self.q_offset: List[List[int]] = []
         for i, dag in enumerate(dags):
-            v_cols = []
+            q_cols = []
             for iv in dag.on_intervals:
-                v_cols.append(col)
+                q_cols.append(col)
                 col += iv.duration
-            self.v_offset.append(v_cols)
-        self.n_v = col - self.n_z
+            self.q_offset.append(q_cols)
+        self.n_q = col - self.n_z
 
         # ── cvar 变量偏移（仅分段线性模式）──────────────────────────────────
         # 每条 ON 弧的每个时段对应一个 cvar 变量
@@ -116,7 +115,7 @@ class _VarIndex:
             for dag in dags:
                 self.cvar_offset.append([])
 
-        self.n_cvar  = col - self.n_z - self.n_v
+        self.n_cvar  = col - self.n_z - self.n_q
         self.p_offset: List[List[int]] = []
         if use_output_vars:
             for dag in dags:
@@ -126,7 +125,7 @@ class _VarIndex:
         else:
             for dag in dags:
                 self.p_offset.append([])
-        self.n_p = col - self.n_z - self.n_v - self.n_cvar
+        self.n_p = col - self.n_z - self.n_q - self.n_cvar
         self.n_total = col
 
     def z_on(self, i: int, k: int) -> int:
@@ -135,8 +134,8 @@ class _VarIndex:
     def z_off(self, i: int, k: int) -> int:
         return self.z_off_offset[i][k]
 
-    def v(self, i: int, k: int, local_tau: int) -> int:
-        return self.v_offset[i][k] + local_tau
+    def q(self, i: int, k: int, local_tau: int) -> int:
+        return self.q_offset[i][k] + local_tau
 
     def cvar(self, i: int, k: int, local_tau: int) -> int:
         """仅 use_pwl == True 时有效。"""
@@ -156,7 +155,7 @@ class PrimalCHPLP:
     原空间凸包定价主问题（纯连续 LP）。
 
     自动检测 GeneratorParams.is_single_segment：
-      True  → Abel 稀疏目标（无额外变量，高效）
+      True  → 直接区间出力目标（无额外变量）
       False → max-of-lines 上镜图目标（支持分段线性成本，精确）
     """
 
@@ -170,7 +169,6 @@ class PrimalCHPLP:
         feasibility_tol: Optional[float] = None,
         optimality_tol: Optional[float] = None,
         use_output_vars: bool = False,
-        power_coordinates: str = "differential",
         collect_presolve_stats: bool = False,
         bid_multipliers: Optional[np.ndarray] = None,
         bid_adders: Optional[np.ndarray] = None,
@@ -210,10 +208,6 @@ class PrimalCHPLP:
         # 若任意一台机组使用分段线性成本，启用 cvar 变量
         self._use_pwl = any(not g.is_single_segment for g in generators)
         self._use_output_vars = bool(use_output_vars)
-        if power_coordinates not in {"differential", "absolute"}:
-            raise ValueError("power_coordinates must be 'differential' or 'absolute'")
-        self.power_coordinates = power_coordinates
-        self._absolute_power = power_coordinates == "absolute"
         self.collect_presolve_stats = bool(collect_presolve_stats)
         self._idx     = _VarIndex(
             self.dags,
@@ -255,16 +249,8 @@ class PrimalCHPLP:
         local_tau: int,
         coefficient: float,
     ) -> None:
-        """Append coefficients for q[e,t] in either interval coordinate system."""
-        if self._absolute_power:
-            rows.append(row); cols.append(idx.v(i, k, local_tau)); data.append(coefficient)
-            return
-        if iv.initial_online:
-            rows.append(row)
-            cols.append(idx.z_on(i, k))
-            data.append(coefficient * self.generators[i].initial_power)
-        for local_k in range(local_tau + 1):
-            rows.append(row); cols.append(idx.v(i, k, local_k)); data.append(coefficient)
+        """Append the coefficient of interval absolute output q[e,t]."""
+        rows.append(row); cols.append(idx.q(i, k, local_tau)); data.append(coefficient)
 
     def _bid_adder_coefficients(self, generator_index: int, adders: np.ndarray) -> np.ndarray:
         """Return objective coefficients for above-minimum energy adders."""
@@ -279,21 +265,11 @@ class PrimalCHPLP:
         params = self.generators[generator_index]
         for k, iv in enumerate(dag.on_intervals):
             interval_adders = adders[iv.a : iv.b + 1]
-            if self._absolute_power:
-                coefficients[self._idx.z_on(generator_index, k)] -= (
-                    float(np.sum(interval_adders)) * params.P_min
-                )
-                for tau, adder in enumerate(interval_adders):
-                    coefficients[self._idx.v(generator_index, k, tau)] += adder
-            else:
-                p0 = params.initial_power if iv.initial_online else 0.0
-                coefficients[self._idx.z_on(generator_index, k)] += (
-                    float(np.sum(interval_adders)) * (p0 - params.P_min)
-                )
-                for tau in range(iv.duration):
-                    coefficients[self._idx.v(generator_index, k, tau)] += float(
-                        np.sum(interval_adders[tau:])
-                    )
+            coefficients[self._idx.z_on(generator_index, k)] -= (
+                float(np.sum(interval_adders)) * params.P_min
+            )
+            for tau, adder in enumerate(interval_adders):
+                coefficients[self._idx.q(generator_index, k, tau)] += adder
         return coefficients
 
     def bid_adder_direction(
@@ -344,12 +320,12 @@ class PrimalCHPLP:
             for k in range(dag.n_off):
                 ub[idx.z_off(i, k)] = 1.0
 
-        # v/q 变量：均由透视容量约束界定；保持自由界限以公平比较矩阵表示。
+        # 区间出力 q 由透视容量约束界定。
         for i, dag in enumerate(self.dags):
             for k, iv in enumerate(dag.on_intervals):
                 for tau in range(iv.duration):
-                    lb[idx.v(i, k, tau)] = -GRB.INFINITY
-                    ub[idx.v(i, k, tau)] =  GRB.INFINITY
+                    lb[idx.q(i, k, tau)] = -GRB.INFINITY
+                    ub[idx.q(i, k, tau)] =  GRB.INFINITY
 
         # cvar 变量：非负（上镜图约束自动保证从下方限制）
         if self._use_pwl:
@@ -361,7 +337,7 @@ class PrimalCHPLP:
 
         # ── 2. 目标函数 ─────────────────────────────────────────────────────
         # cost_var / pwl_slopes 仅作用于超出 P_min 的出力部分。
-        # 因此 Abel 稀疏化后 z_e 系数需减去 cost_var * duration * P_min，
+        # 因此 z_e 系数需减去 cost_var * duration * P_min，
         # 对应 Σ_τ cost_var*(p_τ - z*P_min) 的展开。
         c_obj = np.zeros(n_cols)
         for i, (dag, params) in enumerate(zip(self.dags, self.generators)):
@@ -370,20 +346,11 @@ class PrimalCHPLP:
                     slopes_by_hour = params.cost_var * self.bid_multipliers[
                         i, iv.a : iv.b + 1
                     ]
-                    if self._absolute_power:
-                        c_obj[idx.z_on(i, k)] = (
-                            iv.c_fix - float(np.sum(slopes_by_hour)) * params.P_min
-                        )
-                        for tau in range(iv.duration):
-                            c_obj[idx.v(i, k, tau)] = slopes_by_hour[tau]
-                    else:
-                        # Abel transform of Σ cost_var*(q_τ - z*P_min).
-                        p0 = params.initial_power if iv.initial_online else 0.0
-                        c_obj[idx.z_on(i, k)] = (
-                            iv.c_fix + float(np.sum(slopes_by_hour)) * (p0 - params.P_min)
-                        )
-                        for tau in range(iv.duration):
-                            c_obj[idx.v(i, k, tau)] = float(np.sum(slopes_by_hour[tau:]))
+                    c_obj[idx.z_on(i, k)] = (
+                        iv.c_fix - float(np.sum(slopes_by_hour)) * params.P_min
+                    )
+                    for tau in range(iv.duration):
+                        c_obj[idx.q(i, k, tau)] = slopes_by_hour[tau]
                 else:
                     # 基准 PWL 成本由 cvar 表示；绝对报价加数统一在下方加入。
                     c_obj[idx.z_on(i, k)] = iv.c_fix
@@ -400,7 +367,7 @@ class PrimalCHPLP:
         A_ub_csr, b_ub = self._build_ineq_constraints(idx)
 
         # ── 5. COPT 求解 ───────────────────────────────────────────────────
-        model = gp.Model("YuIntervalCHP" if self._absolute_power else "PrimalCHP")
+        model = gp.Model("IntervalCHP")
         model.Params.OutputFlag = 0
         model.Params.Method     = self.method
         model.Params.Crossover  = self.crossover
@@ -443,6 +410,9 @@ class PrimalCHPLP:
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
             self._ptdf_alpha = None
             self._ptdf_beta_ = None
+            self.raw_energy_dual = None
+            self.raw_line_duals = None
+            self.raw_nodal_price = None
             N_bus = self.network.N_bus
             return np.zeros((N_bus, self.T)), float("inf"), False
 
@@ -460,11 +430,12 @@ class PrimalCHPLP:
         # 等式约束行排列：[n_flow | n_src | n_bal]
         # n_bal = T，全局平衡约束，对偶 = 能量价格 λ_t（所有节点共享基准）
         all_pi_eq  = eq_constrs.getInfo(gp.cp.COPT.Info.Dual).tonumpy()
-        balance_pi = all_pi_eq[n_flow + n_src : n_flow + n_src + n_bal]   # (T,)
+        balance_pi = all_pi_eq[n_flow + n_src : n_flow + n_src + n_bal].copy()
+        # Balance rows are Σ_g p[g,t] = D[t]. COPT returns the RHS shadow
+        # price for a minimization problem, so this is the energy-price sign.
+        self.raw_energy_dual = balance_pi.copy()
 
         # 保持原实现的价格清理口径。
-        if np.all(balance_pi <= 1e-8) and np.any(balance_pi < -1e-6):
-            balance_pi = -balance_pi
         balance_pi = np.where(np.abs(balance_pi) < 1e-8, 0.0, balance_pi)
         balance_pi = np.clip(balance_pi, 0.0, None)
         lambda_t   = balance_pi                         # (T,)
@@ -481,6 +452,8 @@ class PrimalCHPLP:
         #   β_{l,t} = Pi of (-PTDF_Gen @ p ≤ -rhs_neg) constraint ≤ 0
         #   拥塞正向（线路达上限）：α < 0 → 发电侧节点 LMP 降低，负荷侧 LMP 升高
         if self.network.is_single_node or ineq_constrs is None:
+            self.raw_line_duals = None
+            self.raw_nodal_price = self.raw_energy_dual[np.newaxis, :].copy()
             lmp_matrix = np.tile(lambda_t, (1, 1))      # (1, T)
         else:
             # 多节点 PTDF 直流潮流 LMP 后处理计算：
@@ -497,12 +470,17 @@ class PrimalCHPLP:
             # 排列：连续2行 per (l,t)：[upper, lower, upper, lower, ...]
             alpha = ptdf_pi[0::2].reshape(N_line, self.T)   # rows 0,2,4,...
             beta_ = ptdf_pi[1::2].reshape(N_line, self.T)   # rows 1,3,5,...
+            self.raw_line_duals = np.stack((alpha, beta_), axis=-1).copy()
 
             PTDF = self.network.PTDF                    # (N_line, N_bus)
             # LMP[n,t] = λ[t] + Σ_l PTDF[l,n] * (α[l,t] − β[l,t])
             # (alpha ≤ 0, beta ≤ 0; their difference gives the congestion component)
             lmp_matrix = (
                 lambda_t[np.newaxis, :]
+                + PTDF.T @ (alpha - beta_)
+            )
+            self.raw_nodal_price = (
+                self.raw_energy_dual[np.newaxis, :]
                 + PTDF.T @ (alpha - beta_)
             )
 
@@ -539,15 +517,7 @@ class PrimalCHPLP:
             for k, iv in enumerate(dag.on_intervals):
                 for tau in range(iv.a, iv.b + 1):
                     local_end = tau - iv.a
-                    if self._absolute_power:
-                        p_lp[i, tau] += self._solution_x[idx.v(i, k, local_end)]
-                    else:
-                        if iv.initial_online:
-                            p_lp[i, tau] += self._solution_x[idx.z_on(i, k)] * dag.params.initial_power
-                        p_lp[i, tau] += sum(
-                            self._solution_x[idx.v(i, k, local_j)]
-                            for local_j in range(local_end + 1)
-                        )
+                    p_lp[i, tau] += self._solution_x[idx.q(i, k, local_end)]
         return p_lp
 
     def lp_commitment(self) -> np.ndarray:
@@ -699,38 +669,34 @@ class PrimalCHPLP:
                 n     = iv.duration
 
                 # ── (1) 启动约束 τ=0 ─────────────────────────────────────────
-                v0_col = idx.v(i, k, 0)
+                q0_col = idx.q(i, k, 0)
                 if iv.initial_online:
-                    rows.append(row); cols.append(v0_col); data.append(1.0)
-                    z_coeff = -(params.initial_power + params.R_up) if self._absolute_power else -params.R_up
-                    rows.append(row); cols.append(z_col);  data.append(z_coeff)
+                    rows.append(row); cols.append(q0_col); data.append(1.0)
+                    rows.append(row); cols.append(z_col); data.append(-(params.initial_power + params.R_up))
                     b_ub_list.append(0.0); row += 1
 
-                    rows.append(row); cols.append(v0_col); data.append(-1.0)
-                    z_coeff = params.initial_power - params.R_down if self._absolute_power else -params.R_down
-                    rows.append(row); cols.append(z_col);  data.append(z_coeff)
+                    rows.append(row); cols.append(q0_col); data.append(-1.0)
+                    rows.append(row); cols.append(z_col); data.append(params.initial_power - params.R_down)
                     b_ub_list.append(0.0); row += 1
                 else:
-                    rows.append(row); cols.append(v0_col); data.append(1.0)
+                    rows.append(row); cols.append(q0_col); data.append(1.0)
                     rows.append(row); cols.append(z_col);  data.append(-params.SU_ramp)
                     b_ub_list.append(0.0); row += 1
 
-                    rows.append(row); cols.append(v0_col); data.append(-1.0)
+                    rows.append(row); cols.append(q0_col); data.append(-1.0)
                     rows.append(row); cols.append(z_col);  data.append(params.P_min)
                     b_ub_list.append(0.0); row += 1
 
                 # ── (2) 管内爬坡约束 τ=1..n-1 ───────────────────────────────
                 for tau in range(1, n):
-                    vt_col = idx.v(i, k, tau)
-                    rows.append(row); cols.append(vt_col); data.append(1.0)
-                    if self._absolute_power:
-                        rows.append(row); cols.append(idx.v(i, k, tau - 1)); data.append(-1.0)
+                    qt_col = idx.q(i, k, tau)
+                    rows.append(row); cols.append(qt_col); data.append(1.0)
+                    rows.append(row); cols.append(idx.q(i, k, tau - 1)); data.append(-1.0)
                     rows.append(row); cols.append(z_col);  data.append(-params.R_up)
                     b_ub_list.append(0.0); row += 1
 
-                    rows.append(row); cols.append(vt_col); data.append(-1.0)
-                    if self._absolute_power:
-                        rows.append(row); cols.append(idx.v(i, k, tau - 1)); data.append(1.0)
+                    rows.append(row); cols.append(qt_col); data.append(-1.0)
+                    rows.append(row); cols.append(idx.q(i, k, tau - 1)); data.append(1.0)
                     rows.append(row); cols.append(z_col);  data.append(-params.R_down)
                     b_ub_list.append(0.0); row += 1
 
@@ -760,10 +726,10 @@ class PrimalCHPLP:
                     b_ub_list.append(0.0); row += 1
 
                 # ── (B) 分段线性上镜图约束（仅 PWL 模式且本机组分段）────────
-                # cvar 代表超出 P_min 的变动成本。由于 Σv = 总出力 p（含 P_min），
+                # cvar 代表超出 P_min 的变动成本。q 是区间绝对出力，
                 # 需扣减 P_min 基底：
-                #   c_var ≥ s_k · (Σv - z·P_min) + b_k · z
-                #        = s_k · Σv + (b_k - s_k·P_min) · z
+                #   c_var ≥ s_k · (q - z·P_min) + b_k · z
+                #        = s_k · q + (b_k - s_k·P_min) · z
                 if self._use_pwl and not params.is_single_segment:
                     slopes     = params.pwl_slopes
                     intercepts = params.pwl_intercepts()
@@ -784,7 +750,7 @@ class PrimalCHPLP:
                             b_ub_list.append(0.0); row += 1
 
                 elif self._use_pwl and params.is_single_segment:
-                    # 单段退化：c_var ≥ cost_var · (Σv - z·P_min)
+                    # 单段退化：c_var ≥ cost_var · (q - z·P_min)
                     Pmin = params.P_min
                     for tau in range(n):
                         cv_col = idx.cvar(i, k, tau)
@@ -803,7 +769,7 @@ class PrimalCHPLP:
         # 展开为变量的线性约束（消去 f 变量）：
         #   上界：Σ_i PTDF_Gen[l,i] · p_{i,τ} ≤ F_max[l] + Σ_n PTDF[l,n]·D_{n,τ}  = rhs_pos[l,τ]
         #   下界：Σ_i PTDF_Gen[l,i] · p_{i,τ} ≥ −F_max[l] + Σ_n PTDF[l,n]·D_{n,τ} = rhs_neg[l,τ]
-        # 其中 p_{i,τ} = Σ_{e∋τ} Σ_{k=0}^{τ-a} v_{e,k}（在 LP 变量中表达）
+        # 其中 p_{i,τ} = Σ_{e∋τ} q_{e,τ}（在 LP 变量中表达）
         if not self.network.is_single_node:
             PTDF_Gen       = self.network.PTDF_Gen   # (N_line, N_gen)
             rhs_pos, rhs_neg = self.network.line_rhs()   # each (N_line, T)
@@ -815,7 +781,7 @@ class PrimalCHPLP:
                     rhs_p = float(rhs_pos[l, tau])
                     rhs_n = float(rhs_neg[l, tau])
 
-                    # Upper bound: Σ coeff * v ≤ rhs_pos
+                    # Upper bound: Σ coeff * q ≤ rhs_pos
                     for i, dag in enumerate(self.dags):
                         coeff = float(ptdf_row[i])
                         if abs(coeff) < 1e-10:
@@ -833,7 +799,7 @@ class PrimalCHPLP:
                                 )
                     b_ub_list.append(rhs_p); row += 1
 
-                    # Lower bound (negated): -Σ coeff * v ≤ -rhs_neg
+                    # Lower bound (negated): -Σ coeff * q ≤ -rhs_neg
                     for i, dag in enumerate(self.dags):
                         coeff = float(ptdf_row[i])
                         if abs(coeff) < 1e-10:
@@ -858,23 +824,3 @@ class PrimalCHPLP:
             (data, (rows, cols)), shape=(row, idx.n_total)
         ).tocsr()
         return A_ub_csr, np.array(b_ub_list, dtype=float)
-
-    # ── 内部：对偶清理 ────────────────────────────────────────────────────
-
-    @staticmethod
-    def _clean_duals(pi: np.ndarray, clip_nonneg: bool = True) -> np.ndarray:
-        """
-        清理内点法数值噪声。
-
-        Parameters
-        ----------
-        pi           : 原始对偶向量
-        clip_nonneg  : True → 截断至 ≥ 0（单节点全局价格）
-                       False → 保留负值（多节点 LMP 可合法为负）
-        """
-        if np.all(pi <= 1e-8) and np.any(pi < -1e-6):
-            pi = -pi
-        pi = np.where(np.abs(pi) < 1e-8, 0.0, pi)
-        if clip_nonneg:
-            pi = np.clip(pi, 0.0, None)
-        return pi
