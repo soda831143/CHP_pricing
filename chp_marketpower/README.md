@@ -2,9 +2,11 @@
 
 本目录研究“机组报价改变后，凸包定价的最优值与节点价格如何分区变化；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP、最优面左右导数、价值优先重构和价格层门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
 
+以论文贡献为中心的当前主线、同策略 G1/G5 实验及下一步见 [PAPER_DIRECTION_2026-10-14.md](PAPER_DIRECTION_2026-10-14.md)。价格选择的理论边界见 [RESEARCH_UPDATE_2026-09-23.md](RESEARCH_UPDATE_2026-09-23.md)；基事件仅保留为诊断。
+
 代码直接复用相邻的 `../chp_energy/` 的案例、物理 UC、exact DAG-CHP 和自调度求解器，不复制第二套市场模型。
 
-底层 `PrimalCHPLP` 现在只用 Yu/Pan 式绝对 ON-interval 出力 \(q\)（区间 \(p\) 坐标），不再把差分爬坡量 \(v\) 设为 CHP 决策变量；这是等价实现选择，不是论文方法贡献。`yu` 不再是独立 benchmark，因为它与 `chp` 是同一个 LP。6 节点 G2、\(\delta\in[0,0.1]\) 的价值层已过三档 COPT 容差检查；下一步只审查原始对偶和价格子区间，不扩案例、参数或利润网格。
+底层 `PrimalCHPLP` 现在只用 Yu/Pan 式绝对 ON-interval 出力 \(q\)（区间 \(p\) 坐标），不再把差分爬坡量 \(v\) 设为 CHP 决策变量；这是等价实现选择，不是论文方法贡献。`yu` 不再是独立 benchmark，因为它与 `chp` 是同一个 LP。6 节点 G2、\(\delta\in[0,0.1]\) 的价值层已过三档 COPT 容差检查；当前先检验经济报价范围及同策略价格—利润机制，不扩 118 节点或多主体博弈。
 
 ## 可运行入口
 
