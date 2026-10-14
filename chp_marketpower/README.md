@@ -1,18 +1,24 @@
 # CHP Market Power
 
+**当前研究与实验结论（2026-10-14）：** [统一绝对报价后的市场力主线与跨 6/30/118 节点证据](MARKET_POWER_STUDY_2026-10-14.md)。下方早期 R2/R3 段落保留作方法审计历史，其中“暂不做利润/118 节点”的阶段性限制已由本轮实验更新。
+
 本目录研究“机组报价改变后，凸包定价的最优值与节点价格如何分区变化；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP、最优面左右导数、价值优先重构和价格层门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
 
-以论文贡献为中心的当前主线、同策略 G1/G5 实验及下一步见 [PAPER_DIRECTION_2026-10-14.md](PAPER_DIRECTION_2026-10-14.md)。价格选择的理论边界见 [RESEARCH_UPDATE_2026-09-23.md](RESEARCH_UPDATE_2026-09-23.md)；基事件仅保留为诊断。
+较早的相对乘数 G1/G5 实验见 [PAPER_DIRECTION_2026-10-14.md](PAPER_DIRECTION_2026-10-14.md)。价格选择的理论边界见 [RESEARCH_UPDATE_2026-09-23.md](RESEARCH_UPDATE_2026-09-23.md)；基事件仅保留为诊断。
 
 代码直接复用相邻的 `../chp_energy/` 的案例、物理 UC、exact DAG-CHP 和自调度求解器，不复制第二套市场模型。
 
-底层 `PrimalCHPLP` 现在只用 Yu/Pan 式绝对 ON-interval 出力 \(q\)（区间 \(p\) 坐标），不再把差分爬坡量 \(v\) 设为 CHP 决策变量；这是等价实现选择，不是论文方法贡献。`yu` 不再是独立 benchmark，因为它与 `chp` 是同一个 LP。6 节点 G2、\(\delta\in[0,0.1]\) 的价值层已过三档 COPT 容差检查；当前先检验经济报价范围及同策略价格—利润机制，不扩 118 节点或多主体博弈。
+底层 `PrimalCHPLP` 现在只用 Yu/Pan 式绝对 ON-interval 出力 \(q\)（区间 \(p\) 坐标），不再把差分爬坡量 \(v\) 设为 CHP 决策变量；这是等价实现选择，不是论文方法贡献。`yu` 不再是独立 benchmark，因为它与 `chp` 是同一个 LP。6 节点 G2、\(\delta\in[0,0.1]\) 的价值层已过三档 COPT 容差检查；当前已将同一绝对报价与结算核算接到 6/30/118 节点，不扩多主体博弈。
 
 ## 可运行入口
 
 在本目录执行（数值求解使用 COPT 8，经全局 `gurobi_compat` 垫片复用已有模型）：
 
 ```powershell
+python run_unified_bid_experiment.py --case 6 --generator 1 --rho 0 0.025 0.05 0.10 0.20 0.30 0.50
+python run_unified_bid_experiment.py --case 30 --generator 0 --rho 0 0.025 0.05 0.10 0.20 0.30 0.50
+python run_unified_bid_experiment.py --case 30 --generator 4 --rho 0 0.025 0.05 0.10 0.20 0.30 0.50
+python run_unified_bid_experiment.py --case 118 --generator 10 --T 12 --rho 0 0.05 0.10 0.20
 python run_pricing_diagnostics.py --case 6 --scenario C3 --T 24 --segments 3 --dual-audit --include-uc --out-dir results/diagnostics_C3
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization relative --epsilon 0.005 --out-dir results/full_C3_relative_eps0005
 python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --parameterization absolute --epsilon 0.1 --out-dir results/full_C3_absolute_eps01

@@ -21,14 +21,17 @@ from chp_solver.schedule_run import ScheduleRunMILP  # noqa: E402
 from models.generator import (  # noqa: E402
     load_all_case6ww_generators,
     load_all_case30ww_generators,
+    load_all_case118ww_generators,
 )
 from models.network import (  # noqa: E402
     PTDFNetwork,
     SingleNodeNetwork,
     build_ptdf_network_from_case6ww,
     build_ptdf_network_from_case30ww,
+    build_ptdf_network_from_case118ww,
     build_single_node_from_case6ww,
     build_single_node_from_case30ww,
+    build_single_node_from_case118ww,
 )
 
 
@@ -74,7 +77,7 @@ def load_case(
     load_shift: tuple[float, float, float] | None = None,
     warmup: bool = False,
 ):
-    """Load an existing 6- or 30-bus CHP case without copying case data."""
+    """Load an existing CHP case without copying case data."""
     if network not in {"single", "ptdf"}:
         raise ValueError(f"Unsupported network: {network}")
     if not np.isfinite(load_scale) or load_scale <= 0:
@@ -92,6 +95,13 @@ def load_case(
             build_ptdf_network_from_case30ww(T=T, congestion=congestion)
             if network == "ptdf"
             else build_single_node_from_case30ww(T=T)
+        )
+    elif case == "118":
+        generators = load_all_case118ww_generators(T=T, n_segments=segments)
+        grid = (
+            build_ptdf_network_from_case118ww(T=T, congestion=congestion)
+            if network == "ptdf"
+            else build_single_node_from_case118ww(T=T)
         )
     else:
         raise ValueError(f"Unsupported case: {case}")

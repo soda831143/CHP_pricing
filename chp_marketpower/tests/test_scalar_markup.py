@@ -16,7 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from engine import PrimalCHPLP, controlled_case, load_case  # noqa: E402
 from price_vulnerability import (  # noqa: E402
-    apply_generator_markup, central_difference, epsilon_stability, regime_differences,
+    apply_generator_adder, apply_generator_markup, central_difference, epsilon_stability, regime_differences,
     reconstruct_value_regimes, scalar_sensitivity, ValuePoint, vulnerability_metrics,
 )
 from run_price_probe import affine_midpoint_error  # noqa: E402
@@ -34,6 +34,22 @@ def test_scalar_markup_is_immutable() -> None:
     assert np.isclose(changed[0].cost_var, 1.1 * base_cost)
     assert np.allclose(changed[0].pwl_slopes, 1.1 * np.asarray(base_slopes))
     assert changed[1].cost_var == generators[1].cost_var
+
+
+def test_absolute_adder_is_immutable_and_uniform() -> None:
+    generators, _ = load_case("6", "single", T=3, segments=3)
+    changed = apply_generator_adder(generators, 1, 2.4)
+    assert np.allclose(np.asarray(changed[1].pwl_slopes) - generators[1].pwl_slopes, 2.4)
+    assert changed[1].cost_var - generators[1].cost_var == pytest.approx(2.4)
+    assert changed[0].cost_var == generators[0].cost_var
+    with pytest.raises(ValueError, match="delta"):
+        apply_generator_adder(generators, 1, float("nan"))
+
+
+def test_118_case_uses_the_same_market_interface() -> None:
+    generators, network = load_case("118", "ptdf", T=12, segments=3)
+    assert len(generators) == 54
+    assert network.N_bus == 118 and network.T == 12
 
 
 def test_central_difference() -> None:

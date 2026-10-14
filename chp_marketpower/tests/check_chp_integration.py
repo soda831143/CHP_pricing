@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import json
 from copy import deepcopy
 from pathlib import Path
 
@@ -14,9 +15,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from engine import controlled_case, solve_chp  # noqa: E402
-from price_vulnerability import apply_generator_markup, hourly_sensitivity, scalar_sensitivity  # noqa: E402
+from price_vulnerability import apply_generator_adder, apply_generator_markup, hourly_sensitivity, scalar_sensitivity  # noqa: E402
 from price_vulnerability.diagnostics import pricing_mechanism_diagnostics  # noqa: E402
-from strategic_market_simulation.profit_sweep import profit_at_markup  # noqa: E402
+from strategic_market_simulation.profit_sweep import profit_at_adder, profit_at_markup  # noqa: E402
 
 
 def main() -> None:
@@ -43,6 +44,11 @@ def main() -> None:
     by_copy_adder = solve_chp(copied, network)
     assert np.allclose(by_adder.lmp, by_copy_adder.lmp, atol=1e-5)
     assert np.isclose(by_adder.objective, by_copy_adder.objective, atol=1e-5)
+    assert np.isclose(
+        by_adder.objective,
+        solve_chp(apply_generator_adder(generators, 1, 0.2), network).objective,
+        atol=1e-5,
+    )
     absolute_scalar = scalar_sensitivity(generators, network, 1, 0.1, "absolute")
     assert np.all(np.isfinite(absolute_scalar.derivative))
 
@@ -56,6 +62,11 @@ def main() -> None:
         profit["energy_revenue"] + profit["reported_uplift"] - profit["true_cost"],
     )
     assert profit["reported_cost"] >= profit["true_cost"]
+    absolute_profit = profit_at_adder(generators, network, 1, 0.2)
+    assert np.isclose(absolute_profit["chp_objective_reported"], by_adder.objective, atol=1e-5)
+    assert np.isclose(absolute_profit["energy_revenue"],
+                      absolute_profit["nodal_prices"][network.gen_bus_idx(1)] @
+                      np.asarray(json.loads(absolute_profit["scheduled_output_mw"])))
 
     loose_g, loose_n = controlled_case("6", "C2N", T=24, segments=3)
     tight_g, tight_n = controlled_case("6", "C3", T=24, segments=3)
