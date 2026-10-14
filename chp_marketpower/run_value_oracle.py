@@ -26,6 +26,8 @@ def _arguments() -> argparse.Namespace:
     parser.add_argument("--hour", type=int, help="Optional 0-based offer hour; omit for all-day adder")
     parser.add_argument("--lower", type=float, default=0.0)
     parser.add_argument("--upper", type=float, default=0.1)
+    parser.add_argument("--probe-deltas", type=float, nargs="+",
+                        help="Audit selected economic-window points without region reconstruction")
     parser.add_argument("--value-tolerance", type=float, default=1e-7)
     parser.add_argument("--slope-tolerance", type=float, default=1e-4)
     parser.add_argument("--max-points", type=int, default=100)
@@ -58,6 +60,14 @@ def main() -> None:
         optimality_tolerance=args.optimality_tolerance,
         face_tolerance=args.face_tolerance,
     )
+    if args.probe_deltas is not None:
+        points = [solve(delta) for delta in sorted(set(args.probe_deltas))]
+        _write(args.out_dir / "value_points.csv", [asdict(item) for item in points])
+        if not all(point.face_band_passed for point in points):
+            raise SystemExit("Probe face residual exceeded the declared band")
+        print(f"Audited {len(points)} point(s); no complete regime claim; "
+              f"max face residual {max(max(abs(p.face_min_residual), abs(p.face_max_residual)) for p in points):.3e} USD")
+        return
     regimes, points = reconstruct_value_regimes(
         solve,
         args.lower,

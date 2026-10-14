@@ -17,7 +17,9 @@ if str(ROOT) not in sys.path:
 from engine import controlled_case, solve_chp  # noqa: E402
 from price_vulnerability import apply_generator_adder, apply_generator_markup, hourly_sensitivity, scalar_sensitivity  # noqa: E402
 from price_vulnerability.diagnostics import pricing_mechanism_diagnostics  # noqa: E402
-from strategic_market_simulation.profit_sweep import profit_at_adder, profit_at_markup  # noqa: E402
+from strategic_market_simulation.profit_sweep import (  # noqa: E402
+    paired_profit_at_adder, profit_at_adder, profit_at_markup,
+)
 
 
 def main() -> None:
@@ -67,6 +69,14 @@ def main() -> None:
     assert np.isclose(absolute_profit["energy_revenue"],
                       absolute_profit["nodal_prices"][network.gen_bus_idx(1)] @
                       np.asarray(json.loads(absolute_profit["scheduled_output_mw"])))
+    paired = paired_profit_at_adder(generators, network, 1, 0.2)
+    assert paired["legacy_raw_price_max_gap"] < 1e-7
+    assert paired["lmp_legacy_raw_price_max_gap"] < 1e-7
+    assert np.isclose(paired["bid_wedge_usd"], 0.2 * paired["offer_exposure_mwh"], atol=1e-4)
+    for settled in paired["settlements"].values():
+        assert np.isclose(settled["true_profit"],
+                          settled["best_reported_profit"] + paired["bid_wedge_usd"], atol=1e-4)
+    assert paired["physical_commitment"].shape == (len(generators), network.T)
 
     loose_g, loose_n = controlled_case("6", "C2N", T=24, segments=3)
     tight_g, tight_n = controlled_case("6", "C3", T=24, segments=3)

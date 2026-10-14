@@ -69,6 +69,8 @@ class FixedULP:
         self.build_time = float("nan")
         self.solver_time = float("nan")
         self.total_time = float("nan")
+        self.solver_status = None
+        self.raw_lmp = None
 
     def solve(self) -> Tuple[np.ndarray, float, bool]:
         """
@@ -196,6 +198,7 @@ class FixedULP:
 
         build_done = time.perf_counter()
         model.optimize()
+        self.solver_status = model.Status
         total_done = time.perf_counter()
         self.build_time = max(0.0, build_done - t_start)
         self.solver_time = float(getattr(model, "Runtime", total_done - build_done))
@@ -206,8 +209,8 @@ class FixedULP:
 
         # ── 对偶提取 ─────────────────────────────────────────────────────────
         # Gurobi 等式约束 Pi 的符号：对 min LP，功率平衡的 Pi ≥ 0
-        lambda_t = np.array([balance_constrs[t].Pi for t in range(T)])
-        lambda_t = np.clip(lambda_t, 0.0, None)   # 纯火电单节点 LMP ≥ 0
+        raw_lambda_t = np.array([balance_constrs[t].Pi for t in range(T)])
+        lambda_t = np.clip(raw_lambda_t, 0.0, None)   # 历史结果保留原后处理口径
 
         var_obj   = model.objval
         total_obj = var_obj + fixed_cost_total   # 与 MILP/CHP 口径一致的总成本
@@ -217,6 +220,7 @@ class FixedULP:
 
         if self.network.is_single_node:
             lmp_matrix = np.tile(lambda_t, (1, 1))   # (1, T)
+            self.raw_lmp = raw_lambda_t[np.newaxis, :].copy()
         else:
             # PTDF 拥塞修正（与 PrimalCHPLP 后处理逻辑完全一致）
             N_line = self.network.N_line
@@ -233,6 +237,7 @@ class FixedULP:
                 lambda_t[np.newaxis, :]        # (1, T)
                 + PTDF.T @ (alpha - beta_)     # (N_bus, T)
             )
+            self.raw_lmp = raw_lambda_t[np.newaxis, :] + PTDF.T @ (alpha - beta_)
             # 保存供外部 FTR 计算
             self._ptdf_alpha = alpha
             self._ptdf_beta_ = beta_
