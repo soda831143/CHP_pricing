@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import csv
+import io
 import json
 import time
 from dataclasses import asdict
@@ -30,6 +32,8 @@ def main() -> None:
     parser.add_argument("--segments", type=int, choices=(1, 3), default=3)
     parser.add_argument("--discover", action="store_true",
                         help="Discover intervals by largest primal-upper/dual-chord gap")
+    parser.add_argument("--complete", action="store_true",
+                        help="Continue refining every non-price-ready interval until coverage or budget")
     parser.add_argument("--lower", type=float, default=0.0)
     parser.add_argument("--upper", type=float, default=0.1)
     parser.add_argument("--max-points", type=int, default=40)
@@ -39,6 +43,10 @@ def main() -> None:
     parser.add_argument("--focus-upper", type=float)
     parser.add_argument("--focus-budget", type=int, default=12)
     parser.add_argument("--resume", action="store_true", help="Continue a matching saved discovery checkpoint")
+    parser.add_argument("--resume-from", type=Path,
+                        help="Fork a saved partial map into --out-dir without modifying the source")
+    parser.add_argument("--seed-delta", type=float,
+                        help="With --resume-from, learn the uncovered interval containing this query")
     args = parser.parse_args()
     oracle_file = args.out_dir / "oracle.npz"
     if args.query is not None:
@@ -65,7 +73,8 @@ def main() -> None:
                 scope["case"], scope["network"], scope["T"],
                 scope["segments"], scope["congestion"],
             )
-            solved = solve_endpoint(generators, network, scope["generator_index"], args.query)
+            with contextlib.redirect_stdout(io.StringIO()):
+                solved = solve_endpoint(generators, network, scope["generator_index"], args.query)
             value, price = solved.value, solved.price
         print(json.dumps({"delta": args.query, "value": value,
                           "nodal_price": price.tolist(),
@@ -73,6 +82,12 @@ def main() -> None:
         return
 
     if args.discover:
+        if args.resume and args.resume_from is not None:
+            raise ValueError("choose --resume or --resume-from, not both")
+        if (args.seed_delta is None) != (args.resume_from is None):
+            raise ValueError("--seed-delta and --resume-from must be supplied together")
+        if args.seed_delta is not None and args.complete:
+            raise ValueError("seeded learning is a local budgeted expansion, not complete mode")
         if (args.focus_lower is None) != (args.focus_upper is None):
             raise ValueError("focus-lower and focus-upper must be supplied together")
         focus = ((args.focus_lower, args.focus_upper)
@@ -87,13 +102,28 @@ def main() -> None:
                  "generator_index": args.generator, "parameter": "all-day absolute adder"}
         previous = None
         previous_offline_seconds = 0.0
-        if args.resume:
-            saved = json.loads((args.out_dir / "audit.json").read_text(encoding="utf-8"))
+        preserved_ready = []
+        original_prices = {}
+        learning_seed_delta = args.seed_delta
+        parent_oracle = str(args.resume_from) if args.resume_from is not None else None
+        source_dir = args.resume_from or args.out_dir
+        if args.resume_from is not None and args.out_dir.exists() and any(args.out_dir.iterdir()):
+            raise ValueError("fork output directory must be empty to preserve the source and other files")
+        if args.resume or args.resume_from is not None:
+            saved = json.loads((source_dir / "audit.json").read_text(encoding="utf-8"))
+            if args.resume:
+                parent_oracle = saved.get("parent_oracle")
+            if args.resume and saved.get("learning_seed_delta") is not None:
+                learning_seed_delta = saved["learning_seed_delta"]
+                if focus is None:
+                    focus = tuple(saved["focus_window"])
             if (saved["scope"] != scope or saved["value_tolerance_usd"] != args.value_tolerance
                     or saved["price_tolerance_usd"] != args.price_tolerance
-                    or saved.get("focus_window") != (list(focus) if focus is not None else None)):
+                    or (args.resume and saved.get("focus_window") != (
+                        list(focus) if focus is not None else None))
+                    or (args.resume and saved.get("completion_requested", False) != args.complete)):
                 raise ValueError("saved discovery has a different case, parameter, tolerance, or focus")
-            with np.load(oracle_file) as old:
+            with np.load(source_dir / "oracle.npz") as old:
                 keys = [str(key) for key in old["audit_keys"]]
                 previous = [Endpoint(
                     float(old["boundaries"][k]), float(old["values"][k]),
@@ -108,11 +138,36 @@ def main() -> None:
             if previous[0].delta != args.lower or previous[-1].delta != args.upper:
                 raise ValueError("saved discovery has a different parameter domain")
             previous_offline_seconds = float(saved["offline_seconds"])
+            if learning_seed_delta is not None:
+                preserved_ready = [item for item in saved["intervals"] if item["price_ready"]]
+                original_prices = {point.delta: point.price for point in previous}
         args.out_dir.mkdir(parents=True, exist_ok=True)
         started = time.perf_counter()
+        if args.seed_delta is not None:
+            if not np.isfinite(args.seed_delta) or not args.lower < args.seed_delta < args.upper:
+                raise ValueError("seed query must be inside the saved parameter domain")
+            source_intervals = saved["intervals"]
+            target = next((item for item in source_intervals
+                           if item["left"] < args.seed_delta < item["right"]), None)
+            if target is None or target["price_ready"]:
+                raise ValueError("seed query must lie strictly inside an uncovered interval")
+            if args.focus_lower is not None or args.focus_upper is not None:
+                raise ValueError("seeded learning chooses its own uncovered focus interval")
+            if args.max_points <= len(previous):
+                raise ValueError("learning budget must exceed the saved point count")
+            focus = (target["left"], target["right"])
+            previous.append(solve_endpoint(generators, network, args.generator, args.seed_delta))
 
         def save_snapshot(points, intervals):
             boundaries = np.asarray([point.delta for point in points])
+            if preserved_ready:
+                index = {point.delta: k for k, point in enumerate(points)}
+                for old in preserved_ready:
+                    left, right = index[old["left"]], index[old["right"]]
+                    if (right != left + 1
+                            or not np.array_equal(points[left].price, original_prices[old["left"]])
+                            or not np.array_equal(points[right].price, original_prices[old["right"]])):
+                        raise RuntimeError("learning would alter a previously price-ready selector")
             ready = np.asarray([item.price_ready for item in intervals], dtype=bool)
             coverage = sum(item.right - item.left for item in intervals if item.price_ready)
             report = {
@@ -123,9 +178,12 @@ def main() -> None:
                 "value_tolerance_usd": args.value_tolerance,
                 "price_tolerance_usd": args.price_tolerance,
                 "solved_points": len(points), "max_points": args.max_points,
+                "completion_requested": args.complete,
                 "intervals": [asdict(item) for item in intervals],
                 "price_coverage_fraction": float(coverage / (args.upper - args.lower)),
                 "focus_window": list(focus) if focus is not None else None,
+                "parent_oracle": parent_oracle,
+                "learning_seed_delta": learning_seed_delta,
                 "focus_coverage_fraction": (
                     float(sum(
                         max(0.0, min(item.right, focus[1]) - max(item.left, focus[0]))
@@ -188,7 +246,10 @@ def main() -> None:
             args.lower, args.upper, max_points=args.max_points,
             value_tolerance=args.value_tolerance,
             price_tolerance=args.price_tolerance,
-            focus=focus, focus_budget=args.focus_budget if focus is not None else 0,
+            focus=focus, focus_budget=(args.max_points if learning_seed_delta is not None
+                                      else args.focus_budget if focus is not None else 0),
+            only_focus=learning_seed_delta is not None,
+            require_complete=args.complete,
             initial_points=previous,
             on_update=save_snapshot,
         )
@@ -198,6 +259,8 @@ def main() -> None:
               f"{sum(ready)}/{len(ready)} price-ready intervals; "
               f"coverage {report['price_coverage_fraction']:.1%}; "
               f"max unresolved value gap {report['max_unresolved_value_gap_usd']:.4g} USD")
+        if args.complete and not all(ready):
+            raise SystemExit("price coverage incomplete at the solve budget; checkpoint preserved")
         return
 
     with args.regimes.open(newline="", encoding="utf-8") as stream:

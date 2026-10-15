@@ -13,6 +13,9 @@ from price_vulnerability.affine_oracle import Endpoint, query  # noqa: E402
 from price_vulnerability.budgeted_oracle import (  # noqa: E402
     build_budgeted_oracle, interval_status,
 )
+from price_vulnerability.oracle_compression import (  # noqa: E402
+    compress_full_oracle, query_compact,
+)
 
 
 def test_query_interpolates_and_uses_shared_endpoint_once() -> None:
@@ -81,6 +84,15 @@ def test_small_value_gap_never_implies_an_audited_price() -> None:
     assert not intervals[0].price_ready
 
 
+def test_complete_mode_refines_even_when_value_gap_is_below_stop_tolerance() -> None:
+    points, intervals = build_budgeted_oracle(
+        _toy_point, 0.0, 1.0, max_points=3,
+        value_tolerance=1.0, require_complete=True,
+    )
+    assert len(points) == 3
+    assert all(item.price_ready for item in intervals)
+
+
 def test_query_refuses_uncovered_price_but_accepts_solved_endpoints() -> None:
     boundaries = np.array([0.0, 1.0])
     values = np.array([0.0, 0.0])
@@ -97,6 +109,23 @@ def test_focus_reserves_solves_for_a_query_window() -> None:
     )
     assert points[1].delta == pytest.approx(0.5)
     assert intervals[0].price_ready
+
+
+def test_local_learning_does_not_spend_budget_outside_the_query_interval() -> None:
+    points, intervals = build_budgeted_oracle(
+        _toy_point, 0.0, 1.0, max_points=10,
+        focus=(0.0, 0.25), focus_budget=10, only_focus=True,
+    )
+    assert [point.delta for point in points] == pytest.approx([0.0, 0.25, 1.0])
+    assert intervals[0].price_ready and not intervals[1].price_ready
+
+
+def test_local_learning_uses_price_coverage_not_value_gap_as_stop_rule() -> None:
+    points, intervals = build_budgeted_oracle(
+        _toy_point, 0.0, 1.0, max_points=4, value_tolerance=1.0,
+        focus=(0.0, 1.0), focus_budget=4, only_focus=True,
+    )
+    assert len(points) == 3 and all(item.price_ready for item in intervals)
 
 
 def test_budgeted_discovery_resumes_without_resolving_saved_points() -> None:
@@ -126,3 +155,45 @@ def test_complete_dual_interpolation_is_optimal_when_one_primal_works_at_both_en
     assert np.all(z >= 0)
     assert c @ primal == pytest.approx(pi)
     assert np.dot(z, primal) == pytest.approx(0.0)
+
+
+def test_value_merge_does_not_silently_change_noncollinear_price_path() -> None:
+    boundaries = np.array([0.0, 1.0, 2.0, 3.0])
+    values = np.array([4.0, 5.0, 6.0, 7.0])
+    objectives = np.stack([np.array([4.0 + delta, 10.0]) for delta in boundaries])
+    primals = np.tile(np.array([1.0, 0.0]), (4, 1))
+    prices = np.array([[[30.0]], [[32.0]], [[35.0]], [[36.0]]])
+    result = compress_full_oracle(
+        boundaries, values, values, objectives, primals, prices,
+        np.ones(3, bool),
+    )
+    np.testing.assert_array_equal(result.value_indices, [0, 3])
+    np.testing.assert_array_equal(result.price_indices, [0, 1, 2, 3])
+    value, price = query_compact(
+        1.5, boundaries[result.value_indices], values[result.value_indices],
+        boundaries[result.price_indices], prices[result.price_indices],
+    )
+    assert value == pytest.approx(5.5)
+    assert price[0, 0] == pytest.approx(33.5)
+
+
+def test_collinear_price_nodes_can_be_removed_without_crossing_value_kink() -> None:
+    points = [_toy_point(delta) for delta in (0.0, 0.5, 1.0)]
+    boundaries = np.array([point.delta for point in points])
+    prices = np.stack([point.price for point in points])
+    result = compress_full_oracle(
+        boundaries, np.array([point.value for point in points]),
+        np.array([point.dual_value for point in points]),
+        np.stack([point.objective for point in points]),
+        np.stack([point.primal for point in points]), prices, np.ones(2, bool),
+    )
+    np.testing.assert_array_equal(result.value_indices, [0, 1, 2])
+    np.testing.assert_array_equal(result.price_indices, [0, 2])
+    with pytest.raises(ValueError, match="fully price-ready"):
+        compress_full_oracle(
+            boundaries, np.array([point.value for point in points]),
+            np.array([point.dual_value for point in points]),
+            np.stack([point.objective for point in points]),
+            np.stack([point.primal for point in points]), prices,
+            np.array([True, False]),
+        )

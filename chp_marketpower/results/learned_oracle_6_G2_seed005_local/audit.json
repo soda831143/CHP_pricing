@@ -1,0 +1,370 @@
+{
+  "status": "numerically_validated_partial",
+  "scope": {
+    "case": "6",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 1,
+    "parameter": "all-day absolute adder"
+  },
+  "method": "largest numerical primal-upper/dual-chord gap; complete-dual interval gate",
+  "value_tolerance_usd": 1e-06,
+  "price_tolerance_usd": 1e-06,
+  "solved_points": 42,
+  "max_points": 42,
+  "completion_requested": false,
+  "intervals": [
+    {
+      "left": 0.0,
+      "right": 0.037396929128539584,
+      "max_value_gap": 0.076339128507243,
+      "probe_delta": 0.017703403736732175,
+      "common_primal_gap": 0.1449638356207288,
+      "price_ready": false
+    },
+    {
+      "left": 0.037396929128539584,
+      "right": 0.04339611215828339,
+      "max_value_gap": 7.275957614183426e-12,
+      "probe_delta": 0.04039652064341148,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.04339611215828339,
+      "right": 0.05,
+      "max_value_gap": 7.275957614183426e-12,
+      "probe_delta": 0.046698056079141695,
+      "common_primal_gap": 4.3655745685100555e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.05,
+      "right": 0.07438497978837184,
+      "max_value_gap": 1.4551915228366852e-11,
+      "probe_delta": 0.06219248989418592,
+      "common_primal_gap": 5.093170329928398e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.07438497978837184,
+      "right": 0.14533174028531104,
+      "max_value_gap": 0.03914791627903469,
+      "probe_delta": 0.08412263646694357,
+      "common_primal_gap": 0.045375894485914614,
+      "price_ready": false
+    },
+    {
+      "left": 0.14533174028531104,
+      "right": 0.2154680051437146,
+      "max_value_gap": 0.20008122345461743,
+      "probe_delta": 0.16626833333261937,
+      "common_primal_gap": 0.2852244570676703,
+      "price_ready": false
+    },
+    {
+      "left": 0.2154680051437146,
+      "right": 0.3940918630223522,
+      "max_value_gap": 0.08928559078049148,
+      "probe_delta": 0.367306989924079,
+      "common_primal_gap": 0.10503584901744034,
+      "price_ready": false
+    },
+    {
+      "left": 0.3940918630223522,
+      "right": 0.4136307258483541,
+      "max_value_gap": 0.0902613651487627,
+      "probe_delta": 0.39684022575729827,
+      "common_primal_gap": 0.1050358490247163,
+      "price_ready": false
+    },
+    {
+      "left": 0.4136307258483541,
+      "right": 0.4959325666069494,
+      "max_value_gap": 0.0861107175660436,
+      "probe_delta": 0.4262381379125484,
+      "common_primal_gap": 0.10168776319915196,
+      "price_ready": false
+    },
+    {
+      "left": 0.4959325666069494,
+      "right": 0.5004356595538546,
+      "max_value_gap": 0.00444934397819452,
+      "probe_delta": 0.5003749999997589,
+      "common_primal_gap": 0.0045100978459231555,
+      "price_ready": false
+    },
+    {
+      "left": 0.5004356595538546,
+      "right": 0.5086393114278067,
+      "max_value_gap": 0.004460981457668822,
+      "probe_delta": 0.500525000000196,
+      "common_primal_gap": 0.0045100978459231555,
+      "price_ready": false
+    },
+    {
+      "left": 0.5086393114278067,
+      "right": 0.5341216363074801,
+      "max_value_gap": 0.04558123151946347,
+      "probe_delta": 0.5326173781412203,
+      "common_primal_gap": 0.04844075898290612,
+      "price_ready": false
+    },
+    {
+      "left": 0.5341216363074801,
+      "right": 0.5552754855207336,
+      "max_value_gap": 0.045184700735262595,
+      "probe_delta": 0.5355435414603336,
+      "common_primal_gap": 0.04844075898290612,
+      "price_ready": false
+    },
+    {
+      "left": 0.5552754855207336,
+      "right": 0.5770906596263795,
+      "max_value_gap": 0.04435065861616749,
+      "probe_delta": 0.5759790429805921,
+      "common_primal_gap": 0.04673193685448496,
+      "price_ready": false
+    },
+    {
+      "left": 0.5770906596263795,
+      "right": 0.6146546499958909,
+      "max_value_gap": 0.04168287223728839,
+      "probe_delta": 0.5811491906177289,
+      "common_primal_gap": 0.04673193686903687,
+      "price_ready": false
+    },
+    {
+      "left": 0.6146546499958909,
+      "right": 0.623094362687304,
+      "max_value_gap": 0.0884831662842771,
+      "probe_delta": 0.6186655921460739,
+      "common_primal_gap": 0.1686184674690594,
+      "price_ready": false
+    },
+    {
+      "left": 0.623094362687304,
+      "right": 0.6288625255083533,
+      "max_value_gap": 0.06803153407963691,
+      "probe_delta": 0.6267548397751035,
+      "common_primal_gap": 0.10720377594407182,
+      "price_ready": false
+    },
+    {
+      "left": 0.6288625255083533,
+      "right": 0.6398689034175692,
+      "max_value_gap": 0.08992886770283803,
+      "probe_delta": 0.636031657801473,
+      "common_primal_gap": 0.13806288720661541,
+      "price_ready": false
+    },
+    {
+      "left": 0.6398689034175692,
+      "right": 0.6558384295072579,
+      "max_value_gap": 0.04413974427006906,
+      "probe_delta": 0.6507328518083015,
+      "common_primal_gap": 0.06488348179118475,
+      "price_ready": false
+    },
+    {
+      "left": 0.6558384295072579,
+      "right": 0.6877332024755837,
+      "max_value_gap": 0.18798708566464484,
+      "probe_delta": 0.685411869351722,
+      "common_primal_gap": 0.20274291557871038,
+      "price_ready": false
+    },
+    {
+      "left": 0.6877332024755837,
+      "right": 0.6923878879322284,
+      "max_value_gap": 0.07423477689735591,
+      "probe_delta": 0.6906835643290198,
+      "common_primal_gap": 0.1171176803400158,
+      "price_ready": false
+    },
+    {
+      "left": 0.6923878879322284,
+      "right": 0.703767765684532,
+      "max_value_gap": 0.0919387005342287,
+      "probe_delta": 0.6953404776160312,
+      "common_primal_gap": 0.12415039859479293,
+      "price_ready": false
+    },
+    {
+      "left": 0.703767765684532,
+      "right": 0.7760234859027793,
+      "max_value_gap": 0.2745761255864636,
+      "probe_delta": 0.720034558570038,
+      "common_primal_gap": 0.3543503448163392,
+      "price_ready": false
+    },
+    {
+      "left": 0.7760234859027793,
+      "right": 0.7874763081611228,
+      "max_value_gap": 0.15159363961720373,
+      "probe_delta": 0.785214594507953,
+      "common_primal_gap": 0.18889723587199114,
+      "price_ready": false
+    },
+    {
+      "left": 0.7874763081611228,
+      "right": 0.7958189464064427,
+      "max_value_gap": 0.034032245486741886,
+      "probe_delta": 0.7943159137578221,
+      "common_primal_gap": 0.04151097733847564,
+      "price_ready": false
+    },
+    {
+      "left": 0.7958189464064427,
+      "right": 0.8037735187587278,
+      "max_value_gap": 0.009045992730534635,
+      "probe_delta": 0.8026765151507186,
+      "common_primal_gap": 0.01049307798530208,
+      "price_ready": false
+    },
+    {
+      "left": 0.8037735187587278,
+      "right": 0.8143600963451536,
+      "max_value_gap": 0.010395872792287264,
+      "probe_delta": 0.8038715901059897,
+      "common_primal_gap": 0.01049307798530208,
+      "price_ready": false
+    },
+    {
+      "left": 0.8143600963451536,
+      "right": 0.845648198542837,
+      "max_value_gap": 0.2778071529173758,
+      "probe_delta": 0.8207252744253339,
+      "common_primal_gap": 0.34875757553527365,
+      "price_ready": false
+    },
+    {
+      "left": 0.845648198542837,
+      "right": 0.8626878078735377,
+      "max_value_gap": 0.23873774679668713,
+      "probe_delta": 0.8559059023494799,
+      "common_primal_gap": 0.39657978187460685,
+      "price_ready": false
+    },
+    {
+      "left": 0.8626878078735377,
+      "right": 0.8809933912933101,
+      "max_value_gap": 0.041172763958456926,
+      "probe_delta": 0.8654591021277069,
+      "common_primal_gap": 0.04851792430417845,
+      "price_ready": false
+    },
+    {
+      "left": 0.8809933912933101,
+      "right": 0.9747053913073722,
+      "max_value_gap": 0.08210252239223337,
+      "probe_delta": 0.9464148830033867,
+      "common_primal_gap": 0.11760648339986801,
+      "price_ready": false
+    },
+    {
+      "left": 0.9747053913073722,
+      "right": 1.0174229220031876,
+      "max_value_gap": 0.17245783765247324,
+      "probe_delta": 0.9876704290295262,
+      "common_primal_gap": 0.24760859468369745,
+      "price_ready": false
+    },
+    {
+      "left": 1.0174229220031876,
+      "right": 1.032755474032009,
+      "max_value_gap": 0.014015495202329475,
+      "probe_delta": 1.0208378135731546,
+      "common_primal_gap": 0.018031501240329817,
+      "price_ready": false
+    },
+    {
+      "left": 1.032755474032009,
+      "right": 1.0584850051612174,
+      "max_value_gap": 0.05808529051137157,
+      "probe_delta": 1.0347356368850702,
+      "common_primal_gap": 0.06292829656013055,
+      "price_ready": false
+    },
+    {
+      "left": 1.0584850051612174,
+      "right": 1.0757357224184683,
+      "max_value_gap": 0.16895083869894734,
+      "probe_delta": 1.0643808628235787,
+      "common_primal_gap": 0.25667628247174434,
+      "price_ready": false
+    },
+    {
+      "left": 1.0757357224184683,
+      "right": 1.0812199128250846,
+      "max_value_gap": 0.0764325236013974,
+      "probe_delta": 1.0772070927892656,
+      "common_primal_gap": 0.10445783985051094,
+      "price_ready": false
+    },
+    {
+      "left": 1.0812199128250846,
+      "right": 1.1112351720310203,
+      "max_value_gap": 0.14364609211770585,
+      "probe_delta": 1.0961007027475924,
+      "common_primal_gap": 0.2848844322215882,
+      "price_ready": false
+    },
+    {
+      "left": 1.1112351720310203,
+      "right": 1.1471259583602627,
+      "max_value_gap": 0.18072408414445817,
+      "probe_delta": 1.1448107137818255,
+      "common_primal_gap": 0.19318614531948697,
+      "price_ready": false
+    },
+    {
+      "left": 1.1471259583602627,
+      "right": 1.1536560900570176,
+      "max_value_gap": 0.1144875184763805,
+      "probe_delta": 1.1497861511854806,
+      "common_primal_gap": 0.193186145312211,
+      "price_ready": false
+    },
+    {
+      "left": 1.1536560900570176,
+      "right": 1.1663962629602345,
+      "max_value_gap": 0.03454447908006841,
+      "probe_delta": 1.165483646351772,
+      "common_primal_gap": 0.03720993798197014,
+      "price_ready": false
+    },
+    {
+      "left": 1.1663962629602345,
+      "right": 1.1999875,
+      "max_value_gap": 0.03615894773247419,
+      "probe_delta": 1.1673450434377535,
+      "common_primal_gap": 0.03720993799652206,
+      "price_ready": false
+    }
+  ],
+  "price_coverage_fraction": 0.030823696630033447,
+  "focus_window": [
+    0.037396929128539584,
+    0.07438497978837184
+  ],
+  "parent_oracle": "chp_marketpower\\results\\complete_oracle_6_G2_0to10pct",
+  "learning_seed_delta": 0.05,
+  "focus_coverage_fraction": 1.0,
+  "max_unresolved_value_gap_usd": 0.2778071529173758,
+  "max_full_lp_residuals": {
+    "primal_feasibility": 2.2266455346198196e-12,
+    "dual_sign": 9.562350911096473e-13,
+    "stationarity": 1.8189894035458565e-11,
+    "duality_gap": 7.275957614183426e-11,
+    "row_complementarity": 1.3811345568783059e-12,
+    "bound_complementarity": 0.0,
+    "objective_reconstruction": 6.548361852765083e-11,
+    "price_projection": 0.0
+  },
+  "offline_seconds": 85.2677362000104,
+  "mean_direct_chp_seconds": 1.72488271666918,
+  "interpretation": "Uncovered intervals return direct CHP prices; value gaps never certify price accuracy."
+}

@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "scope": {
+    "case": "6",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 1,
+    "parameter": "all-day absolute adder"
+  },
+  "direct_checks": [
+    {
+      "interval": 2,
+      "delta": 0.04039652064341148,
+      "value_error_usd": 3.637978807091713e-11,
+      "selector_dual_gap_usd": 6.548361852765083e-11,
+      "selector_stationarity": 8.753886504564434e-12,
+      "selector_dual_sign": 7.10542735760101e-15,
+      "selector_complementarity": 8.77161434988897e-14,
+      "selector_price_projection": 3.552713678800501e-15,
+      "selector_vs_direct_price_gap_usd_per_mwh": 1.652011860642233e-13,
+      "direct_complete_dual_gap_usd": 6.548361852765083e-11,
+      "direct_complete_dual_stationarity": 8.981260180007666e-12,
+      "direct_chp_seconds": 1.5076063000014983
+    },
+    {
+      "interval": 3,
+      "delta": 0.046698056079141695,
+      "value_error_usd": 7.275957614183426e-12,
+      "selector_dual_gap_usd": 5.093170329928398e-11,
+      "selector_stationarity": 1.4551915228366852e-11,
+      "selector_dual_sign": 3.552713678800501e-13,
+      "selector_complementarity": 5.571843431727903e-13,
+      "selector_price_projection": 3.552713678800501e-15,
+      "selector_vs_direct_price_gap_usd_per_mwh": 3.943512183468556e-13,
+      "direct_complete_dual_gap_usd": 5.093170329928398e-11,
+      "direct_complete_dual_stationarity": 9.094947017729282e-12,
+      "direct_chp_seconds": 1.4551663000020199
+    },
+    {
+      "interval": 4,
+      "delta": 0.06219248989418592,
+      "value_error_usd": 1.4551915228366852e-11,
+      "selector_dual_gap_usd": 7.275957614183426e-11,
+      "selector_stationarity": 1.0913936421275139e-11,
+      "selector_dual_sign": 3.552713678800501e-13,
+      "selector_complementarity": 1.4942807324739366e-13,
+      "selector_price_projection": 3.552713678800501e-15,
+      "selector_vs_direct_price_gap_usd_per_mwh": 7.815970093361102e-14,
+      "direct_complete_dual_gap_usd": 6.548361852765083e-11,
+      "direct_complete_dual_stationarity": 1.3528733688872308e-11,
+      "direct_chp_seconds": 1.4828266000258736
+    }
+  ],
+  "maximums": {
+    "value_error_usd": 3.637978807091713e-11,
+    "selector_dual_gap_usd": 7.275957614183426e-11,
+    "selector_stationarity": 1.4551915228366852e-11,
+    "selector_dual_sign": 3.552713678800501e-13,
+    "selector_complementarity": 5.571843431727903e-13,
+    "selector_price_projection": 3.552713678800501e-15,
+    "selector_vs_direct_price_gap_usd_per_mwh": 3.943512183468556e-13,
+    "direct_complete_dual_gap_usd": 6.548361852765083e-11,
+    "direct_complete_dual_stationarity": 1.3528733688872308e-11,
+    "direct_chp_seconds": 1.5076063000014983
+  },
+  "online_mean_seconds_loaded": 3.8595666604427e-06,
+  "direct_mean_seconds_independent": 1.4818664000097972,
+  "full_price_coverage": false,
+  "saved_oracle_bytes": 1725966,
+  "break_even_queries_estimate": null,
+  "batch_total_seconds_estimate": null,
+  "price_gap_interpretation": "Direct simplex and the valid affine dual selector may differ under dual nonuniqueness."
+}

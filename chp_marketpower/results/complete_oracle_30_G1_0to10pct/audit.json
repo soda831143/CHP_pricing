@@ -1,0 +1,69 @@
+{
+  "status": "numerically_validated",
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 0,
+    "parameter": "all-day absolute adder"
+  },
+  "method": "largest numerical primal-upper/dual-chord gap; complete-dual interval gate",
+  "value_tolerance_usd": 1e-06,
+  "price_tolerance_usd": 1e-06,
+  "solved_points": 5,
+  "max_points": 40,
+  "completion_requested": true,
+  "intervals": [
+    {
+      "left": 0.0,
+      "right": 0.6599222222155033,
+      "max_value_gap": 0.0,
+      "probe_delta": 0.32996111110775167,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.6599222222155033,
+      "right": 0.6786878313442841,
+      "max_value_gap": 0.0,
+      "probe_delta": 0.6693050267798937,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.6786878313442841,
+      "right": 2.1532555532980977,
+      "max_value_gap": 0.0,
+      "probe_delta": 1.415971692321191,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 2.1532555532980977,
+      "right": 4.1982,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 2.15325555341956,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    }
+  ],
+  "price_coverage_fraction": 1.0,
+  "focus_window": null,
+  "focus_coverage_fraction": null,
+  "max_unresolved_value_gap_usd": 0.0,
+  "max_full_lp_residuals": {
+    "primal_feasibility": 2.2737367544323206e-13,
+    "dual_sign": 1.7763568394002505e-14,
+    "stationarity": 6.548361852765083e-11,
+    "duality_gap": 5.820766091346741e-11,
+    "row_complementarity": 1.2583550839881685e-12,
+    "bound_complementarity": 2.2737367544323206e-13,
+    "objective_reconstruction": 8.731149137020111e-11,
+    "price_projection": 0.0
+  },
+  "offline_seconds": 20.211705399968196,
+  "mean_direct_chp_seconds": 3.532338240009267,
+  "interpretation": "Uncovered intervals return direct CHP prices; value gaps never certify price accuracy."
+}

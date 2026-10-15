@@ -34,10 +34,14 @@ python validate_affine_oracle.py --oracle-dir results/budgeted_oracle_30_G1_econ
 python run_affine_oracle.py --out-dir results/budgeted_oracle_30_G1_economic --query 17.84235
 python run_selector_settlement.py --oracle-dir results/budgeted_oracle_30_G1_economic --delta 17.84235 --output results/budgeted_oracle_30_G1_economic/selector_settlement.json
 python run_affine_oracle.py --discover --case 30 --generator 0 --lower 0 --upper 20.991 --max-points 30 --focus-lower 16.7928 --focus-upper 18.8919 --focus-budget 12 --out-dir results/budgeted_oracle_30_G1_broad_focused
+python run_affine_oracle.py --discover --complete --case 30 --generator 0 --lower 0 --upper 8.3964 --max-points 40 --out-dir results/complete_oracle_30_G1_0to20pct
+python postprocess_oracle.py --oracle-dir results/complete_oracle_30_G1_0to20pct
+python benchmark_oracle_queries.py --oracle-dir results/complete_oracle_30_G1_0to20pct --queries 24
+python run_affine_oracle.py --discover --case 6 --generator 1 --lower 0 --upper 1.1999875 --max-points 55 --resume-from results/complete_oracle_6_G2_0to10pct --seed-delta 0.05 --out-dir results/learned_oracle_6_G2_seed005_local
 python run_price_probe.py --regimes results/value_oracle_G2_absolute_nominal/value_regimes.csv --out-dir results/price_probe_G2_absolute
 ```
 
-`run_affine_oracle.py --discover` 是当前主线：在 6/30 节点用共同原问题最优解和**完整对偶**审计建立可在线插值的报价窗口。宽域预算耗尽时只开放已通过的区间；其他价格直接重求 CHP，不把小价值误差误作价格误差。`--resume` 可从同口径检查点继续；`validate_affine_oracle.py` 在未用于建图的内部点重求 CHP，并检验插值完整对偶。`run_selector_settlement.py` 则固定同一物理 UC，比较两个合法价格下的能量收入、uplift 与含 uplift 利润。详见顶部研究方案；早期基追踪入口仅作诊断。
+`run_affine_oracle.py --discover` 是当前主线：在 6/30 节点用共同原问题最优解和**完整对偶**审计建立可在线插值的报价窗口。`--complete` 要求全域价格覆盖，否则到预算上限时保留检查点并明确退出；普通预算模式只开放已通过区间，其他价格直接重求 CHP，不把小价值误差误作价格误差。`--resume` 在同目录续算；`--resume-from` 与 `--seed-delta` 则从旧部分地图分叉、只在被查询的未覆盖区间追加求解，旧地图不变。`postprocess_oracle.py` 分别合并价值区间和无损压缩既有选价路径，保留原始见证；`benchmark_oracle_queries.py` 实测固定报价工作负载下的新建模型、同模型重优化与精简 Oracle。`validate_affine_oracle.py` 在未用于建图的内部点重求 CHP 并检验插值完整对偶。`run_selector_settlement.py` 固定同一物理 UC，比较两个合法价格下的收入、uplift 与利润。详见顶部研究方案；早期基追踪入口仅作诊断。
 
 诊断入口分别输出定价 LP 正流 ON/OFF 弧、活动爬坡、线路潮流与对偶，并可单独保存物理 UC；hourly 入口输出节点×价格小时×报价小时的 Jacobian、全矩阵及逐报价小时步长预警和热图，支持相对百分比及绝对美元/MWh 斜率扰动；利润入口逐点重求 UC/CHP/申报 uplift，并按不变的真实成本核算利润。`run_price_vulnerability.py` 用于整段相对或绝对加价快筛，**其分数不是 hourly VI**。利润网格的最大增益只是观察值，不是全局最优策略。
 
@@ -70,9 +74,11 @@ P1 主结果为 `p1_shift23to21_r020/` 和 `p1_warmup/`；`p1_shift23to21_r005_d
 
 代码中已无 `gurobipy` 直接导入；现有代数模型通过全局 `gurobi_compat` 调用 COPT，矩阵 CHP 路径使用 COPT 原生的矩阵变量命名、约束方向和向量取值接口。迁移回归包括：`chp_energy` 12 项测试、上述市场力集成检查、6 节点全部定价方法 smoke，以及 6/30 节点同配置的目标、节点价、结算量和 UC 数值对照。30 节点比较中 UC 目标差 $5.82\times10^{-11}$ 美元、CHP 定价目标差 $2.13\times10^{-6}$ 美元，详细判据见 [PILOT_EVIDENCE.md](PILOT_EVIDENCE.md)。COPT 的 `auto/simplex/barrier+crossover` 审计只检查算法选择敏感性，不证明对偶唯一。
 
-## R2 残差审计与 R3 价格进展（6 节点 G2）
+## 历史阶段记录：R2 残差审计与早期 R3 价格探针（6 节点 G2）
 
-继续工作只使用全日统一绝对报价加数 `δ∈[0,0.1]`，不扩 30 节点、利润或其他报价参数。复算顺序：
+以下记录解释研究如何从基追踪转向完整对偶选价；其中当时的范围限制与“下一步”不适用于当前 Oracle 主线，现行结论以页首研究方案为准。
+
+当时只使用全日统一绝对报价加数 `δ∈[0,0.1]`，暂不扩 30 节点、利润或其他报价参数。复算顺序：
 
 ```powershell
 python run_value_oracle.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --lower 0 --upper 0.1 --out-dir results/value_oracle_G2_absolute_residual_audit
