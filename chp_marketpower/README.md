@@ -28,8 +28,16 @@ python run_basis_dual_audit.py --case 6 --network ptdf --congestion tight --T 24
 python run_value_oracle.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --lower 0 --upper 0.1 --out-dir results/value_oracle_G2_absolute_residual_audit
 python run_affine_oracle.py --regimes results/value_oracle_G2_absolute_residual_audit/value_regimes.csv --out-dir results/affine_oracle_G2
 python run_affine_oracle.py --out-dir results/affine_oracle_G2 --query 0.05
+python run_affine_oracle.py --discover --case 6 --generator 1 --lower 0 --upper 0.1 --max-points 30 --out-dir results/budgeted_oracle_6_G2
+python run_affine_oracle.py --discover --case 30 --generator 0 --lower 16.7928 --upper 18.8919 --max-points 30 --out-dir results/budgeted_oracle_30_G1_economic
+python validate_affine_oracle.py --oracle-dir results/budgeted_oracle_30_G1_economic --extra-deltas 17.84235
+python run_affine_oracle.py --out-dir results/budgeted_oracle_30_G1_economic --query 17.84235
+python run_selector_settlement.py --oracle-dir results/budgeted_oracle_30_G1_economic --delta 17.84235 --output results/budgeted_oracle_30_G1_economic/selector_settlement.json
+python run_affine_oracle.py --discover --case 30 --generator 0 --lower 0 --upper 20.991 --max-points 30 --focus-lower 16.7928 --focus-upper 18.8919 --focus-budget 12 --out-dir results/budgeted_oracle_30_G1_broad_focused
 python run_price_probe.py --regimes results/value_oracle_G2_absolute_nominal/value_regimes.csv --out-dir results/price_probe_G2_absolute
 ```
+
+`run_affine_oracle.py --discover` 是当前主线：在 6/30 节点用共同原问题最优解和**完整对偶**审计建立可在线插值的报价窗口。宽域预算耗尽时只开放已通过的区间；其他价格直接重求 CHP，不把小价值误差误作价格误差。`--resume` 可从同口径检查点继续；`validate_affine_oracle.py` 在未用于建图的内部点重求 CHP，并检验插值完整对偶。`run_selector_settlement.py` 则固定同一物理 UC，比较两个合法价格下的能量收入、uplift 与含 uplift 利润。详见顶部研究方案；早期基追踪入口仅作诊断。
 
 诊断入口分别输出定价 LP 正流 ON/OFF 弧、活动爬坡、线路潮流与对偶，并可单独保存物理 UC；hourly 入口输出节点×价格小时×报价小时的 Jacobian、全矩阵及逐报价小时步长预警和热图，支持相对百分比及绝对美元/MWh 斜率扰动；利润入口逐点重求 UC/CHP/申报 uplift，并按不变的真实成本核算利润。`run_price_vulnerability.py` 用于整段相对或绝对加价快筛，**其分数不是 hourly VI**。利润网格的最大增益只是观察值，不是全局最优策略。
 

@@ -1,0 +1,47 @@
+{
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 0,
+    "parameter": "all-day absolute adder"
+  },
+  "delta": 17.84235,
+  "interval": 7,
+  "uc_objective_reported": 207962.87427032387,
+  "chp_value": 206550.4867479373,
+  "scheduled_generation_mwh": 1720.0967980744972,
+  "scheduled_commitment_hours": 24,
+  "node_price_max_gap_usd_per_mwh": 0.4983833525419996,
+  "all_node_price_max_gap_usd_per_mwh": 0.6689849935336696,
+  "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
+  "settlements": {
+    "affine_selector": {
+      "energy_revenue": 109864.71548420115,
+      "reported_uplift": 238.50816991255851,
+      "reported_cost": 87142.61975843796,
+      "true_cost": 73580.70665331343,
+      "true_profit": 36522.517000800275,
+      "best_reported_profit": 22960.603895675755
+    },
+    "direct_simplex": {
+      "energy_revenue": 109873.23760831033,
+      "reported_uplift": 229.9860458048788,
+      "reported_cost": 87142.61975843796,
+      "true_cost": 73580.70665331343,
+      "true_profit": 36522.517000801774,
+      "best_reported_profit": 22960.603895677254
+    }
+  },
+  "selector_minus_direct": {
+    "energy_revenue": -8.522124109178549,
+    "reported_uplift": 8.522124107679701,
+    "reported_cost": 0.0,
+    "true_cost": 0.0,
+    "true_profit": -1.4988472685217857e-09,
+    "best_reported_profit": -1.4988472685217857e-09
+  },
+  "interpretation": "Identical reported-bid physical UC; only the valid CHP dual price selection changes."
+}

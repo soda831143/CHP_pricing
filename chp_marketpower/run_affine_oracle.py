@@ -6,12 +6,14 @@ import argparse
 import csv
 import json
 import time
+from dataclasses import asdict
 from pathlib import Path
 
 import numpy as np
 
 from engine import load_case
-from price_vulnerability.affine_oracle import query, solve_endpoint
+from price_vulnerability.affine_oracle import Endpoint, dual_audit_passed, query, solve_endpoint
+from price_vulnerability.budgeted_oracle import build_budgeted_oracle
 
 
 def main() -> None:
@@ -26,15 +28,176 @@ def main() -> None:
     parser.add_argument("--congestion", choices=("tight", "moderate", "relaxed"), default="tight")
     parser.add_argument("--T", type=int, default=24)
     parser.add_argument("--segments", type=int, choices=(1, 3), default=3)
+    parser.add_argument("--discover", action="store_true",
+                        help="Discover intervals by largest primal-upper/dual-chord gap")
+    parser.add_argument("--lower", type=float, default=0.0)
+    parser.add_argument("--upper", type=float, default=0.1)
+    parser.add_argument("--max-points", type=int, default=40)
+    parser.add_argument("--value-tolerance", type=float, default=1e-6)
+    parser.add_argument("--price-tolerance", type=float, default=1e-6)
+    parser.add_argument("--focus-lower", type=float)
+    parser.add_argument("--focus-upper", type=float)
+    parser.add_argument("--focus-budget", type=int, default=12)
+    parser.add_argument("--resume", action="store_true", help="Continue a matching saved discovery checkpoint")
     args = parser.parse_args()
     oracle_file = args.out_dir / "oracle.npz"
     if args.query is not None:
         report = json.loads((args.out_dir / "audit.json").read_text(encoding="utf-8"))
-        if report["status"] != "numerically_validated":
+        if report["status"] not in {"numerically_validated", "numerically_validated_partial"}:
             raise SystemExit("Oracle audit is not valid; refusing a stale query file")
         with np.load(oracle_file) as oracle:
-            value, price = query(args.query, oracle["boundaries"], oracle["values"], oracle["prices"])
-        print(json.dumps({"delta": args.query, "value": value, "nodal_price": price.tolist()}))
+            boundaries = oracle["boundaries"]
+            if report.get("solved_points", len(boundaries)) != len(boundaries):
+                raise SystemExit("Oracle checkpoint and audit refer to different solve counts")
+            if not np.isfinite(args.query) or not boundaries[0] <= args.query <= boundaries[-1]:
+                raise ValueError("query is outside the preprocessed parameter domain")
+            values = oracle["values"]
+            prices = oracle["prices"]
+            ready = oracle["price_ready"] if "price_ready" in oracle else np.ones(len(values) - 1, bool)
+            k = min(int(np.searchsorted(boundaries, args.query, side="right")) - 1,
+                    len(ready) - 1)
+            offline = bool(ready[k] or np.any(boundaries == args.query))
+            if offline:
+                value, price = query(args.query, boundaries, values, prices, ready)
+        if not offline:
+            scope = report["scope"]
+            generators, network = load_case(
+                scope["case"], scope["network"], scope["T"],
+                scope["segments"], scope["congestion"],
+            )
+            solved = solve_endpoint(generators, network, scope["generator_index"], args.query)
+            value, price = solved.value, solved.price
+        print(json.dumps({"delta": args.query, "value": value,
+                          "nodal_price": price.tolist(),
+                          "source": "offline_selector" if offline else "direct_chp_fallback"}))
+        return
+
+    if args.discover:
+        if (args.focus_lower is None) != (args.focus_upper is None):
+            raise ValueError("focus-lower and focus-upper must be supplied together")
+        focus = ((args.focus_lower, args.focus_upper)
+                 if args.focus_lower is not None else None)
+        generators, network = load_case(
+            args.case, args.network, args.T, args.segments, args.congestion
+        )
+        if not 0 <= args.generator < len(generators):
+            raise ValueError("generator is outside the case")
+        scope = {"case": args.case, "network": args.network, "T": args.T,
+                 "segments": args.segments, "congestion": args.congestion,
+                 "generator_index": args.generator, "parameter": "all-day absolute adder"}
+        previous = None
+        previous_offline_seconds = 0.0
+        if args.resume:
+            saved = json.loads((args.out_dir / "audit.json").read_text(encoding="utf-8"))
+            if (saved["scope"] != scope or saved["value_tolerance_usd"] != args.value_tolerance
+                    or saved["price_tolerance_usd"] != args.price_tolerance
+                    or saved.get("focus_window") != (list(focus) if focus is not None else None)):
+                raise ValueError("saved discovery has a different case, parameter, tolerance, or focus")
+            with np.load(oracle_file) as old:
+                keys = [str(key) for key in old["audit_keys"]]
+                previous = [Endpoint(
+                    float(old["boundaries"][k]), float(old["values"][k]),
+                    float(old["dual_values"][k]), float(old["exposures"][k]),
+                    old["prices"][k].copy(), old["objectives"][k].copy(),
+                    old["primals"][k].copy(), old["eq_duals"][k].copy(),
+                    old["ineq_duals"][k].copy(), old["lower_duals"][k].copy(),
+                    old["upper_duals"][k].copy(),
+                    dict(zip(keys, map(float, old["audit_values"][k]))),
+                    float(old["runtimes"][k]),
+                ) for k in range(len(old["boundaries"]))]
+            if previous[0].delta != args.lower or previous[-1].delta != args.upper:
+                raise ValueError("saved discovery has a different parameter domain")
+            previous_offline_seconds = float(saved["offline_seconds"])
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        started = time.perf_counter()
+
+        def save_snapshot(points, intervals):
+            boundaries = np.asarray([point.delta for point in points])
+            ready = np.asarray([item.price_ready for item in intervals], dtype=bool)
+            coverage = sum(item.right - item.left for item in intervals if item.price_ready)
+            report = {
+                "status": "numerically_validated" if np.all(ready)
+                          else "numerically_validated_partial",
+                "scope": scope,
+                "method": "largest numerical primal-upper/dual-chord gap; complete-dual interval gate",
+                "value_tolerance_usd": args.value_tolerance,
+                "price_tolerance_usd": args.price_tolerance,
+                "solved_points": len(points), "max_points": args.max_points,
+                "intervals": [asdict(item) for item in intervals],
+                "price_coverage_fraction": float(coverage / (args.upper - args.lower)),
+                "focus_window": list(focus) if focus is not None else None,
+                "focus_coverage_fraction": (
+                    float(sum(
+                        max(0.0, min(item.right, focus[1]) - max(item.left, focus[0]))
+                        for item in intervals if item.price_ready
+                    ) / (focus[1] - focus[0])) if focus is not None else None
+                ),
+                "max_unresolved_value_gap_usd": float(max(
+                    (item.max_value_gap for item in intervals if not item.price_ready),
+                    default=0.0,
+                )),
+                "max_full_lp_residuals": {
+                    key: max(point.audit[key] for point in points) for key in points[0].audit
+                },
+                "offline_seconds": previous_offline_seconds + time.perf_counter() - started,
+                "mean_direct_chp_seconds": float(np.mean([point.runtime for point in points])),
+                "interpretation": "Uncovered intervals return direct CHP prices; value gaps never certify price accuracy.",
+            }
+            pending_oracle = args.out_dir / "oracle.pending.npz"
+            np.savez_compressed(
+                pending_oracle, boundaries=boundaries,
+                values=np.asarray([point.value for point in points]),
+                prices=np.stack([point.price for point in points]),
+                price_ready=ready,
+                objectives=np.stack([point.objective for point in points]),
+                primals=np.stack([point.primal for point in points]),
+                exposures=np.asarray([point.exposure for point in points]),
+                dual_values=np.asarray([point.dual_value for point in points]),
+                audit_keys=np.asarray(list(points[0].audit)),
+                audit_values=np.asarray([
+                    [point.audit[key] for key in points[0].audit] for point in points
+                ]),
+                runtimes=np.asarray([point.runtime for point in points]),
+                eq_duals=np.stack([point.eq_dual for point in points]),
+                ineq_duals=np.stack([point.ineq_dual for point in points]),
+                lower_duals=np.stack([point.lower_dual for point in points]),
+                upper_duals=np.stack([point.upper_dual for point in points]),
+            )
+            for attempt in range(10):
+                try:
+                    pending_oracle.replace(oracle_file)
+                    break
+                except PermissionError:
+                    if attempt == 9:
+                        raise
+                    time.sleep(0.2)
+            pending_audit = args.out_dir / "audit.pending.json"
+            pending_audit.write_text(json.dumps(report, indent=2), encoding="utf-8")
+            for attempt in range(10):
+                try:
+                    pending_audit.replace(args.out_dir / "audit.json")
+                    break
+                except PermissionError:
+                    if attempt == 9:
+                        raise
+                    time.sleep(0.2)
+            return report
+
+        points, intervals = build_budgeted_oracle(
+            lambda delta: solve_endpoint(generators, network, args.generator, delta),
+            args.lower, args.upper, max_points=args.max_points,
+            value_tolerance=args.value_tolerance,
+            price_tolerance=args.price_tolerance,
+            focus=focus, focus_budget=args.focus_budget if focus is not None else 0,
+            initial_points=previous,
+            on_update=save_snapshot,
+        )
+        report = save_snapshot(points, intervals)
+        ready = [item.price_ready for item in intervals]
+        print(f"{len(points)} CHP solves in {report['offline_seconds']:.1f}s; "
+              f"{sum(ready)}/{len(ready)} price-ready intervals; "
+              f"coverage {report['price_coverage_fraction']:.1%}; "
+              f"max unresolved value gap {report['max_unresolved_value_gap_usd']:.4g} USD")
         return
 
     with args.regimes.open(newline="", encoding="utf-8") as stream:
@@ -84,13 +247,7 @@ def main() -> None:
     max_value = max(item["midpoint_value_gap"] for item in checks)
     max_affinity = max(item["objective_affinity"] for item in checks)
     passed = (
-        max_audit["primal_feasibility"] <= 1e-7
-        and max_audit["dual_sign"] <= 1e-7
-        and max_audit["stationarity"] <= 1e-7
-        and max_audit["price_projection"] <= 1e-9
-        and max_audit["duality_gap"] <= 1e-6
-        and max_audit["row_complementarity"] <= 1e-6
-        and max_audit["bound_complementarity"] <= 1e-6
+        all(dual_audit_passed(point) for point in endpoints + midpoints)
         and max_common <= 1e-6 and max_value <= 1e-6 and max_affinity <= 1e-9
     )
     offline_seconds = time.perf_counter() - started
@@ -113,6 +270,15 @@ def main() -> None:
         oracle_file, boundaries=boundaries,
         values=np.asarray([point.value for point in endpoints]),
         prices=np.stack([point.price for point in endpoints]),
+        objectives=np.stack([point.objective for point in endpoints]),
+        primals=np.stack([point.primal for point in endpoints]),
+        exposures=np.asarray([point.exposure for point in endpoints]),
+        dual_values=np.asarray([point.dual_value for point in endpoints]),
+        audit_keys=np.asarray(list(endpoints[0].audit)),
+        audit_values=np.asarray([
+            [point.audit[key] for key in endpoints[0].audit] for point in endpoints
+        ]),
+        runtimes=np.asarray([point.runtime for point in endpoints]),
         eq_duals=np.stack([point.eq_dual for point in endpoints]),
         ineq_duals=np.stack([point.ineq_dual for point in endpoints]),
         lower_duals=np.stack([point.lower_dual for point in endpoints]),
