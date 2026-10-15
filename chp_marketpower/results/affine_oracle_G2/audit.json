@@ -1,0 +1,72 @@
+{
+  "status": "numerically_validated",
+  "scope": {
+    "case": "6",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 1,
+    "parameter": "all-day absolute adder"
+  },
+  "max_full_lp_residuals": {
+    "primal_feasibility": 1.1368683772161603e-13,
+    "dual_sign": 2.972733170736319e-11,
+    "stationarity": 2.546585164964199e-11,
+    "duality_gap": 8.003553375601768e-11,
+    "row_complementarity": 2.0102356626367403e-13,
+    "bound_complementarity": 0.0,
+    "objective_reconstruction": 6.548361852765083e-11,
+    "price_projection": 0.0
+  },
+  "intervals": [
+    {
+      "interval": 1,
+      "left": 0.0,
+      "right": 0.017679053714574077,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "midpoint_value_gap": 2.1827872842550278e-11,
+      "objective_affinity": 1.8189894035458565e-12,
+      "price_selection_vs_direct": 4.618527782440651e-14
+    },
+    {
+      "interval": 2,
+      "left": 0.017679053714574077,
+      "right": 0.0180442738017342,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "midpoint_value_gap": 1.4551915228366852e-11,
+      "objective_affinity": 1.8189894035458565e-12,
+      "price_selection_vs_direct": 1.6624035481527244e-10
+    },
+    {
+      "interval": 3,
+      "left": 0.0180442738017342,
+      "right": 0.043396112158476316,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "midpoint_value_gap": 1.4551915228366852e-11,
+      "objective_affinity": 1.8189894035458565e-12,
+      "price_selection_vs_direct": 5.212026366052669e-10
+    },
+    {
+      "interval": 4,
+      "left": 0.043396112158476316,
+      "right": 0.08412263646689806,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "midpoint_value_gap": 4.3655745685100555e-11,
+      "objective_affinity": 1.8189894035458565e-12,
+      "price_selection_vs_direct": 5.10880227011512e-12
+    },
+    {
+      "interval": 5,
+      "left": 0.08412263646689806,
+      "right": 0.1,
+      "common_primal_gap": 3.637978807091713e-11,
+      "midpoint_value_gap": 7.275957614183426e-12,
+      "objective_affinity": 1.8189894035458565e-12,
+      "price_selection_vs_direct": 4.973799150320701e-14
+    }
+  ],
+  "offline_seconds": 21.5911242000293,
+  "mean_direct_chp_seconds": 1.8347243399941362,
+  "interpretation": "Endpoint dual interpolation selects one optimal price; it need not match a direct solver's degenerate price."
+}

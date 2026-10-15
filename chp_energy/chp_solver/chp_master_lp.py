@@ -217,6 +217,8 @@ class PrimalCHPLP:
         self._balance_constrs = None
         self._model           = None
         self._solution_x      = None
+        self._all_eq_duals     = None
+        self._all_ineq_duals   = None
         if method not in {-1, 1, 2} or crossover not in {0, 1}:
             raise ValueError("COPT method must be -1, 1, or 2; crossover must be 0 or 1")
         self.method = method
@@ -408,6 +410,8 @@ class PrimalCHPLP:
             self.presolve_stats_time = time.perf_counter() - stats_start
 
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):
+            self._all_eq_duals = None
+            self._all_ineq_duals = None
             self._ptdf_alpha = None
             self._ptdf_beta_ = None
             self.raw_energy_dual = None
@@ -430,6 +434,11 @@ class PrimalCHPLP:
         # 等式约束行排列：[n_flow | n_src | n_bal]
         # n_bal = T，全局平衡约束，对偶 = 能量价格 λ_t（所有节点共享基准）
         all_pi_eq  = eq_constrs.getInfo(gp.cp.COPT.Info.Dual).tonumpy()
+        self._all_eq_duals = all_pi_eq.copy()
+        self._all_ineq_duals = (
+            ineq_constrs.getInfo(gp.cp.COPT.Info.Dual).tonumpy().copy()
+            if ineq_constrs is not None else np.empty(0)
+        )
         balance_pi = all_pi_eq[n_flow + n_src : n_flow + n_src + n_bal].copy()
         # Balance rows are Σ_g p[g,t] = D[t]. COPT returns the RHS shadow
         # price for a minimization problem, so this is the energy-price sign.
@@ -459,7 +468,7 @@ class PrimalCHPLP:
             # 多节点 PTDF 直流潮流 LMP 后处理计算：
             # PTDF 不等式约束排列：物理/PWL 约束在前，PTDF 约束在后
             # PTDF 约束排列：l=0→T-1 upper; l=0→T-1 lower; l=1→T-1 upper; ...
-            all_pi_ub = ineq_constrs.getInfo(gp.cp.COPT.Info.Dual).tonumpy()  # (n_ineq,)
+            all_pi_ub = self._all_ineq_duals  # (n_ineq,)
             N_line    = self.network.N_line
             n_ptdf_rows = 2 * N_line * self.T
             n_unit_ineq = len(all_pi_ub) - n_ptdf_rows

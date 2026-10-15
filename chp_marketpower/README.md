@@ -1,6 +1,6 @@
 # CHP Market Power
 
-**当前主机制（2026-10-15）：** [6/30 节点的匹配定价规则反事实、物理/凸化/自调度分层及局部价值探针](MECHANISM_STUDY_2026-10-15.md)。此前的[统一报价跨系统试验](MARKET_POWER_STUDY_2026-10-14.md)仍作为宽范围直接重求证据；下方早期 R2/R3 段落保留方法审计历史，不代表当前论文主张。
+**当前论文主线（2026-10-15）：** [参数化 CHP 报价响应 Oracle：目标、方法、进度与下一步](ORACLE_STUDY_2026-10-15.md)。[6/30 节点的匹配定价规则与利润实验](MECHANISM_STUDY_2026-10-15.md)是 Oracle 的市场力应用证据，不取代算法主贡献；下方早期 R2/R3 段落保留方法审计历史，不代表当前优先级。
 
 本目录研究“机组报价改变后，凸包定价的最优值与节点价格如何分区变化；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP、最优面左右导数、价值优先重构和价格层门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
 
@@ -25,7 +25,9 @@ python run_hourly_vulnerability.py --case 6 --scenario C3 --T 24 --segments 3 --
 python run_profit_validation.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generators 0 1 2 --beta 0 0.05 0.10 --bid-cap 0.10 --out results/profit_c3_24h_pilot_strict.csv
 python run_parametric_regime_scan.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --grid 0 0.025 0.05 0.075 0.10 --out-dir results/regime_G2_direct
 python run_basis_dual_audit.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --deltas 0 0.04 0.06 0.10 --out results/basis_dual_G2.json
-python run_value_oracle.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --lower 0 --upper 0.1 --out-dir results/value_oracle_G2_absolute_nominal
+python run_value_oracle.py --case 6 --network ptdf --congestion tight --T 24 --segments 3 --generator 1 --lower 0 --upper 0.1 --out-dir results/value_oracle_G2_absolute_residual_audit
+python run_affine_oracle.py --regimes results/value_oracle_G2_absolute_residual_audit/value_regimes.csv --out-dir results/affine_oracle_G2
+python run_affine_oracle.py --out-dir results/affine_oracle_G2 --query 0.05
 python run_price_probe.py --regimes results/value_oracle_G2_absolute_nominal/value_regimes.csv --out-dir results/price_probe_G2_absolute
 ```
 
