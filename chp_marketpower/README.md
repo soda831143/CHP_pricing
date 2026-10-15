@@ -1,6 +1,6 @@
 # CHP Market Power
 
-**当前论文主线（2026-10-15）：** [参数化 CHP 报价响应 Oracle：目标、方法、进度与下一步](ORACLE_STUDY_2026-10-15.md)。[6/30 节点的匹配定价规则与利润实验](MECHANISM_STUDY_2026-10-15.md)是 Oracle 的市场力应用证据，不取代算法主贡献；下方早期 R2/R3 段落保留方法审计历史，不代表当前优先级。
+**当前论文主线（更新至 2026-10-16）：** [区域发现算法与三项论文实验](PARAMETRIC_ORACLE_ALGORITHM_20261015.md)，结果及主图见 [三项论文实验的进展](PAPER_STUDY_20261015.md)，复现及归档范围见 [本轮结果说明](results/parametric_algorithm_20261015/README.md)。[e9393f9 阶段的 Oracle 结果](ORACLE_STUDY_2026-10-15.md)与[匹配定价规则及利润实验](MECHANISM_STUDY_2026-10-15.md)保留为前期证据；下方早期 R2/R3 段落不代表当前优先级。
 
 本目录研究“机组报价改变后，凸包定价的最优值与节点价格如何分区变化；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP、最优面左右导数、价值优先重构和价格层门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。
 
@@ -13,6 +13,19 @@
 ## 可运行入口
 
 在本目录执行（数值求解使用 COPT 8，经全局 `gurobi_compat` 垫片复用已有模型）：
+
+当前主线可按下面的顺序复现；构造和批次输出使用尚不存在的新目录，旧价格路径版本会保留。
+
+```powershell
+python run_affine_oracle.py --discover --complete --case 30 --generator 0 --upper 8.3964 --out-dir results/paper30_new
+python postprocess_oracle.py --oracle-dir results/paper30_new
+python validate_affine_oracle.py --oracle-dir results/paper30_new --fractions 0.001 0.5 0.999 --persistent-direct
+python run_oracle_paper_study.py --stage timing --oracle-dir results/paper30_new --output results/paper30_timing_new
+```
+
+`run_affine_oracle.py` 默认使用持久模型细分；`--endpoint-solver fresh` 是逐点重建的实现消融。`run_region_oracle.py --formulation active_cone` 使用完整活动法锥的有效区间辅助 LP；`full_dual` 保留未经消元的 formulation。`--initial-map` 可把已有小地图扩到更大的报价范围。原目录续算需要保持原求解方式，旧 fresh 地图须显式给 `--endpoint-solver fresh`；换方式应保存为新地图。
+
+以下是前期研究和各功能入口，历史范围与优先级以页首最新实验方案为准：
 
 ```powershell
 python run_unified_bid_experiment.py --case 6 --generator 1 --rho 0 0.025 0.05 0.10 0.20 0.30 0.50
@@ -36,6 +49,10 @@ python run_selector_settlement.py --oracle-dir results/budgeted_oracle_30_G1_eco
 python run_affine_oracle.py --discover --case 30 --generator 0 --lower 0 --upper 20.991 --max-points 30 --focus-lower 16.7928 --focus-upper 18.8919 --focus-budget 12 --out-dir results/budgeted_oracle_30_G1_broad_focused
 python run_affine_oracle.py --discover --complete --case 30 --generator 0 --lower 0 --upper 8.3964 --max-points 40 --out-dir results/complete_oracle_30_G1_0to20pct
 python postprocess_oracle.py --oracle-dir results/complete_oracle_30_G1_0to20pct
+python run_affine_oracle.py --discover --complete --endpoint-solver persistent --case 30 --generator 0 --upper 8.3964 --out-dir results/new_30_persistent_bracket
+python postprocess_oracle.py --oracle-dir results/new_30_persistent_bracket
+python run_region_oracle.py --case 6 --generator 1 --upper 1.1999875 --max-chp-solves 120 --formulation active_cone --out-dir results/new_6_region
+python run_oracle_paper_study.py --stage timing --oracle-dir results/new_30_persistent_bracket --output results/new_timing
 python benchmark_oracle_queries.py --oracle-dir results/complete_oracle_30_G1_0to20pct --queries 24
 python run_affine_oracle.py --discover --case 6 --generator 1 --lower 0 --upper 1.1999875 --max-points 55 --resume-from results/complete_oracle_6_G2_0to10pct --seed-delta 0.05 --out-dir results/learned_oracle_6_G2_seed005_local
 python run_price_probe.py --regimes results/value_oracle_G2_absolute_nominal/value_regimes.csv --out-dir results/price_probe_G2_absolute
@@ -64,9 +81,9 @@ python -m pytest -q tests
 python tests/check_chp_integration.py
 ```
 
-前者不需要许可证；后者需要有效 COPT 许可证，验证默认报价兼容性、逐小时报价、绝对斜率加数、C0 的跨小时零响应、C2N/C3 拥塞配对及利润会计恒等式。利润入口要求 UC、自调度和 CHP 均证明最优，否则拒绝该网格点。输出放在 `results/`；正式论文结果应另存案例配置、COPT/垫片版本和原始表。
+前者包含小规模 COPT 辅助 LP，需要安装 COPT 及兼容接口；后者需要有效 COPT 许可证，验证默认报价兼容性、逐小时报价、绝对斜率加数、C0 的跨小时零响应、C2N/C3 拥塞配对及利润会计恒等式。持久模型解刷新另见 `python tests/check_persistent_chp.py`。利润入口要求 UC、自调度和 CHP 均证明最优，否则拒绝该网格点。输出放在 `results/`；正式论文结果应另存案例配置、COPT/垫片版本和原始表。
 
-当前 30 节点 P0 的主结果只认 `full_case30_C3_relative_twostep_copt/`、`full_case30_C3_absolute_twostep_copt/`、`profit_case30_C3_all_dispatched_copt.csv` 和 `copt_validation_C3/`；smoke、单步长运行和局部探针保留作审计，不再作为主实验入口。
+历史 30 节点 P0 的主结果为 `full_case30_C3_relative_twostep_copt/`、`full_case30_C3_absolute_twostep_copt/`、`profit_case30_C3_all_dispatched_copt.csv` 和 `copt_validation_C3/`；smoke、单步长运行和局部探针保留作审计。当前论文主结果以页首三项实验为准。
 
 P1 主结果为 `p1_shift23to21_r020/` 和 `p1_warmup/`；`p1_shift23to21_r005_diagnostics/` 只记录“同一活动区域，按规则停止”的负结果，不追加对应 VI 或利润。
 

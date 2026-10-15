@@ -1,5 +1,7 @@
 # 一维报价参数化 CHP：从价值函数到价格与市场力
 
+> 当前统一算法为原始—对偶最优性区域发现：持久 CHP、上下界细分及固定原始解的有效区间扩张。新的完整 formulation 与论文实验组织见 [PARAMETRIC_ORACLE_ALGORITHM_20261015.md](PARAMETRIC_ORACLE_ALGORITHM_20261015.md)。
+
 > R3 当前实施方向已更新：不要求枚举所有退化基；先核验完整对偶端点构造的选定价格路径。适用条件与数值证据见 [RESEARCH_UPDATE_2026-09-23.md](RESEARCH_UPDATE_2026-09-23.md)。本文后续基延拓小节保留为方法诊断与历史记录。
 
 ## 1. 研究对象与当前边界

@@ -1,0 +1,19 @@
+{
+  "queries": [
+    24,
+    100,
+    500,
+    1000
+  ],
+  "repeats": 3,
+  "order": "shuffled",
+  "seed": 20261015,
+  "oracle": "results\\parametric_algorithm_20261015\\30_persistent_bracket",
+  "source_commit": "e9393f9cfe4233ed7f50a7d7d38e92504fa04c73",
+  "source_sha256": {
+    "benchmark_oracle_queries.py": "1eb604c43234607892d98484676f416c3c8ab7777d413c399f485aa71552878b",
+    "run_oracle_paper_study.py": "d258d520ba1ddc2b9da40bfa2aeb2b90f82be0798fb5e77dcaa385d8561e107a",
+    "price_vulnerability/persistent_chp.py": "91b1ef9232bf5ee633b260ab0af9fb2bafd07ba067ca3b3076ccaaf6494fe6a9",
+    "price_vulnerability/affine_oracle.py": "8f65b7d37dc21f71530f27ff820a076b67a69c001af996ab600ee5921cfb693f"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "rows": [
+    {
+      "variant": "30_active_cone",
+      "case": "30",
+      "chp_solves": 8,
+      "auxiliary_lps": 12,
+      "offline_seconds": 9.39905710000312,
+      "coverage": 1.0,
+      "value_intervals": 8,
+      "selected_price_segments": 8,
+      "inherited_seconds": 0.0,
+      "compact_bytes": 8877
+    },
+    {
+      "variant": "30_fresh_bracket",
+      "case": "30",
+      "chp_solves": 15,
+      "auxiliary_lps": 0,
+      "offline_seconds": 65.81757209997158,
+      "coverage": 1.0,
+      "value_intervals": 8,
+      "selected_price_segments": 8,
+      "inherited_seconds": 0.0,
+      "compact_bytes": 9113
+    },
+    {
+      "variant": "30_persistent_bracket",
+      "case": "30",
+      "chp_solves": 15,
+      "auxiliary_lps": 0,
+      "offline_seconds": 6.768508300010581,
+      "coverage": 1.0,
+      "value_intervals": 8,
+      "selected_price_segments": 8,
+      "inherited_seconds": 0.0,
+      "compact_bytes": 9026
+    },
+    {
+      "variant": "30_region",
+      "case": "30",
+      "chp_solves": 8,
+      "auxiliary_lps": 11,
+      "offline_seconds": 30.440897300024517,
+      "coverage": 1.0,
+      "value_intervals": 8,
+      "selected_price_segments": 8,
+      "inherited_seconds": 0.0,
+      "compact_bytes": 9151
+    },
+    {
+      "variant": "6_active_cone",
+      "case": "6",
+      "chp_solves": 40,
+      "auxiliary_lps": 76,
+      "offline_seconds": 41.17316960002063,
+      "coverage": 0.84938531473677,
+      "value_intervals": null,
+      "selected_price_segments": null,
+      "inherited_seconds": 0.0,
+      "compact_bytes": null
+    },
+    {
+      "variant": "6_active_cone_extended",
+      "case": "6",
+      "chp_solves": 63,
+      "auxiliary_lps": 122,
+      "offline_seconds": 58.09477440000046,
+      "coverage": 1.0,
+      "value_intervals": 63,
+      "selected_price_segments": 65,
+      "inherited_seconds": 0.0,
+      "compact_bytes": 11079
+    },
+    {
+      "variant": "6_persistent_bracket",
+      "case": "6",
+      "chp_solves": 40,
+      "auxiliary_lps": 0,
+      "offline_seconds": 9.325637799978722,
+      "coverage": 0.0,
+      "value_intervals": null,
+      "selected_price_segments": null,
+      "inherited_seconds": 0.0,
+      "compact_bytes": null
+    },
+    {
+      "variant": "6_persistent_bracket_complete",
+      "case": "6",
+      "chp_solves": 125,
+      "auxiliary_lps": 0,
+      "offline_seconds": 49.73567889997503,
+      "coverage": 1.0,
+      "value_intervals": 63,
+      "selected_price_segments": 65,
+      "inherited_seconds": 0.0,
+      "compact_bytes": 11187
+    },
+    {
+      "variant": "6_persistent_bracket_extended",
+      "case": "6",
+      "chp_solves": 120,
+      "auxiliary_lps": 0,
+      "offline_seconds": 51.26376340002753,
+      "coverage": 0.9914579515191533,
+      "value_intervals": null,
+      "selected_price_segments": null,
+      "inherited_seconds": 0.0,
+      "compact_bytes": null
+    },
+    {
+      "variant": "6_region",
+      "case": "6",
+      "chp_solves": 40,
+      "auxiliary_lps": 74,
+      "offline_seconds": 169.27054369996767,
+      "coverage": 0.7859793104397796,
+      "value_intervals": null,
+      "selected_price_segments": null,
+      "inherited_seconds": 0.0,
+      "compact_bytes": null
+    },
+    {
+      "variant": "6_warm_bracket",
+      "case": "6",
+      "chp_solves": 40,
+      "auxiliary_lps": 0,
+      "offline_seconds": 25.430018800019752,
+      "coverage": 0.2912764882330163,
+      "value_intervals": null,
+      "selected_price_segments": null,
+      "inherited_seconds": 16.812692900013644,
+      "compact_bytes": null
+    }
+  ],
+  "complete_map_comparisons": [
+    {
+      "first": "6_persistent_bracket_complete",
+      "second": "6_active_cone_extended",
+      "value_intervals": [
+        63,
+        63
+      ],
+      "max_value_difference_usd": 6.548361852765083e-11,
+      "max_boundary_difference": 3.0875746404035453e-11
+    },
+    {
+      "first": "30_persistent_bracket",
+      "second": "30_active_cone",
+      "value_intervals": [
+        8,
+        8
+      ],
+      "max_value_difference_usd": 1.1641532182693481e-10,
+      "max_boundary_difference": 5.913505241039729e-10
+    }
+  ],
+  "interpretation": "All auxiliary work counts in offline time. Different legal selected-price paths need not agree; value-map consistency is checked at the union of their breakpoints."
+}

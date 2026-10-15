@@ -1,0 +1,52 @@
+{
+  "plan": {
+    "queries": [
+      24,
+      100,
+      500,
+      1000
+    ],
+    "repeats": 3,
+    "order": "shuffled",
+    "seed": 20261015,
+    "oracle": "results\\parametric_algorithm_20261015\\30_persistent_bracket",
+    "source_commit": "e9393f9cfe4233ed7f50a7d7d38e92504fa04c73",
+    "source_sha256": {
+      "benchmark_oracle_queries.py": "1eb604c43234607892d98484676f416c3c8ab7777d413c399f485aa71552878b",
+      "run_oracle_paper_study.py": "d258d520ba1ddc2b9da40bfa2aeb2b90f82be0798fb5e77dcaa385d8561e107a",
+      "price_vulnerability/persistent_chp.py": "91b1ef9232bf5ee633b260ab0af9fb2bafd07ba067ca3b3076ccaaf6494fe6a9",
+      "price_vulnerability/affine_oracle.py": "8f65b7d37dc21f71530f27ff820a076b67a69c001af996ab600ee5921cfb693f"
+    }
+  },
+  "rows": [
+    {
+      "Q": 24,
+      "reopt_mean_seconds": 7.127826066668301,
+      "reopt_std_seconds": 0.2728529703571067,
+      "oracle_mean_seconds": 6.803687133341252,
+      "oracle_std_seconds": 0.0018274779428155414
+    },
+    {
+      "Q": 100,
+      "reopt_mean_seconds": 16.36241450001641,
+      "reopt_std_seconds": 0.4841871578055726,
+      "oracle_mean_seconds": 6.8032796333815595,
+      "oracle_std_seconds": 0.00045733436818902554
+    },
+    {
+      "Q": 500,
+      "reopt_mean_seconds": 63.226712000013016,
+      "reopt_std_seconds": 1.7065207528586601,
+      "oracle_mean_seconds": 6.80640463331171,
+      "oracle_std_seconds": 0.001215171638197345
+    },
+    {
+      "Q": 1000,
+      "reopt_mean_seconds": 125.48403603333281,
+      "reopt_std_seconds": 2.3890461413933672,
+      "oracle_mean_seconds": 6.809769166672292,
+      "oracle_std_seconds": 0.001404853543875742
+    }
+  ],
+  "interpretation": "Three actual repeated batches per Q. Offline construction measured once and included in each Oracle total; no interpolated exact break-even claim."
+}

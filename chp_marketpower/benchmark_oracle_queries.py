@@ -29,7 +29,7 @@ def _solve_fresh(generators, network, g: int, delta: float) -> tuple[float, np.n
 
 
 def _reoptimize_workload(generators, network, g: int,
-                         deltas: np.ndarray) -> tuple[float, list[float]]:
+                         deltas: np.ndarray) -> tuple[float, list[float], list[np.ndarray]]:
     import coptpy as cp
     from gurobi_compat import GRB
 
@@ -50,7 +50,12 @@ def _reoptimize_workload(generators, network, g: int,
     variables = [all_variables[int(k)] for k in changed]
     base = np.asarray([all_variables[int(k)].obj for k in changed]) - first * direction[changed]
     values = [float(first_value)]
+    prices = [solver.raw_nodal_price.copy()]
     n_eq = len(solver._all_eq_duals)
+    rows = model.getConstrs()
+    balance_rows = [rows[k] for k in range(n_eq-network.T, n_eq)]
+    n_line_rows = 2*network.N_line*network.T if not network.is_single_node else 0
+    line_rows = [rows[k] for k in range(len(rows)-n_line_rows, len(rows))]
     for delta in deltas[1:]:
         model.setInfo(cp.COPT.Info.Obj, variables,
                       (base + float(delta) * direction[changed]).tolist())
@@ -58,24 +63,23 @@ def _reoptimize_workload(generators, network, g: int,
         if model.Status != GRB.OPTIMAL:
             raise RuntimeError(f"same-model CHP reoptimization failed at delta={delta:g}")
         values.append(float(model.objval))
-        rows = model.getConstrs()
-        balance = np.asarray([rows[k].pi for k in range(n_eq - network.T, n_eq)])
+        balance = np.asarray(model.getInfo(cp.COPT.Info.Dual, balance_rows))
         if network.is_single_node:
             price = balance[np.newaxis, :]
         else:
-            n_line_rows = 2 * network.N_line * network.T
-            line_duals = np.asarray([rows[k].pi for k in range(len(rows) - n_line_rows,
-                                                               len(rows))])
+            line_duals = np.asarray(model.getInfo(cp.COPT.Info.Dual, line_rows))
             alpha = line_duals[0::2].reshape(network.N_line, network.T)
             beta = line_duals[1::2].reshape(network.N_line, network.T)
             price = balance[np.newaxis, :] + network.PTDF.T @ (alpha - beta)
         if not np.all(np.isfinite(price)):
             raise RuntimeError("same-model reoptimization produced a nonfinite price")
+        prices.append(price)
     elapsed = time.perf_counter() - start
-    return elapsed, values
+    return elapsed, values, prices
 
 
-def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False) -> dict:
+def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
+              order: str = 'sorted', seed: int = 20261015) -> dict:
     if n_queries < 2:
         raise ValueError("at least two predeclared queries are required")
     build = json.loads((oracle_dir / "audit.json").read_text(encoding="utf-8"))
@@ -96,13 +100,18 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False) -> dic
         price_boundaries, prices = compact["price_boundaries"], compact["prices"]
     load_seconds = time.perf_counter() - started
     lower, upper = float(value_boundaries[0]), float(value_boundaries[-1])
-    # Fixed before any direct solve; includes all value regions without using their breakpoints.
+    # Fixed independently of observed breakpoints; need not sample every value region.
     deltas = np.linspace(lower + 0.025 * (upper - lower),
                          upper - 0.025 * (upper - lower), n_queries)
+    if order == 'shuffled':
+        deltas = np.random.default_rng(seed).permutation(deltas)
+    elif order != 'sorted':
+        raise ValueError('order must be sorted or shuffled')
     started = time.perf_counter()
-    online_values = [query_compact(float(delta), value_boundaries, values,
-                                   price_boundaries, prices)[0] for delta in deltas]
+    online_answers = [query_compact(float(delta), value_boundaries, values,
+                                    price_boundaries, prices) for delta in deltas]
     online_seconds = time.perf_counter() - started
+    online_values = [answer[0] for answer in online_answers]
     direct_values = None
     fresh_seconds = None
     if not skip_fresh:
@@ -110,7 +119,7 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False) -> dic
         direct_values = [_solve_fresh(generators, network, scope["generator_index"], float(delta))[0]
                          for delta in deltas]
         fresh_seconds = time.perf_counter() - started
-    reopt_seconds, reopt_values = _reoptimize_workload(
+    reopt_seconds, reopt_values, reopt_prices = _reoptimize_workload(
         generators, network, scope["generator_index"], deltas,
     )
     max_value_error = float(np.max(np.abs(np.asarray(online_values) - reopt_values)))
@@ -122,19 +131,23 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False) -> dic
     if max_value_error > 1e-6:
         raise RuntimeError(f"batch benchmark value discrepancy: {max_value_error:g} USD")
     return {
-        "scope": scope, "workload": "fixed equally spaced interior queries",
+        "scope": scope, "workload": "fixed equally spaced interior queries", 'order': order, 'seed': seed,
         "query_deltas": deltas.tolist(), "n_queries": n_queries,
         "max_value_discrepancy_usd": max_value_error,
         "oracle_offline_seconds_prior_run": build["offline_seconds"],
+        'postprocessing_seconds': compact_audit.get('postprocessing_seconds', 0.),
         "oracle_file_load_seconds": load_seconds,
         "oracle_online_batch_seconds": online_seconds,
-        "oracle_total_with_offline_seconds": build["offline_seconds"] + load_seconds + online_seconds,
+        "oracle_total_with_offline_seconds": build["offline_seconds"] + compact_audit.get('postprocessing_seconds', 0.) + load_seconds + online_seconds,
         "fresh_chp_batch_seconds": fresh_seconds,
         "fresh_chp_skipped": skip_fresh,
         "same_model_reoptimization_batch_seconds": reopt_seconds,
         "query_hit_rate": 1.0,
         "compact_file_bytes": (oracle_dir / "compact.npz").stat().st_size,
         "raw_audit_file_bytes": (oracle_dir / "oracle.npz").stat().st_size,
+        'selector_vs_direct_max_price_difference': float(np.max(np.abs(
+            np.stack([answer[1] for answer in online_answers])-np.stack(reopt_prices)))),
+        'price_validation': 'Prices extracted at every query; different legal dual selectors need not agree. Complete-dual interpolation is independently checked per interval and at boundary neighborhoods by validate_affine_oracle.py.',
         "timing_scope": "Fresh and same-model timings include objective update/build and optimize; case-data load is common and excluded. Oracle load is separate; offline time came from its prior construction run.",
     }
 
@@ -146,9 +159,13 @@ def main() -> None:
     parser.add_argument("--skip-fresh", action="store_true",
                         help="Measure high-Q same-model reoptimization without repeating fresh model builds")
     parser.add_argument("--output", type=Path)
+    parser.add_argument('--order', choices=('sorted', 'shuffled'), default='shuffled')
+    parser.add_argument('--seed', type=int, default=20261015)
     args = parser.parse_args()
-    result = benchmark(args.oracle_dir, args.queries, args.skip_fresh)
     output = args.output or args.oracle_dir / f"batch_benchmark_q{args.queries}.json"
+    if output.exists():
+        parser.error('Use a fresh output file to preserve earlier timed results')
+    result = benchmark(args.oracle_dir, args.queries, args.skip_fresh, args.order, args.seed)
     output.write_text(json.dumps(result, indent=2), encoding="utf-8")
     fresh = (f"{result['fresh_chp_batch_seconds']:.2f}s"
              if result["fresh_chp_batch_seconds"] is not None else "not run")

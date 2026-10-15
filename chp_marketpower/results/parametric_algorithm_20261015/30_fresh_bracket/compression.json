@@ -1,0 +1,50 @@
+{
+  "status": "numerically_validated_compression",
+  "source": "oracle.npz; raw primal and complete-dual witnesses remain unchanged",
+  "source_sha256": "fedc9cb2906c0f4fdcf0ad15bbcf2f9781fe301f894551bfd9e806f53925a7d7",
+  "raw_intervals": 14,
+  "merged_value_intervals": 8,
+  "selected_price_intervals": 8,
+  "value_raw_indices": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    14
+  ],
+  "price_raw_indices": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    14
+  ],
+  "value_witness_raw_indices": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    11,
+    14
+  ],
+  "max_merged_value_endpoint_gap_usd": 5.820766091346741e-11,
+  "max_removed_price_deviation_usd_per_mwh": 9.612790563551243e-10,
+  "max_checked_value_change_usd": 2.0372681319713593e-10,
+  "max_checked_price_change_usd_per_mwh": 9.612790563551243e-10,
+  "value_tolerance_usd": 1e-07,
+  "price_tolerance_usd_per_mwh": 1e-08,
+  "raw_file_bytes": 1100318,
+  "compact_file_bytes": 9113,
+  "postprocessing_seconds": 0.03373599995393306,
+  "interpretation": "Numerical common-primal merging and numerically lossless selected-price compression; not an exact symbolic certificate."
+}

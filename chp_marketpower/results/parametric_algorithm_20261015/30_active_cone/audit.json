@@ -1,0 +1,283 @@
+{
+  "status": "numerically_validated",
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 0,
+    "parameter": "all-day absolute adder"
+  },
+  "method": "fixed-primal full-dual optimality-region expansion with gap-refinement fallback",
+  "endpoint_solver": "persistent",
+  "solved_points": 20,
+  "stored_points": 20,
+  "region_formulation": "active_cone",
+  "chp_solves": 8,
+  "auxiliary_lps": 12,
+  "max_chp_solves": 40,
+  "auxiliary_wall_seconds": 3.619750900019426,
+  "region_expansions": [
+    {
+      "seed_delta": 5.09239604368245,
+      "left": 4.796153968253975,
+      "right": 6.075711111111154,
+      "auxiliary_lps": 2,
+      "wall_seconds": 0.6399989000055939,
+      "formulation": "active_cone",
+      "auxiliary_variables": 78579,
+      "active_tolerance": 1e-08,
+      "endpoint_duality_gaps": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed_delta": 3.7393779156733213,
+      "left": 2.153255555555542,
+      "right": 4.52479841269853,
+      "auxiliary_lps": 2,
+      "wall_seconds": 0.5737353999866173,
+      "formulation": "active_cone",
+      "auxiliary_variables": 78530,
+      "active_tolerance": 1e-08,
+      "endpoint_duality_gaps": [
+        2.9103830456733704e-11,
+        5.820766091346741e-11
+      ]
+    },
+    {
+      "seed_delta": 6.6629370741207214,
+      "left": 6.166999999999984,
+      "right": 7.630999999999986,
+      "auxiliary_lps": 2,
+      "wall_seconds": 0.5973119999980554,
+      "formulation": "active_cone",
+      "auxiliary_variables": 78580,
+      "active_tolerance": 1e-08,
+      "endpoint_duality_gaps": [
+        0.0,
+        2.9103830456733704e-11
+      ]
+    },
+    {
+      "seed_delta": 0.6786878313620449,
+      "left": 0.659922222222203,
+      "right": 2.153255555555589,
+      "auxiliary_lps": 2,
+      "wall_seconds": 0.609515400021337,
+      "formulation": "active_cone",
+      "auxiliary_variables": 78530,
+      "active_tolerance": 1e-08,
+      "endpoint_duality_gaps": [
+        2.9103830456733704e-11,
+        2.9103830456733704e-11
+      ]
+    },
+    {
+      "seed_delta": 4.552627776488066,
+      "left": 4.5247984126983924,
+      "right": 4.796153968253918,
+      "auxiliary_lps": 2,
+      "wall_seconds": 0.5798692000098526,
+      "formulation": "active_cone",
+      "auxiliary_variables": 78530,
+      "active_tolerance": 1e-08,
+      "endpoint_duality_gaps": [
+        2.9103830456733704e-11,
+        2.9103830456733704e-11
+      ]
+    },
+    {
+      "seed_delta": 6.087009646449587,
+      "left": 6.075711111111009,
+      "right": 6.1669999999999945,
+      "auxiliary_lps": 2,
+      "wall_seconds": 0.5666485999827273,
+      "formulation": "active_cone",
+      "auxiliary_variables": 78580,
+      "active_tolerance": 1e-08,
+      "endpoint_duality_gaps": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "expansion_failures": [],
+  "value_tolerance_usd": 1e-06,
+  "price_tolerance_usd": 1e-06,
+  "intervals": [
+    {
+      "left": 0.0,
+      "right": 0.659922222222203,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 0.6599222222155033,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.659922222222203,
+      "right": 0.6786878313620449,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 0.6693050267921239,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.6786878313620449,
+      "right": 2.153255555555542,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 1.4159716934587936,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 2.153255555555542,
+      "right": 2.153255555555589,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 2.1532555555555657,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 2.153255555555589,
+      "right": 3.7393779156733213,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 2.1532555561138134,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 3.7393779156733213,
+      "right": 4.5247984126983924,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.5247984126939045,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 4.5247984126983924,
+      "right": 4.52479841269853,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 4.524798412698461,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 4.52479841269853,
+      "right": 4.552627776488066,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 4.538713094593298,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 4.552627776488066,
+      "right": 4.796153968253918,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 4.674390872370992,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 4.796153968253918,
+      "right": 4.796153968253975,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.796153968253947,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 4.796153968253975,
+      "right": 5.09239604368245,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.944275005968212,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 5.09239604368245,
+      "right": 6.075711111111009,
+      "max_value_gap": 0.0,
+      "probe_delta": 5.5840535773967295,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 6.075711111111009,
+      "right": 6.075711111111154,
+      "max_value_gap": 0.0,
+      "probe_delta": 6.075711111111081,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 6.075711111111154,
+      "right": 6.087009646449587,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 6.081360378780371,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 6.087009646449587,
+      "right": 6.166999999999984,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 6.127004823224786,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 6.166999999999984,
+      "right": 6.1669999999999945,
+      "max_value_gap": 0.0,
+      "probe_delta": 6.166999999999989,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 6.1669999999999945,
+      "right": 6.6629370741207214,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 6.414968537060358,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 6.6629370741207214,
+      "right": 7.630999999999986,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 7.146968537060354,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 7.630999999999986,
+      "right": 8.3964,
+      "max_value_gap": 0.0,
+      "probe_delta": 8.013699999999993,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    }
+  ],
+  "price_coverage_fraction": 1.0,
+  "offline_seconds": 9.39905710000312,
+  "persistent_timing": {
+    "setup_seconds": 4.218535399995744,
+    "reoptimization_seconds": 0.8974170999717899,
+    "extraction_audit_seconds": 0.20773150003515184
+  },
+  "max_unresolved_value_gap_usd": 0.0,
+  "max_full_lp_residuals": {
+    "primal_feasibility": 4.547473508864641e-13,
+    "dual_sign": 7.389644451905042e-13,
+    "stationarity": 6.548361852765083e-11,
+    "duality_gap": 1.1641532182693481e-10,
+    "row_complementarity": 1.265569417360057e-12,
+    "bound_complementarity": 2.2737367544323206e-13,
+    "objective_reconstruction": 1.1641532182693481e-10,
+    "price_projection": 0.0
+  },
+  "interpretation": "Numerical KKT-validated selected prices; auxiliary equality LPs locate fixed-primal optimality regions, not symbolic exact boundaries."
+}

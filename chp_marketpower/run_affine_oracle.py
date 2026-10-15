@@ -14,8 +14,9 @@ from pathlib import Path
 import numpy as np
 
 from engine import load_case
-from price_vulnerability.affine_oracle import Endpoint, dual_audit_passed, query, solve_endpoint
+from price_vulnerability.affine_oracle import dual_audit_passed, query, solve_endpoint, load_endpoints, save_endpoints
 from price_vulnerability.budgeted_oracle import build_budgeted_oracle
+from price_vulnerability.persistent_chp import PersistentCHP
 
 
 def main() -> None:
@@ -34,6 +35,8 @@ def main() -> None:
                         help="Discover intervals by largest primal-upper/dual-chord gap")
     parser.add_argument("--complete", action="store_true",
                         help="Continue refining every non-price-ready interval until coverage or budget")
+    parser.add_argument('--endpoint-solver', choices=('fresh', 'persistent'), default='persistent')
+    parser.add_argument('--initial-map', type=Path, help='Extend an archived smaller domain in a new directory')
     parser.add_argument("--lower", type=float, default=0.0)
     parser.add_argument("--upper", type=float, default=0.1)
     parser.add_argument("--max-points", type=int, default=40)
@@ -82,6 +85,10 @@ def main() -> None:
         return
 
     if args.discover:
+        if not args.resume and (args.out_dir/'oracle.npz').exists():
+            raise ValueError('Use a new output directory to preserve the existing price-selector version')
+        if args.initial_map is not None and (args.resume or args.resume_from is not None):
+            raise ValueError('initial-map cannot be combined with resume or seeded learning')
         if args.resume and args.resume_from is not None:
             raise ValueError("choose --resume or --resume-from, not both")
         if (args.seed_delta is None) != (args.resume_from is None):
@@ -100,16 +107,25 @@ def main() -> None:
         scope = {"case": args.case, "network": args.network, "T": args.T,
                  "segments": args.segments, "congestion": args.congestion,
                  "generator_index": args.generator, "parameter": "all-day absolute adder"}
+        persistent = PersistentCHP(generators, network, args.generator)
+        endpoint_solve = (persistent.solve if args.endpoint_solver == 'persistent' else
+                          lambda delta: solve_endpoint(generators, network, args.generator, delta))
+        solve_count = 0
+        def solve(delta):
+            nonlocal solve_count
+            point = endpoint_solve(delta)
+            solve_count += 1
+            return point
         previous = None
         previous_offline_seconds = 0.0
         preserved_ready = []
         original_prices = {}
         learning_seed_delta = args.seed_delta
-        parent_oracle = str(args.resume_from) if args.resume_from is not None else None
-        source_dir = args.resume_from or args.out_dir
-        if args.resume_from is not None and args.out_dir.exists() and any(args.out_dir.iterdir()):
+        parent_oracle = str(args.resume_from or args.initial_map) if args.resume_from or args.initial_map else None
+        source_dir = args.resume_from or args.initial_map or args.out_dir
+        if (args.resume_from is not None or args.initial_map is not None) and args.out_dir.exists() and any(args.out_dir.iterdir()):
             raise ValueError("fork output directory must be empty to preserve the source and other files")
-        if args.resume or args.resume_from is not None:
+        if args.resume or args.resume_from is not None or args.initial_map is not None:
             saved = json.loads((source_dir / "audit.json").read_text(encoding="utf-8"))
             if args.resume:
                 parent_oracle = saved.get("parent_oracle")
@@ -123,26 +139,24 @@ def main() -> None:
                         list(focus) if focus is not None else None))
                     or (args.resume and saved.get("completion_requested", False) != args.complete)):
                 raise ValueError("saved discovery has a different case, parameter, tolerance, or focus")
-            with np.load(source_dir / "oracle.npz") as old:
-                keys = [str(key) for key in old["audit_keys"]]
-                previous = [Endpoint(
-                    float(old["boundaries"][k]), float(old["values"][k]),
-                    float(old["dual_values"][k]), float(old["exposures"][k]),
-                    old["prices"][k].copy(), old["objectives"][k].copy(),
-                    old["primals"][k].copy(), old["eq_duals"][k].copy(),
-                    old["ineq_duals"][k].copy(), old["lower_duals"][k].copy(),
-                    old["upper_duals"][k].copy(),
-                    dict(zip(keys, map(float, old["audit_values"][k]))),
-                    float(old["runtimes"][k]),
-                ) for k in range(len(old["boundaries"]))]
-            if previous[0].delta != args.lower or previous[-1].delta != args.upper:
+            if args.resume and saved.get('endpoint_solver', 'fresh') != args.endpoint_solver:
+                raise ValueError('resume must preserve its endpoint solver; fork to create a new price selector')
+            previous = load_endpoints(source_dir)
+            if args.initial_map is not None:
+                if not args.lower <= previous[0].delta < previous[-1].delta <= args.upper:
+                    raise ValueError('new domain must contain the initial map')
+            elif previous[0].delta != args.lower or previous[-1].delta != args.upper:
                 raise ValueError("saved discovery has a different parameter domain")
             previous_offline_seconds = float(saved["offline_seconds"])
-            if learning_seed_delta is not None:
+            if learning_seed_delta is not None or args.initial_map is not None:
                 preserved_ready = [item for item in saved["intervals"] if item["price_ready"]]
                 original_prices = {point.delta: point.price for point in previous}
         args.out_dir.mkdir(parents=True, exist_ok=True)
         started = time.perf_counter()
+        if args.initial_map is not None:
+            for delta in (args.lower, args.upper):
+                if not any(point.delta == delta for point in previous):
+                    previous.append(solve(delta))
         if args.seed_delta is not None:
             if not np.isfinite(args.seed_delta) or not args.lower < args.seed_delta < args.upper:
                 raise ValueError("seed query must be inside the saved parameter domain")
@@ -156,7 +170,7 @@ def main() -> None:
             if args.max_points <= len(previous):
                 raise ValueError("learning budget must exceed the saved point count")
             focus = (target["left"], target["right"])
-            previous.append(solve_endpoint(generators, network, args.generator, args.seed_delta))
+            previous.append(solve(args.seed_delta))
 
         def save_snapshot(points, intervals):
             boundaries = np.asarray([point.delta for point in points])
@@ -175,9 +189,16 @@ def main() -> None:
                           else "numerically_validated_partial",
                 "scope": scope,
                 "method": "largest numerical primal-upper/dual-chord gap; complete-dual interval gate",
+                'endpoint_solver': args.endpoint_solver,
+                'new_chp_solves': solve_count,
+                'inherited_offline_seconds': previous_offline_seconds,
+                'persistent_timing': dict(setup_seconds=persistent.setup_seconds,
+                                          reoptimization_seconds=persistent.reoptimization_seconds,
+                                          extraction_audit_seconds=persistent.audit_seconds),
                 "value_tolerance_usd": args.value_tolerance,
                 "price_tolerance_usd": args.price_tolerance,
                 "solved_points": len(points), "max_points": args.max_points,
+                'chp_solves': len(points), 'auxiliary_lps': 0,
                 "completion_requested": args.complete,
                 "intervals": [asdict(item) for item in intervals],
                 "price_coverage_fraction": float(coverage / (args.upper - args.lower)),
@@ -202,25 +223,7 @@ def main() -> None:
                 "interpretation": "Uncovered intervals return direct CHP prices; value gaps never certify price accuracy.",
             }
             pending_oracle = args.out_dir / "oracle.pending.npz"
-            np.savez_compressed(
-                pending_oracle, boundaries=boundaries,
-                values=np.asarray([point.value for point in points]),
-                prices=np.stack([point.price for point in points]),
-                price_ready=ready,
-                objectives=np.stack([point.objective for point in points]),
-                primals=np.stack([point.primal for point in points]),
-                exposures=np.asarray([point.exposure for point in points]),
-                dual_values=np.asarray([point.dual_value for point in points]),
-                audit_keys=np.asarray(list(points[0].audit)),
-                audit_values=np.asarray([
-                    [point.audit[key] for key in points[0].audit] for point in points
-                ]),
-                runtimes=np.asarray([point.runtime for point in points]),
-                eq_duals=np.stack([point.eq_dual for point in points]),
-                ineq_duals=np.stack([point.ineq_dual for point in points]),
-                lower_duals=np.stack([point.lower_dual for point in points]),
-                upper_duals=np.stack([point.upper_dual for point in points]),
-            )
+            save_endpoints(pending_oracle, points, ready)
             for attempt in range(10):
                 try:
                     pending_oracle.replace(oracle_file)
@@ -242,7 +245,7 @@ def main() -> None:
             return report
 
         points, intervals = build_budgeted_oracle(
-            lambda delta: solve_endpoint(generators, network, args.generator, delta),
+            solve,
             args.lower, args.upper, max_points=args.max_points,
             value_tolerance=args.value_tolerance,
             price_tolerance=args.price_tolerance,

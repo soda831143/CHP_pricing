@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import time
 from pathlib import Path
 
 import numpy as np
@@ -15,6 +16,7 @@ from price_vulnerability.oracle_compression import compress_full_oracle, query_c
 
 def postprocess(oracle_dir: Path, value_tolerance: float = 1e-7,
                 price_tolerance: float = 1e-8) -> dict:
+    started = time.perf_counter()
     report = json.loads((oracle_dir / "audit.json").read_text(encoding="utf-8"))
     if report["status"] != "numerically_validated":
         raise ValueError("only fully price-ready oracles can be compressed")
@@ -69,6 +71,7 @@ def postprocess(oracle_dir: Path, value_tolerance: float = 1e-7,
         "price_tolerance_usd_per_mwh": price_tolerance,
         "raw_file_bytes": raw_path.stat().st_size,
         "compact_file_bytes": compact_path.stat().st_size,
+        'postprocessing_seconds': time.perf_counter()-started,
         "interpretation": "Numerical common-primal merging and numerically lossless selected-price compression; not an exact symbolic certificate.",
     }
     (oracle_dir / "compression.json").write_text(json.dumps(audit, indent=2), encoding="utf-8")

@@ -13,7 +13,7 @@ from engine import PrimalCHPLP, load_case
 from price_vulnerability.affine_oracle import audited_solution, dual_audit_passed, query
 
 
-def validate_point(generators, network, generator_index, delta, k, data):
+def validate_point(generators, network, generator_index, delta, k, data, persistent=None):
     from gurobi_compat import GRB
 
     boundaries = data["boundaries"]
@@ -22,16 +22,20 @@ def validate_point(generators, network, generator_index, delta, k, data):
     predicted_value, selected_price = query(
         delta, boundaries, data["values"], data["prices"]
     )
-    adders = np.zeros((len(generators), network.T))
-    adders[generator_index] = delta
-    solver = PrimalCHPLP(
-        generators, network, bid_adders=adders, method=1, crossover=1,
-        feasibility_tol=1e-9, optimality_tol=1e-9,
-    )
-    _, direct_value, success = solver.solve()
-    if not success or solver._model.Status != GRB.OPTIMAL:
-        raise RuntimeError(f"direct CHP did not reach OPTIMAL at {delta:g}")
-    direct = audited_solution(solver, generator_index, delta, direct_value)
+    if persistent is None:
+        adders = np.zeros((len(generators), network.T))
+        adders[generator_index] = delta
+        solver = PrimalCHPLP(
+            generators, network, bid_adders=adders, method=1, crossover=1,
+            feasibility_tol=1e-9, optimality_tol=1e-9,
+        )
+        _, direct_value, success = solver.solve()
+        if not success or solver._model.Status != GRB.OPTIMAL:
+            raise RuntimeError(f"direct CHP did not reach OPTIMAL at {delta:g}")
+        direct = audited_solution(solver, generator_index, delta, direct_value)
+    else:
+        direct = persistent.solve(delta)
+        direct_value, solver = direct.value, persistent.solver
     if not dual_audit_passed(direct):
         raise RuntimeError(f"direct CHP complete-dual audit failed at {delta:g}: {direct.audit}")
     eq, rhs_eq, n_flow, n_src, _ = solver._build_eq_constraints(solver._idx)
@@ -39,9 +43,9 @@ def validate_point(generators, network, generator_index, delta, k, data):
     pi, mu = blend("eq_duals"), blend("ineq_duals")
     z_lower, z_upper = blend("lower_duals"), blend("upper_duals")
     variables = solver._model.getVars()
-    c = np.asarray([variable.obj for variable in variables])
-    lb = np.asarray([variable.lb for variable in variables])
-    ub = np.asarray([variable.ub for variable in variables])
+    from coptpy import COPT
+    c, lb, ub = (np.asarray(solver._model.getInfo(info, variables))
+                 for info in (COPT.Info.Obj, COPT.Info.LB, COPT.Info.UB))
     x = solver._solution_x
     finite_lb = np.isfinite(lb) & (lb > -1e20)
     finite_ub = np.isfinite(ub) & (ub < 1e20)
@@ -89,6 +93,8 @@ def main() -> None:
     parser.add_argument("--oracle-dir", type=Path, required=True)
     parser.add_argument("--fractions", type=float, nargs="+", default=[0.5])
     parser.add_argument("--extra-deltas", type=float, nargs="*", default=[])
+    parser.add_argument('--persistent-direct', action='store_true',
+                        help='Use a separately built persistent LP for independent validation queries')
     args = parser.parse_args()
     if any(not 0 < fraction < 1 for fraction in args.fractions):
         raise ValueError("validation fractions must lie strictly inside an interval")
@@ -100,6 +106,8 @@ def main() -> None:
         scope["case"], scope["network"], scope["T"],
         scope["segments"], scope["congestion"],
     )
+    from price_vulnerability.persistent_chp import PersistentCHP
+    persistent = PersistentCHP(generators, network, scope['generator_index']) if args.persistent_direct else None
     with np.load(args.oracle_dir / "oracle.npz") as data:
         boundaries = data["boundaries"]
         ready = data["price_ready"] if "price_ready" in data else np.ones(len(boundaries) - 1, bool)
@@ -107,7 +115,7 @@ def main() -> None:
             validate_point(
                 generators, network, scope["generator_index"],
                 float(boundaries[k] + fraction * (boundaries[k + 1] - boundaries[k])),
-                k, data,
+                k, data, persistent,
             )
             for k in range(len(ready)) if ready[k]
             for fraction in args.fractions
@@ -119,7 +127,7 @@ def main() -> None:
             if not ready[k]:
                 raise ValueError("extra validation delta lies in an uncovered interval")
             checks.append(validate_point(
-                generators, network, scope["generator_index"], delta, k, data,
+                generators, network, scope["generator_index"], delta, k, data, persistent,
             ))
         samples = [float(0.5 * (boundaries[k] + boundaries[k + 1]))
                    for k in range(len(ready)) if ready[k]]
@@ -142,6 +150,7 @@ def main() -> None:
     full_coverage = bool(np.all(ready))
     result = {
         "status": "passed" if passed else "failed", "scope": scope,
+        'validation_solver': 'independently rebuilt persistent CHP' if persistent else 'independent fresh CHP per point',
         "direct_checks": checks,
         "maximums": {key: max(item[key] for item in checks) for key in checks[0]
                      if key not in {"interval", "delta"}},
@@ -149,22 +158,13 @@ def main() -> None:
         "direct_mean_seconds_independent": direct_mean,
         "full_price_coverage": full_coverage,
         "saved_oracle_bytes": (args.oracle_dir / "oracle.npz").stat().st_size,
-        "break_even_queries_estimate": (
-            report["offline_seconds"] / (direct_mean - online_mean)
-            if full_coverage and direct_mean > online_mean else None
-        ),
-        "batch_total_seconds_estimate": {
-            str(q): {"direct": q * direct_mean,
-                     "oracle": report["offline_seconds"] + q * online_mean}
-            for q in (10, 100, 1000)
-        } if full_coverage else None,
+        'performance_evidence': 'Use measured fixed-workload batches; validation-point timings do not estimate a break-even threshold.',
         "price_gap_interpretation": "Direct simplex and the valid affine dual selector may differ under dual nonuniqueness.",
     }
     (args.oracle_dir / "validation.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(f"{len(checks)} direct checks; status {result['status']}; "
           f"max selector dual gap {result['maximums']['selector_dual_gap_usd']:.3e} USD; "
-          f"max price-selection gap {result['maximums']['selector_vs_direct_price_gap_usd_per_mwh']:.3g} USD/MWh; "
-          f"estimated break-even {result['break_even_queries_estimate']}")
+          f"max price-selection gap {result['maximums']['selector_vs_direct_price_gap_usd_per_mwh']:.3g} USD/MWh")
     if not passed:
         raise SystemExit("interpolated complete-dual validation failed")
 
