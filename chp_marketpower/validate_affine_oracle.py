@@ -10,10 +10,10 @@ from pathlib import Path
 import numpy as np
 
 from engine import PrimalCHPLP, load_case
-from price_vulnerability.affine_oracle import audited_solution, dual_audit_passed, query
+from price_vulnerability.affine_oracle import audited_solution, dual_audit_passed, query, bid_adder_matrix
 
 
-def validate_point(generators, network, generator_index, delta, k, data, persistent=None, *, aggregate_output=False):
+def validate_point(generators, network, generator_index, delta, k, data, persistent=None, *, aggregate_output=False, hour=None):
     from gurobi_compat import GRB
 
     boundaries = data["boundaries"]
@@ -23,8 +23,7 @@ def validate_point(generators, network, generator_index, delta, k, data, persist
         delta, boundaries, data["values"], data["prices"]
     )
     if persistent is None:
-        adders = np.zeros((len(generators), network.T))
-        adders[generator_index] = delta
+        adders = bid_adder_matrix(len(generators), network.T, generator_index, delta, hour)
         solver = PrimalCHPLP(
             generators, network, bid_adders=adders, method=1, crossover=1,
             feasibility_tol=1e-9, optimality_tol=1e-9, use_output_vars=aggregate_output,
@@ -32,7 +31,7 @@ def validate_point(generators, network, generator_index, delta, k, data, persist
         _, direct_value, success = solver.solve()
         if not success or solver._model.Status != GRB.OPTIMAL:
             raise RuntimeError(f"direct CHP did not reach OPTIMAL at {delta:g}")
-        direct = audited_solution(solver, generator_index, delta, direct_value)
+        direct = audited_solution(solver, generator_index, delta, direct_value, hour=hour)
     else:
         direct = persistent.solve(delta)
         direct_value, solver = direct.value, persistent.solver
@@ -111,8 +110,9 @@ def main() -> None:
     )
     from price_vulnerability.persistent_chp import PersistentCHP
     aggregate_output = scope.get('aggregate_output', False)
+    hour = scope['bid_hour_1based']-1 if 'bid_hour_1based' in scope else None
     persistent = PersistentCHP(generators, network, scope['generator_index'],
-                               aggregate_output=aggregate_output) if args.persistent_direct else None
+                               aggregate_output=aggregate_output, hour=hour) if args.persistent_direct else None
     with np.load(args.oracle_dir / "oracle.npz") as archive:
         # NPZ access decompresses a whole array; load each witness block once, not per query.
         data = {key:archive[key] for key in ('boundaries', 'values', 'prices', 'eq_duals',
@@ -125,7 +125,7 @@ def main() -> None:
             validate_point(
                 generators, network, scope["generator_index"],
                 float(boundaries[k] + fraction * (boundaries[k + 1] - boundaries[k])),
-                k, data, persistent, aggregate_output=aggregate_output,
+                k, data, persistent, aggregate_output=aggregate_output, hour=hour,
             )
             for k in range(len(ready)) if ready[k]
             for fraction in args.fractions
@@ -138,7 +138,7 @@ def main() -> None:
                 raise ValueError("extra validation delta lies in an uncovered interval")
             checks.append(validate_point(
                 generators, network, scope["generator_index"], delta, k, data, persistent,
-                aggregate_output=aggregate_output,
+                aggregate_output=aggregate_output, hour=hour,
             ))
         samples = [float(0.5 * (boundaries[k] + boundaries[k + 1]))
                    for k in range(len(ready)) if ready[k]]

@@ -90,6 +90,8 @@ def assess(oracle_dir, out_dir, *, max_solves=400, tolerance=1e-5):
     audit, compression, compact = load_matched_compact(oracle_dir)
     digest = compression['source_sha256']
     scope = audit['scope']
+    if scope.get('bid_hour_1based') is not None:
+        raise ValueError('This physical-profit study supports all-day adders only, not a single-hour price map')
     gens, net = load_case(scope['case'], scope['network'], scope['T'], scope['segments'], scope['congestion'])
     g = scope['generator_index']
     slopes = gens[g].pwl_slopes

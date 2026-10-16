@@ -12,13 +12,13 @@ import numpy as np
 
 from engine import PrimalCHPLP, load_case
 from price_vulnerability.oracle_compression import query_compact
+from price_vulnerability.affine_oracle import bid_adder_matrix
 
 
-def _solve_fresh(generators, network, g: int, delta: float, *, aggregate_output=False) -> tuple[float, np.ndarray]:
+def _solve_fresh(generators, network, g: int, delta: float, *, aggregate_output=False, hour=None) -> tuple[float, np.ndarray]:
     from gurobi_compat import GRB
 
-    adders = np.zeros((len(generators), network.T))
-    adders[g] = delta
+    adders = bid_adder_matrix(len(generators), network.T, g, delta, hour)
     solver = PrimalCHPLP(generators, network, bid_adders=adders,
                          method=1, crossover=1,
                          feasibility_tol=1e-9, optimality_tol=1e-9, use_output_vars=aggregate_output)
@@ -30,13 +30,12 @@ def _solve_fresh(generators, network, g: int, delta: float, *, aggregate_output=
 
 def _reoptimize_workload(generators, network, g: int,
                          deltas: np.ndarray, *, aggregate_output=False,
-                         cumulative_trace=None) -> tuple[float, list[float], list[np.ndarray]]:
+                         cumulative_trace=None, hour=None) -> tuple[float, list[float], list[np.ndarray]]:
     import coptpy as cp
     from gurobi_compat import GRB
 
     first = float(deltas[0])
-    adders = np.zeros((len(generators), network.T))
-    adders[g] = first
+    adders = bid_adder_matrix(len(generators), network.T, g, first, hour)
     start = time.perf_counter()
     solver = PrimalCHPLP(generators, network, bid_adders=adders,
                          method=1, crossover=1,
@@ -45,7 +44,7 @@ def _reoptimize_workload(generators, network, g: int,
     if not success or solver._model.Status != GRB.OPTIMAL:
         raise RuntimeError("initial reusable CHP model failed")
     model = solver._model
-    direction = solver.bid_adder_direction(g)
+    direction = solver.bid_adder_direction(g, hour)
     all_variables = model.getVars()
     changed = np.flatnonzero(direction)
     variables = [all_variables[int(k)] for k in changed]
@@ -99,6 +98,7 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
             (oracle_dir / "oracle.npz").read_bytes()).hexdigest():
         raise ValueError("compact oracle was built from a different raw witness version")
     scope = build["scope"]
+    hour = scope['bid_hour_1based']-1 if 'bid_hour_1based' in scope else None
     generators, network = load_case(
         scope["case"], scope["network"], scope["T"],
         scope["segments"], scope["congestion"],
@@ -132,7 +132,7 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
     if not skip_fresh:
         started = time.perf_counter()
         direct_values = [_solve_fresh(generators, network, scope["generator_index"], float(delta),
-                                      aggregate_output=scope.get('aggregate_output', False))[0]
+                                      aggregate_output=scope.get('aggregate_output', False), hour=hour)[0]
                          for delta in deltas]
         fresh_seconds = time.perf_counter() - started
     reopt_trace = [] if record_trace else None
@@ -140,6 +140,7 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
         generators, network, scope["generator_index"], deltas,
         aggregate_output=scope.get('aggregate_output', False),
         cumulative_trace=reopt_trace,
+        hour=hour,
     )
     max_value_error = float(np.max(np.abs(np.asarray(online_values) - reopt_values)))
     if direct_values is not None:

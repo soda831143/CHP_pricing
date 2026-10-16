@@ -27,6 +27,7 @@ def main() -> None:
     parser.add_argument("--query", type=float, help="Query a previously built oracle without a CHP solve")
     parser.add_argument("--case", choices=("6", "30", "118"), default="6")
     parser.add_argument("--generator", type=int, default=1, help="0-based generator index")
+    parser.add_argument('--bid-hour', type=int, help='Only perturb this 1-based hour; omitted means all hours')
     parser.add_argument("--network", choices=("single", "ptdf"), default="ptdf")
     parser.add_argument("--congestion", choices=("tight", "moderate", "relaxed"), default="tight")
     parser.add_argument("--T", type=int, default=24)
@@ -54,6 +55,9 @@ def main() -> None:
     parser.add_argument("--seed-delta", type=float,
                         help="With --resume-from, learn the uncovered interval containing this query")
     args = parser.parse_args()
+    if args.bid_hour is not None and (not 1 <= args.bid_hour <= args.T or not args.discover):
+        parser.error('bid-hour must be in 1..T and applies to discovery; queries use archived scope')
+    hour = args.bid_hour-1 if args.bid_hour is not None else None
     if args.checkpoint_every < 0:
         parser.error('checkpoint-every must be nonnegative')
     oracle_file = args.out_dir / "oracle.npz"
@@ -83,7 +87,8 @@ def main() -> None:
             )
             with contextlib.redirect_stdout(io.StringIO()):
                 solved = solve_endpoint(generators, network, scope["generator_index"], args.query,
-                                         aggregate_output=scope.get('aggregate_output', False))
+                                         aggregate_output=scope.get('aggregate_output', False),
+                                         hour=scope['bid_hour_1based']-1 if 'bid_hour_1based' in scope else None)
             value, price = solved.value, solved.price
         print(json.dumps({"delta": args.query, "value": value,
                           "nodal_price": price.tolist(),
@@ -115,10 +120,12 @@ def main() -> None:
                  "generator_index": args.generator, "parameter": "all-day absolute adder"}
         if args.aggregate_output:
             scope['aggregate_output'] = True
-        persistent = PersistentCHP(generators, network, args.generator, aggregate_output=args.aggregate_output)
+        if args.bid_hour is not None:
+            scope.update(parameter='single-hour absolute adder', bid_hour_1based=args.bid_hour)
+        persistent = PersistentCHP(generators, network, args.generator, aggregate_output=args.aggregate_output, hour=hour)
         endpoint_solve = (persistent.solve if args.endpoint_solver == 'persistent' else
                           lambda delta: solve_endpoint(generators, network, args.generator, delta,
-                                                       aggregate_output=args.aggregate_output))
+                                                       aggregate_output=args.aggregate_output, hour=hour))
         solve_count = 0
         def solve(delta):
             nonlocal solve_count

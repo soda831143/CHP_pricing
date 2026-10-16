@@ -30,6 +30,8 @@ def assess(oracle_dir, lower_rho=.4, upper_rho=.45):
             or compression['source_sha256'] != hashlib.sha256((oracle_dir/'oracle.npz').read_bytes()).hexdigest()):
         raise ValueError('Need a complete, source-matched oracle')
     scope = audit['scope']
+    if scope.get('bid_hour_1based') is not None:
+        raise ValueError('This physical-profit study supports all-day adders only')
     gens, net = load_case(scope['case'], scope['network'], scope['T'], scope['segments'], scope['congestion'])
     g = scope['generator_index']
     slopes = gens[g].pwl_slopes

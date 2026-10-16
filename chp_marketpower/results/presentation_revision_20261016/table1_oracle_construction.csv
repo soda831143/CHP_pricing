@@ -1,0 +1,4 @@
+instance,rho_range,lp_variables,lp_rows,chp_solves,value_intervals,selected_price_segments,offline_seconds,complete_price_coverage,compact_bytes,timing_statistic
+30-G1,0-50%,20717,69923,154,78,83,41.9612639999832,1.0,93223,single archived construction
+30-G2,0-50%,20717,69923,15,8,8,5.7742967999656685,1.0,8208,single archived construction
+118-G11,0-50%,198068,648378,205,103,103,309.7227242999943,1.0,53071,single archived construction

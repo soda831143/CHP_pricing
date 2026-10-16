@@ -19,6 +19,8 @@ def compare(oracle_dir: Path, delta: float) -> dict:
     if report["status"] not in {"numerically_validated", "numerically_validated_partial"}:
         raise ValueError("oracle audit did not pass")
     scope = report["scope"]
+    if scope.get('bid_hour_1based') is not None:
+        raise ValueError('This physical settlement comparison supports all-day adders only')
     generators, network = load_case(
         scope["case"], scope["network"], scope["T"],
         scope["segments"], scope["congestion"],

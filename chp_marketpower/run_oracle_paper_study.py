@@ -200,8 +200,8 @@ def main():
     args = parser.parse_args()
     if args.stage in ('application', 'figures'):
         scope = read(args.oracle_dir/'audit.json')['scope']
-        if scope['case'] != '30' or scope['generator_index'] != 0:
-            parser.error('These paper application figures use the declared 30-G1 case')
+        if scope['case'] != '30' or scope['generator_index'] != 0 or scope.get('bid_hour_1based') is not None:
+            parser.error('These historical application figures use the all-day 30-G1 case only')
     if args.stage == 'figures' and (args.timing_dir is None or args.application_dir is None):
         parser.error('Figures require timing-dir and application-dir')
     if args.output.exists():
