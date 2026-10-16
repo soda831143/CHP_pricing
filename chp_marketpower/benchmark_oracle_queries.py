@@ -14,14 +14,14 @@ from engine import PrimalCHPLP, load_case
 from price_vulnerability.oracle_compression import query_compact
 
 
-def _solve_fresh(generators, network, g: int, delta: float) -> tuple[float, np.ndarray]:
+def _solve_fresh(generators, network, g: int, delta: float, *, aggregate_output=False) -> tuple[float, np.ndarray]:
     from gurobi_compat import GRB
 
     adders = np.zeros((len(generators), network.T))
     adders[g] = delta
     solver = PrimalCHPLP(generators, network, bid_adders=adders,
                          method=1, crossover=1,
-                         feasibility_tol=1e-9, optimality_tol=1e-9)
+                         feasibility_tol=1e-9, optimality_tol=1e-9, use_output_vars=aggregate_output)
     _, value, success = solver.solve()
     if not success or solver._model.Status != GRB.OPTIMAL:
         raise RuntimeError(f"fresh CHP failed at delta={delta:g}")
@@ -29,7 +29,7 @@ def _solve_fresh(generators, network, g: int, delta: float) -> tuple[float, np.n
 
 
 def _reoptimize_workload(generators, network, g: int,
-                         deltas: np.ndarray) -> tuple[float, list[float], list[np.ndarray]]:
+                         deltas: np.ndarray, *, aggregate_output=False) -> tuple[float, list[float], list[np.ndarray]]:
     import coptpy as cp
     from gurobi_compat import GRB
 
@@ -39,7 +39,7 @@ def _reoptimize_workload(generators, network, g: int,
     start = time.perf_counter()
     solver = PrimalCHPLP(generators, network, bid_adders=adders,
                          method=1, crossover=1,
-                         feasibility_tol=1e-9, optimality_tol=1e-9)
+                         feasibility_tol=1e-9, optimality_tol=1e-9, use_output_vars=aggregate_output)
     _, first_value, success = solver.solve()
     if not success or solver._model.Status != GRB.OPTIMAL:
         raise RuntimeError("initial reusable CHP model failed")
@@ -53,7 +53,9 @@ def _reoptimize_workload(generators, network, g: int,
     prices = [solver.raw_nodal_price.copy()]
     n_eq = len(solver._all_eq_duals)
     rows = model.getConstrs()
-    balance_rows = [rows[k] for k in range(n_eq-network.T, n_eq)]
+    # Aggregate output-link equalities follow, rather than precede, the balance block.
+    balance_end = n_eq-(len(generators)*network.T if aggregate_output else 0)
+    balance_rows = [rows[k] for k in range(balance_end-network.T, balance_end)]
     n_line_rows = 2*network.N_line*network.T if not network.is_single_node else 0
     line_rows = [rows[k] for k in range(len(rows)-n_line_rows, len(rows))]
     for delta in deltas[1:]:
@@ -116,11 +118,13 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
     fresh_seconds = None
     if not skip_fresh:
         started = time.perf_counter()
-        direct_values = [_solve_fresh(generators, network, scope["generator_index"], float(delta))[0]
+        direct_values = [_solve_fresh(generators, network, scope["generator_index"], float(delta),
+                                      aggregate_output=scope.get('aggregate_output', False))[0]
                          for delta in deltas]
         fresh_seconds = time.perf_counter() - started
     reopt_seconds, reopt_values, reopt_prices = _reoptimize_workload(
         generators, network, scope["generator_index"], deltas,
+        aggregate_output=scope.get('aggregate_output', False),
     )
     max_value_error = float(np.max(np.abs(np.asarray(online_values) - reopt_values)))
     if direct_values is not None:

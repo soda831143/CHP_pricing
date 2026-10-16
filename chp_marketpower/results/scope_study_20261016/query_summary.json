@@ -1,0 +1,110 @@
+{
+  "rows": [
+    {
+      "case": "6",
+      "repeat": 1,
+      "queries": 24,
+      "reopt_seconds": 3.3630772000178695,
+      "oracle_seconds": 16.11924180010101
+    },
+    {
+      "case": "6",
+      "repeat": 1,
+      "queries": 100,
+      "reopt_seconds": 10.011118200025521,
+      "oracle_seconds": 16.116405000037048
+    },
+    {
+      "case": "6",
+      "repeat": 2,
+      "queries": 24,
+      "reopt_seconds": 3.360448300023563,
+      "oracle_seconds": 16.116014099970926
+    },
+    {
+      "case": "6",
+      "repeat": 2,
+      "queries": 100,
+      "reopt_seconds": 9.794576000014786,
+      "oracle_seconds": 16.11621250002645
+    },
+    {
+      "case": "6",
+      "repeat": 3,
+      "queries": 24,
+      "reopt_seconds": 3.396125800034497,
+      "oracle_seconds": 16.115889000007883
+    },
+    {
+      "case": "6",
+      "repeat": 3,
+      "queries": 100,
+      "reopt_seconds": 9.72067969996715,
+      "oracle_seconds": 16.116217700007837
+    },
+    {
+      "case": "6",
+      "repeat": 1,
+      "queries": 1000,
+      "reopt_seconds": 78.49254309997195,
+      "oracle_seconds": 16.120568500016816
+    },
+    {
+      "case": "30",
+      "repeat": 1,
+      "queries": 24,
+      "reopt_seconds": 10.113202800042927,
+      "oracle_seconds": 42.51500569994096
+    },
+    {
+      "case": "30",
+      "repeat": 1,
+      "queries": 100,
+      "reopt_seconds": 36.60557009995682,
+      "oracle_seconds": 42.51549309998518
+    },
+    {
+      "case": "30",
+      "repeat": 2,
+      "queries": 24,
+      "reopt_seconds": 10.31969079998089,
+      "oracle_seconds": 42.51518919994123
+    },
+    {
+      "case": "30",
+      "repeat": 2,
+      "queries": 100,
+      "reopt_seconds": 36.92040579998866,
+      "oracle_seconds": 42.5154959000065
+    },
+    {
+      "case": "30",
+      "repeat": 3,
+      "queries": 24,
+      "reopt_seconds": 10.152204399986658,
+      "oracle_seconds": 42.515037199889775
+    },
+    {
+      "case": "30",
+      "repeat": 3,
+      "queries": 100,
+      "reopt_seconds": 36.942764200037345,
+      "oracle_seconds": 42.515348199929576
+    },
+    {
+      "case": "30",
+      "repeat": 1,
+      "queries": 1000,
+      "reopt_seconds": 276.2359830000205,
+      "oracle_seconds": 42.521043699933216
+    },
+    {
+      "case": "118",
+      "repeat": 1,
+      "queries": 24,
+      "reopt_seconds": 75.49039939994691,
+      "oracle_seconds": 311.5930892000324
+    }
+  ],
+  "note": "6/30: three repeats at Q=24,100 and one Q=1000 batch; 118: one Q=24 scalability batch. Single batches are not variance estimates. Actual shuffled workloads; no extrapolated speedup."
+}

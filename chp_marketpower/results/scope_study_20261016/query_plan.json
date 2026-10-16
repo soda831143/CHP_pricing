@@ -1,0 +1,33 @@
+{
+  "seed": 20261016,
+  "order": "shuffled",
+  "workloads": {
+    "6": {
+      "Q": [
+        24,
+        100
+      ],
+      "repeats": 3,
+      "single_batch_Q": [
+        1000
+      ]
+    },
+    "30": {
+      "Q": [
+        24,
+        100
+      ],
+      "repeats": 3,
+      "single_batch_Q": [
+        1000
+      ]
+    },
+    "118": {
+      "Q": [
+        24
+      ],
+      "repeats": 1
+    }
+  },
+  "benchmark_source_sha256": "2eef56e2475fed45a841c245c42dc8dbcbedc0933e9b03c0276cf5e1dc15bbc3"
+}

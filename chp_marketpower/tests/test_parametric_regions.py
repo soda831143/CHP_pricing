@@ -23,18 +23,24 @@ def point(delta, primal):
 
 @pytest.mark.parametrize('primal,expected', [([1., 0.], [0., .5]), ([0., 1.], [.5, 1.]),
                                            ([.5, .5], [.5, .5])])
-@pytest.mark.parametrize('formulation', ['full_dual', 'active_cone'])
+@pytest.mark.parametrize('formulation', ['full_dual', 'active_cone', 'persistent_cone'])
 def test_full_dual_region_finds_exact_toy_interval_including_degenerate_point(primal, expected, formulation):
     p = SimpleNamespace(
         solver=True, matrices=(sparse.csr_matrix([[1., 1.]]), np.array([1.]), 0, 0,
                                sparse.csr_matrix((0, 2)), np.empty(0)),
         c0=np.array([0., 1.]), direction=np.array([1., -1.]), lb=np.zeros(2), ub=np.ones(2),
-        network=SimpleNamespace(is_single_node=True))
+        network=SimpleNamespace(is_single_node=True, T=1))
     expander = OptimalityRegion(p, 0., 1., formulation)
     a, b = expander.expand(point(.5, primal))
     assert [a.delta, b.delta] == pytest.approx(expected, abs=1e-8)
     assert dual_audit_passed(a) and dual_audit_passed(b)
     assert expander.calls == 2
+    if formulation == 'persistent_cone':
+        saved_model = expander.model
+        other = [0., 1.] if primal == [1., 0.] else [1., 0.]
+        left, right = expander.expand(point(.5, other))
+        assert expander.model is saved_model
+        assert [left.delta, right.delta] == pytest.approx([.5, 1.] if other == [0., 1.] else [0., .5], abs=1e-8)
 
 
 def test_interior_common_primal_avoids_rejection_due_to_degenerate_endpoint_choices():
@@ -67,3 +73,42 @@ def test_common_witness_bound_retains_the_endpoint_primal_dual_gap():
     assert result.max_value_gap == pytest.approx(1e-7, abs=1e-12)
     fast = interval_status(a, b, witness_lines=(np.array([0., 0.]), np.array([1., 1.])))
     assert fast.max_value_gap == pytest.approx(result.max_value_gap, abs=1e-12)
+
+
+def test_common_physical_schedule_requires_endpoint_global_bounds():
+    from run_profit_interval import common_schedule_gap
+    assert common_schedule_gap([100., 120.], [100., 120.]) == 0.
+    assert common_schedule_gap([100., 120.], [100., 119.]) == 1.
+    with pytest.raises(ValueError):
+        common_schedule_gap([100., 120.], [101., 120.])
+
+
+def test_cached_endpoint_values_preserve_interval_gate():
+    a, b = point(0., [1., 0.]), point(.4, [1., 0.])
+    assert interval_status(a, b) == interval_status(a, b, primal_values=(a.value, b.value))
+
+
+def test_compression_can_use_a_common_witness_saved_outside_the_interval():
+    from price_vulnerability.oracle_compression import compress_full_oracle
+    boundaries = np.array([-1., -1e-10, 0., 1.])
+    objectives = np.array([[d, 1-d, 0.] for d in boundaries])
+    primals = np.array([[1., 0., 0.], [0., 0., 1.], [1., 0., 0.], [0., 1., 0.]])
+    values = np.array([-1., -1e-10, 0., 0.])
+    result = compress_full_oracle(boundaries, values, values, objectives, primals,
+                                  np.zeros((4, 1, 1)), np.ones(3, bool))
+    assert result.value_indices.tolist() == [0, 2, 3]
+    assert result.value_witness_indices[-1] == 1
+
+
+@pytest.mark.parametrize('aggregate_output', [False, True])
+def test_native_query_baseline_reads_balance_rows_with_or_without_output_links(aggregate_output):
+    from engine import load_case
+    from benchmark_oracle_queries import _reoptimize_workload
+    from price_vulnerability.affine_oracle import solve_endpoint
+    generators, network = load_case('6', 'ptdf', 3, 3, 'tight')
+    elapsed, values, prices = _reoptimize_workload(generators, network, 1,
+        np.array([.2, -.2, 0.]), aggregate_output=aggregate_output)
+    assert elapsed > 0 and np.asarray(prices).shape == (3, 6, 3)
+    expected = solve_endpoint(generators, network, 1, -.2, aggregate_output=aggregate_output)
+    assert abs(values[1]-expected.value) < 1e-6
+    assert np.allclose(prices[1], expected.price, atol=1e-6)

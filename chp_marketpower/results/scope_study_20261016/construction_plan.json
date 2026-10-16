@@ -1,0 +1,30 @@
+{
+  "rho": [
+    0.0,
+    0.5
+  ],
+  "repeats": 3,
+  "checkpoint_every": 0,
+  "cases": {
+    "6": [
+      1,
+      5.9999375
+    ],
+    "30": [
+      0,
+      20.991
+    ],
+    "118": [
+      10,
+      18.165
+    ]
+  },
+  "source_sha256": {
+    "run_affine_oracle.py": "28abf4d3c807b837ce008a3ef39579545bb9490f55367e03c6f74d08e2254ec5",
+    "run_region_oracle.py": "aa4e7e74965cd8db501ce791b42dab994e7a49cf157b79300400425993434aae",
+    "price_vulnerability/optimality_region.py": "e0dc6210433998ee4b6214f6781dcc87b51cc5ba72e817884df1492a16183b55",
+    "price_vulnerability/budgeted_oracle.py": "f017cea45ac7fcab0d3e0592e4b3a0f4194635708e4fce934b01d0a31faacf83",
+    "price_vulnerability/persistent_chp.py": "7b9c839b4cc4b4ed3e3f4e31e6c396b1a29572ee6a129e677740916cb1b89150"
+  },
+  "purpose": "Isolate construction costs on identical domains and archive policies. The 118 run is separate, not a profit experiment."
+}

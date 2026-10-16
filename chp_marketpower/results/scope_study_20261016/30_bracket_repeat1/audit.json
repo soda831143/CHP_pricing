@@ -1,0 +1,1278 @@
+{
+  "status": "numerically_validated",
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 0,
+    "parameter": "all-day absolute adder"
+  },
+  "method": "largest numerical primal-upper/dual-chord gap; complete-dual interval gate",
+  "endpoint_solver": "persistent",
+  "new_chp_solves": 154,
+  "inherited_offline_seconds": 0.0,
+  "persistent_timing": {
+    "setup_seconds": 3.6080574999796227,
+    "reoptimization_seconds": 33.19499129959149,
+    "extraction_audit_seconds": 3.8194582003634423
+  },
+  "value_tolerance_usd": 1e-06,
+  "price_tolerance_usd": 1e-06,
+  "solved_points": 154,
+  "max_points": 600,
+  "chp_solves": 154,
+  "auxiliary_lps": 0,
+  "completion_requested": true,
+  "intervals": [
+    {
+      "left": 0.0,
+      "right": 0.6599222221975165,
+      "max_value_gap": 0.0,
+      "probe_delta": 0.32996111109875825,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.6599222221975165,
+      "right": 0.6786878313442841,
+      "max_value_gap": 0.0,
+      "probe_delta": 0.6693050267709003,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 0.6786878313442841,
+      "right": 2.1532555547114764,
+      "max_value_gap": 0.0,
+      "probe_delta": 1.4159716930278803,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 2.1532555547114764,
+      "right": 3.7393779156733213,
+      "max_value_gap": 0.0,
+      "probe_delta": 2.946316735192399,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 3.7393779156733213,
+      "right": 4.524798412704421,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.132088164188872,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 4.524798412704421,
+      "right": 4.5526277764960295,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.538713094600226,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 4.5526277764960295,
+      "right": 4.79615396824333,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.674390872369679,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 4.79615396824333,
+      "right": 5.096606973430391,
+      "max_value_gap": 0.0,
+      "probe_delta": 4.946380470836861,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 5.096606973430391,
+      "right": 6.075711111116073,
+      "max_value_gap": 0.0,
+      "probe_delta": 5.586159042273232,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 6.075711111116073,
+      "right": 6.087009646449156,
+      "max_value_gap": 0.0,
+      "probe_delta": 6.081360378782614,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 6.087009646449156,
+      "right": 6.166999999981226,
+      "max_value_gap": 0.0,
+      "probe_delta": 6.1270048232151915,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 6.166999999981226,
+      "right": 6.668292711339944,
+      "max_value_gap": 0.0,
+      "probe_delta": 6.417646355660585,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 6.668292711339944,
+      "right": 7.631000000014151,
+      "max_value_gap": 0.0,
+      "probe_delta": 7.1496463556770475,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 7.631000000014151,
+      "right": 7.639158905359913,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 7.635079452687032,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 7.639158905359913,
+      "right": 8.916999999497543,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 8.278079452428727,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 8.916999999497543,
+      "right": 9.462311607176334,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 9.189655803336938,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 9.462311607176334,
+      "right": 10.024000000002802,
+      "max_value_gap": 8.731149137020111e-11,
+      "probe_delta": 10.023999999994173,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 10.024000000002802,
+      "right": 10.44476960708359,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 10.234384803543197,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 10.44476960708359,
+      "right": 10.637799999983963,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 10.541284803533777,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 10.637799999983963,
+      "right": 10.65462729551505,
+      "max_value_gap": 0.0,
+      "probe_delta": 10.646213647749507,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 10.65462729551505,
+      "right": 10.704200000027578,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 10.704200000009177,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 10.704200000027578,
+      "right": 11.05583042302921,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 10.880015211528395,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.05583042302921,
+      "right": 11.100639999991705,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.078235211510457,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.100639999991705,
+      "right": 11.189265038176387,
+      "max_value_gap": 8.731149137020111e-11,
+      "probe_delta": 11.100639999994911,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.189265038176387,
+      "right": 11.241440000001601,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.215352519088995,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.241440000001601,
+      "right": 11.264241869754732,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.252840934878167,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.264241869754732,
+      "right": 11.293000000026723,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.278620934890728,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.293000000026723,
+      "right": 11.430841964668794,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.361920982347758,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 11.430841964668794,
+      "right": 11.438000000002889,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.43442098233584,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.438000000002889,
+      "right": 11.513113497644776,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.475556748823832,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.513113497644776,
+      "right": 11.672666666640247,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.59289008214251,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.672666666640247,
+      "right": 11.685152602729396,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.678909634684821,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.685152602729396,
+      "right": 11.721599999999953,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.703376301364674,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 11.721599999999953,
+      "right": 11.794999999997255,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.758299999998604,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.794999999997255,
+      "right": 11.814657845296093,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.804828922646674,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.814657845296093,
+      "right": 11.86733333332382,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.840995589309957,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.86733333332382,
+      "right": 11.891707612682387,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 11.879520473003105,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.891707612682387,
+      "right": 11.92666666669541,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.9091871396889,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.92666666669541,
+      "right": 11.976833092516326,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.951749879605869,
+      "common_primal_gap": 3.4924596548080444e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.976833092516326,
+      "right": 11.99250000000059,
+      "max_value_gap": 0.0,
+      "probe_delta": 11.984666546258458,
+      "common_primal_gap": 3.4924596548080444e-10,
+      "price_ready": true
+    },
+    {
+      "left": 11.99250000000059,
+      "right": 12.01027827373289,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.00138913686674,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.01027827373289,
+      "right": 12.044000000000363,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.027139136866627,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.044000000000363,
+      "right": 12.082565907663174,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.063282953831768,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.082565907663174,
+      "right": 12.161333333332854,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.121949620498015,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.161333333332854,
+      "right": 12.21186958238391,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.186601457858382,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.21186958238391,
+      "right": 12.4242499998957,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 12.318059791139806,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.4242499998957,
+      "right": 12.496672917213,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 12.46046145855435,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.496672917213,
+      "right": 12.512249999987189,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.504461458600094,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.512249999987189,
+      "right": 12.539057070975522,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.525653535481355,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.539057070975522,
+      "right": 12.541600000000727,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.540328535488126,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.541600000000727,
+      "right": 12.581892877954433,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.561746438977579,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.581892877954433,
+      "right": 12.658933333331557,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.620413105642996,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.658933333331557,
+      "right": 12.659686173190359,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.659309753260958,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.659686173190359,
+      "right": 12.776266666770882,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.71797641998062,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.776266666770882,
+      "right": 12.824301112457116,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.800283889613999,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.824301112457116,
+      "right": 12.835600000031695,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.829950556244405,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.835600000031695,
+      "right": 12.845888746108892,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.840744373070294,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.845888746108892,
+      "right": 12.846750000000526,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.846319373054708,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.846750000000526,
+      "right": 12.852902285427932,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 12.846750000003018,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.852902285427932,
+      "right": 12.880199999537915,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.866551142482923,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.880199999537915,
+      "right": 12.899563596046352,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.889881797792134,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.899563596046352,
+      "right": 12.901657142918916,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.900610369482635,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.901657142918916,
+      "right": 12.908206851262262,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.90493199709059,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.908206851262262,
+      "right": 12.952000000065594,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.930103425663928,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.952000000065594,
+      "right": 12.952499999918102,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.952249999991848,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 12.952499999918102,
+      "right": 12.952999999732047,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.952749999825073,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 12.952999999732047,
+      "right": 13.02196402865012,
+      "max_value_gap": 0.0,
+      "probe_delta": 12.987482014191084,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.02196402865012,
+      "right": 13.209384615380587,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.115674322015353,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.209384615380587,
+      "right": 13.299422241853287,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.254403428616937,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.299422241853287,
+      "right": 13.306923076929198,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.303172659391244,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.306923076929198,
+      "right": 13.322828874005468,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.314875975467334,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.322828874005468,
+      "right": 13.331714285712344,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.327271579858905,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.331714285712344,
+      "right": 13.357492684465015,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.34460348508868,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.357492684465015,
+      "right": 13.382000000002689,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.369746342233853,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.382000000002689,
+      "right": 13.408857956021356,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.395428978012022,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.408857956021356,
+      "right": 13.432285714286339,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.420571835153847,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.432285714286339,
+      "right": 13.441629237366536,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.436957475826437,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.441629237366536,
+      "right": 13.532857142789167,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.487243190077852,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.532857142789167,
+      "right": 13.566273071159976,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.549565106974573,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.566273071159976,
+      "right": 13.583142857145313,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.574707964152644,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 13.583142857145313,
+      "right": 13.64857987563557,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.61586136639044,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.64857987563557,
+      "right": 13.654000000000382,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.651289937817975,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.654000000000382,
+      "right": 13.658473481798097,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.656236740899239,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.658473481798097,
+      "right": 13.763756708258045,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.71111509502807,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 13.763756708258045,
+      "right": 14.016360365245214,
+      "max_value_gap": 0.0,
+      "probe_delta": 13.89005853675163,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.016360365245214,
+      "right": 14.090007722055548,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.053184043650381,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 14.090007722055548,
+      "right": 14.343211415307193,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.21660956868137,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.343211415307193,
+      "right": 14.35799999999966,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.350605707653425,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.35799999999966,
+      "right": 14.364773660692983,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.361386830346321,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.364773660692983,
+      "right": 14.380526888319903,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.372650274506443,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.380526888319903,
+      "right": 14.384059297145557,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.38229309273273,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.384059297145557,
+      "right": 14.388121044316629,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.386090170731093,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.388121044316629,
+      "right": 14.391303335001279,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 14.388121044325136,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.391303335001279,
+      "right": 14.395749179232055,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.393526257116667,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.395749179232055,
+      "right": 14.396564722190922,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.39615695071149,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.396564722190922,
+      "right": 14.397884056376009,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.397224389283465,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.397884056376009,
+      "right": 14.412479511298192,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.4051817838371,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.412479511298192,
+      "right": 14.416258735836616,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.414369123567404,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.416258735836616,
+      "right": 14.42024696740719,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 14.4162587358381,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.42024696740719,
+      "right": 14.482404740223062,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.451325853815126,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 14.482404740223062,
+      "right": 14.91944287140498,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.700923805814021,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 14.91944287140498,
+      "right": 15.062000000000076,
+      "max_value_gap": 0.0,
+      "probe_delta": 14.990721435702529,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.062000000000076,
+      "right": 15.086118692916905,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.07405934645849,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.086118692916905,
+      "right": 15.120258735837133,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.10318871437702,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.120258735837133,
+      "right": 15.12159047114761,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.120924603492371,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.12159047114761,
+      "right": 15.192412634391019,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 15.192412634356481,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.192412634391019,
+      "right": 15.48664954684401,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 15.339531090617514,
+      "common_primal_gap": 0.0,
+      "price_ready": true
+    },
+    {
+      "left": 15.48664954684401,
+      "right": 15.5946180826253,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.540633814734655,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.5946180826253,
+      "right": 15.601652396926548,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.598135239775925,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.601652396926548,
+      "right": 15.66409000651945,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.632871201722999,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.66409000651945,
+      "right": 15.699223194351706,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.681656600435577,
+      "common_primal_gap": 1.7462298274040222e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.699223194351706,
+      "right": 15.703276955737543,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.701250075044625,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.703276955737543,
+      "right": 15.711674479147167,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.707475717442355,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.711674479147167,
+      "right": 15.715112129875168,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.713393304511168,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.715112129875168,
+      "right": 15.81221861409918,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.763665371987173,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 15.81221861409918,
+      "right": 15.824258735838134,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.818238674968658,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.824258735838134,
+      "right": 15.859508765899795,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.841883750868964,
+      "common_primal_gap": 1.4551915228366852e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.859508765899795,
+      "right": 15.896412634301583,
+      "max_value_gap": 0.0,
+      "probe_delta": 15.87796070010069,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.896412634301583,
+      "right": 15.976506672943213,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 15.936459653622398,
+      "common_primal_gap": 5.529727786779404e-10,
+      "price_ready": true
+    },
+    {
+      "left": 15.976506672943213,
+      "right": 16.131079300960916,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 16.053792986952065,
+      "common_primal_gap": 5.529727786779404e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.131079300960916,
+      "right": 16.23463438553377,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.182856843247343,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.23463438553377,
+      "right": 16.248723280356497,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 16.241678832945134,
+      "common_primal_gap": 5.820766091346741e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.248723280356497,
+      "right": 16.287688985682323,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 16.26820613301941,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.287688985682323,
+      "right": 16.30997621448169,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.298832600082008,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.30997621448169,
+      "right": 16.3429641421772,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.326470178329444,
+      "common_primal_gap": 1.1641532182693481e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.3429641421772,
+      "right": 16.397976214483652,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.370470178330425,
+      "common_primal_gap": 2.9103830456733704e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.397976214483652,
+      "right": 16.41943527018251,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.408705742333083,
+      "common_primal_gap": 2.9103830456733704e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.41943527018251,
+      "right": 16.424412634300566,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.42192395224154,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.424412634300566,
+      "right": 16.42653459705954,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.425473615680055,
+      "common_primal_gap": 2.6193447411060333e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.42653459705954,
+      "right": 16.469628154506296,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.44808137578292,
+      "common_primal_gap": 2.6193447411060333e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.469628154506296,
+      "right": 16.507718134584344,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.48867314454532,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.507718134584344,
+      "right": 16.57718972428927,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.542453929436807,
+      "common_primal_gap": 2.6193447411060333e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.57718972428927,
+      "right": 16.595100216729758,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.586144970509515,
+      "common_primal_gap": 2.6193447411060333e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.595100216729758,
+      "right": 16.600412634300948,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.597756425515353,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.600412634300948,
+      "right": 16.614822147909237,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.607617391105094,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.614822147909237,
+      "right": 16.635481235596657,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.625151691752947,
+      "common_primal_gap": 8.731149137020111e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.635481235596657,
+      "right": 16.636614479722734,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.636047857659698,
+      "common_primal_gap": 2.9103830456733704e-11,
+      "price_ready": true
+    },
+    {
+      "left": 16.636614479722734,
+      "right": 16.650510636145416,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.643562557934075,
+      "common_primal_gap": 2.6193447411060333e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.650510636145416,
+      "right": 16.789108948706673,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.719809792426044,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.789108948706673,
+      "right": 16.988489583566377,
+      "max_value_gap": 0.0,
+      "probe_delta": 16.888799266136523,
+      "common_primal_gap": 2.6193447411060333e-10,
+      "price_ready": true
+    },
+    {
+      "left": 16.988489583566377,
+      "right": 17.464333647885695,
+      "max_value_gap": 0.0,
+      "probe_delta": 17.226411615726036,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 17.464333647885695,
+      "right": 17.50934546269234,
+      "max_value_gap": 3.1141098588705063e-09,
+      "probe_delta": 17.486839555289016,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 17.50934546269234,
+      "right": 17.569944192516083,
+      "max_value_gap": 3.14321368932724e-09,
+      "probe_delta": 17.539644827604214,
+      "common_primal_gap": 2.9103830456733704e-10,
+      "price_ready": true
+    },
+    {
+      "left": 17.569944192516083,
+      "right": 17.58756768491248,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 17.57875593871428,
+      "common_primal_gap": 2.9103830456733704e-10,
+      "price_ready": true
+    },
+    {
+      "left": 17.58756768491248,
+      "right": 17.653586818433663,
+      "max_value_gap": 0.0,
+      "probe_delta": 17.62057725167307,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 17.653586818433663,
+      "right": 18.08114521022396,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 17.86736601432881,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 18.08114521022396,
+      "right": 18.20224937014857,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 18.141697290186265,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 18.20224937014857,
+      "right": 18.928874329741006,
+      "max_value_gap": 0.0,
+      "probe_delta": 18.56556184994479,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    },
+    {
+      "left": 18.928874329741006,
+      "right": 19.658508375840224,
+      "max_value_gap": 0.0,
+      "probe_delta": 19.293691352790617,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 19.658508375840224,
+      "right": 19.937224216858283,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 19.797866296349255,
+      "common_primal_gap": 2.9103830456733704e-10,
+      "price_ready": true
+    },
+    {
+      "left": 19.937224216858283,
+      "right": 20.45112771124236,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 20.194175964050324,
+      "common_primal_gap": 2.9103830456733704e-10,
+      "price_ready": true
+    },
+    {
+      "left": 20.45112771124236,
+      "right": 20.641224216856976,
+      "max_value_gap": 2.9103830456733704e-11,
+      "probe_delta": 20.546175964049667,
+      "common_primal_gap": 2.0372681319713593e-10,
+      "price_ready": true
+    },
+    {
+      "left": 20.641224216856976,
+      "right": 20.991,
+      "max_value_gap": 5.820766091346741e-11,
+      "probe_delta": 20.641224216857346,
+      "common_primal_gap": 2.3283064365386963e-10,
+      "price_ready": true
+    }
+  ],
+  "price_coverage_fraction": 1.0,
+  "focus_window": null,
+  "parent_oracle": null,
+  "learning_seed_delta": null,
+  "focus_coverage_fraction": null,
+  "max_unresolved_value_gap_usd": 0.0,
+  "max_full_lp_residuals": {
+    "primal_feasibility": 9.094947017729282e-13,
+    "dual_sign": 4.326299318790916e-10,
+    "stationarity": 9.458744898438454e-11,
+    "duality_gap": 3.4051481634378433e-09,
+    "row_complementarity": 2.4152593227007957e-12,
+    "bound_complementarity": 5.245084366833908e-10,
+    "objective_reconstruction": 5.529727786779404e-10,
+    "price_projection": 0.0
+  },
+  "offline_seconds": 41.9612639999832,
+  "checkpoint_every": 0,
+  "lp_dimensions": {
+    "variables": 20717,
+    "rows": 69923
+  },
+  "mean_direct_chp_seconds": 0.2507272610378863,
+  "interpretation": "Uncovered intervals return direct CHP prices; value gaps never certify price accuracy."
+}

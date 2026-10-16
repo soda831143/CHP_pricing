@@ -1,0 +1,16 @@
+{
+  "case": "30",
+  "method": "persistent_cone",
+  "repeat": 2,
+  "offline_seconds": 91.98054080002476,
+  "postprocess_seconds": 0.846928899991326,
+  "chp_solves": 78,
+  "auxiliary_lps": 152,
+  "value_intervals": 78,
+  "price_segments": 86,
+  "auxiliary_phase_seconds": {
+    "compile_build": 1.8788564002607018,
+    "optimize": 61.34846760000801,
+    "extract_audit": 2.0699718000832945
+  }
+}

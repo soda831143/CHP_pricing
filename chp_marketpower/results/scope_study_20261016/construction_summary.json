@@ -1,0 +1,427 @@
+{
+  "rows": [
+    {
+      "case": "6",
+      "method": "bracket",
+      "repeat": 1,
+      "offline_seconds": 15.965787000022829,
+      "postprocess_seconds": 0.14914130000397563,
+      "chp_solves": 145,
+      "auxiliary_lps": 0,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": null
+    },
+    {
+      "case": "6",
+      "method": "active_cone",
+      "repeat": 1,
+      "offline_seconds": 32.38304149999749,
+      "postprocess_seconds": 0.2254959999700077,
+      "chp_solves": 73,
+      "auxiliary_lps": 142,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": {
+        "compile_build": 5.700368300022092,
+        "optimize": 15.221647999831475,
+        "extract_audit": 1.0726439998834394
+      }
+    },
+    {
+      "case": "6",
+      "method": "persistent_cone",
+      "repeat": 1,
+      "offline_seconds": 25.306078899942804,
+      "postprocess_seconds": 0.22434979997342452,
+      "chp_solves": 73,
+      "auxiliary_lps": 142,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": {
+        "compile_build": 1.0493028996279463,
+        "optimize": 12.717596600588877,
+        "extract_audit": 1.1528636998846196
+      }
+    },
+    {
+      "case": "30",
+      "method": "bracket",
+      "repeat": 1,
+      "offline_seconds": 41.9612639999832,
+      "postprocess_seconds": 0.5520535999676213,
+      "chp_solves": 154,
+      "auxiliary_lps": 0,
+      "value_intervals": 78,
+      "price_segments": 83,
+      "auxiliary_phase_seconds": null
+    },
+    {
+      "case": "30",
+      "method": "active_cone",
+      "repeat": 1,
+      "offline_seconds": 63.19250419997843,
+      "postprocess_seconds": 0.9136363000143319,
+      "chp_solves": 78,
+      "auxiliary_lps": 152,
+      "value_intervals": 78,
+      "price_segments": 83,
+      "auxiliary_phase_seconds": {
+        "compile_build": 9.674554899800569,
+        "optimize": 25.342046100238804,
+        "extract_audit": 1.9021438998170197
+      }
+    },
+    {
+      "case": "30",
+      "method": "persistent_cone",
+      "repeat": 1,
+      "offline_seconds": 92.17903100000694,
+      "postprocess_seconds": 0.8187492999713868,
+      "chp_solves": 78,
+      "auxiliary_lps": 152,
+      "value_intervals": 78,
+      "price_segments": 86,
+      "auxiliary_phase_seconds": {
+        "compile_build": 1.8511298997909762,
+        "optimize": 61.5863529004273,
+        "extract_audit": 2.082401799969375
+      }
+    },
+    {
+      "case": "6",
+      "method": "persistent_cone",
+      "repeat": 2,
+      "offline_seconds": 25.09710020001512,
+      "postprocess_seconds": 0.19630769995274022,
+      "chp_solves": 73,
+      "auxiliary_lps": 142,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": {
+        "compile_build": 1.0498228999204002,
+        "optimize": 12.582301300251856,
+        "extract_audit": 1.1254909995477647
+      }
+    },
+    {
+      "case": "6",
+      "method": "active_cone",
+      "repeat": 2,
+      "offline_seconds": 32.33796949998941,
+      "postprocess_seconds": 0.1945246999966912,
+      "chp_solves": 73,
+      "auxiliary_lps": 142,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": {
+        "compile_build": 5.699223399918992,
+        "optimize": 15.146834399842191,
+        "extract_audit": 1.0612900005071424
+      }
+    },
+    {
+      "case": "6",
+      "method": "bracket",
+      "repeat": 2,
+      "offline_seconds": 16.136789999960456,
+      "postprocess_seconds": 0.12481929996283725,
+      "chp_solves": 145,
+      "auxiliary_lps": 0,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": null
+    },
+    {
+      "case": "30",
+      "method": "persistent_cone",
+      "repeat": 2,
+      "offline_seconds": 91.98054080002476,
+      "postprocess_seconds": 0.846928899991326,
+      "chp_solves": 78,
+      "auxiliary_lps": 152,
+      "value_intervals": 78,
+      "price_segments": 86,
+      "auxiliary_phase_seconds": {
+        "compile_build": 1.8788564002607018,
+        "optimize": 61.34846760000801,
+        "extract_audit": 2.0699718000832945
+      }
+    },
+    {
+      "case": "30",
+      "method": "active_cone",
+      "repeat": 2,
+      "offline_seconds": 62.90007540001534,
+      "postprocess_seconds": 0.8294149999856018,
+      "chp_solves": 78,
+      "auxiliary_lps": 152,
+      "value_intervals": 78,
+      "price_segments": 83,
+      "auxiliary_phase_seconds": {
+        "compile_build": 9.678747500176542,
+        "optimize": 25.164730000018608,
+        "extract_audit": 1.8733329998794943
+      }
+    },
+    {
+      "case": "30",
+      "method": "bracket",
+      "repeat": 2,
+      "offline_seconds": 41.60299210000085,
+      "postprocess_seconds": 0.5216509000165388,
+      "chp_solves": 154,
+      "auxiliary_lps": 0,
+      "value_intervals": 78,
+      "price_segments": 83,
+      "auxiliary_phase_seconds": null
+    },
+    {
+      "case": "6",
+      "method": "bracket",
+      "repeat": 3,
+      "offline_seconds": 15.856190399965271,
+      "postprocess_seconds": 0.12206909997621551,
+      "chp_solves": 145,
+      "auxiliary_lps": 0,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": null
+    },
+    {
+      "case": "6",
+      "method": "active_cone",
+      "repeat": 3,
+      "offline_seconds": 32.123785999952815,
+      "postprocess_seconds": 0.19320420001167804,
+      "chp_solves": 73,
+      "auxiliary_lps": 142,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": {
+        "compile_build": 5.644539800065104,
+        "optimize": 15.128814799769316,
+        "extract_audit": 1.0454403004259802
+      }
+    },
+    {
+      "case": "6",
+      "method": "persistent_cone",
+      "repeat": 3,
+      "offline_seconds": 25.12580739997793,
+      "postprocess_seconds": 0.18622219999087974,
+      "chp_solves": 73,
+      "auxiliary_lps": 142,
+      "value_intervals": 73,
+      "price_segments": 75,
+      "auxiliary_phase_seconds": {
+        "compile_build": 1.0515897002187558,
+        "optimize": 12.646459599898662,
+        "extract_audit": 1.1160522999125533
+      }
+    },
+    {
+      "case": "30",
+      "method": "bracket",
+      "repeat": 3,
+      "offline_seconds": 41.79770880000433,
+      "postprocess_seconds": 0.584010099992156,
+      "chp_solves": 154,
+      "auxiliary_lps": 0,
+      "value_intervals": 78,
+      "price_segments": 83,
+      "auxiliary_phase_seconds": null
+    },
+    {
+      "case": "30",
+      "method": "active_cone",
+      "repeat": 3,
+      "offline_seconds": 63.13266930001555,
+      "postprocess_seconds": 0.8583355999435298,
+      "chp_solves": 78,
+      "auxiliary_lps": 152,
+      "value_intervals": 78,
+      "price_segments": 83,
+      "auxiliary_phase_seconds": {
+        "compile_build": 9.642243199923541,
+        "optimize": 25.421491399989463,
+        "extract_audit": 1.8707978001912124
+      }
+    },
+    {
+      "case": "30",
+      "method": "persistent_cone",
+      "repeat": 3,
+      "offline_seconds": 92.04967320000287,
+      "postprocess_seconds": 0.8297911999979988,
+      "chp_solves": 78,
+      "auxiliary_lps": 152,
+      "value_intervals": 78,
+      "price_segments": 86,
+      "auxiliary_phase_seconds": {
+        "compile_build": 1.8736632002401166,
+        "optimize": 61.462127699749544,
+        "extract_audit": 2.0368407001369633
+      }
+    }
+  ],
+  "summary": [
+    {
+      "case": "6",
+      "method": "bracket",
+      "offline_mean_seconds": 15.986255799982851,
+      "offline_std_seconds": 0.14141521384991432,
+      "chp_solves": [
+        145,
+        145,
+        145
+      ],
+      "auxiliary_lps": [
+        0,
+        0,
+        0
+      ],
+      "value_intervals": [
+        73,
+        73,
+        73
+      ],
+      "price_segments": [
+        75,
+        75,
+        75
+      ]
+    },
+    {
+      "case": "6",
+      "method": "active_cone",
+      "offline_mean_seconds": 32.281598999979906,
+      "offline_std_seconds": 0.13851562557828923,
+      "chp_solves": [
+        73,
+        73,
+        73
+      ],
+      "auxiliary_lps": [
+        142,
+        142,
+        142
+      ],
+      "value_intervals": [
+        73,
+        73,
+        73
+      ],
+      "price_segments": [
+        75,
+        75,
+        75
+      ]
+    },
+    {
+      "case": "6",
+      "method": "persistent_cone",
+      "offline_mean_seconds": 25.176328833311953,
+      "offline_std_seconds": 0.11327989969742745,
+      "chp_solves": [
+        73,
+        73,
+        73
+      ],
+      "auxiliary_lps": [
+        142,
+        142,
+        142
+      ],
+      "value_intervals": [
+        73,
+        73,
+        73
+      ],
+      "price_segments": [
+        75,
+        75,
+        75
+      ]
+    },
+    {
+      "case": "30",
+      "method": "bracket",
+      "offline_mean_seconds": 41.78732163332946,
+      "offline_std_seconds": 0.17936166954756633,
+      "chp_solves": [
+        154,
+        154,
+        154
+      ],
+      "auxiliary_lps": [
+        0,
+        0,
+        0
+      ],
+      "value_intervals": [
+        78,
+        78,
+        78
+      ],
+      "price_segments": [
+        83,
+        83,
+        83
+      ]
+    },
+    {
+      "case": "30",
+      "method": "active_cone",
+      "offline_mean_seconds": 63.075082966669775,
+      "offline_std_seconds": 0.1544855660025283,
+      "chp_solves": [
+        78,
+        78,
+        78
+      ],
+      "auxiliary_lps": [
+        152,
+        152,
+        152
+      ],
+      "value_intervals": [
+        78,
+        78,
+        78
+      ],
+      "price_segments": [
+        83,
+        83,
+        83
+      ]
+    },
+    {
+      "case": "30",
+      "method": "persistent_cone",
+      "offline_mean_seconds": 92.06974833334486,
+      "offline_std_seconds": 0.1007563799779755,
+      "chp_solves": [
+        78,
+        78,
+        78
+      ],
+      "auxiliary_lps": [
+        152,
+        152,
+        152
+      ],
+      "value_intervals": [
+        78,
+        78,
+        78
+      ],
+      "price_segments": [
+        86,
+        86,
+        86
+      ]
+    }
+  ],
+  "note": "Three serial cold construction repeats per case and strategy, final-only full witness archival. Compression separately timed. No presumption that expansion wins."
+}

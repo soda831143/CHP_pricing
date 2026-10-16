@@ -1,5 +1,7 @@
 # CHP Market Power
 
+**统一范围扩展（2026-10-16）：** [报价方向、0–50% 范围与 118 节点实验](BID_DOMAIN_AND_SCALING_20261016.md)。本轮推进代码与实验：同域算法重复计时、双向报价对照、118 节点稀疏网络表示，以及从全域地图截取固定物理执行下的区间利润问题。旧小范围结果保留，不与新归档口径直接混排速度比。
+
 **当前论文主线（更新至 2026-10-16）：** [区域发现算法与三项论文实验](PARAMETRIC_ORACLE_ALGORITHM_20261015.md)，结果及主图见 [三项论文实验的进展](PAPER_STUDY_20261015.md)，复现及归档范围见 [本轮结果说明](results/parametric_algorithm_20261015/README.md)。[e9393f9 阶段的 Oracle 结果](ORACLE_STUDY_2026-10-15.md)与[匹配定价规则及利润实验](MECHANISM_STUDY_2026-10-15.md)保留为前期证据；下方早期 R2/R3 段落不代表当前优先级。
 
 本目录研究“机组报价改变后，凸包定价的最优值与节点价格如何分区变化；这些响应何时能变成按真实成本计算的额外利润”。完整研究路线见 [RESEARCH_PLAN.md](RESEARCH_PLAN.md)；一维参数 LP、最优面左右导数、价值优先重构和价格层门槛见 [PARAMETRIC_FORMULATION.md](PARAMETRIC_FORMULATION.md)。

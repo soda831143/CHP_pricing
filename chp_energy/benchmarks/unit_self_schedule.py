@@ -82,6 +82,7 @@ class UnitSelfScheduleMILP:
         threads: Optional[int] = None,
         return_timing: bool = False,
         require_optimal: bool = False,
+        mip_gap: float = 1e-7,
     ) -> Tuple[np.ndarray, np.ndarray, float]:
         try:
             import gurobi_compat as gp
@@ -97,7 +98,9 @@ class UnitSelfScheduleMILP:
 
         model = gp.Model("UnitSelfScheduleMILP")
         model.Params.OutputFlag = 0
-        model.Params.MIPGap = 1e-7
+        if not np.isfinite(mip_gap) or mip_gap < 0:
+            raise ValueError('mip_gap must be finite and nonnegative')
+        model.Params.MIPGap = mip_gap
         if threads is not None:
             model.Params.Threads = int(threads)
 
@@ -194,6 +197,9 @@ class UnitSelfScheduleMILP:
                 "solver_time": solver_time,
                 "total_time": max(0.0, total_done - t_start),
             }
+            from coptpy import COPT
+            timing['best_bound'] = float(model.getAttr(COPT.Attr.BestBnd))
+            timing['relative_gap'] = float(model.getAttr(COPT.Attr.BestGap))
             return u_star, p_star, float(model.objval), timing
         return u_star, p_star, float(model.objval)
 

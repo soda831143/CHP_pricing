@@ -22,6 +22,21 @@ def main():
     assert abs(points[1].value-points[3].value) < 1e-6
     # Archived arrays must not alias the mutable model state or a later solution.
     assert not np.shares_memory(points[0].primal, points[4].primal)
+    down = model.solve(-.6)
+    direct_down = solve_endpoint(generators, network, 1, -.6)
+    assert abs(down.value-direct_down.value) < 1e-6
+    try:
+        model.solve(-1000.)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('Objective updates bypassed the nonnegative-offer boundary')
+    sparse_model = PersistentCHP(generators, network, 1, aggregate_output=True)
+    for point in points[:3]:
+        sparse_point = sparse_model.solve(point.delta)
+        assert abs(sparse_point.value-point.value) < 1e-6
+        assert sparse_point.price.shape == point.price.shape
+        assert dual_audit_passed(sparse_point)
     print('Persistent objective updates, complete-dual extraction, and non-monotone returns passed')
 
 

@@ -13,7 +13,7 @@ from engine import PrimalCHPLP, load_case
 from price_vulnerability.affine_oracle import audited_solution, dual_audit_passed, query
 
 
-def validate_point(generators, network, generator_index, delta, k, data, persistent=None):
+def validate_point(generators, network, generator_index, delta, k, data, persistent=None, *, aggregate_output=False):
     from gurobi_compat import GRB
 
     boundaries = data["boundaries"]
@@ -27,7 +27,7 @@ def validate_point(generators, network, generator_index, delta, k, data, persist
         adders[generator_index] = delta
         solver = PrimalCHPLP(
             generators, network, bid_adders=adders, method=1, crossover=1,
-            feasibility_tol=1e-9, optimality_tol=1e-9,
+            feasibility_tol=1e-9, optimality_tol=1e-9, use_output_vars=aggregate_output,
         )
         _, direct_value, success = solver.solve()
         if not success or solver._model.Status != GRB.OPTIMAL:
@@ -54,7 +54,7 @@ def validate_point(generators, network, generator_index, delta, k, data, persist
         + lb[finite_lb] @ z_lower[finite_lb]
         + ub[finite_ub] @ z_upper[finite_ub]
     )
-    balance = pi[n_flow + n_src:]
+    balance = pi[n_flow + n_src:n_flow + n_src + network.T]
     if network.is_single_node:
         projected_price = balance[np.newaxis, :]
     else:
@@ -91,11 +91,14 @@ def validate_point(generators, network, generator_index, delta, k, data, persist
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--oracle-dir", type=Path, required=True)
-    parser.add_argument("--fractions", type=float, nargs="+", default=[0.5])
+    parser.add_argument("--fractions", type=float, nargs="*", default=[0.5],
+                        help='Interior fractions per interval; empty allows explicit extra-deltas only')
     parser.add_argument("--extra-deltas", type=float, nargs="*", default=[])
     parser.add_argument('--persistent-direct', action='store_true',
                         help='Use a separately built persistent LP for independent validation queries')
     args = parser.parse_args()
+    if not args.fractions and not args.extra_deltas:
+        raise ValueError('Supply at least one interior fraction or independent delta')
     if any(not 0 < fraction < 1 for fraction in args.fractions):
         raise ValueError("validation fractions must lie strictly inside an interval")
     report = json.loads((args.oracle_dir / "audit.json").read_text(encoding="utf-8"))
@@ -107,15 +110,22 @@ def main() -> None:
         scope["segments"], scope["congestion"],
     )
     from price_vulnerability.persistent_chp import PersistentCHP
-    persistent = PersistentCHP(generators, network, scope['generator_index']) if args.persistent_direct else None
-    with np.load(args.oracle_dir / "oracle.npz") as data:
+    aggregate_output = scope.get('aggregate_output', False)
+    persistent = PersistentCHP(generators, network, scope['generator_index'],
+                               aggregate_output=aggregate_output) if args.persistent_direct else None
+    with np.load(args.oracle_dir / "oracle.npz") as archive:
+        # NPZ access decompresses a whole array; load each witness block once, not per query.
+        data = {key:archive[key] for key in ('boundaries', 'values', 'prices', 'eq_duals',
+                                            'ineq_duals', 'lower_duals', 'upper_duals')}
+        if 'price_ready' in archive:
+            data['price_ready'] = archive['price_ready']
         boundaries = data["boundaries"]
         ready = data["price_ready"] if "price_ready" in data else np.ones(len(boundaries) - 1, bool)
         checks = [
             validate_point(
                 generators, network, scope["generator_index"],
                 float(boundaries[k] + fraction * (boundaries[k + 1] - boundaries[k])),
-                k, data, persistent,
+                k, data, persistent, aggregate_output=aggregate_output,
             )
             for k in range(len(ready)) if ready[k]
             for fraction in args.fractions
@@ -128,6 +138,7 @@ def main() -> None:
                 raise ValueError("extra validation delta lies in an uncovered interval")
             checks.append(validate_point(
                 generators, network, scope["generator_index"], delta, k, data, persistent,
+                aggregate_output=aggregate_output,
             ))
         samples = [float(0.5 * (boundaries[k] + boundaries[k + 1]))
                    for k in range(len(ready)) if ready[k]]
@@ -150,6 +161,7 @@ def main() -> None:
     full_coverage = bool(np.all(ready))
     result = {
         "status": "passed" if passed else "failed", "scope": scope,
+        'validation_sampling': dict(fractions=args.fractions, extra_deltas=args.extra_deltas),
         'validation_solver': 'independently rebuilt persistent CHP' if persistent else 'independent fresh CHP per point',
         "direct_checks": checks,
         "maximums": {key: max(item[key] for item in checks) for key in checks[0]

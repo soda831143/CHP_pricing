@@ -25,7 +25,7 @@ def main() -> None:
                         default=Path("results/value_oracle_G2_absolute_residual_audit/value_regimes.csv"))
     parser.add_argument("--out-dir", type=Path, default=Path("results/affine_oracle_G2"))
     parser.add_argument("--query", type=float, help="Query a previously built oracle without a CHP solve")
-    parser.add_argument("--case", choices=("6", "30"), default="6")
+    parser.add_argument("--case", choices=("6", "30", "118"), default="6")
     parser.add_argument("--generator", type=int, default=1, help="0-based generator index")
     parser.add_argument("--network", choices=("single", "ptdf"), default="ptdf")
     parser.add_argument("--congestion", choices=("tight", "moderate", "relaxed"), default="tight")
@@ -36,10 +36,13 @@ def main() -> None:
     parser.add_argument("--complete", action="store_true",
                         help="Continue refining every non-price-ready interval until coverage or budget")
     parser.add_argument('--endpoint-solver', choices=('fresh', 'persistent'), default='persistent')
+    parser.add_argument('--aggregate-output', action='store_true', help='Reuse sparse aggregate-output network coupling')
     parser.add_argument('--initial-map', type=Path, help='Extend an archived smaller domain in a new directory')
     parser.add_argument("--lower", type=float, default=0.0)
     parser.add_argument("--upper", type=float, default=0.1)
     parser.add_argument("--max-points", type=int, default=40)
+    parser.add_argument('--checkpoint-every', type=int, default=1,
+                        help='Archive every N points, or 0 for final-only; all archive costs count')
     parser.add_argument("--value-tolerance", type=float, default=1e-6)
     parser.add_argument("--price-tolerance", type=float, default=1e-6)
     parser.add_argument("--focus-lower", type=float)
@@ -51,6 +54,8 @@ def main() -> None:
     parser.add_argument("--seed-delta", type=float,
                         help="With --resume-from, learn the uncovered interval containing this query")
     args = parser.parse_args()
+    if args.checkpoint_every < 0:
+        parser.error('checkpoint-every must be nonnegative')
     oracle_file = args.out_dir / "oracle.npz"
     if args.query is not None:
         report = json.loads((args.out_dir / "audit.json").read_text(encoding="utf-8"))
@@ -77,7 +82,8 @@ def main() -> None:
                 scope["segments"], scope["congestion"],
             )
             with contextlib.redirect_stdout(io.StringIO()):
-                solved = solve_endpoint(generators, network, scope["generator_index"], args.query)
+                solved = solve_endpoint(generators, network, scope["generator_index"], args.query,
+                                         aggregate_output=scope.get('aggregate_output', False))
             value, price = solved.value, solved.price
         print(json.dumps({"delta": args.query, "value": value,
                           "nodal_price": price.tolist(),
@@ -107,14 +113,19 @@ def main() -> None:
         scope = {"case": args.case, "network": args.network, "T": args.T,
                  "segments": args.segments, "congestion": args.congestion,
                  "generator_index": args.generator, "parameter": "all-day absolute adder"}
-        persistent = PersistentCHP(generators, network, args.generator)
+        if args.aggregate_output:
+            scope['aggregate_output'] = True
+        persistent = PersistentCHP(generators, network, args.generator, aggregate_output=args.aggregate_output)
         endpoint_solve = (persistent.solve if args.endpoint_solver == 'persistent' else
-                          lambda delta: solve_endpoint(generators, network, args.generator, delta))
+                          lambda delta: solve_endpoint(generators, network, args.generator, delta,
+                                                       aggregate_output=args.aggregate_output))
         solve_count = 0
         def solve(delta):
             nonlocal solve_count
             point = endpoint_solve(delta)
             solve_count += 1
+            if solve_count % 20 == 0:
+                print(f'{solve_count} new CHP solves; latest delta={delta:.9g}', flush=True)
             return point
         previous = None
         previous_offline_seconds = 0.0
@@ -219,6 +230,9 @@ def main() -> None:
                     key: max(point.audit[key] for point in points) for key in points[0].audit
                 },
                 "offline_seconds": previous_offline_seconds + time.perf_counter() - started,
+                'checkpoint_every': args.checkpoint_every,
+                'lp_dimensions': (dict(variables=len(persistent.variables), rows=len(persistent.rows))
+                                  if persistent.solver is not None else None),
                 "mean_direct_chp_seconds": float(np.mean([point.runtime for point in points])),
                 "interpretation": "Uncovered intervals return direct CHP prices; value gaps never certify price accuracy.",
             }
@@ -233,6 +247,7 @@ def main() -> None:
                         raise
                     time.sleep(0.2)
             pending_audit = args.out_dir / "audit.pending.json"
+            report['offline_seconds'] = previous_offline_seconds + time.perf_counter() - started
             pending_audit.write_text(json.dumps(report, indent=2), encoding="utf-8")
             for attempt in range(10):
                 try:
@@ -254,7 +269,8 @@ def main() -> None:
             only_focus=learning_seed_delta is not None,
             require_complete=args.complete,
             initial_points=previous,
-            on_update=save_snapshot,
+            on_update=(lambda pts, ints: save_snapshot(pts, ints)
+                       if args.checkpoint_every > 0 and len(pts) % args.checkpoint_every == 0 else None),
         )
         report = save_snapshot(points, intervals)
         ready = [item.price_ready for item in intervals]

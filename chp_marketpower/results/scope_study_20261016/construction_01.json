@@ -1,0 +1,12 @@
+{
+  "case": "6",
+  "method": "bracket",
+  "repeat": 1,
+  "offline_seconds": 15.965787000022829,
+  "postprocess_seconds": 0.14914130000397563,
+  "chp_solves": 145,
+  "auxiliary_lps": 0,
+  "value_intervals": 73,
+  "price_segments": 75,
+  "auxiliary_phase_seconds": null
+}

@@ -62,9 +62,10 @@ def _profit_at_reported(true_generators, reported, network, generator_index, par
     return result
 
 
-def _settle_target(true_generator, reported_generator, nodal_price, p_dispatch, u_dispatch):
-    self_u, self_p, best = UnitSelfScheduleMILP.solve(
-        reported_generator, nodal_price, require_optimal=True
+def _settle_target(true_generator, reported_generator, nodal_price, p_dispatch, u_dispatch,
+                   *, mip_gap=1e-7):
+    self_u, self_p, best, self_info = UnitSelfScheduleMILP.solve(
+        reported_generator, nodal_price, require_optimal=True, return_timing=True, mip_gap=mip_gap
     )
     scheduled = dispatch_profit(reported_generator, nodal_price, p_dispatch, u_dispatch)
     if best < scheduled - 1e-4:
@@ -82,6 +83,8 @@ def _settle_target(true_generator, reported_generator, nodal_price, p_dispatch, 
         "energy_revenue": revenue, "reported_uplift": uplift,
         "reported_cost": reported_cost, "true_cost": true_cost, "true_profit": profit,
         "best_reported_profit": best, "self_output_mw": self_p, "self_commitment": self_u,
+        'self_schedule_upper_bound': self_info['best_bound'],
+        'self_schedule_gap_usd': max(0., self_info['best_bound']-best),
     }
 
 

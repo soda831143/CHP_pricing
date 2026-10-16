@@ -15,23 +15,29 @@ from price_vulnerability.persistent_chp import PersistentCHP
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--case', choices=('6', '30'), required=True)
+    parser.add_argument('--case', choices=('6', '30', '118'), required=True)
     parser.add_argument('--generator', type=int, required=True)
     parser.add_argument('--lower', type=float, default=0.)
     parser.add_argument('--upper', type=float, required=True)
     parser.add_argument('--max-chp-solves', type=int, default=40)
     parser.add_argument('--out-dir', type=Path, required=True)
-    parser.add_argument('--formulation', choices=('full_dual', 'active_cone'), default='full_dual')
+    parser.add_argument('--formulation', choices=('full_dual', 'active_cone', 'persistent_cone'), default='active_cone')
+    parser.add_argument('--checkpoint-every', type=int, default=1)
+    parser.add_argument('--aggregate-output', action='store_true')
     args = parser.parse_args()
+    if args.checkpoint_every < 0:
+        parser.error('checkpoint-every must be nonnegative')
     if args.out_dir.exists():
         parser.error('Use a new directory; existing price-selector versions are immutable')
     if not np.isfinite([args.lower, args.upper]).all() or args.lower >= args.upper:
         parser.error('Domain must be finite and increasing')
     generators, network = load_case(args.case, 'ptdf', 24, 3, 'tight')
-    chp = PersistentCHP(generators, network, args.generator)
+    chp = PersistentCHP(generators, network, args.generator, aggregate_output=args.aggregate_output)
     args.out_dir.mkdir(parents=True)
     scope = dict(case=args.case, network='ptdf', T=24, segments=3, congestion='tight',
                  generator_index=args.generator, parameter='all-day absolute adder')
+    if args.aggregate_output:
+        scope['aggregate_output'] = True
     started = time.perf_counter()
 
     def save(points, intervals, expander, failures):
@@ -43,6 +49,8 @@ def main():
             region_formulation=args.formulation,
             chp_solves=chp.calls, auxiliary_lps=expander.calls, max_chp_solves=args.max_chp_solves,
             auxiliary_wall_seconds=expander.seconds, region_expansions=expander.records,
+            auxiliary_phase_seconds=expander.phase_seconds, checkpoint_every=args.checkpoint_every,
+            lp_dimensions=dict(variables=len(chp.variables), rows=len(chp.rows)),
             expansion_failures=failures, value_tolerance_usd=1e-6, price_tolerance_usd=1e-6,
             intervals=[asdict(item) for item in intervals],
             price_coverage_fraction=sum(i.right-i.left for i in intervals if i.price_ready)/(args.upper-args.lower),
@@ -56,13 +64,17 @@ def main():
         )
         save_endpoints(args.out_dir/'oracle.pending.npz', points, ready)
         (args.out_dir/'oracle.pending.npz').replace(args.out_dir/'oracle.npz')
+        report['offline_seconds'] = time.perf_counter()-started
         (args.out_dir/'audit.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
         print(f"{chp.calls} CHP + {expander.calls} auxiliary LPs; "
               f"{report['price_coverage_fraction']:.1%} coverage; {report['offline_seconds']:.2f}s", flush=True)
 
     points, intervals, expander, failures = build_region_oracle(
-        chp, args.lower, args.upper, max_chp_solves=args.max_chp_solves, on_update=save,
+        chp, args.lower, args.upper, max_chp_solves=args.max_chp_solves,
+        on_update=(lambda pts, ints, exp, fails: save(pts, ints, exp, fails)
+                   if args.checkpoint_every > 0 and chp.calls % args.checkpoint_every == 0 else None),
         formulation=args.formulation)
+    save(points, intervals, expander, failures)
     if not all(item.price_ready for item in intervals):
         raise SystemExit('price coverage incomplete at the CHP-solve budget; partial archive preserved')
 

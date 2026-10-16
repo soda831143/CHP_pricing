@@ -44,6 +44,11 @@ def test_absolute_adder_is_immutable_and_uniform() -> None:
     assert changed[0].cost_var == generators[0].cost_var
     with pytest.raises(ValueError, match="delta"):
         apply_generator_adder(generators, 1, float("nan"))
+    reduced = apply_generator_adder(generators, 1, -2.4)
+    assert np.allclose(np.asarray(reduced[1].pwl_slopes) - generators[1].pwl_slopes, -2.4)
+    assert min(generators[1].pwl_slopes) > 0
+    with pytest.raises(ValueError, match='negative'):
+        apply_generator_adder(generators, 1, -1000.)
 
 
 def test_118_case_uses_the_same_market_interface() -> None:

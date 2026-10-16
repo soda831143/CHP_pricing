@@ -81,7 +81,7 @@ class ScheduleRunMILP:
         self.N = len(generators)
         self._incremental_dispatch = None
 
-    def solve(self, require_optimal: bool = False) -> Tuple[np.ndarray, np.ndarray, float]:
+    def solve(self, require_optimal: bool = False, mip_gap: float = 1e-6) -> Tuple[np.ndarray, np.ndarray, float]:
         """
         求解 UC MILP，返回物理调度结果。
 
@@ -103,7 +103,9 @@ class ScheduleRunMILP:
 
         model = gp.Model("ScheduleRun")
         model.Params.OutputFlag = 0
-        model.Params.MIPGap     = 1e-6
+        if not np.isfinite(mip_gap) or mip_gap < 0:
+            raise ValueError('mip_gap must be finite and nonnegative')
+        model.Params.MIPGap     = mip_gap
 
         # ── 变量 ─────────────────────────────────────────────────────────────
         u  = model.addVars(N, T, vtype=GRB.BINARY, name="u")
@@ -254,6 +256,11 @@ class ScheduleRunMILP:
             )
         if require_optimal and model.Status != GRB.OPTIMAL:
             raise RuntimeError(f"ScheduleRunMILP 未证明最优，Status={model.Status}，MIPGap={model.BestGap}")
+        from coptpy import COPT
+        self.solve_info = dict(status=int(model.Status), objective=float(model.objval),
+                               lower_bound=float(model.getAttr(COPT.Attr.BestBnd)),
+                               relative_gap=float(model.getAttr(COPT.Attr.BestGap)),
+                               requested_mip_gap=mip_gap)
 
         # ── 提取结果 ──────────────────────────────────────────────────────────
         p_dispatch = np.array([[p[i, t].X for t in range(T)] for i in range(N)])
