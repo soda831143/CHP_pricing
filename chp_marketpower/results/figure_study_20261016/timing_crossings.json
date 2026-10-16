@@ -1,0 +1,21 @@
+{
+  "rows": [
+    {
+      "unit": "G1",
+      "first_amortized_query": 138,
+      "offline_plus_postprocess_load_seconds": 42.517688799940515,
+      "reoptimization_q1000_seconds": 286.4636559999781,
+      "oracle_q1000_seconds": 42.52434729994275,
+      "speedup": 6.7364621490701575
+    },
+    {
+      "unit": "G2",
+      "first_amortized_query": 18,
+      "offline_plus_postprocess_load_seconds": 5.801207999989856,
+      "reoptimization_q1000_seconds": 119.27767939999467,
+      "oracle_q1000_seconds": 5.807894099969417,
+      "speedup": 20.537164994214127
+    }
+  ],
+  "interpretation": "First integer query at which this measured prefix costs at least the Oracle total. Not a universal break-even point; marker spacing is 100 queries, all prefixes are observed."
+}

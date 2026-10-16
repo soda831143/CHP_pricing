@@ -29,7 +29,8 @@ def _solve_fresh(generators, network, g: int, delta: float, *, aggregate_output=
 
 
 def _reoptimize_workload(generators, network, g: int,
-                         deltas: np.ndarray, *, aggregate_output=False) -> tuple[float, list[float], list[np.ndarray]]:
+                         deltas: np.ndarray, *, aggregate_output=False,
+                         cumulative_trace=None) -> tuple[float, list[float], list[np.ndarray]]:
     import coptpy as cp
     from gurobi_compat import GRB
 
@@ -58,6 +59,8 @@ def _reoptimize_workload(generators, network, g: int,
     balance_rows = [rows[k] for k in range(balance_end-network.T, balance_end)]
     n_line_rows = 2*network.N_line*network.T if not network.is_single_node else 0
     line_rows = [rows[k] for k in range(len(rows)-n_line_rows, len(rows))]
+    if cumulative_trace is not None:
+        cumulative_trace.append(time.perf_counter()-start)
     for delta in deltas[1:]:
         model.setInfo(cp.COPT.Info.Obj, variables,
                       (base + float(delta) * direction[changed]).tolist())
@@ -76,12 +79,16 @@ def _reoptimize_workload(generators, network, g: int,
         if not np.all(np.isfinite(price)):
             raise RuntimeError("same-model reoptimization produced a nonfinite price")
         prices.append(price)
+        if cumulative_trace is not None:
+            cumulative_trace.append(time.perf_counter()-start)
     elapsed = time.perf_counter() - start
+    if cumulative_trace is not None:
+        cumulative_trace[-1] = elapsed
     return elapsed, values, prices
 
 
 def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
-              order: str = 'sorted', seed: int = 20261015) -> dict:
+              order: str = 'sorted', seed: int = 20261015, *, record_trace=False) -> dict:
     if n_queries < 2:
         raise ValueError("at least two predeclared queries are required")
     build = json.loads((oracle_dir / "audit.json").read_text(encoding="utf-8"))
@@ -110,9 +117,15 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
     elif order != 'sorted':
         raise ValueError('order must be sorted or shuffled')
     started = time.perf_counter()
-    online_answers = [query_compact(float(delta), value_boundaries, values,
-                                    price_boundaries, prices) for delta in deltas]
+    online_trace = []
+    online_answers = []
+    for delta in deltas:
+        online_answers.append(query_compact(float(delta), value_boundaries, values, price_boundaries, prices))
+        if record_trace:
+            online_trace.append(time.perf_counter()-started)
     online_seconds = time.perf_counter() - started
+    if record_trace:
+        online_trace[-1] = online_seconds
     online_values = [answer[0] for answer in online_answers]
     direct_values = None
     fresh_seconds = None
@@ -122,9 +135,11 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
                                       aggregate_output=scope.get('aggregate_output', False))[0]
                          for delta in deltas]
         fresh_seconds = time.perf_counter() - started
+    reopt_trace = [] if record_trace else None
     reopt_seconds, reopt_values, reopt_prices = _reoptimize_workload(
         generators, network, scope["generator_index"], deltas,
         aggregate_output=scope.get('aggregate_output', False),
+        cumulative_trace=reopt_trace,
     )
     max_value_error = float(np.max(np.abs(np.asarray(online_values) - reopt_values)))
     if direct_values is not None:
@@ -137,6 +152,9 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
     return {
         "scope": scope, "workload": "fixed equally spaced interior queries", 'order': order, 'seed': seed,
         "query_deltas": deltas.tolist(), "n_queries": n_queries,
+        'same_model_cumulative_seconds': reopt_trace,
+        'oracle_cumulative_online_seconds': online_trace if record_trace else None,
+        'trace_scope': 'Elapsed prefixes of one fixed query stream, including first-model setup and every raw price extraction; not independently restarted batches at each Q.' if record_trace else None,
         "max_value_discrepancy_usd": max_value_error,
         "oracle_offline_seconds_prior_run": build["offline_seconds"],
         'postprocessing_seconds': compact_audit.get('postprocessing_seconds', 0.),
@@ -165,11 +183,13 @@ def main() -> None:
     parser.add_argument("--output", type=Path)
     parser.add_argument('--order', choices=('sorted', 'shuffled'), default='shuffled')
     parser.add_argument('--seed', type=int, default=20261015)
+    parser.add_argument('--record-trace', action='store_true', help='Record actual elapsed prefixes after every query for a cumulative-time curve')
     args = parser.parse_args()
     output = args.output or args.oracle_dir / f"batch_benchmark_q{args.queries}.json"
     if output.exists():
         parser.error('Use a fresh output file to preserve earlier timed results')
-    result = benchmark(args.oracle_dir, args.queries, args.skip_fresh, args.order, args.seed)
+    result = benchmark(args.oracle_dir, args.queries, args.skip_fresh, args.order, args.seed,
+                       record_trace=args.record_trace)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2), encoding="utf-8")
     fresh = (f"{result['fresh_chp_batch_seconds']:.2f}s"
