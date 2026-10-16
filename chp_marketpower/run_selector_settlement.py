@@ -11,6 +11,7 @@ import numpy as np
 from engine import ScheduleRunMILP, load_case
 from price_vulnerability.affine_oracle import dual_audit_passed, query, solve_endpoint
 from price_vulnerability.scalar_markup import apply_generator_adder
+from price_vulnerability.model_identity import check_model_identity
 from strategic_market_simulation.profit_sweep import _settle_target
 
 
@@ -25,6 +26,7 @@ def compare(oracle_dir: Path, delta: float) -> dict:
         scope["case"], scope["network"], scope["T"],
         scope["segments"], scope["congestion"],
     )
+    check_model_identity(oracle_dir, generators, network, report)
     g = scope["generator_index"]
     with np.load(oracle_dir / "oracle.npz") as data:
         boundaries = data["boundaries"]

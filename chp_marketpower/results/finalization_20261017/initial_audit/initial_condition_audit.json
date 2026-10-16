@@ -1,0 +1,1739 @@
+{
+  "g2_binding_check": {
+    "delta": 17.71965,
+    "direct_value": 180569.14920421984,
+    "archived_value": 180569.14920421987,
+    "value_gap_usd": 2.9103830456733704e-11,
+    "complete_dual_audit": {
+      "primal_feasibility": 1.1368683772161603e-13,
+      "dual_sign": 1.4210854715202004e-14,
+      "stationarity": 5.820766091346741e-11,
+      "duality_gap": 2.9103830456733704e-11,
+      "row_complementarity": 6.284114804837401e-13,
+      "bound_complementarity": 0.0,
+      "objective_reconstruction": 8.731149137020111e-11,
+      "price_projection": 0.0
+    }
+  },
+  "status": "passed",
+  "initial_condition_source": "GeneratorParams default cold start; no previous-day warmup used",
+  "model_identities": {
+    "30-G1": {
+      "schema": 1,
+      "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+      "components": {
+        "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+        "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+        "demand": {
+          "shape": [
+            30,
+            24
+          ],
+          "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+        },
+        "PTDF": {
+          "shape": [
+            41,
+            30
+          ],
+          "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+        },
+        "PTDF_Gen": {
+          "shape": [
+            41,
+            6
+          ],
+          "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+        },
+        "F_max": {
+          "shape": [
+            41
+          ],
+          "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+        }
+      },
+      "initial_conditions": [
+        {
+          "unit": "G1",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 6,
+          "minimum_down_time": 6
+        },
+        {
+          "unit": "G2",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 4,
+          "minimum_down_time": 4
+        },
+        {
+          "unit": "G3",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G4",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 3,
+          "minimum_down_time": 3
+        },
+        {
+          "unit": "G5",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G6",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 4,
+          "minimum_down_time": 4
+        }
+      ]
+    },
+    "118-G11": {
+      "schema": 1,
+      "model_sha256": "3227fd1bdea3713d6cc3658eb4fa9596c2e5bcd8deb62821f32e2e5bf94ba74c",
+      "components": {
+        "generators": "6df56a93e0ee8d6014fb1f17e510ee90aeb19ae64be95a1f8dfa286eebcebcee",
+        "gen_bus_map": "d7e7724ee9ed00e67a87bd467c697d3e650e65b6d84228e800f4e9f2690028e3",
+        "demand": {
+          "shape": [
+            118,
+            24
+          ],
+          "sha256": "76ceef96345d8b38dfc88350790488378505bacadf330a56a6032d717cbd0755"
+        },
+        "PTDF": {
+          "shape": [
+            186,
+            118
+          ],
+          "sha256": "7c8c4d79d1c7bbbc0452ade25c3712b2bec51ad28e83215ea44b1a6fed1ea3a6"
+        },
+        "PTDF_Gen": {
+          "shape": [
+            186,
+            54
+          ],
+          "sha256": "ae7e51015e84e110328960c86d2de71c65773eacd88fa2e6ba0abccbc7e7c43b"
+        },
+        "F_max": {
+          "shape": [
+            186
+          ],
+          "sha256": "d80b85a4d097e8c8ec18b64ad752229bb89c86cb105795790c4742ce66a45fc9"
+        }
+      },
+      "initial_conditions": [
+        {
+          "unit": "G1",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G2",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G3",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G4",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G5",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G6",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G7",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G8",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G9",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G10",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G11",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G12",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G13",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G14",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G15",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G16",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G17",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G18",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G19",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G20",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G21",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G22",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G23",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G24",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G25",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G26",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G27",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 10,
+          "minimum_down_time": 10
+        },
+        {
+          "unit": "G28",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 10,
+          "minimum_down_time": 10
+        },
+        {
+          "unit": "G29",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G30",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 4,
+          "minimum_down_time": 4
+        },
+        {
+          "unit": "G31",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G32",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G33",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G34",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G35",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G36",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G37",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G38",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G39",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G40",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G41",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G42",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G43",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G44",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G45",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 8,
+          "minimum_down_time": 8
+        },
+        {
+          "unit": "G46",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G47",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G48",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G49",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 1,
+          "minimum_down_time": 1
+        },
+        {
+          "unit": "G50",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 2,
+          "minimum_down_time": 2
+        },
+        {
+          "unit": "G51",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G52",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G53",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G54",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 2,
+          "minimum_down_time": 2
+        }
+      ]
+    }
+  },
+  "records": {
+    "30-G1": [
+      {
+        "delta": 0.0,
+        "bid_hour_1based": null,
+        "physical_residuals": {
+          "balance": 2.842170943040401e-14,
+          "binary": 0.0,
+          "capacity": 4.973799150320701e-14,
+          "initial_ramp": 0.0,
+          "later_ramp": 0.0,
+          "residual_initial_duration": 0.0,
+          "minimum_up_down": 0.0,
+          "line_capacity": 7.105427357601002e-15
+        },
+        "chp_full_dual_residuals": {
+          "primal_feasibility": 1.4210854715202004e-13,
+          "dual_sign": 0.0,
+          "stationarity": 5.820766091346741e-11,
+          "duality_gap": 2.9103830456733704e-11,
+          "row_complementarity": 6.315027724610198e-13,
+          "bound_complementarity": 2.2737367544323206e-13,
+          "objective_reconstruction": 2.9103830456733704e-11,
+          "price_projection": 0.0
+        },
+        "uc_solve_info": {
+          "status": 2,
+          "objective": 183288.96480640347,
+          "lower_bound": 183288.96480640347,
+          "relative_gap": 0.0,
+          "requested_mip_gap": 0.0
+        },
+        "uc_objective": 183288.96480640347,
+        "chp_objective": 179926.18318927745,
+        "archived_value_gap_usd": 0.0,
+        "reported_cost_reconstruction_usd": 2.9103830456733704e-11,
+        "chp_above_uc_lower_bound_usd": 0.0,
+        "max_settlement_identity_residual_usd": 0.0,
+        "max_bid_wedge_residual_usd": 0.0,
+        "units": [
+          {
+            "unit": "G1",
+            "energy_revenue": 143815.43707318846,
+            "reported_uplift": 594.6131664871937,
+            "reported_cost": 107120.73792463764,
+            "true_cost": 107120.73792463764,
+            "true_profit": 37289.31231503801,
+            "best_reported_profit": 37289.31231503801,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G2",
+            "energy_revenue": 8738.261945347884,
+            "reported_uplift": 332.60752958884154,
+            "reported_cost": 8145.720851412416,
+            "true_cost": 8145.720851412416,
+            "true_profit": 925.1486235243101,
+            "best_reported_profit": 925.1486235243094,
+            "self_schedule_gap_usd": 4.547473508864641e-13
+          },
+          {
+            "unit": "G3",
+            "energy_revenue": 41443.56961185178,
+            "reported_uplift": 957.0780349834313,
+            "reported_cost": 42400.64764683521,
+            "true_cost": 42400.64764683521,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G4",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G5",
+            "energy_revenue": 21503.14957366427,
+            "reported_uplift": 355.82080985390974,
+            "reported_cost": 21858.970383518175,
+            "true_cost": 21858.970383518175,
+            "true_profit": 3.637978807091713e-12,
+            "best_reported_profit": 2.6147972675971687e-12,
+            "self_schedule_gap_usd": 2.842170943040401e-14
+          },
+          {
+            "unit": "G6",
+            "energy_revenue": 3188.4828211723616,
+            "reported_uplift": 574.4051788276411,
+            "reported_cost": 3762.8880000000026,
+            "true_cost": 3762.8880000000026,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          }
+        ]
+      },
+      {
+        "delta": 13.204080443599175,
+        "bid_hour_1based": null,
+        "physical_residuals": {
+          "balance": 0.0,
+          "binary": 0.0,
+          "capacity": 0.0,
+          "initial_ramp": 0.0,
+          "later_ramp": 0.0,
+          "residual_initial_duration": 0.0,
+          "minimum_up_down": 0.0,
+          "line_capacity": 7.105427357601002e-15
+        },
+        "chp_full_dual_residuals": {
+          "primal_feasibility": 9.094947017729282e-13,
+          "dual_sign": 1.4210854715202004e-14,
+          "stationarity": 3.637978807091713e-11,
+          "duality_gap": 2.9103830456733704e-11,
+          "row_complementarity": 6.091719721249913e-13,
+          "bound_complementarity": 0.0,
+          "objective_reconstruction": 8.731149137020111e-11,
+          "price_projection": 0.0
+        },
+        "uc_solve_info": {
+          "status": 2,
+          "objective": 203521.36408527824,
+          "lower_bound": 203521.3640852782,
+          "relative_gap": 0.0,
+          "requested_mip_gap": 0.0
+        },
+        "uc_objective": 203521.36408527824,
+        "chp_objective": 201785.24193415436,
+        "archived_value_gap_usd": 1.1641532182693481e-10,
+        "reported_cost_reconstruction_usd": 2.9103830456733704e-11,
+        "chp_above_uc_lower_bound_usd": 0.0,
+        "max_settlement_identity_residual_usd": 0.0,
+        "max_bid_wedge_residual_usd": 7.275957614183426e-12,
+        "units": [
+          {
+            "unit": "G1",
+            "energy_revenue": 142302.4628157323,
+            "reported_uplift": 110.58983049627932,
+            "reported_cost": 116643.7627250503,
+            "true_cost": 98699.53222028982,
+            "true_profit": 43713.520425938754,
+            "best_reported_profit": 25769.289921178268,
+            "self_schedule_gap_usd": 3.637978807091713e-12
+          },
+          {
+            "unit": "G2",
+            "energy_revenue": 8940.940703522787,
+            "reported_uplift": 332.50762054208485,
+            "reported_cost": 8398.174620574146,
+            "true_cost": 8398.174620574146,
+            "true_profit": 875.2737034907259,
+            "best_reported_profit": 875.2737034907261,
+            "self_schedule_gap_usd": 2.2737367544323206e-13
+          },
+          {
+            "unit": "G3",
+            "energy_revenue": 34592.04563979226,
+            "reported_uplift": 556.9054243731019,
+            "reported_cost": 34508.03237088274,
+            "true_cost": 34508.03237088274,
+            "true_profit": 640.9186932826196,
+            "best_reported_profit": 640.9186932826209,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G4",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G5",
+            "energy_revenue": 40190.27102474944,
+            "reported_uplift": 18.235344021581113,
+            "reported_cost": 40208.50636877102,
+            "true_cost": 40208.50636877102,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G6",
+            "energy_revenue": 3202.1267279219774,
+            "reported_uplift": 560.7612720780226,
+            "reported_cost": 3762.888,
+            "true_cost": 3762.888,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          }
+        ]
+      },
+      {
+        "delta": 20.991,
+        "bid_hour_1based": null,
+        "physical_residuals": {
+          "balance": 1.4210854715202004e-14,
+          "binary": 0.0,
+          "capacity": 3.694822225952521e-13,
+          "initial_ramp": 0.0,
+          "later_ramp": 3.694822225952521e-13,
+          "residual_initial_duration": 0.0,
+          "minimum_up_down": 0.0,
+          "line_capacity": 1.0658141036401503e-14
+        },
+        "chp_full_dual_residuals": {
+          "primal_feasibility": 3.410605131648481e-13,
+          "dual_sign": 3.552713678800501e-15,
+          "stationarity": 2.1827872842550278e-11,
+          "duality_gap": 2.9103830456733704e-11,
+          "row_complementarity": 6.389058645970983e-13,
+          "bound_complementarity": 0.0,
+          "objective_reconstruction": 2.9103830456733704e-11,
+          "price_projection": 0.0
+        },
+        "uc_solve_info": {
+          "status": 2,
+          "objective": 210256.17615705635,
+          "lower_bound": 210256.17615705632,
+          "relative_gap": 0.0,
+          "requested_mip_gap": 0.0
+        },
+        "uc_objective": 210256.17615705635,
+        "chp_objective": 208659.72287270636,
+        "archived_value_gap_usd": 0.0,
+        "reported_cost_reconstruction_usd": 2.9103830456733704e-11,
+        "chp_above_uc_lower_bound_usd": 0.0,
+        "max_settlement_identity_residual_usd": 0.0,
+        "max_bid_wedge_residual_usd": 0.0,
+        "units": [
+          {
+            "unit": "G1",
+            "energy_revenue": 103321.0950005999,
+            "reported_uplift": 138.21136317478886,
+            "reported_cost": 79992.07709970888,
+            "true_cost": 67224.57628258682,
+            "true_profit": 36234.73008118788,
+            "best_reported_profit": 23467.22926406581,
+            "self_schedule_gap_usd": 3.637978807091713e-12
+          },
+          {
+            "unit": "G2",
+            "energy_revenue": 8726.150621834211,
+            "reported_uplift": 307.79096883768057,
+            "reported_cost": 8145.720851412416,
+            "true_cost": 8145.720851412416,
+            "true_profit": 888.2207392594755,
+            "best_reported_profit": 888.2207392594757,
+            "self_schedule_gap_usd": 9.094947017729282e-13
+          },
+          {
+            "unit": "G3",
+            "energy_revenue": 81133.68001703781,
+            "reported_uplift": 540.5709048558329,
+            "reported_cost": 78924.47695442122,
+            "true_cost": 78924.47695442122,
+            "true_profit": 2749.773967472429,
+            "best_reported_profit": 2749.773967472427,
+            "self_schedule_gap_usd": 1.8189894035458565e-12
+          },
+          {
+            "unit": "G4",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G5",
+            "energy_revenue": 39425.46325151381,
+            "reported_uplift": 48.600000000001046,
+            "reported_cost": 39431.0132515138,
+            "true_cost": 39431.0132515138,
+            "true_profit": 43.05000000000291,
+            "best_reported_profit": 43.05000000000541,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G6",
+            "energy_revenue": 3250.4168269934034,
+            "reported_uplift": 512.4711730065965,
+            "reported_cost": 3762.888,
+            "true_cost": 3762.888,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          }
+        ]
+      }
+    ],
+    "118-G11": [
+      {
+        "delta": 0.0,
+        "bid_hour_1based": null,
+        "physical_residuals": {
+          "balance": 9.094947017729282e-13,
+          "binary": 0.0,
+          "capacity": 3.650413304967515e-12,
+          "initial_ramp": 0.0,
+          "later_ramp": 3.650413304967515e-12,
+          "residual_initial_duration": 0.0,
+          "minimum_up_down": 0.0,
+          "line_capacity": 0.0
+        },
+        "chp_full_dual_residuals": {
+          "primal_feasibility": 6.366462912410498e-12,
+          "dual_sign": 9.237055564881302e-14,
+          "stationarity": 1.4260876923799515e-09,
+          "duality_gap": 4.190951585769653e-09,
+          "row_complementarity": 1.38090860748119e-12,
+          "bound_complementarity": 0.0,
+          "objective_reconstruction": 3.725290298461914e-09,
+          "price_projection": 0.0
+        },
+        "uc_solve_info": {
+          "status": 2,
+          "objective": 2123845.152176812,
+          "lower_bound": 2123845.152176811,
+          "relative_gap": 0.0,
+          "requested_mip_gap": 0.0
+        },
+        "uc_objective": 2123845.152176812,
+        "chp_objective": 2123701.6419402007,
+        "archived_value_gap_usd": 0.0,
+        "reported_cost_reconstruction_usd": 9.313225746154785e-10,
+        "chp_above_uc_lower_bound_usd": 0.0,
+        "max_settlement_identity_residual_usd": 0.0,
+        "max_bid_wedge_residual_usd": 0.0,
+        "units": [
+          {
+            "unit": "G1",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G2",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G3",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G4",
+            "energy_revenue": 62018.747449275485,
+            "reported_uplift": 12.837333333300194,
+            "reported_cost": 62031.584782608785,
+            "true_cost": 62031.584782608785,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G5",
+            "energy_revenue": 84402.04912045875,
+            "reported_uplift": 14.940560701047161,
+            "reported_cost": 81821.16634782645,
+            "true_cost": 81821.16634782645,
+            "true_profit": 2595.8233333333337,
+            "best_reported_profit": 2595.8233333333396,
+            "self_schedule_gap_usd": 4.092726157978177e-12
+          },
+          {
+            "unit": "G6",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G7",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G8",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G9",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G10",
+            "energy_revenue": 53763.933333333334,
+            "reported_uplift": 8.640199666842818e-12,
+            "reported_cost": 51138.11,
+            "true_cost": 51138.11,
+            "true_profit": 2625.823333333341,
+            "best_reported_profit": 2625.8233333333424,
+            "self_schedule_gap_usd": 4.092726157978177e-12
+          },
+          {
+            "unit": "G11",
+            "energy_revenue": 349379.69766885386,
+            "reported_uplift": 6.548361852765083e-11,
+            "reported_cost": 291752.5343478261,
+            "true_cost": 291752.5343478261,
+            "true_profit": 57627.16332102782,
+            "best_reported_profit": 57627.16332102783,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G12",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G13",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G14",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G15",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G16",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G17",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G18",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G19",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G20",
+            "energy_revenue": 204339.05268304283,
+            "reported_uplift": 2.532173912924918,
+            "reported_cost": 182357.1444347828,
+            "true_cost": 182357.1444347828,
+            "true_profit": 21984.44042217295,
+            "best_reported_profit": 21984.44042217296,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G21",
+            "energy_revenue": 206872.66818523427,
+            "reported_uplift": 2.532173912964936,
+            "reported_cost": 184890.87593043502,
+            "true_cost": 184890.87593043502,
+            "true_profit": 21984.32442871222,
+            "best_reported_profit": 21984.324428712214,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G22",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G23",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G24",
+            "energy_revenue": 98674.30160524725,
+            "reported_uplift": 23.037867557469326,
+            "reported_cost": 93565.44869565204,
+            "true_cost": 93565.44869565204,
+            "true_profit": 5131.8907771526865,
+            "best_reported_profit": 5131.89077715268,
+            "self_schedule_gap_usd": 2.7284841053187847e-12
+          },
+          {
+            "unit": "G25",
+            "energy_revenue": 102769.79421583653,
+            "reported_uplift": 25.76441909737423,
+            "reported_cost": 97663.70086956538,
+            "true_cost": 97663.70086956538,
+            "true_profit": 5131.857765368535,
+            "best_reported_profit": 5131.857765368529,
+            "self_schedule_gap_usd": 2.7284841053187847e-12
+          },
+          {
+            "unit": "G26",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G27",
+            "energy_revenue": 285052.5196382472,
+            "reported_uplift": 14.71435652179207,
+            "reported_cost": 228578.4779673916,
+            "true_cost": 228578.4779673916,
+            "true_profit": 56488.756027377385,
+            "best_reported_profit": 56488.75602737739,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G28",
+            "energy_revenue": 282553.4830787815,
+            "reported_uplift": 4.3655745685100555e-11,
+            "reported_cost": 226064.54412391313,
+            "true_cost": 226064.54412391313,
+            "true_profit": 56488.93895486844,
+            "best_reported_profit": 56488.93895486843,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G29",
+            "energy_revenue": 78694.22107662399,
+            "reported_uplift": 24.04028115937399,
+            "reported_cost": 75295.37555362313,
+            "true_cost": 75295.37555362313,
+            "true_profit": 3422.885804160236,
+            "best_reported_profit": 3422.885804160229,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G30",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G31",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G32",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G33",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G34",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G35",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G36",
+            "energy_revenue": 1.6744664854684327e-10,
+            "reported_uplift": 1.5389777452412172e-11,
+            "reported_cost": 1.8283642599925544e-10,
+            "true_cost": 1.8283642599925544e-10,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G37",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G38",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G39",
+            "energy_revenue": 301060.9291026618,
+            "reported_uplift": 3.637978807091713e-11,
+            "reported_cost": 249872.35130434783,
+            "true_cost": 249872.35130434783,
+            "true_profit": 51188.577798314014,
+            "best_reported_profit": 51188.57779831399,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G40",
+            "energy_revenue": 86264.19878127823,
+            "reported_uplift": 7.332240959000956,
+            "reported_cost": 82479.88115217403,
+            "true_cost": 82479.88115217403,
+            "true_profit": 3791.6498700632073,
+            "best_reported_profit": 3791.6498700632046,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G41",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G42",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G43",
+            "energy_revenue": 83630.01193158363,
+            "reported_uplift": 4.547473508864641e-13,
+            "reported_cost": 81004.04,
+            "true_cost": 81004.04,
+            "true_profit": 2625.971931583641,
+            "best_reported_profit": 2625.9719315836414,
+            "self_schedule_gap_usd": 4.092726157978177e-12
+          },
+          {
+            "unit": "G44",
+            "energy_revenue": 86787.77615628146,
+            "reported_uplift": 9.854375093709677e-10,
+            "reported_cost": 84161.8066666664,
+            "true_cost": 84161.8066666664,
+            "true_profit": 2625.969489616051,
+            "best_reported_profit": 2625.9694896160468,
+            "self_schedule_gap_usd": 4.092726157978177e-12
+          },
+          {
+            "unit": "G45",
+            "energy_revenue": 53763.933333333334,
+            "reported_uplift": 5.9117155615240335e-12,
+            "reported_cost": 51168.11,
+            "true_cost": 51168.11,
+            "true_profit": 2595.823333333341,
+            "best_reported_profit": 2595.8233333333396,
+            "self_schedule_gap_usd": 4.092726157978177e-12
+          },
+          {
+            "unit": "G46",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G47",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G48",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G49",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G50",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G51",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G52",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G53",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G54",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  "localized_economics": {
+    "endpoint_uc_checks": [
+      {
+        "delta": 0.0,
+        "bid_hour_1based": 1,
+        "physical_residuals": {
+          "balance": 2.842170943040401e-14,
+          "binary": 0.0,
+          "capacity": 4.973799150320701e-14,
+          "initial_ramp": 0.0,
+          "later_ramp": 0.0,
+          "residual_initial_duration": 0.0,
+          "minimum_up_down": 0.0,
+          "line_capacity": 7.105427357601002e-15
+        },
+        "chp_full_dual_residuals": {
+          "primal_feasibility": 1.4210854715202004e-13,
+          "dual_sign": 0.0,
+          "stationarity": 5.820766091346741e-11,
+          "duality_gap": 2.9103830456733704e-11,
+          "row_complementarity": 6.315027724610198e-13,
+          "bound_complementarity": 2.2737367544323206e-13,
+          "objective_reconstruction": 2.9103830456733704e-11,
+          "price_projection": 0.0
+        },
+        "uc_solve_info": {
+          "status": 2,
+          "objective": 183288.96480640347,
+          "lower_bound": 183288.96480640347,
+          "relative_gap": 0.0,
+          "requested_mip_gap": 0.0
+        },
+        "uc_objective": 183288.96480640347,
+        "chp_objective": 179926.18318927745,
+        "archived_value_gap_usd": 0.0,
+        "reported_cost_reconstruction_usd": 2.9103830456733704e-11,
+        "chp_above_uc_lower_bound_usd": 0.0,
+        "max_settlement_identity_residual_usd": 0.0,
+        "max_bid_wedge_residual_usd": 0.0,
+        "units": [
+          {
+            "unit": "G1",
+            "energy_revenue": 143815.43707318846,
+            "reported_uplift": 594.6131664871937,
+            "reported_cost": 107120.73792463764,
+            "true_cost": 107120.73792463764,
+            "true_profit": 37289.31231503801,
+            "best_reported_profit": 37289.31231503801,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G2",
+            "energy_revenue": 8738.261945347884,
+            "reported_uplift": 332.60752958884154,
+            "reported_cost": 8145.720851412416,
+            "true_cost": 8145.720851412416,
+            "true_profit": 925.1486235243101,
+            "best_reported_profit": 925.1486235243094,
+            "self_schedule_gap_usd": 4.547473508864641e-13
+          },
+          {
+            "unit": "G3",
+            "energy_revenue": 41443.56961185178,
+            "reported_uplift": 957.0780349834313,
+            "reported_cost": 42400.64764683521,
+            "true_cost": 42400.64764683521,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G4",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G5",
+            "energy_revenue": 21503.14957366427,
+            "reported_uplift": 355.82080985390974,
+            "reported_cost": 21858.970383518175,
+            "true_cost": 21858.970383518175,
+            "true_profit": 3.637978807091713e-12,
+            "best_reported_profit": 2.6147972675971687e-12,
+            "self_schedule_gap_usd": 2.842170943040401e-14
+          },
+          {
+            "unit": "G6",
+            "energy_revenue": 3188.4828211723616,
+            "reported_uplift": 574.4051788276411,
+            "reported_cost": 3762.8880000000026,
+            "true_cost": 3762.8880000000026,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          }
+        ]
+      },
+      {
+        "delta": 20.991,
+        "bid_hour_1based": 1,
+        "physical_residuals": {
+          "balance": 0.0,
+          "binary": 0.0,
+          "capacity": 1.4210854715202004e-14,
+          "initial_ramp": 0.0,
+          "later_ramp": 0.0,
+          "residual_initial_duration": 0.0,
+          "minimum_up_down": 0.0,
+          "line_capacity": 7.105427357601002e-15
+        },
+        "chp_full_dual_residuals": {
+          "primal_feasibility": 2.2737367544323206e-13,
+          "dual_sign": 1.0658141036401503e-14,
+          "stationarity": 5.093170329928398e-11,
+          "duality_gap": 2.9103830456733704e-11,
+          "row_complementarity": 2.6746936315823064e-13,
+          "bound_complementarity": 0.0,
+          "objective_reconstruction": 2.9103830456733704e-11,
+          "price_projection": 0.0
+        },
+        "uc_solve_info": {
+          "status": 2,
+          "objective": 184121.47192814262,
+          "lower_bound": 184121.4719281426,
+          "relative_gap": 0.0,
+          "requested_mip_gap": 0.0
+        },
+        "uc_objective": 184121.47192814262,
+        "chp_objective": 180765.82318927743,
+        "archived_value_gap_usd": 5.820766091346741e-11,
+        "reported_cost_reconstruction_usd": 5.820766091346741e-11,
+        "chp_above_uc_lower_bound_usd": 0.0,
+        "max_settlement_identity_residual_usd": 0.0,
+        "max_bid_wedge_residual_usd": 1.1368683772161603e-12,
+        "units": [
+          {
+            "unit": "G1",
+            "energy_revenue": 143358.13001345278,
+            "reported_uplift": 732.6744957880364,
+            "reported_cost": 107641.13219420284,
+            "true_cost": 106907.9074376811,
+            "true_profit": 37182.89707155971,
+            "best_reported_profit": 36449.67231503798,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G2",
+            "energy_revenue": 8738.261945347884,
+            "reported_uplift": 332.6075295888427,
+            "reported_cost": 8145.720851412416,
+            "true_cost": 8145.720851412416,
+            "true_profit": 925.1486235243101,
+            "best_reported_profit": 925.1486235243106,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G3",
+            "energy_revenue": 41888.7543724315,
+            "reported_uplift": 824.0061265776312,
+            "reported_cost": 42712.76049900913,
+            "true_cost": 42712.76049900913,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G4",
+            "energy_revenue": 0.0,
+            "reported_uplift": 0.0,
+            "reported_cost": 0.0,
+            "true_cost": 0.0,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          },
+          {
+            "unit": "G5",
+            "energy_revenue": 21503.14957366426,
+            "reported_uplift": 355.8208098539102,
+            "reported_cost": 21858.970383518168,
+            "true_cost": 21858.970383518168,
+            "true_profit": 3.637978807091713e-12,
+            "best_reported_profit": 3.069544618483633e-12,
+            "self_schedule_gap_usd": 2.842170943040401e-14
+          },
+          {
+            "unit": "G6",
+            "energy_revenue": 3188.4828211723607,
+            "reported_uplift": 574.4051788276392,
+            "reported_cost": 3762.888,
+            "true_cost": 3762.888,
+            "true_profit": 0.0,
+            "best_reported_profit": 0.0,
+            "self_schedule_gap_usd": 0.0
+          }
+        ]
+      }
+    ],
+    "endpoint_common_plan_gaps_usd": [
+      [
+        0.0,
+        7.132878260861617
+      ],
+      [
+        99.28236521733925,
+        0.0
+      ]
+    ],
+    "common_plan_found": false,
+    "interpretation": "No common endpoint plan; no full-range profit maximum claimed. No automatic expansion into a new strategic study."
+  },
+  "scope": "Checks these fixed cases and representative bids; not a warm-start sensitivity study or universal initial-state validation."
+}

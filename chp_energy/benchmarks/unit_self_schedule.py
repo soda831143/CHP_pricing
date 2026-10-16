@@ -25,7 +25,7 @@ if _proj_dir not in sys.path:
 from models.generator import GeneratorParams
 
 
-def dispatch_cost(params: GeneratorParams, p_dispatch: np.ndarray, u_dispatch: np.ndarray) -> float:
+def dispatch_cost(params: GeneratorParams, p_dispatch: np.ndarray, u_dispatch: np.ndarray, *, bid_adders=None) -> float:
     """Cost of a feasible dispatch under the same accounting as ScheduleRunMILP."""
     p_dispatch = np.asarray(p_dispatch, dtype=float)
     u_dispatch = np.asarray(u_dispatch, dtype=float)
@@ -53,7 +53,15 @@ def dispatch_cost(params: GeneratorParams, p_dispatch: np.ndarray, u_dispatch: n
         + params.cost_su * startups
         + params.cost_sd * shutdowns
     )
-    return var_cost + fixed_cost
+    adders = _hour_adders(bid_adders, params.T)
+    return var_cost + fixed_cost + float(adders @ excess)
+
+
+def _hour_adders(bid_adders, periods):
+    adders = np.zeros(periods) if bid_adders is None else np.asarray(bid_adders, dtype=float)
+    if adders.shape != (periods,) or not np.isfinite(adders).all():
+        raise ValueError('bid_adders must be a finite hourly vector')
+    return adders
 
 
 def dispatch_profit(
@@ -61,9 +69,10 @@ def dispatch_profit(
     lambda_star: np.ndarray,
     p_dispatch: np.ndarray,
     u_dispatch: np.ndarray,
+    *, bid_adders=None,
 ) -> float:
     """Profit of a dispatch at a given price."""
-    return float(np.dot(lambda_star, p_dispatch)) - dispatch_cost(params, p_dispatch, u_dispatch)
+    return float(np.dot(lambda_star, p_dispatch)) - dispatch_cost(params, p_dispatch, u_dispatch, bid_adders=bid_adders)
 
 
 class UnitSelfScheduleMILP:
@@ -83,6 +92,7 @@ class UnitSelfScheduleMILP:
         return_timing: bool = False,
         require_optimal: bool = False,
         mip_gap: float = 1e-7,
+        bid_adders: np.ndarray | None = None,
     ) -> Tuple[np.ndarray, np.ndarray, float]:
         try:
             import gurobi_compat as gp
@@ -92,6 +102,7 @@ class UnitSelfScheduleMILP:
 
         t_start = time.perf_counter()
         T = params.T
+        adders = _hour_adders(bid_adders, T)
         lambda_star = np.asarray(lambda_star, dtype=float)
         segs = params.get_pwl_segments()
         K = len(segs)
@@ -121,7 +132,7 @@ class UnitSelfScheduleMILP:
             profit -= params.cost_su * su[t]
             profit -= params.cost_sd * sd[t]
             for k, (slope, _) in enumerate(segs):
-                profit -= slope * x[k, t]
+                profit -= (slope + adders[t]) * x[k, t]
         model.setObjective(profit, GRB.MAXIMIZE)
 
         for t in range(T):
@@ -210,6 +221,7 @@ class UnitSelfScheduleMILP:
         p_dispatch: np.ndarray,
         u_dispatch: np.ndarray,
         max_profit: float,
+        *, bid_adders=None,
     ) -> float:
-        scheduled_profit = dispatch_profit(params, lambda_star, p_dispatch, u_dispatch)
+        scheduled_profit = dispatch_profit(params, lambda_star, p_dispatch, u_dispatch, bid_adders=bid_adders)
         return max(0.0, float(max_profit) - scheduled_profit)

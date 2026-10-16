@@ -1,0 +1,2 @@
+case,rho_lower,rho_upper,selected_price_segments,physical_regions,joint_intervals,unique_candidate_bids,candidate_plan_bid_pairs,best_rho,baseline_true_profit,best_candidate_true_profit,additional_profit,relative_gain
+30-G1,0.0,0.5,83,17,99,100,116,0.31451766098802286,37289.31231503801,45100.867417243164,7811.555102205151,0.20948509417951675

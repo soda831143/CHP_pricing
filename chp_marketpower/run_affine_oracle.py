@@ -17,6 +17,7 @@ from engine import load_case
 from price_vulnerability.affine_oracle import dual_audit_passed, query, solve_endpoint, load_endpoints, save_endpoints
 from price_vulnerability.budgeted_oracle import build_budgeted_oracle
 from price_vulnerability.persistent_chp import PersistentCHP
+from price_vulnerability.model_identity import model_identity, check_model_identity
 
 
 def main() -> None:
@@ -85,6 +86,7 @@ def main() -> None:
                 scope["case"], scope["network"], scope["T"],
                 scope["segments"], scope["congestion"],
             )
+            check_model_identity(args.out_dir, generators, network, report)
             with contextlib.redirect_stdout(io.StringIO()):
                 solved = solve_endpoint(generators, network, scope["generator_index"], args.query,
                                          aggregate_output=scope.get('aggregate_output', False),
@@ -113,6 +115,7 @@ def main() -> None:
         generators, network = load_case(
             args.case, args.network, args.T, args.segments, args.congestion
         )
+        model_stamp = model_identity(generators, network)
         if not 0 <= args.generator < len(generators):
             raise ValueError("generator is outside the case")
         scope = {"case": args.case, "network": args.network, "T": args.T,
@@ -145,6 +148,8 @@ def main() -> None:
             raise ValueError("fork output directory must be empty to preserve the source and other files")
         if args.resume or args.resume_from is not None or args.initial_map is not None:
             saved = json.loads((source_dir / "audit.json").read_text(encoding="utf-8"))
+            if not check_model_identity(source_dir, generators, network, saved):
+                raise ValueError('Cannot inherit unbound legacy witnesses; revalidate and bind their model data first')
             if args.resume:
                 parent_oracle = saved.get("parent_oracle")
             if args.resume and saved.get("learning_seed_delta") is not None:
@@ -210,6 +215,7 @@ def main() -> None:
                 'endpoint_solver': args.endpoint_solver,
                 'new_chp_solves': solve_count,
                 'inherited_offline_seconds': previous_offline_seconds,
+                'model_identity': model_stamp,
                 'persistent_timing': dict(setup_seconds=persistent.setup_seconds,
                                           reoptimization_seconds=persistent.reoptimization_seconds,
                                           extraction_audit_seconds=persistent.audit_seconds),
@@ -346,6 +352,7 @@ def main() -> None:
         "scope": {"case": args.case, "network": args.network, "T": args.T,
                   "segments": args.segments, "congestion": args.congestion,
                   "generator_index": args.generator, "parameter": "all-day absolute adder"},
+        "model_identity": model_identity(generators, network),
         "max_full_lp_residuals": max_audit,
         "intervals": checks,
         "offline_seconds": offline_seconds,

@@ -14,6 +14,7 @@ from price_vulnerability.affine_oracle import query
 from price_vulnerability.range_vulnerability import range_price_impact
 from price_vulnerability.scalar_markup import apply_generator_adder
 from strategic_market_simulation.profit_sweep import _settle_target
+from price_vulnerability.model_identity import check_model_identity
 
 
 ROOT = Path(__file__).resolve().parent
@@ -103,6 +104,7 @@ def range_assessment(oracle_dir, output):
     if audit['status'] != 'numerically_validated':
         raise ValueError('Economic application requires a separately complete local oracle')
     g, n = load_case('30', 'ptdf', 24, 3, 'tight')
+    check_model_identity(local, g, n, audit)
     rows = []
     with np.load(local/'oracle.npz') as archive:
         if not np.allclose(archive['boundaries'][[0, -1]], [16.7928, 18.8919], rtol=0., atol=1e-10):

@@ -11,6 +11,7 @@ from engine import ScheduleRunMILP, load_case
 from benchmarks.unit_self_schedule import dispatch_cost
 from price_vulnerability.oracle_compression import query_compact, load_matched_compact
 from price_vulnerability.scalar_markup import apply_generator_adder
+from price_vulnerability.model_identity import check_model_identity
 from strategic_market_simulation.profit_sweep import _settle_target
 
 
@@ -93,6 +94,7 @@ def assess(oracle_dir, out_dir, *, max_solves=400, tolerance=1e-5):
     if scope.get('bid_hour_1based') is not None:
         raise ValueError('This physical-profit study supports all-day adders only, not a single-hour price map')
     gens, net = load_case(scope['case'], scope['network'], scope['T'], scope['segments'], scope['congestion'])
+    check_model_identity(oracle_dir, gens, net, audit)
     g = scope['generator_index']
     slopes = gens[g].pwl_slopes
     ref = float(slopes[len(slopes)//2] if slopes else gens[g].cost_var)
@@ -219,6 +221,7 @@ def validate_existing(oracle_dir, out_dir):
         raise ValueError('Validation must use the original selected-price path')
     scope = audit['scope']
     gens, net = load_case(scope['case'], scope['network'], scope['T'], scope['segments'], scope['congestion'])
+    check_model_identity(oracle_dir, gens, net, audit)
     g = scope['generator_index']
     with np.load(out_dir/'physical_plans.npz') as data:
         saved = {float(delta):(data['outputs'][i], data['commitments'][i]) for i, delta in enumerate(data['deltas'])}

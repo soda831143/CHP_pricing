@@ -11,6 +11,7 @@ import numpy as np
 
 from engine import PrimalCHPLP, load_case
 from price_vulnerability.affine_oracle import audited_solution, dual_audit_passed, query, bid_adder_matrix
+from price_vulnerability.model_identity import check_model_identity
 
 
 def validate_point(generators, network, generator_index, delta, k, data, persistent=None, *, aggregate_output=False, hour=None):
@@ -108,6 +109,7 @@ def main() -> None:
         scope["case"], scope["network"], scope["T"],
         scope["segments"], scope["congestion"],
     )
+    check_model_identity(args.oracle_dir, generators, network, report)
     from price_vulnerability.persistent_chp import PersistentCHP
     aggregate_output = scope.get('aggregate_output', False)
     hour = scope['bid_hour_1based']-1 if 'bid_hour_1based' in scope else None

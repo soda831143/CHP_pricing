@@ -1,0 +1,100 @@
+{
+  "model_identity": {
+    "schema": 1,
+    "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+    "components": {
+      "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+      "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+      "demand": {
+        "shape": [
+          30,
+          24
+        ],
+        "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+      },
+      "PTDF": {
+        "shape": [
+          41,
+          30
+        ],
+        "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+      },
+      "PTDF_Gen": {
+        "shape": [
+          41,
+          6
+        ],
+        "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+      },
+      "F_max": {
+        "shape": [
+          41
+        ],
+        "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+      }
+    },
+    "initial_conditions": [
+      {
+        "unit": "G1",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 6,
+        "minimum_down_time": 6
+      },
+      {
+        "unit": "G2",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 4,
+        "minimum_down_time": 4
+      },
+      {
+        "unit": "G3",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 5,
+        "minimum_down_time": 5
+      },
+      {
+        "unit": "G4",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 3,
+        "minimum_down_time": 3
+      },
+      {
+        "unit": "G5",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 5,
+        "minimum_down_time": 5
+      },
+      {
+        "unit": "G6",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 4,
+        "minimum_down_time": 4
+      }
+    ]
+  },
+  "oracle_sha256": "16d6ab0fe14d2638dd0f5941aa97fb8587ab6327aa91dc1a39937cf9402b61fe",
+  "binding_kind": "retrospective after current-data direct value/physical audit at declared bids; not a contemporaneous historical snapshot",
+  "directly_rechecked_deltas": [
+    0.0,
+    20.991
+  ],
+  "audit_report": "results\\finalization_20261017\\initial_audit\\initial_condition_audit.json"
+}

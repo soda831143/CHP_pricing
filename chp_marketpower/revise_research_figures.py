@@ -12,6 +12,7 @@ from price_vulnerability.oracle_compression import load_matched_compact, query_c
 
 OLD = ROOT/'results/figure_study_20261016'
 HOUR_CASE = '30_G1_hour1_0to50'
+PREVIOUS = ROOT/'results/presentation_revision_20261016'
 
 
 def selected_prices(compact, deltas):
@@ -54,6 +55,8 @@ def render(output, qa_tools=None):
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_pdf import PdfPages
     from matplotlib.colors import TwoSlopeNorm
+    from engine import load_case
+    from price_vulnerability.model_identity import check_model_identity
 
     plt.rcParams.update({'font.family':'sans-serif', 'font.sans-serif':['Arial', 'DejaVu Sans'],
         'font.size':9, 'axes.labelsize':9, 'axes.titlesize':9, 'xtick.labelsize':8,
@@ -63,11 +66,13 @@ def render(output, qa_tools=None):
     if qa_tools:
         sys.path.insert(0, str(qa_tools))
         from audit_panel_alignment import require_matplotlib_panel_alignment
-    _, compression, compact = load_matched_compact(MAIN)
-    hourly_audit, hourly_compression, hourly = load_matched_compact(output/HOUR_CASE)
+    main_audit, compression, compact = load_matched_compact(MAIN)
+    gens, network = load_case('30', 'ptdf', 24, 3, 'tight')
+    check_model_identity(MAIN, gens, network, main_audit)
+    hourly_audit, hourly_compression, hourly = load_matched_compact(PREVIOUS/HOUR_CASE)
     if hourly_audit['scope'].get('bid_hour_1based') != 1:
         raise ValueError('The localized experiment must use hour 1, not an all-day map')
-    validation = read(output/HOUR_CASE/'validation.json')
+    validation = read(PREVIOUS/HOUR_CASE/'validation.json')
     if validation['status'] != 'passed':
         raise ValueError('Localized selector needs independent direct validation')
     report = read(PROFIT/'profit_range.json')
@@ -99,19 +104,25 @@ def render(output, qa_tools=None):
         ax.set_axisbelow(True)
 
     pb, prices = compact['price_boundaries'], compact['prices']
-    buses = [0, 1, 21, 26, 22, 12]
+    buses = [network.gen_bus_idx(i) for i in range(len(gens))]
+    peak_hour = int(np.argmax(network.sys_demand))
+    comparison = []
+    for hour in [0, peak_hour]:
+        spread = np.ptp(prices[:, buses, hour], axis=1)
+        for i, bus in enumerate(buses):
+            comparison.append(dict(hour=hour+1, system_load_mw=float(network.sys_demand[hour]),
+                unit=f'G{i+1}', bus=bus+1, baseline_price=float(prices[0, bus, hour]),
+                upper_bid_price=float(prices[-1, bus, hour]),
+                min_spatial_spread=float(spread.min()), max_spatial_spread=float(spread.max())))
+    write_csv(output/'hour_selection_comparison.csv', comparison)
     spatial = []
     fig, axes = plt.subplots(2, 1, figsize=(7.2, 5.5))
     fig.subplots_adjust(left=.14, right=.85, bottom=.12, top=.93, hspace=.68)
     for i, bus in enumerate(buses):
-        change = prices[:, bus, 0]-prices[0, bus, 0]
-        axes[0].plot(100*pb/REF, change, color=COLORS[i], ls=['-', '--', '-.', ':', '-', '--'][i],
+        axes[0].plot(100*pb/REF, prices[:, bus, peak_hour], color=COLORS[i], ls=['-', '--', '-.', ':', '-', '--'][i],
                      label=f'G{i+1}: bus {bus+1}', linewidth=1.7 if i == 0 else 1.15)
-    axes[0].plot(100*pb/REF, prices[:, 14, 0]-prices[0, 14, 0], color='#202A35',
-                 ls=(0, (4, 1, 1, 1)), label='Bus 15 (no generator)', linewidth=1.2)
-    axes[0].set(xlim=(0, 50), ylabel='Price change ($/MWh)', xlabel='All-day G1 bid adder / reference slope (%)')
-    axes[0].axhline(0, color='#ADB8BD', linewidth=.6)
-    label(axes[0], 'a', 'Spatial response at hour 1')
+    axes[0].set(xlim=(0, 50), ylabel='Selected CHP price ($/MWh)', xlabel='All-day G1 bid adder / reference slope (%)')
+    label(axes[0], 'a', f'Generator-bus prices at peak-load hour {peak_hour+1}')
     axes[0].legend(loc='lower left', bbox_to_anchor=(-.02, 1.22), ncol=3, frameon=False,
                    fontsize=8, columnspacing=1.3, handlelength=2.5)
     # Leave the legend a dedicated top strip instead of masking price curves.
@@ -129,10 +140,15 @@ def render(output, qa_tools=None):
     fig.colorbar(image, cax=color_ax).set_label('Price change ($/MWh)', fontsize=8)
     save(fig, 'figure1_spatial_temporal_prices', list(axes))
     for k, delta in enumerate(pb):
-        for bus in buses+[14]:
-            spatial.append(dict(delta=float(delta), rho=float(delta/REF), bus=bus+1, hour=1,
-                price=float(prices[k, bus, 0]), change=float(prices[k, bus, 0]-prices[0, bus, 0])))
+        for bus in buses:
+            spatial.append(dict(delta=float(delta), rho=float(delta/REF), bus=bus+1, hour=peak_hour+1,
+                price=float(prices[k, bus, peak_hour]), change=float(prices[k, bus, peak_hour]-prices[0, bus, peak_hour])))
     write_csv(output/'figure1_spatial_prices.csv', spatial)
+    dp15 = prices[:, 14, 0]-prices[0, 14, 0]
+    k15 = int(np.argmax(abs(dp15)))
+    write_csv(output/'supplementary_bus15.csv', [dict(bus=15, hour=1,
+        baseline_price=float(prices[0, 14, 0]), upper_bid_price=float(prices[-1, 14, 0]),
+        max_abs_change=float(abs(dp15[k15])), rho_at_max_change=float(pb[k15]/REF))])
     np.savez_compressed(output/'price_heatmaps.npz', all_day_edges_percent=edges,
         all_day_cell_centers_delta=centers, all_day_bus1_change=heat)
 
@@ -140,7 +156,7 @@ def render(output, qa_tools=None):
     fig.subplots_adjust(left=.10, right=.98, bottom=.23, top=.83, wspace=.38)
     timing, timing_rows = [], []
     for ax, name, path, letter in zip(axes, ['30-G1', '30-G2', '118-G11'],
-            [OLD/'trace_30_G1_q1000.json', OLD/'trace_30_G2_q1000.json', output/'trace_118_G11_q200.json'], 'abc'):
+            [OLD/'trace_30_G1_q1000.json', OLD/'trace_30_G2_q1000.json', PREVIOUS/'trace_118_G11_q200.json'], 'abc'):
         trace = read(path)
         direct, online = map(np.asarray, (trace['same_model_cumulative_seconds'], trace['oracle_cumulative_online_seconds']))
         fixed = trace['oracle_offline_seconds_prior_run']+trace['postprocessing_seconds']+trace['oracle_file_load_seconds']
@@ -185,13 +201,15 @@ def render(output, qa_tools=None):
         label='Finite endpoint candidates')
     axes[0].plot(best_x, winner['extra_profit_vs_truthful']/1000, '*', ms=10, color=COLORS[0],
                  label='Upper boundary / supremum estimate')
-    axes[0].set(xlim=(0, 50), ylabel='Extra true profit ($1000)', xlabel='All-day G1 bid adder / reference slope (%)')
+    axes[0].set(xlim=(0, 50), ylim=(-2.2, winner['extra_profit_vs_truthful']/1000+1.7),
+        ylabel='Additional true profit\nrelative to truthful bid ($1000)', xlabel='All-day G1 bid adder / reference slope (%)')
     label(axes[0], 'a', 'Strategic G1: profitable offers over the complete range')
     fig.legend(*axes[0].get_legend_handles_labels(), loc='lower center', ncol=2,
                bbox_to_anchor=(.55, .005), frameon=False, fontsize=8)
-    axes[0].annotate(f'{best_x:.4f}%; +${winner["extra_profit_vs_truthful"]:,.0f}',
-        xy=(best_x, winner['extra_profit_vs_truthful']/1000), xytext=(.10, .85), textcoords='axes fraction',
-        fontsize=8, color='#955517')
+    axes[0].annotate(f'{best_x:.4f}%\n+${winner["extra_profit_vs_truthful"]:,.0f}',
+        xy=(best_x, winner['extra_profit_vs_truthful']/1000),
+        xytext=(best_x+3.5, winner['extra_profit_vs_truthful']/1000+.7),
+        fontsize=8, va='top', color='#955517', arrowprops=dict(arrowstyle='-', color='#955517', lw=.7))
     for i in range(1, 6):
         unit = [r for r in rows if int(r['generator_index']) == i]
         # Non-strategic profit is independent of the physical tie at a fixed price.
@@ -200,7 +218,7 @@ def render(output, qa_tools=None):
         axes[1].plot(100*values(sample, 'rho'), values(sample, 'true_profit_change'),
                      color=COLORS[i], ls=['-', '-', '-', ':', '--', '-.'][i], marker='.', ms=1.7,
                      linewidth=1.25 if i < 3 else .8, label=f'G{i+1}')
-    axes[1].set(xlim=(0, 50), ylabel='Extra true profit ($)', xlabel='All-day G1 bid adder / reference slope (%)')
+    axes[1].set(xlim=(0, 50), ylabel='Change in true profit ($)', xlabel='All-day G1 bid adder / reference slope (%)')
     label(axes[1], 'b', 'Other generators: directly evaluated samples, separate scale')
     axes[1].legend(frameon=False, loc='upper left', ncol=5, fontsize=8)
     for ax in axes[:2]:
@@ -214,9 +232,6 @@ def render(output, qa_tools=None):
         branch = [r for r in local if side*(r['delta']-winner['delta']) > 0]
         root_profit = (winner['true_profit'] if side == -1 else
             min(r['true_profit'] for r in candidates if r['delta'] == winner['delta']))
-        axes[2].plot([100*branch[0]['delta']/REF, best_x],
-                     [(branch[0]['solver_dispatch_profit_at_same_price']-baseline_profit)/1000,
-                      (root_profit-baseline_profit)/1000], color=COLORS[0])
         axes[2].plot(100*branch[0]['delta']/REF,
                      (branch[0]['solver_dispatch_profit_at_same_price']-baseline_profit)/1000,
                      'o', ms=4, color=COLORS[0])
@@ -225,7 +240,7 @@ def render(output, qa_tools=None):
                          mfc='white', mec=COLORS[0], zorder=4)
     axes[2].scatter([best_x], [(winner['true_profit']-baseline_profit)/1000], marker='*', s=90, color=COLORS[0], zorder=4)
     axes[2].axvline(best_x, color='#AAB3B9', ls=':', linewidth=.7)
-    axes[2].set(xlim=(best_x-.0007, best_x+.0007), ylabel='Extra true profit ($1000)',
+    axes[2].set(xlim=(best_x-.0007, best_x+.0007), ylabel='Additional true profit\nrelative to truthful bid ($1000)',
                 xlabel='All-day G1 bid adder / reference slope (%)')
     axes[2].ticklabel_format(axis='x', useOffset=False)
     axes[2].set_xticks([best_x-.0005, best_x, best_x+.0005],
@@ -234,7 +249,16 @@ def render(output, qa_tools=None):
     axes[2].text(.05, .60, 'Same boundary price; two optimal UC plans\nTrue-profit difference: $1,387.35',
                  transform=axes[2].transAxes, fontsize=8)
     save(fig, 'figure3_profitable_bid', list(axes))
-    write_csv(output/'table2_settlement_decomposition.csv', settlement_table(rows, source['baseline'], winner))
+    full_table = settlement_table(rows, source['baseline'], winner)
+    write_csv(output/'tableA1_absolute_settlements.csv', full_table)
+    write_csv(output/'table2_settlement_decomposition.csv', [
+        {k:v for k, v in r.items() if k == 'unit' or k.endswith('_change')} for r in full_table])
+    write_csv(output/'table3_market_power_summary.csv', [dict(
+        case='30-G1', rho_lower=0., rho_upper=.5, selected_price_segments=compression['selected_price_intervals'],
+        physical_regions=len(report['physical_regions']), joint_intervals=len(report['joint_intervals']),
+        unique_candidate_bids=len({r['delta'] for r in candidates}), candidate_plan_bid_pairs=len(candidates),
+        best_rho=winner['rho'], baseline_true_profit=baseline_profit, best_candidate_true_profit=winner['true_profit'],
+        additional_profit=winner['extra_profit_vs_truthful'], relative_gain=winner['extra_profit_vs_truthful']/baseline_profit)])
     write_csv(output/'table1_oracle_construction.csv', load_rows(OLD/'table1_oracle_construction.csv'))
 
     fig, axes = plt.subplots(2, 1, figsize=(7.2, 5.0))
@@ -293,7 +317,9 @@ def render(output, qa_tools=None):
     inputs = [MAIN/'compact.npz', PROFIT/'profit_range.json', PROFIT/'direct_validation.json',
         OLD/'economic_source_audit.json', OLD/'generator_settlements.csv',
         OLD/'trace_30_G1_q1000.json', OLD/'trace_30_G2_q1000.json',
-        output/'trace_118_G11_q200.json', output/HOUR_CASE/'oracle.npz', output/HOUR_CASE/'validation.json']
+        PREVIOUS/'trace_118_G11_q200.json', PREVIOUS/HOUR_CASE/'oracle.npz', PREVIOUS/HOUR_CASE/'validation.json',
+        ROOT/'results/finalization_20261017/initial_audit/initial_condition_audit.json',
+        ROOT/'results/finalization_20261017/localized_economics/localized_economic_followup.json']
     write_json(output/'input_manifest.json', {p.resolve().relative_to(ROOT).as_posix():
         hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs})
     bundle.close()

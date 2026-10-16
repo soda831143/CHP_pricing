@@ -1,0 +1,14 @@
+{
+  "results/scope_study_20261016/30_bracket_repeat1/compact.npz": "f9ed496035e2cbf25cd6e06250fdc15f7105439881991be8ca75c97b74f52d3b",
+  "results/targeted_study_20261016/30_G1_profit_0to50/profit_range.json": "723dbfe0053f0713582055d570f517bd334623d0d2c73a7b8de485d7fde03178",
+  "results/targeted_study_20261016/30_G1_profit_0to50/direct_validation.json": "f8913f3e946c79a4b279219bf7589d12a6dd5c5a2afd355de5f8fc8f7fd0f09e",
+  "results/figure_study_20261016/economic_source_audit.json": "8fdaa9e9d8951e78a295f23fc54202754c0404b01b06ffd245afc40b911f6448",
+  "results/figure_study_20261016/generator_settlements.csv": "ce5251a442f7d47087c5776eb32d7531f5bb908dc98f38c525324ead5a445148",
+  "results/figure_study_20261016/trace_30_G1_q1000.json": "ef944b59abae5a95c4119d3f2250ac9447749380e0a65e87a68bc55ad06a191c",
+  "results/figure_study_20261016/trace_30_G2_q1000.json": "7a5fa511d71df9a9fdd9a3577cfbca257cf7b27112d3864bbc121ce2f876203b",
+  "results/presentation_revision_20261016/trace_118_G11_q200.json": "c4ae10106f56557de540cbf31a47be852b7fa09404061085f73486c6d6606037",
+  "results/presentation_revision_20261016/30_G1_hour1_0to50/oracle.npz": "16d6ab0fe14d2638dd0f5941aa97fb8587ab6327aa91dc1a39937cf9402b61fe",
+  "results/presentation_revision_20261016/30_G1_hour1_0to50/validation.json": "934a9cabdc6e234517545ffe532c7c748b93929a9f2e165b27802b6cdb6a65a5",
+  "results/finalization_20261017/initial_audit/initial_condition_audit.json": "de045dee20710cc194f297afe4899ea96472c0a59d5e9ab49a42e8df7d626be0",
+  "results/finalization_20261017/localized_economics/localized_economic_followup.json": "a76ba2748836901b7dafe0e2f7819bedca11fa5273000125bcaa580e84b978e8"
+}

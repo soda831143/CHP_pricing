@@ -63,19 +63,20 @@ def _profit_at_reported(true_generators, reported, network, generator_index, par
 
 
 def _settle_target(true_generator, reported_generator, nodal_price, p_dispatch, u_dispatch,
-                   *, mip_gap=1e-7):
+                   *, mip_gap=1e-7, bid_adders=None):
     self_u, self_p, best, self_info = UnitSelfScheduleMILP.solve(
-        reported_generator, nodal_price, require_optimal=True, return_timing=True, mip_gap=mip_gap
+        reported_generator, nodal_price, require_optimal=True, return_timing=True, mip_gap=mip_gap,
+        bid_adders=bid_adders,
     )
-    scheduled = dispatch_profit(reported_generator, nodal_price, p_dispatch, u_dispatch)
+    scheduled = dispatch_profit(reported_generator, nodal_price, p_dispatch, u_dispatch, bid_adders=bid_adders)
     if best < scheduled - 1e-4:
         raise RuntimeError("Physical dispatch exceeds the optimal single-unit self schedule")
     uplift = UnitSelfScheduleMILP.uplift(
-        reported_generator, nodal_price, p_dispatch, u_dispatch, best
+        reported_generator, nodal_price, p_dispatch, u_dispatch, best, bid_adders=bid_adders,
     )
     revenue = float(np.dot(nodal_price, p_dispatch))
     true_cost = dispatch_cost(true_generator, p_dispatch, u_dispatch)
-    reported_cost = dispatch_cost(reported_generator, p_dispatch, u_dispatch)
+    reported_cost = dispatch_cost(reported_generator, p_dispatch, u_dispatch, bid_adders=bid_adders)
     profit = revenue + uplift - true_cost
     if abs(profit - best - (reported_cost - true_cost)) > 1e-4:
         raise RuntimeError("Reported self-schedule surplus and bid wedge do not reconcile")

@@ -1,0 +1,106 @@
+{
+  "status": "numerically_validated",
+  "price_map": "results\\presentation_revision_20261016\\30_G1_hour1_0to50",
+  "physical_regions": [
+    {
+      "left": 0.0,
+      "right": 19.583999999995488,
+      "witness_delta": 0.0,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 19.583999999995488,
+      "right": 20.991,
+      "witness_delta": 20.991,
+      "common_plan_gap_usd": 5.820766091346741e-11,
+      "ready": true
+    }
+  ],
+  "physical_points": [
+    {
+      "intercept": 183288.96480640344,
+      "exposure": 40.0,
+      "lower_bound": 183288.96480640347,
+      "delta": 0.0
+    },
+    {
+      "intercept": 183388.2471716208,
+      "exposure": 34.9304347826087,
+      "lower_bound": 184121.4719281426,
+      "delta": 20.991
+    },
+    {
+      "intercept": 183288.96480640344,
+      "exposure": 40.0,
+      "lower_bound": 184072.32480640325,
+      "delta": 19.583999999995488
+    }
+  ],
+  "total_uc_solves": 3,
+  "new_uc_solves": 1,
+  "inherited_endpoint_uc_solves": 2,
+  "target_candidates": [
+    {
+      "delta": 0.0,
+      "rho": 0.0,
+      "physical_region": 0,
+      "exposure_mwh": 40.0,
+      "energy_revenue": 143815.43707318846,
+      "reported_uplift": 594.6131664871937,
+      "reported_cost": 107120.73792463764,
+      "true_cost": 107120.73792463764,
+      "true_profit": 37289.31231503801,
+      "best_reported_profit": 37289.31231503801,
+      "self_schedule_upper_bound": 37289.31231503801,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "delta": 19.583999999995488,
+      "rho": 0.466485636701336,
+      "physical_region": 0,
+      "exposure_mwh": 40.0,
+      "energy_revenue": 143815.43707318843,
+      "reported_uplift": 594.6131664871937,
+      "reported_cost": 107904.09792463746,
+      "true_cost": 107120.73792463764,
+      "true_profit": 37289.31231503798,
+      "best_reported_profit": 36505.95231503816,
+      "self_schedule_upper_bound": 36505.95231503816,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "delta": 19.583999999995488,
+      "rho": 0.466485636701336,
+      "physical_region": 1,
+      "exposure_mwh": 34.9304347826087,
+      "energy_revenue": 143358.13001345278,
+      "reported_uplift": 739.8073740489344,
+      "reported_cost": 107591.98507246356,
+      "true_cost": 106907.9074376811,
+      "true_profit": 37190.0299498206,
+      "best_reported_profit": 36505.95231503816,
+      "self_schedule_upper_bound": 36505.95231503816,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "delta": 20.991,
+      "rho": 0.5,
+      "physical_region": 1,
+      "exposure_mwh": 34.9304347826087,
+      "energy_revenue": 143358.13001345278,
+      "reported_uplift": 732.6744957880364,
+      "reported_cost": 107641.13219420284,
+      "true_cost": 106907.9074376811,
+      "true_profit": 37182.89707155971,
+      "best_reported_profit": 36449.67231503798,
+      "self_schedule_upper_bound": 36449.67231503798,
+      "self_schedule_gap_usd": 0.0
+    }
+  ],
+  "baseline_true_profit": 37289.31231503801,
+  "full_range_common_region_coverage": true,
+  "maximum_candidate_profit": 37289.31231503801,
+  "maximum_additional_profit": 0.0,
+  "interpretation": "Conditional on saved affine selector and chosen optimal physical witnesses. Convex profit on each common-plan region reduces its maximum to endpoints. No claim about all dispatch ties or all legal CHP price selections."
+}

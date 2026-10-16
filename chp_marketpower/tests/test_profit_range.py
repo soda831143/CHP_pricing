@@ -92,7 +92,7 @@ def test_successful_physical_witness_survives_a_later_mip_failure(tmp_path, monk
             self.solve_info = dict(lower_bound=1.)
             return np.ones((1, 1)), np.ones((1, 1)), 1.
     monkeypatch.setattr(study, 'ScheduleRunMILP', UC)
-    with pytest.raises(RuntimeError, match='injected MIP failure'):
+    with pytest.warns(RuntimeWarning, match='Legacy'), pytest.raises(RuntimeError, match='injected MIP failure'):
         study.assess(source, output)
     with np.load(output/'physical_plans.npz') as saved:
         assert saved['deltas'].tolist() == [0.]

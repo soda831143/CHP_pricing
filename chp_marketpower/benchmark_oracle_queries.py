@@ -13,6 +13,7 @@ import numpy as np
 from engine import PrimalCHPLP, load_case
 from price_vulnerability.oracle_compression import query_compact
 from price_vulnerability.affine_oracle import bid_adder_matrix
+from price_vulnerability.model_identity import check_model_identity
 
 
 def _solve_fresh(generators, network, g: int, delta: float, *, aggregate_output=False, hour=None) -> tuple[float, np.ndarray]:
@@ -103,6 +104,7 @@ def benchmark(oracle_dir: Path, n_queries: int, skip_fresh: bool = False,
         scope["case"], scope["network"], scope["T"],
         scope["segments"], scope["congestion"],
     )
+    check_model_identity(oracle_dir, generators, network, build)
     started = time.perf_counter()
     with np.load(oracle_dir / "compact.npz") as compact:
         value_boundaries, values = compact["value_boundaries"], compact["values"]

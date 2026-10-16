@@ -1,0 +1,32 @@
+{
+  "rows": [
+    {
+      "instance": "30-G1",
+      "queries": 1000,
+      "first_amortized_query": 138,
+      "offline_postprocess_load_seconds": 42.517688799940515,
+      "reoptimization_seconds": 286.4636559999781,
+      "oracle_total_seconds": 42.52434729994275,
+      "speedup": 6.7364621490701575
+    },
+    {
+      "instance": "30-G2",
+      "queries": 1000,
+      "first_amortized_query": 18,
+      "offline_postprocess_load_seconds": 5.801207999989856,
+      "reoptimization_seconds": 119.27767939999467,
+      "oracle_total_seconds": 5.807894099969417,
+      "speedup": 20.537164994214127
+    },
+    {
+      "instance": "118-G11",
+      "queries": 200,
+      "first_amortized_query": null,
+      "offline_postprocess_load_seconds": 311.5963376000873,
+      "reoptimization_seconds": 279.34616269997787,
+      "oracle_total_seconds": 311.5993373001111,
+      "speedup": 0.8964915173453364
+    }
+  ],
+  "interpretation": "Single recorded query streams; no extrapolated 118-bus crossing. Archived construction plus measured load and lookup cost."
+}

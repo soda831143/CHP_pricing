@@ -8,7 +8,7 @@
 同时支持单节点（无网络约束）和多节点（PTDF 直流潮流）两种模式，
 由 NetworkModel.is_single_node 自动切换。
 
-假设：所有机组在 t=0 之前均处于关机状态（初始状态为 OFF）。
+初态由 GeneratorParams 指定；默认全机关机且最小停机时间已满足。
 
 变量说明
 --------
@@ -71,6 +71,7 @@ class ScheduleRunMILP:
         self,
         generators: List[GeneratorParams],
         network: "NetworkModel | np.ndarray",
+        bid_adders: np.ndarray | None = None,
     ) -> None:
         self.generators = generators
         if isinstance(network, np.ndarray):
@@ -79,6 +80,9 @@ class ScheduleRunMILP:
         self.demand = network.sys_demand
         self.T = network.T
         self.N = len(generators)
+        self.bid_adders = np.zeros((self.N, self.T)) if bid_adders is None else np.asarray(bid_adders, dtype=float).copy()
+        if self.bid_adders.shape != (self.N, self.T) or not np.isfinite(self.bid_adders).all():
+            raise ValueError('bid_adders must be a finite generator-by-hour matrix')
         self._incremental_dispatch = None
 
     def solve(self, require_optimal: bool = False, mip_gap: float = 1e-6) -> Tuple[np.ndarray, np.ndarray, float]:
@@ -131,7 +135,7 @@ class ScheduleRunMILP:
             segs = g.get_pwl_segments()
             for t in range(T):
                 for k, (slope_k, _) in enumerate(segs):
-                    obj += slope_k * x[i, k, t]
+                    obj += (slope_k + self.bid_adders[i, t]) * x[i, k, t]
                 obj += g.cost_nl * u[i, t]
                 obj += g.cost_su * su[i, t]
                 obj += g.cost_sd * sd[i, t]

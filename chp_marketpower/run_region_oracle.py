@@ -11,6 +11,7 @@ from engine import load_case
 from price_vulnerability.affine_oracle import save_endpoints
 from price_vulnerability.optimality_region import build_region_oracle
 from price_vulnerability.persistent_chp import PersistentCHP
+from price_vulnerability.model_identity import model_identity
 
 
 def main():
@@ -32,6 +33,7 @@ def main():
     if not np.isfinite([args.lower, args.upper]).all() or args.lower >= args.upper:
         parser.error('Domain must be finite and increasing')
     generators, network = load_case(args.case, 'ptdf', 24, 3, 'tight')
+    model_stamp = model_identity(generators, network)
     chp = PersistentCHP(generators, network, args.generator, aggregate_output=args.aggregate_output)
     args.out_dir.mkdir(parents=True)
     scope = dict(case=args.case, network='ptdf', T=24, segments=3, congestion='tight',
@@ -44,7 +46,7 @@ def main():
         ready = np.asarray([item.price_ready for item in intervals])
         report = dict(
             status='numerically_validated' if np.all(ready) else 'numerically_validated_partial',
-            scope=scope, method='fixed-primal full-dual optimality-region expansion with gap-refinement fallback',
+            scope=scope, model_identity=model_stamp, method='fixed-primal full-dual optimality-region expansion with gap-refinement fallback',
             endpoint_solver='persistent', solved_points=len(points), stored_points=len(points),
             region_formulation=args.formulation,
             chp_solves=chp.calls, auxiliary_lps=expander.calls, max_chp_solves=args.max_chp_solves,
