@@ -1,0 +1,3072 @@
+{
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 0,
+    "parameter": "all-day absolute adder"
+  },
+  "source_oracle": "results\\scope_study_20261016\\30_bracket_repeat1",
+  "source_sha256": "2aa983e6c28d4f0c8906c4d4c7c879d4e43b46d45a8dd1b28ba58651da661880",
+  "compact_sha256": "f9ed496035e2cbf25cd6e06250fdc15f7105439881991be8ca75c97b74f52d3b",
+  "rho_interval": [
+    0.0,
+    0.5
+  ],
+  "physical_tolerance_usd": 1e-05,
+  "uc_solves": 33,
+  "physical_regions": [
+    {
+      "left": 0.0,
+      "right": 9.218100544191211,
+      "witness_delta": 0.0,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 9.218100544191211,
+      "right": 11.393501130364132,
+      "witness_delta": 9.482334555893866,
+      "common_plan_gap_usd": 5.820766091346741e-11,
+      "ready": true
+    },
+    {
+      "left": 11.393501130364132,
+      "right": 13.204080443599175,
+      "witness_delta": 12.954003254249237,
+      "common_plan_gap_usd": 5.820766091346741e-11,
+      "ready": true
+    },
+    {
+      "left": 13.204080443599175,
+      "right": 13.653999999999858,
+      "witness_delta": 13.204080443599175,
+      "common_plan_gap_usd": 0.0,
+      "ready": true
+    },
+    {
+      "left": 13.653999999999858,
+      "right": 13.927929631197317,
+      "witness_delta": 13.793738566219194,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 13.927929631197317,
+      "right": 14.357999999999697,
+      "witness_delta": 14.158355232089534,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 14.357999999999697,
+      "right": 14.416258735838216,
+      "witness_delta": 14.377320472582205,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 14.416258735838216,
+      "right": 14.992000000000546,
+      "witness_delta": 14.934110858651453,
+      "common_plan_gap_usd": 0.0,
+      "ready": true
+    },
+    {
+      "left": 14.992000000000546,
+      "right": 15.061999999999765,
+      "witness_delta": 15.03670391271621,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 15.061999999999765,
+      "right": 15.120258735837293,
+      "witness_delta": 15.074475898935916,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 15.120258735837293,
+      "right": 15.696000000212676,
+      "witness_delta": 15.403186910106418,
+      "common_plan_gap_usd": 2.7066562324762344e-09,
+      "ready": true
+    },
+    {
+      "left": 15.696000000212676,
+      "right": 15.824258735723731,
+      "witness_delta": 15.779666980607725,
+      "common_plan_gap_usd": 4.685716703534126e-09,
+      "ready": true
+    },
+    {
+      "left": 15.824258735723731,
+      "right": 19.58400000000359,
+      "witness_delta": 17.019759312872225,
+      "common_plan_gap_usd": 4.685716703534126e-09,
+      "ready": true
+    },
+    {
+      "left": 19.58400000000359,
+      "right": 19.93722421685852,
+      "witness_delta": 19.85476330006176,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 19.93722421685852,
+      "right": 20.28799999999988,
+      "witness_delta": 20.117683547265578,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 20.28799999999988,
+      "right": 20.64122421685691,
+      "witness_delta": 20.332650433483693,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 20.64122421685691,
+      "right": 20.991,
+      "witness_delta": 20.991,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    }
+  ],
+  "physical_points": [
+    {
+      "intercept": 183288.96480640344,
+      "exposure": 1559.0608695652174,
+      "lower_bound": 183288.96480640347,
+      "solver_info": {
+        "status": 2,
+        "objective": 183288.96480640347,
+        "lower_bound": 183288.96480640347,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 0.0
+    },
+    {
+      "intercept": 184058.3154935612,
+      "exposure": 1475.6000000000001,
+      "lower_bound": 197660.54465656978,
+      "solver_info": {
+        "status": 2,
+        "objective": 197660.54465656978,
+        "lower_bound": 197660.54465656978,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.218100544191211
+    },
+    {
+      "intercept": 184058.31549356124,
+      "exposure": 1475.6000000000004,
+      "lower_bound": 198050.44836423823,
+      "solver_info": {
+        "status": 2,
+        "objective": 198050.44836423823,
+        "lower_bound": 198050.44836423823,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.482334555893866
+    },
+    {
+      "intercept": 184189.78658921347,
+      "exposure": 1464.0608695652184,
+      "lower_bound": 200870.5657615266,
+      "solver_info": {
+        "status": 2,
+        "objective": 200870.56576152664,
+        "lower_bound": 200870.5657615266,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 11.393501130364132
+    },
+    {
+      "intercept": 184189.78658921336,
+      "exposure": 1464.0608695652177,
+      "lower_bound": 203155.2358579802,
+      "solver_info": {
+        "status": 2,
+        "objective": 203155.2358579802,
+        "lower_bound": 203155.2358579802,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 12.954003254249237
+    },
+    {
+      "intercept": 185577.13358051775,
+      "exposure": 1358.9913043478264,
+      "lower_bound": 203521.3640852782,
+      "solver_info": {
+        "status": 2,
+        "objective": 203521.36408527824,
+        "lower_bound": 203521.3640852782,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.204080443599175
+    },
+    {
+      "intercept": 185577.13358051778,
+      "exposure": 1358.9913043478264,
+      "lower_bound": 203795.04402360736,
+      "solver_info": {
+        "status": 2,
+        "objective": 203795.0440236074,
+        "lower_bound": 203795.04402360736,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.405465056917572
+    },
+    {
+      "intercept": 186739.58727356698,
+      "exposure": 1273.8548100568357,
+      "lower_bound": 204132.80085008277,
+      "solver_info": {
+        "status": 2,
+        "objective": 204132.8008500828,
+        "lower_bound": 204132.80085008277,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.653999999999858
+    },
+    {
+      "intercept": 186739.58727356695,
+      "exposure": 1273.8548100568357,
+      "lower_bound": 204310.8074948117,
+      "solver_info": {
+        "status": 2,
+        "objective": 204310.80749481174,
+        "lower_bound": 204310.8074948117,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.793738566219194
+    },
+    {
+      "intercept": 186739.58727356698,
+      "exposure": 1273.854810056836,
+      "lower_bound": 204481.74742840076,
+      "solver_info": {
+        "status": 2,
+        "objective": 204481.74742840076,
+        "lower_bound": 204481.74742840076,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.927929631197317
+    },
+    {
+      "intercept": 188114.14542962582,
+      "exposure": 1175.164036018175,
+      "lower_bound": 204752.53530754716,
+      "solver_info": {
+        "status": 2,
+        "objective": 204752.5353075472,
+        "lower_bound": 204752.53530754716,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.158355232089534
+    },
+    {
+      "intercept": 188447.39868488593,
+      "exposure": 1151.9537521861548,
+      "lower_bound": 204987.1506587744,
+      "solver_info": {
+        "status": 2,
+        "objective": 204987.15065877442,
+        "lower_bound": 204987.1506587744,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.357999999999697
+    },
+    {
+      "intercept": 189110.79291373873,
+      "exposure": 1105.7499474185838,
+      "lower_bound": 205008.51427031663,
+      "solver_info": {
+        "status": 2,
+        "objective": 205008.51427031663,
+        "lower_bound": 205008.51427031663,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.377320472582205
+    },
+    {
+      "intercept": 189238.22231226793,
+      "exposure": 1096.9106638801695,
+      "lower_bound": 205051.57025286453,
+      "solver_info": {
+        "status": 2,
+        "objective": 205051.57025286453,
+        "lower_bound": 205051.57025286453,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.416258735838216
+    },
+    {
+      "intercept": 189607.31819047892,
+      "exposure": 1071.3079131960808,
+      "lower_bound": 205606.34932989973,
+      "solver_info": {
+        "status": 2,
+        "objective": 205606.34932989973,
+        "lower_bound": 205606.34932989973,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.934110858651453
+    },
+    {
+      "intercept": 189666.15635859483,
+      "exposure": 1067.3832755149213,
+      "lower_bound": 205668.36642511515,
+      "solver_info": {
+        "status": 2,
+        "objective": 205668.36642511515,
+        "lower_bound": 205668.36642511515,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.992000000000546
+    },
+    {
+      "intercept": 190100.5332629427,
+      "exposure": 1038.4093624714428,
+      "lower_bound": 205714.78738661818,
+      "solver_info": {
+        "status": 2,
+        "objective": 205714.7873866182,
+        "lower_bound": 205714.78738661818,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.03670391271621
+    },
+    {
+      "intercept": 190838.7483176674,
+      "exposure": 989.3976074107143,
+      "lower_bound": 205741.0550804873,
+      "solver_info": {
+        "status": 2,
+        "objective": 205741.05508048733,
+        "lower_bound": 205741.0550804873,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.061999999999765
+    },
+    {
+      "intercept": 190976.22569224876,
+      "exposure": 980.2701758225212,
+      "lower_bound": 205753.284832131,
+      "solver_info": {
+        "status": 2,
+        "objective": 205753.28483213103,
+        "lower_bound": 205753.284832131,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.074475898935916
+    },
+    {
+      "intercept": 192100.15707631427,
+      "exposure": 905.9373615697073,
+      "lower_bound": 205798.16438171,
+      "solver_info": {
+        "status": 2,
+        "objective": 205798.16438171003,
+        "lower_bound": 205798.16438171,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.120258735837293
+    },
+    {
+      "intercept": 192111.88430998262,
+      "exposure": 905.1617641495001,
+      "lower_bound": 206054.26014705905,
+      "solver_info": {
+        "status": 2,
+        "objective": 206054.26014705905,
+        "lower_bound": 206054.26014705905,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.403186910106418
+    },
+    {
+      "intercept": 192311.88319693913,
+      "exposure": 892.4197351639928,
+      "lower_bound": 206319.30336026297,
+      "solver_info": {
+        "status": 2,
+        "objective": 206319.303360263,
+        "lower_bound": 206319.30336026297,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.696000000212676
+    },
+    {
+      "intercept": 192903.50865781476,
+      "exposure": 854.7269815411021,
+      "lower_bound": 206390.81578586265,
+      "solver_info": {
+        "status": 2,
+        "objective": 206390.81578586265,
+        "lower_bound": 206390.81578586265,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.779666980607725
+    },
+    {
+      "intercept": 193747.37745791307,
+      "exposure": 801.3994409468671,
+      "lower_bound": 206428.92956212064,
+      "solver_info": {
+        "status": 2,
+        "objective": 206428.92956212067,
+        "lower_bound": 206428.92956212064,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.824258735723731
+    },
+    {
+      "intercept": 194400.96116519932,
+      "exposure": 760.0967980744974,
+      "lower_bound": 207337.62572291214,
+      "solver_info": {
+        "status": 2,
+        "objective": 207337.62572291214,
+        "lower_bound": 207337.62572291214,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 17.019759312872225
+    },
+    {
+      "intercept": 194400.96116519938,
+      "exposure": 760.0967980744974,
+      "lower_bound": 209286.69685869303,
+      "solver_info": {
+        "status": 2,
+        "objective": 209286.69685869303,
+        "lower_bound": 209286.69685869303,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 19.58400000000359
+    },
+    {
+      "intercept": 194561.8337912863,
+      "exposure": 751.8823053208741,
+      "lower_bound": 209490.27899293703,
+      "solver_info": {
+        "status": 2,
+        "objective": 209490.27899293703,
+        "lower_bound": 209490.27899293703,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 19.85476330006176
+    },
+    {
+      "intercept": 194838.20976791138,
+      "exposure": 738.0199956222461,
+      "lower_bound": 209552.27989715704,
+      "solver_info": {
+        "status": 2,
+        "objective": 209552.27989715704,
+        "lower_bound": 209552.27989715704,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 19.93722421685852
+    },
+    {
+      "intercept": 195099.59204341294,
+      "exposure": 724.909731492271,
+      "lower_bound": 209683.0966219077,
+      "solver_info": {
+        "status": 2,
+        "objective": 209683.0966219077,
+        "lower_bound": 209683.0966219077,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.117683547265578
+    },
+    {
+      "intercept": 195579.56495935493,
+      "exposure": 701.2517604777781,
+      "lower_bound": 209806.56067592802,
+      "solver_info": {
+        "status": 2,
+        "objective": 209806.56067592802,
+        "lower_bound": 209806.56067592802,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.28799999999988
+    },
+    {
+      "intercept": 196201.6126810941,
+      "exposure": 670.5908909125608,
+      "lower_bound": 209836.50284989757,
+      "solver_info": {
+        "status": 2,
+        "objective": 209836.50284989757,
+        "lower_bound": 209836.50284989757,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.332650433483693
+    },
+    {
+      "intercept": 196840.5090134344,
+      "exposure": 639.6384471220149,
+      "lower_bound": 210043.4296182021,
+      "solver_info": {
+        "status": 2,
+        "objective": 210043.4296182021,
+        "lower_bound": 210043.4296182021,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.64122421685691
+    },
+    {
+      "intercept": 197488.67533993424,
+      "exposure": 608.236902344913,
+      "lower_bound": 210256.17615705632,
+      "solver_info": {
+        "status": 2,
+        "objective": 210256.17615705635,
+        "lower_bound": 210256.17615705632,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.991
+    }
+  ],
+  "status": "numerically_validated_complete",
+  "profit_assessment_status": "completed",
+  "physical_discovery_seconds": 11.748171900049783,
+  "physical_selection": "Each interval fixes its archived common full-system plan. At a shared boundary choose the adjacent archived plan with the higher true profit. This is a declared optimistic boundary tie-break, not a claim about an ISO rule or all optimal schedules.",
+  "scope_limit": "Conditional on the declared CHP selector, physical tie-break, reported LOC uplift and floating-point COPT optimality/bounds. A small UC cost gap is NOT a bound on dispatch or profit error.",
+  "physical_coverage_fraction": 1.0,
+  "baseline_true_profit": 37289.31231503801,
+  "joint_intervals": [
+    {
+      "left": 0.0,
+      "right": 0.6599222221975165,
+      "physical_region": 0
+    },
+    {
+      "left": 0.6599222221975165,
+      "right": 2.1532555547114764,
+      "physical_region": 0
+    },
+    {
+      "left": 2.1532555547114764,
+      "right": 4.524798412704421,
+      "physical_region": 0
+    },
+    {
+      "left": 4.524798412704421,
+      "right": 4.79615396824333,
+      "physical_region": 0
+    },
+    {
+      "left": 4.79615396824333,
+      "right": 6.075711111116073,
+      "physical_region": 0
+    },
+    {
+      "left": 6.075711111116073,
+      "right": 6.166999999981226,
+      "physical_region": 0
+    },
+    {
+      "left": 6.166999999981226,
+      "right": 7.631000000014151,
+      "physical_region": 0
+    },
+    {
+      "left": 7.631000000014151,
+      "right": 8.916999999497543,
+      "physical_region": 0
+    },
+    {
+      "left": 8.916999999497543,
+      "right": 9.218100544191211,
+      "physical_region": 0
+    },
+    {
+      "left": 9.218100544191211,
+      "right": 10.024000000002802,
+      "physical_region": 1
+    },
+    {
+      "left": 10.024000000002802,
+      "right": 10.637799999983963,
+      "physical_region": 1
+    },
+    {
+      "left": 10.637799999983963,
+      "right": 10.704200000027578,
+      "physical_region": 1
+    },
+    {
+      "left": 10.704200000027578,
+      "right": 11.100639999991705,
+      "physical_region": 1
+    },
+    {
+      "left": 11.100639999991705,
+      "right": 11.241440000001601,
+      "physical_region": 1
+    },
+    {
+      "left": 11.241440000001601,
+      "right": 11.293000000026723,
+      "physical_region": 1
+    },
+    {
+      "left": 11.293000000026723,
+      "right": 11.393501130364132,
+      "physical_region": 1
+    },
+    {
+      "left": 11.393501130364132,
+      "right": 11.438000000002889,
+      "physical_region": 2
+    },
+    {
+      "left": 11.438000000002889,
+      "right": 11.672666666640247,
+      "physical_region": 2
+    },
+    {
+      "left": 11.672666666640247,
+      "right": 11.721599999999953,
+      "physical_region": 2
+    },
+    {
+      "left": 11.721599999999953,
+      "right": 11.794999999997255,
+      "physical_region": 2
+    },
+    {
+      "left": 11.794999999997255,
+      "right": 11.86733333332382,
+      "physical_region": 2
+    },
+    {
+      "left": 11.86733333332382,
+      "right": 11.92666666669541,
+      "physical_region": 2
+    },
+    {
+      "left": 11.92666666669541,
+      "right": 11.99250000000059,
+      "physical_region": 2
+    },
+    {
+      "left": 11.99250000000059,
+      "right": 12.044000000000363,
+      "physical_region": 2
+    },
+    {
+      "left": 12.044000000000363,
+      "right": 12.161333333332854,
+      "physical_region": 2
+    },
+    {
+      "left": 12.161333333332854,
+      "right": 12.4242499998957,
+      "physical_region": 2
+    },
+    {
+      "left": 12.4242499998957,
+      "right": 12.512249999987189,
+      "physical_region": 2
+    },
+    {
+      "left": 12.512249999987189,
+      "right": 12.541600000000727,
+      "physical_region": 2
+    },
+    {
+      "left": 12.541600000000727,
+      "right": 12.658933333331557,
+      "physical_region": 2
+    },
+    {
+      "left": 12.658933333331557,
+      "right": 12.776266666770882,
+      "physical_region": 2
+    },
+    {
+      "left": 12.776266666770882,
+      "right": 12.835600000031695,
+      "physical_region": 2
+    },
+    {
+      "left": 12.835600000031695,
+      "right": 12.846750000000526,
+      "physical_region": 2
+    },
+    {
+      "left": 12.846750000000526,
+      "right": 12.880199999537915,
+      "physical_region": 2
+    },
+    {
+      "left": 12.880199999537915,
+      "right": 12.901657142918916,
+      "physical_region": 2
+    },
+    {
+      "left": 12.901657142918916,
+      "right": 12.952000000065594,
+      "physical_region": 2
+    },
+    {
+      "left": 12.952000000065594,
+      "right": 12.952999999732047,
+      "physical_region": 2
+    },
+    {
+      "left": 12.952999999732047,
+      "right": 13.204080443599175,
+      "physical_region": 2
+    },
+    {
+      "left": 13.204080443599175,
+      "right": 13.209384615380587,
+      "physical_region": 3
+    },
+    {
+      "left": 13.209384615380587,
+      "right": 13.306923076929198,
+      "physical_region": 3
+    },
+    {
+      "left": 13.306923076929198,
+      "right": 13.331714285712344,
+      "physical_region": 3
+    },
+    {
+      "left": 13.331714285712344,
+      "right": 13.382000000002689,
+      "physical_region": 3
+    },
+    {
+      "left": 13.382000000002689,
+      "right": 13.432285714286339,
+      "physical_region": 3
+    },
+    {
+      "left": 13.432285714286339,
+      "right": 13.441629237366536,
+      "physical_region": 3
+    },
+    {
+      "left": 13.441629237366536,
+      "right": 13.532857142789167,
+      "physical_region": 3
+    },
+    {
+      "left": 13.532857142789167,
+      "right": 13.583142857145313,
+      "physical_region": 3
+    },
+    {
+      "left": 13.583142857145313,
+      "right": 13.653999999999858,
+      "physical_region": 3
+    },
+    {
+      "left": 13.653999999999858,
+      "right": 13.654000000000382,
+      "physical_region": 4
+    },
+    {
+      "left": 13.654000000000382,
+      "right": 13.763756708258045,
+      "physical_region": 4
+    },
+    {
+      "left": 13.763756708258045,
+      "right": 13.927929631197317,
+      "physical_region": 4
+    },
+    {
+      "left": 13.927929631197317,
+      "right": 14.090007722055548,
+      "physical_region": 5
+    },
+    {
+      "left": 14.090007722055548,
+      "right": 14.35799999999966,
+      "physical_region": 5
+    },
+    {
+      "left": 14.35799999999966,
+      "right": 14.357999999999697,
+      "physical_region": 5
+    },
+    {
+      "left": 14.357999999999697,
+      "right": 14.380526888319903,
+      "physical_region": 6
+    },
+    {
+      "left": 14.380526888319903,
+      "right": 14.388121044316629,
+      "physical_region": 6
+    },
+    {
+      "left": 14.388121044316629,
+      "right": 14.395749179232055,
+      "physical_region": 6
+    },
+    {
+      "left": 14.395749179232055,
+      "right": 14.397884056376009,
+      "physical_region": 6
+    },
+    {
+      "left": 14.397884056376009,
+      "right": 14.416258735836616,
+      "physical_region": 6
+    },
+    {
+      "left": 14.416258735836616,
+      "right": 14.416258735838216,
+      "physical_region": 6
+    },
+    {
+      "left": 14.416258735838216,
+      "right": 14.482404740223062,
+      "physical_region": 7
+    },
+    {
+      "left": 14.482404740223062,
+      "right": 14.992000000000546,
+      "physical_region": 7
+    },
+    {
+      "left": 14.992000000000546,
+      "right": 15.061999999999765,
+      "physical_region": 8
+    },
+    {
+      "left": 15.061999999999765,
+      "right": 15.062000000000076,
+      "physical_region": 9
+    },
+    {
+      "left": 15.062000000000076,
+      "right": 15.120258735837133,
+      "physical_region": 9
+    },
+    {
+      "left": 15.120258735837133,
+      "right": 15.120258735837293,
+      "physical_region": 9
+    },
+    {
+      "left": 15.120258735837293,
+      "right": 15.192412634391019,
+      "physical_region": 10
+    },
+    {
+      "left": 15.192412634391019,
+      "right": 15.5946180826253,
+      "physical_region": 10
+    },
+    {
+      "left": 15.5946180826253,
+      "right": 15.66409000651945,
+      "physical_region": 10
+    },
+    {
+      "left": 15.66409000651945,
+      "right": 15.696000000212676,
+      "physical_region": 10
+    },
+    {
+      "left": 15.696000000212676,
+      "right": 15.703276955737543,
+      "physical_region": 11
+    },
+    {
+      "left": 15.703276955737543,
+      "right": 15.715112129875168,
+      "physical_region": 11
+    },
+    {
+      "left": 15.715112129875168,
+      "right": 15.824258735723731,
+      "physical_region": 11
+    },
+    {
+      "left": 15.824258735723731,
+      "right": 15.824258735838134,
+      "physical_region": 12
+    },
+    {
+      "left": 15.824258735838134,
+      "right": 15.896412634301583,
+      "physical_region": 12
+    },
+    {
+      "left": 15.896412634301583,
+      "right": 16.131079300960916,
+      "physical_region": 12
+    },
+    {
+      "left": 16.131079300960916,
+      "right": 16.23463438553377,
+      "physical_region": 12
+    },
+    {
+      "left": 16.23463438553377,
+      "right": 16.248723280356497,
+      "physical_region": 12
+    },
+    {
+      "left": 16.248723280356497,
+      "right": 16.30997621448169,
+      "physical_region": 12
+    },
+    {
+      "left": 16.30997621448169,
+      "right": 16.3429641421772,
+      "physical_region": 12
+    },
+    {
+      "left": 16.3429641421772,
+      "right": 16.397976214483652,
+      "physical_region": 12
+    },
+    {
+      "left": 16.397976214483652,
+      "right": 16.41943527018251,
+      "physical_region": 12
+    },
+    {
+      "left": 16.41943527018251,
+      "right": 16.424412634300566,
+      "physical_region": 12
+    },
+    {
+      "left": 16.424412634300566,
+      "right": 16.469628154506296,
+      "physical_region": 12
+    },
+    {
+      "left": 16.469628154506296,
+      "right": 16.57718972428927,
+      "physical_region": 12
+    },
+    {
+      "left": 16.57718972428927,
+      "right": 16.600412634300948,
+      "physical_region": 12
+    },
+    {
+      "left": 16.600412634300948,
+      "right": 16.635481235596657,
+      "physical_region": 12
+    },
+    {
+      "left": 16.635481235596657,
+      "right": 16.650510636145416,
+      "physical_region": 12
+    },
+    {
+      "left": 16.650510636145416,
+      "right": 16.988489583566377,
+      "physical_region": 12
+    },
+    {
+      "left": 16.988489583566377,
+      "right": 17.50934546269234,
+      "physical_region": 12
+    },
+    {
+      "left": 17.50934546269234,
+      "right": 17.58756768491248,
+      "physical_region": 12
+    },
+    {
+      "left": 17.58756768491248,
+      "right": 17.653586818433663,
+      "physical_region": 12
+    },
+    {
+      "left": 17.653586818433663,
+      "right": 18.08114521022396,
+      "physical_region": 12
+    },
+    {
+      "left": 18.08114521022396,
+      "right": 18.928874329741006,
+      "physical_region": 12
+    },
+    {
+      "left": 18.928874329741006,
+      "right": 19.58400000000359,
+      "physical_region": 12
+    },
+    {
+      "left": 19.58400000000359,
+      "right": 19.937224216858283,
+      "physical_region": 13
+    },
+    {
+      "left": 19.937224216858283,
+      "right": 19.93722421685852,
+      "physical_region": 13
+    },
+    {
+      "left": 19.93722421685852,
+      "right": 20.28799999999988,
+      "physical_region": 14
+    },
+    {
+      "left": 20.28799999999988,
+      "right": 20.64122421685691,
+      "physical_region": 15
+    },
+    {
+      "left": 20.64122421685691,
+      "right": 20.641224216856976,
+      "physical_region": 16
+    },
+    {
+      "left": 20.641224216856976,
+      "right": 20.991,
+      "physical_region": 16
+    }
+  ],
+  "candidate_bids": [
+    {
+      "delta": 0.0,
+      "rho": 0.0,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 143815.43707318846,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 594.6131664871937,
+      "adder_exposure_revenue": 0.0,
+      "best_reported_profit": 37289.31231503801,
+      "self_schedule_upper_bound": 37289.31231503801,
+      "true_profit": 37289.31231503801,
+      "extra_profit_vs_truthful": 0.0,
+      "profit_upper_bound": 37289.31231503801
+    },
+    {
+      "delta": 0.6599222221975165,
+      "rho": 0.015719170649266746,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 144192.78656433406,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 553.4282813679456,
+      "adder_exposure_revenue": 1028.8589135846707,
+      "best_reported_profit": 36596.6180074797,
+      "self_schedule_upper_bound": 36596.6180074797,
+      "true_profit": 37625.47692106437,
+      "extra_profit_vs_truthful": 336.16460602635925,
+      "profit_upper_bound": 37625.47692106437
+    },
+    {
+      "delta": 2.1532555547114764,
+      "rho": 0.05128997081395542,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 145093.87717947114,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 460.2312959118499,
+      "adder_exposure_revenue": 3357.056477524609,
+      "best_reported_profit": 35076.31407322075,
+      "self_schedule_upper_bound": 35076.314073220754,
+      "true_profit": 38433.370550745356,
+      "extra_profit_vs_truthful": 1144.0582357073436,
+      "profit_upper_bound": 38433.37055074536
+    },
+    {
+      "delta": 4.524798412704421,
+      "rho": 0.10777948674918826,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 146889.86290869478,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 312.22639946128766,
+      "adder_exposure_revenue": 7054.436147918271,
+      "best_reported_profit": 33026.91523560016,
+      "self_schedule_upper_bound": 33026.91523560016,
+      "true_profit": 40081.35138351843,
+      "extra_profit_vs_truthful": 2792.039068480415,
+      "profit_upper_bound": 40081.35138351843
+    },
+    {
+      "delta": 4.79615396824333,
+      "rho": 0.11424310343107356,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 147157.67757296335,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 310.7327640993826,
+      "adder_exposure_revenue": 7477.495976298115,
+      "best_reported_profit": 32870.17643612698,
+      "self_schedule_upper_bound": 32870.17643612698,
+      "true_profit": 40347.6724124251,
+      "extra_profit_vs_truthful": 3058.3600973870853,
+      "profit_upper_bound": 40347.6724124251
+    },
+    {
+      "delta": 6.075711111116073,
+      "rho": 0.14472181199361805,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 148207.68674272802,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 303.68963652167804,
+      "adder_exposure_revenue": 9472.403448123678,
+      "best_reported_profit": 31918.23500648839,
+      "self_schedule_upper_bound": 31918.23500648839,
+      "true_profit": 41390.63845461207,
+      "extra_profit_vs_truthful": 4101.326139574056,
+      "profit_upper_bound": 41390.63845461207
+    },
+    {
+      "delta": 6.166999999981226,
+      "rho": 0.14689628888526574,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 148295.41413536842,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 303.18715072470513,
+      "adder_exposure_revenue": 9614.728382579427,
+      "best_reported_profit": 31863.134978876064,
+      "self_schedule_upper_bound": 31863.134978876067,
+      "true_profit": 41477.86336145549,
+      "extra_profit_vs_truthful": 4188.55104641748,
+      "profit_upper_bound": 41477.86336145549
+    },
+    {
+      "delta": 7.631000000014151,
+      "rho": 0.18176837692378045,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 149672.01628319756,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 295.1287855071387,
+      "adder_exposure_revenue": 11897.193495674235,
+      "best_reported_profit": 30949.21364839283,
+      "self_schedule_upper_bound": 30949.21364839283,
+      "true_profit": 42846.40714406707,
+      "extra_profit_vs_truthful": 5557.094829029054,
+      "profit_upper_bound": 42846.40714406707
+    },
+    {
+      "delta": 8.916999999497543,
+      "rho": 0.2124005526058202,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 150491.8514755438,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 214.87120292985855,
+      "adder_exposure_revenue": 13902.145773129683,
+      "best_reported_profit": 29683.838980706347,
+      "self_schedule_upper_bound": 29683.83898070635,
+      "true_profit": 43585.98475383603,
+      "extra_profit_vs_truthful": 6296.672438798021,
+      "profit_upper_bound": 43585.98475383603
+    },
+    {
+      "delta": 9.218100544191211,
+      "rho": 0.21957268696563315,
+      "physical_region": 0,
+      "physical_plan_delta": 0.0,
+      "physical_exposure_mwh": 1559.0608695652174,
+      "generation_mwh": 2519.060869565217,
+      "energy_revenue": 150719.84672337532,
+      "true_cost": 107120.73792463764,
+      "reported_uplift": 196.07991067538387,
+      "adder_exposure_revenue": 14371.579850166354,
+      "best_reported_profit": 29423.608859246713,
+      "self_schedule_upper_bound": 29423.608859246713,
+      "true_profit": 43795.188709413065,
+      "extra_profit_vs_truthful": 6505.876394375053,
+      "profit_upper_bound": 43795.188709413065
+    },
+    {
+      "delta": 9.218100544191211,
+      "rho": 0.21957268696563315,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 146475.34127765184,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 159.48748083527607,
+      "adder_exposure_revenue": 13602.229163008555,
+      "best_reported_profit": 29423.608859246713,
+      "self_schedule_upper_bound": 29423.608859246713,
+      "true_profit": 43025.838022255266,
+      "extra_profit_vs_truthful": 5736.5257072172535,
+      "profit_upper_bound": 43025.838022255266
+    },
+    {
+      "delta": 10.024000000002802,
+      "rho": 0.23876899623654904,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147004.98352657564,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 122.52122318830152,
+      "adder_exposure_revenue": 14791.414400004138,
+      "best_reported_profit": 28727.099613527953,
+      "self_schedule_upper_bound": 28727.099613527953,
+      "true_profit": 43518.51401353209,
+      "extra_profit_vs_truthful": 6229.201698494078,
+      "profit_upper_bound": 43518.51401353209
+    },
+    {
+      "delta": 10.637799999983963,
+      "rho": 0.2533895479010996,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147454.23166039278,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 106.18880579898541,
+      "adder_exposure_revenue": 15697.13767997634,
+      "best_reported_profit": 28254.292049983575,
+      "self_schedule_upper_bound": 28254.29204998358,
+      "true_profit": 43951.42972995991,
+      "extra_profit_vs_truthful": 6662.1174149219005,
+      "profit_upper_bound": 43951.42972995992
+    },
+    {
+      "delta": 10.704200000027578,
+      "rho": 0.2549711781246148,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147477.1875739068,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 98.1930910111696,
+      "adder_exposure_revenue": 15795.117520040698,
+      "best_reported_profit": 28171.27240864541,
+      "self_schedule_upper_bound": 28171.272408645415,
+      "true_profit": 43966.38992868611,
+      "extra_profit_vs_truthful": 6677.0776136481,
+      "profit_upper_bound": 43966.38992868611
+    },
+    {
+      "delta": 11.100639999991705,
+      "rho": 0.2644142727833763,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147614.24544056598,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 50.45482040564457,
+      "adder_exposure_revenue": 16380.104383987764,
+      "best_reported_profit": 27675.60514075201,
+      "self_schedule_upper_bound": 27675.60514075201,
+      "true_profit": 44055.709524739774,
+      "extra_profit_vs_truthful": 6766.397209701761,
+      "profit_upper_bound": 44055.709524739774
+    },
+    {
+      "delta": 11.241440000001601,
+      "rho": 0.2677680910866943,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147680.62710984112,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 34.569315478234785,
+      "adder_exposure_revenue": 16587.86886400237,
+      "best_reported_profit": 27518.336825085134,
+      "self_schedule_upper_bound": 27518.336825085134,
+      "true_profit": 44106.2056890875,
+      "extra_profit_vs_truthful": 6816.89337404949,
+      "profit_upper_bound": 44106.2056890875
+    },
+    {
+      "delta": 11.293000000026723,
+      "rho": 0.26899623648293847,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147722.91988114873,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 34.406565217257594,
+      "adder_exposure_revenue": 16663.950800039438,
+      "best_reported_profit": 27484.384910094697,
+      "self_schedule_upper_bound": 27484.384910094697,
+      "true_profit": 44148.33571013414,
+      "extra_profit_vs_truthful": 6859.0233950961265,
+      "profit_upper_bound": 44148.33571013414
+    },
+    {
+      "delta": 11.393501130364132,
+      "rho": 0.27139014650002696,
+      "physical_region": 1,
+      "physical_plan_delta": 9.482334555893866,
+      "physical_exposure_mwh": 1475.6000000000004,
+      "generation_mwh": 2435.6000000000004,
+      "energy_revenue": 147802.88717806982,
+      "true_cost": 103608.99073623185,
+      "reported_uplift": 34.089331214556296,
+      "adder_exposure_revenue": 16812.25026796532,
+      "best_reported_profit": 27415.73550508722,
+      "self_schedule_upper_bound": 27415.735505087232,
+      "true_profit": 44227.98577305254,
+      "extra_profit_vs_truthful": 6938.673458014528,
+      "profit_upper_bound": 44227.985773052555
+    },
+    {
+      "delta": 11.393501130364132,
+      "rho": 0.27139014650002696,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147152.77256937418,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 60.173522518955,
+      "adder_exposure_revenue": 16680.779172313203,
+      "best_reported_profit": 27415.73550508722,
+      "self_schedule_upper_bound": 27415.735505087232,
+      "true_profit": 44096.514677400424,
+      "extra_profit_vs_truthful": 6807.202362362412,
+      "profit_upper_bound": 44096.51467740044
+    },
+    {
+      "delta": 11.438000000002889,
+      "rho": 0.2724500976609711,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147188.17967682768,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 59.51958260862739,
+      "adder_exposure_revenue": 16745.92822609119,
+      "best_reported_profit": 27385.339618852406,
+      "self_schedule_upper_bound": 27385.339618852406,
+      "true_profit": 44131.26784494359,
+      "extra_profit_vs_truthful": 6841.955529905579,
+      "profit_upper_bound": 44131.26784494359
+    },
+    {
+      "delta": 11.672666666640247,
+      "rho": 0.27803979483207675,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147345.7788091835,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 51.86332753491661,
+      "adder_exposure_revenue": 17089.49451010625,
+      "best_reported_profit": 27191.71621211946,
+      "self_schedule_upper_bound": 27191.716212119467,
+      "true_profit": 44281.21072222571,
+      "extra_profit_vs_truthful": 6991.8984071876985,
+      "profit_upper_bound": 44281.21072222572
+    },
+    {
+      "delta": 11.721599999999953,
+      "rho": 0.27920537373159815,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147395.68127419843,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 53.97171594198517,
+      "adder_exposure_revenue": 17161.135888695586,
+      "best_reported_profit": 27172.085686952112,
+      "self_schedule_upper_bound": 27172.08568695212,
+      "true_profit": 44333.221575647694,
+      "extra_profit_vs_truthful": 7043.909260609682,
+      "profit_upper_bound": 44333.22157564771
+    },
+    {
+      "delta": 11.794999999997255,
+      "rho": 0.28095374207987367,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147434.16540774633,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 50.06555942023988,
+      "adder_exposure_revenue": 17268.597956517726,
+      "best_reported_profit": 27099.201596156126,
+      "self_schedule_upper_bound": 27099.201596156134,
+      "true_profit": 44367.79955267385,
+      "extra_profit_vs_truthful": 7078.48723763584,
+      "profit_upper_bound": 44367.79955267386
+    },
+    {
+      "delta": 11.86733333332382,
+      "rho": 0.28267670271363493,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147488.88212295197,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 49.86721932365981,
+      "adder_exposure_revenue": 17374.498359406367,
+      "best_reported_profit": 27047.81956837654,
+      "self_schedule_upper_bound": 27047.819568376544,
+      "true_profit": 44422.317927782904,
+      "extra_profit_vs_truthful": 7133.005612744892,
+      "profit_upper_bound": 44422.31792778291
+    },
+    {
+      "delta": 11.92666666669541,
+      "rho": 0.2840900068290079,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147544.46543600623,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 49.70452559967089,
+      "adder_exposure_revenue": 17461.36597105658,
+      "best_reported_profit": 27016.372576056594,
+      "self_schedule_upper_bound": 27016.3725760566,
+      "true_profit": 44477.73854711317,
+      "extra_profit_vs_truthful": 7188.426232075159,
+      "profit_upper_bound": 44477.738547113186
+    },
+    {
+      "delta": 11.99250000000059,
+      "rho": 0.2856581392025294,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147558.3499083997,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 40.155066666553466,
+      "adder_exposure_revenue": 17557.749978261734,
+      "best_reported_profit": 26924.323582311783,
+      "self_schedule_upper_bound": 26924.32358231179,
+      "true_profit": 44482.07356057352,
+      "extra_profit_vs_truthful": 7192.761245535505,
+      "profit_upper_bound": 44482.073560573524
+    },
+    {
+      "delta": 12.044000000000363,
+      "rho": 0.2868848554142338,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147578.06624322297,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 33.9159536231673,
+      "adder_exposure_revenue": 17633.14911304401,
+      "best_reported_profit": 26862.40166930941,
+      "self_schedule_upper_bound": 26862.401669309413,
+      "true_profit": 44495.55078235342,
+      "extra_profit_vs_truthful": 7206.238467315408,
+      "profit_upper_bound": 44495.55078235343
+    },
+    {
+      "delta": 12.161333333332854,
+      "rho": 0.2896797040001156,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147617.08495050532,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 25.602631884030416,
+      "adder_exposure_revenue": 17804.932255071766,
+      "best_reported_profit": 26721.323912824868,
+      "self_schedule_upper_bound": 26721.323912824868,
+      "true_profit": 44526.25616789663,
+      "extra_profit_vs_truthful": 7236.943852858618,
+      "profit_upper_bound": 44526.25616789663
+    },
+    {
+      "delta": 12.4242499998957,
+      "rho": 0.2959423086059669,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147814.77582558087,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 21.7389000015246,
+      "adder_exposure_revenue": 18189.858258542954,
+      "best_reported_profit": 26530.225052546724,
+      "self_schedule_upper_bound": 26530.225052546724,
+      "true_profit": 44720.08331108968,
+      "extra_profit_vs_truthful": 7430.770996051666,
+      "profit_upper_bound": 44720.08331108968
+    },
+    {
+      "delta": 12.512249999987189,
+      "rho": 0.2980384450475725,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147843.54108495003,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 20.82727101189448,
+      "adder_exposure_revenue": 18318.695615198638,
+      "best_reported_profit": 26429.24132627057,
+      "self_schedule_upper_bound": 26429.241326270574,
+      "true_profit": 44747.936941469205,
+      "extra_profit_vs_truthful": 7458.624626431192,
+      "profit_upper_bound": 44747.93694146921
+    },
+    {
+      "delta": 12.541600000000727,
+      "rho": 0.2987375541899082,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147871.38061386047,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 20.39595362315231,
+      "adder_exposure_revenue": 18361.6658017402,
+      "best_reported_profit": 26413.67935125071,
+      "self_schedule_upper_bound": 26413.679351250717,
+      "true_profit": 44775.34515299091,
+      "extra_profit_vs_truthful": 7486.032837952895,
+      "profit_upper_bound": 44775.34515299092
+    },
+    {
+      "delta": 12.658933333331557,
+      "rho": 0.3015324027757505,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147907.31484530255,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 20.934666666606063,
+      "adder_exposure_revenue": 18533.448943765517,
+      "best_reported_profit": 26278.369153710923,
+      "self_schedule_upper_bound": 26278.369153710923,
+      "true_profit": 44811.81809747644,
+      "extra_profit_vs_truthful": 7522.505782438428,
+      "profit_upper_bound": 44811.81809747644
+    },
+    {
+      "delta": 12.776266666770882,
+      "rho": 0.3043272513641771,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147960.95314632892,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 22.54264347668868,
+      "adder_exposure_revenue": 18705.232085949683,
+      "best_reported_profit": 26161.832289363203,
+      "self_schedule_upper_bound": 26161.832289363203,
+      "true_profit": 44867.06437531288,
+      "extra_profit_vs_truthful": 7577.75206027487,
+      "profit_upper_bound": 44867.06437531288
+    },
+    {
+      "delta": 12.835600000031695,
+      "rho": 0.3057405554769114,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147970.77545989567,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 21.67070144878744,
+      "adder_exposure_revenue": 18792.099697437712,
+      "best_reported_profit": 26083.915049414016,
+      "self_schedule_upper_bound": 26083.915049414023,
+      "true_profit": 44876.014746851724,
+      "extra_profit_vs_truthful": 7586.702431813712,
+      "profit_upper_bound": 44876.01474685174
+    },
+    {
+      "delta": 12.846750000000526,
+      "rho": 0.3060061454909372,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147972.89196083177,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 21.50684492749133,
+      "adder_exposure_revenue": 18808.42397608773,
+      "best_reported_profit": 26069.5434151788,
+      "self_schedule_upper_bound": 26069.543415178803,
+      "true_profit": 44877.96739126653,
+      "extra_profit_vs_truthful": 7588.655076228519,
+      "profit_upper_bound": 44877.96739126653
+    },
+    {
+      "delta": 12.880199999537915,
+      "rho": 0.3068029155242226,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147978.15874946155,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 21.015275369078154,
+      "adder_exposure_revenue": 18857.396811497394,
+      "best_reported_profit": 26025.345798840513,
+      "self_schedule_upper_bound": 26025.345798840517,
+      "true_profit": 44882.74261033791,
+      "extra_profit_vs_truthful": 7593.430295299899,
+      "profit_upper_bound": 44882.74261033791
+    },
+    {
+      "delta": 12.901657142918916,
+      "rho": 0.30731401893475574,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 147981.71086390913,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 20.69994866484558,
+      "adder_exposure_revenue": 18888.81137549417,
+      "best_reported_profit": 25997.168022587084,
+      "self_schedule_upper_bound": 25997.16802258709,
+      "true_profit": 44885.979398081254,
+      "extra_profit_vs_truthful": 7596.667083043241,
+      "profit_upper_bound": 44885.97939808126
+    },
+    {
+      "delta": 12.952000000065594,
+      "rho": 0.30851317231350567,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 148017.54421490929,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 19.960127535217907,
+      "adder_exposure_revenue": 18962.516382704733,
+      "best_reported_profit": 25958.556545247047,
+      "self_schedule_upper_bound": 25958.55654524705,
+      "true_profit": 44921.072927951784,
+      "extra_profit_vs_truthful": 7631.760612913771,
+      "profit_upper_bound": 44921.072927951784
+    },
+    {
+      "delta": 12.952999999732047,
+      "rho": 0.30853699203782686,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 148018.26409290257,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 19.945431887965242,
+      "adder_exposure_revenue": 18963.980443085966,
+      "best_reported_profit": 25957.797667211846,
+      "self_schedule_upper_bound": 25957.79766721185,
+      "true_profit": 44921.77811029781,
+      "extra_profit_vs_truthful": 7632.465795259799,
+      "profit_upper_bound": 44921.77811029782
+    },
+    {
+      "delta": 13.204080443599175,
+      "rho": 0.31451766098802286,
+      "physical_region": 2,
+      "physical_plan_delta": 12.954003254249237,
+      "physical_exposure_mwh": 1464.0608695652177,
+      "generation_mwh": 2424.0608695652177,
+      "energy_revenue": 148201.04319071863,
+      "true_cost": 103116.43141449272,
+      "reported_uplift": 16.25564101724376,
+      "adder_exposure_revenue": 19331.577496064892,
+      "best_reported_profit": 25769.289921178268,
+      "self_schedule_upper_bound": 25769.28992117827,
+      "true_profit": 45100.867417243164,
+      "extra_profit_vs_truthful": 7811.555102205151,
+      "profit_upper_bound": 45100.867417243164
+    },
+    {
+      "delta": 13.204080443599175,
+      "rho": 0.31451766098802286,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142302.4628157323,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 110.58983049627932,
+      "adder_exposure_revenue": 17944.230504760468,
+      "best_reported_profit": 25769.289921178268,
+      "self_schedule_upper_bound": 25769.28992117827,
+      "true_profit": 43713.52042593874,
+      "extra_profit_vs_truthful": 6424.208110900727,
+      "profit_upper_bound": 43713.52042593874
+    },
+    {
+      "delta": 13.209384615380587,
+      "rho": 0.3146440049397501,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142305.86421539364,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 110.41445489755279,
+      "adder_exposure_revenue": 17951.438828088176,
+      "best_reported_profit": 25765.307621913184,
+      "self_schedule_upper_bound": 25765.307621913187,
+      "true_profit": 43716.74645000136,
+      "extra_profit_vs_truthful": 6427.434134963347,
+      "profit_upper_bound": 43716.74645000136
+    },
+    {
+      "delta": 13.306923076929198,
+      "rho": 0.31696734497949597,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142322.6770595256,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 107.1894714695627,
+      "adder_exposure_revenue": 18083.9927491722,
+      "best_reported_profit": 25646.34156153313,
+      "self_schedule_upper_bound": 25646.341561533132,
+      "true_profit": 43730.33431070533,
+      "extra_profit_vs_truthful": 6441.021995667317,
+      "profit_upper_bound": 43730.33431070534
+    },
+    {
+      "delta": 13.331714285712344,
+      "rho": 0.31755786493526617,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142297.00598306148,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 105.35248026265981,
+      "adder_exposure_revenue": 18117.683786332767,
+      "best_reported_profit": 25585.142456701546,
+      "self_schedule_upper_bound": 25585.14245670155,
+      "true_profit": 43702.82624303432,
+      "extra_profit_vs_truthful": 6413.513927996304,
+      "profit_upper_bound": 43702.82624303432
+    },
+    {
+      "delta": 13.382000000002689,
+      "rho": 0.3187556571864773,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142294.36192426874,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 109.0622570875712,
+      "adder_exposure_revenue": 18186.021634786266,
+      "best_reported_profit": 25517.87032628023,
+      "self_schedule_upper_bound": 25517.870326280237,
+      "true_profit": 43703.891961066496,
+      "extra_profit_vs_truthful": 6414.579646028484,
+      "profit_upper_bound": 43703.8919610665
+    },
+    {
+      "delta": 13.432285714286339,
+      "rho": 0.3199534494375289,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142259.99558340255,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 106.40542521633688,
+      "adder_exposure_revenue": 18254.359483230666,
+      "best_reported_profit": 25412.50930509839,
+      "self_schedule_upper_bound": 25412.509305098392,
+      "true_profit": 43666.868788329055,
+      "extra_profit_vs_truthful": 6377.5564732910425,
+      "profit_upper_bound": 43666.868788329055
+    },
+    {
+      "delta": 13.441629237366536,
+      "rho": 0.32017600965572235,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142263.32748191364,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 103.05708434944245,
+      "adder_exposure_revenue": 18267.05724984863,
+      "best_reported_profit": 25399.79509612463,
+      "self_schedule_upper_bound": 25399.795096124635,
+      "true_profit": 43666.85234597326,
+      "extra_profit_vs_truthful": 6377.540030935248,
+      "profit_upper_bound": 43666.85234597327
+    },
+    {
+      "delta": 13.532857142789167,
+      "rho": 0.3223490339380965,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142295.85933522426,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 70.36469181774737,
+      "adder_exposure_revenue": 18391.03518003185,
+      "best_reported_profit": 25275.656626720338,
+      "self_schedule_upper_bound": 25275.65662672034,
+      "true_profit": 43666.69180675219,
+      "extra_profit_vs_truthful": 6377.379491714179,
+      "profit_upper_bound": 43666.69180675219
+    },
+    {
+      "delta": 13.583142857145313,
+      "rho": 0.323546826190875,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142310.91934602626,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 75.14373241131034,
+      "adder_exposure_revenue": 18459.37302857477,
+      "best_reported_profit": 25227.157829572974,
+      "self_schedule_upper_bound": 25227.157829572978,
+      "true_profit": 43686.530858147744,
+      "extra_profit_vs_truthful": 6397.218543109731,
+      "profit_upper_bound": 43686.530858147744
+    },
+    {
+      "delta": 13.653999999999858,
+      "rho": 0.3252346243628188,
+      "physical_region": 3,
+      "physical_plan_delta": 13.204080443599175,
+      "physical_exposure_mwh": 1358.9913043478264,
+      "generation_mwh": 2318.9913043478264,
+      "energy_revenue": 142353.45613448508,
+      "true_cost": 98699.53222028982,
+      "reported_uplift": 73.02459448486479,
+      "adder_exposure_revenue": 18555.667269565027,
+      "best_reported_profit": 25171.281239115087,
+      "self_schedule_upper_bound": 25171.28123911509,
+      "true_profit": 43726.948508680114,
+      "extra_profit_vs_truthful": 6437.636193642102,
+      "profit_upper_bound": 43726.948508680114
+    },
+    {
+      "delta": 13.653999999999858,
+      "rho": 0.3252346243628188,
+      "physical_region": 4,
+      "physical_plan_delta": 13.793738566219194,
+      "physical_exposure_mwh": 1273.8548100568357,
+      "generation_mwh": 2233.854810056836,
+      "energy_revenue": 137518.40300124936,
+      "true_cost": 95065.3958249846,
+      "reported_uplift": 111.4876393661907,
+      "adder_exposure_revenue": 17393.213576515853,
+      "best_reported_profit": 25171.281239115087,
+      "self_schedule_upper_bound": 25171.28123911509,
+      "true_profit": 42564.49481563094,
+      "extra_profit_vs_truthful": 5275.182500592928,
+      "profit_upper_bound": 42564.49481563094
+    },
+    {
+      "delta": 13.654000000000382,
+      "rho": 0.32523462436283124,
+      "physical_region": 4,
+      "physical_plan_delta": 13.793738566219194,
+      "physical_exposure_mwh": 1273.8548100568357,
+      "generation_mwh": 2233.854810056836,
+      "energy_revenue": 137518.40300124968,
+      "true_cost": 95065.3958249846,
+      "reported_uplift": 111.48763936617979,
+      "adder_exposure_revenue": 17393.213576516522,
+      "best_reported_profit": 25171.281239114727,
+      "self_schedule_upper_bound": 25171.281239114734,
+      "true_profit": 42564.494815631246,
+      "extra_profit_vs_truthful": 5275.182500593233,
+      "profit_upper_bound": 42564.49481563126
+    },
+    {
+      "delta": 13.763756708258045,
+      "rho": 0.32784899976794923,
+      "physical_region": 4,
+      "physical_plan_delta": 13.793738566219194,
+      "physical_exposure_mwh": 1273.8548100568357,
+      "generation_mwh": 2233.854810056836,
+      "energy_revenue": 137593.24339392316,
+      "true_cost": 95065.3958249846,
+      "reported_uplift": 106.6849878294779,
+      "adder_exposure_revenue": 17533.02768726655,
+      "best_reported_profit": 25101.50486950149,
+      "self_schedule_upper_bound": 25101.504869501492,
+      "true_profit": 42634.53255676804,
+      "extra_profit_vs_truthful": 5345.220241730029,
+      "profit_upper_bound": 42634.53255676804
+    },
+    {
+      "delta": 13.927929631197317,
+      "rho": 0.33175955483772374,
+      "physical_region": 4,
+      "physical_plan_delta": 13.793738566219194,
+      "physical_exposure_mwh": 1273.8548100568357,
+      "generation_mwh": 2233.854810056836,
+      "energy_revenue": 137701.6434265973,
+      "true_cost": 95065.3958249846,
+      "reported_uplift": 99.50123247506053,
+      "adder_exposure_revenue": 17742.160154833833,
+      "best_reported_profit": 24993.588679253913,
+      "self_schedule_upper_bound": 24993.588679253913,
+      "true_profit": 42735.748834087746,
+      "extra_profit_vs_truthful": 5446.436519049734,
+      "profit_upper_bound": 42735.748834087746
+    },
+    {
+      "delta": 13.927929631197317,
+      "rho": 0.33175955483772374,
+      "physical_region": 5,
+      "physical_plan_delta": 14.158355232089534,
+      "physical_exposure_mwh": 1175.164036018175,
+      "generation_mwh": 2135.164036018175,
+      "energy_revenue": 132156.1742058662,
+      "true_cost": 90887.25090523993,
+      "reported_uplift": 92.26737740260796,
+      "adder_exposure_revenue": 16367.601998774971,
+      "best_reported_profit": 24993.588679253913,
+      "self_schedule_upper_bound": 24993.588679253913,
+      "true_profit": 41361.190678028885,
+      "extra_profit_vs_truthful": 4071.878362990872,
+      "profit_upper_bound": 41361.190678028885
+    },
+    {
+      "delta": 14.090007722055548,
+      "rho": 0.3356202115681851,
+      "physical_region": 5,
+      "physical_plan_delta": 14.158355232089534,
+      "physical_exposure_mwh": 1175.164036018175,
+      "generation_mwh": 2135.164036018175,
+      "energy_revenue": 132247.19545140027,
+      "true_cost": 90887.25090523993,
+      "reported_uplift": 85.17528613572358,
+      "adder_exposure_revenue": 16558.07034217805,
+      "best_reported_profit": 24887.04949011802,
+      "self_schedule_upper_bound": 24887.04949011802,
+      "true_profit": 41445.11983229607,
+      "extra_profit_vs_truthful": 4155.8075172580575,
+      "profit_upper_bound": 41445.11983229607
+    },
+    {
+      "delta": 14.35799999999966,
+      "rho": 0.3420037158782254,
+      "physical_region": 5,
+      "physical_plan_delta": 14.158355232089534,
+      "physical_exposure_mwh": 1175.164036018175,
+      "generation_mwh": 2135.164036018175,
+      "energy_revenue": 132426.6343717303,
+      "true_cost": 90887.25090523993,
+      "reported_uplift": 73.4486814851698,
+      "adder_exposure_revenue": 16873.005229148555,
+      "best_reported_profit": 24739.82691882699,
+      "self_schedule_upper_bound": 24739.826918827,
+      "true_profit": 41612.83214797555,
+      "extra_profit_vs_truthful": 4323.519832937534,
+      "profit_upper_bound": 41612.832147975554
+    },
+    {
+      "delta": 14.357999999999697,
+      "rho": 0.3420037158782263,
+      "physical_region": 5,
+      "physical_plan_delta": 14.158355232089534,
+      "physical_exposure_mwh": 1175.164036018175,
+      "generation_mwh": 2135.164036018175,
+      "energy_revenue": 132426.63437173032,
+      "true_cost": 90887.25090523993,
+      "reported_uplift": 73.44868148517708,
+      "adder_exposure_revenue": 16873.0052291486,
+      "best_reported_profit": 24739.82691882697,
+      "self_schedule_upper_bound": 24739.82691882697,
+      "true_profit": 41612.83214797557,
+      "extra_profit_vs_truthful": 4323.519832937556,
+      "profit_upper_bound": 41612.83214797557
+    },
+    {
+      "delta": 14.357999999999697,
+      "rho": 0.3420037158782263,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128447.1137136756,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 142.17958783894574,
+      "adder_exposure_revenue": 15876.357745035692,
+      "best_reported_profit": 24739.82691882697,
+      "self_schedule_upper_bound": 24739.82691882697,
+      "true_profit": 40616.18466386266,
+      "extra_profit_vs_truthful": 3326.872348824647,
+      "profit_upper_bound": 40616.18466386266
+    },
+    {
+      "delta": 14.380526888319903,
+      "rho": 0.34254030032680444,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128461.00007322973,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 141.1685487111754,
+      "adder_exposure_revenue": 15901.266850611262,
+      "best_reported_profit": 24727.793133677762,
+      "self_schedule_upper_bound": 24727.793133677766,
+      "true_profit": 40629.05998428902,
+      "extra_profit_vs_truthful": 3339.74766925101,
+      "profit_upper_bound": 40629.05998428903
+    },
+    {
+      "delta": 14.388121044316629,
+      "rho": 0.3427211910894343,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128466.99245351396,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 141.2048958657506,
+      "adder_exposure_revenue": 15909.66408820533,
+      "best_reported_profit": 24725.424623522496,
+      "self_schedule_upper_bound": 24725.4246235225,
+      "true_profit": 40635.088711727825,
+      "extra_profit_vs_truthful": 3345.776396689813,
+      "profit_upper_bound": 40635.08871172783
+    },
+    {
+      "delta": 14.395749179232055,
+      "rho": 0.34290289122081025,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128471.03942534233,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 140.75247931653576,
+      "adder_exposure_revenue": 15918.098897986967,
+      "best_reported_profit": 24720.584369020013,
+      "self_schedule_upper_bound": 24720.584369020013,
+      "true_profit": 40638.68326700698,
+      "extra_profit_vs_truthful": 3349.3709519689655,
+      "profit_upper_bound": 40638.68326700698
+    },
+    {
+      "delta": 14.397884056376009,
+      "rho": 0.3429537434228005,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128471.16237319086,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 140.37555740404423,
+      "adder_exposure_revenue": 15920.459538276638,
+      "best_reported_profit": 24717.969754666385,
+      "self_schedule_upper_bound": 24717.969754666385,
+      "true_profit": 40638.42929294302,
+      "extra_profit_vs_truthful": 3349.1169779050106,
+      "profit_upper_bound": 40638.42929294302
+    },
+    {
+      "delta": 14.416258735836616,
+      "rho": 0.3433914233680295,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128480.98901950632,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 139.51184977551748,
+      "adder_exposure_revenue": 15940.777339124037,
+      "best_reported_profit": 24706.614892505924,
+      "self_schedule_upper_bound": 24706.614892505928,
+      "true_profit": 40647.39223162996,
+      "extra_profit_vs_truthful": 3358.079916591945,
+      "profit_upper_bound": 40647.392231629965
+    },
+    {
+      "delta": 14.416258735838216,
+      "rho": 0.34339142336806766,
+      "physical_region": 6,
+      "physical_plan_delta": 14.377320472582205,
+      "physical_exposure_mwh": 1105.7499474185838,
+      "generation_mwh": 2065.749947418584,
+      "energy_revenue": 128480.98901950693,
+      "true_cost": 87973.10863765188,
+      "reported_uplift": 139.51184977544835,
+      "adder_exposure_revenue": 15940.777339125807,
+      "best_reported_profit": 24706.61489250469,
+      "self_schedule_upper_bound": 24706.61489250469,
+      "true_profit": 40647.392231630496,
+      "extra_profit_vs_truthful": 3358.0799165924836,
+      "profit_upper_bound": 40647.392231630496
+    },
+    {
+      "delta": 14.416258735838216,
+      "rho": 0.34339142336806766,
+      "physical_region": 7,
+      "physical_plan_delta": 14.934110858651453,
+      "physical_exposure_mwh": 1071.3079131960808,
+      "generation_mwh": 2031.3079131960808,
+      "energy_revenue": 126362.3635213113,
+      "true_cost": 86502.9159648301,
+      "reported_uplift": 291.4193984090998,
+      "adder_exposure_revenue": 15444.252062385609,
+      "best_reported_profit": 24706.61489250469,
+      "self_schedule_upper_bound": 24706.61489250469,
+      "true_profit": 40150.8669548903,
+      "extra_profit_vs_truthful": 2861.5546398522856,
+      "profit_upper_bound": 40150.8669548903
+    },
+    {
+      "delta": 14.482404740223062,
+      "rho": 0.3449670034829942,
+      "physical_region": 7,
+      "physical_plan_delta": 14.934110858651453,
+      "physical_exposure_mwh": 1071.3079131960808,
+      "generation_mwh": 2031.3079131960808,
+      "energy_revenue": 126391.54885722799,
+      "true_cost": 86502.9159648301,
+      "reported_uplift": 282.0420009857917,
+      "adder_exposure_revenue": 15515.114800309397,
+      "best_reported_profit": 24655.56009307428,
+      "self_schedule_upper_bound": 24655.560093074284,
+      "true_profit": 40170.67489338368,
+      "extra_profit_vs_truthful": 2881.3625783456664,
+      "profit_upper_bound": 40170.67489338368
+    },
+    {
+      "delta": 14.992000000000546,
+      "rho": 0.3571054261350233,
+      "physical_region": 7,
+      "physical_plan_delta": 14.934110858651453,
+      "physical_exposure_mwh": 1071.3079131960808,
+      "generation_mwh": 2031.3079131960808,
+      "energy_revenue": 126603.15928699038,
+      "true_cost": 86502.9159648301,
+      "reported_uplift": 207.15036986334235,
+      "adder_exposure_revenue": 16061.048234636228,
+      "best_reported_profit": 24246.3454573874,
+      "self_schedule_upper_bound": 24246.3454573874,
+      "true_profit": 40307.39369202363,
+      "extra_profit_vs_truthful": 3018.0813769856177,
+      "profit_upper_bound": 40307.39369202363
+    },
+    {
+      "delta": 14.992000000000546,
+      "rho": 0.3571054261350233,
+      "physical_region": 8,
+      "physical_plan_delta": 15.03670391271621,
+      "physical_exposure_mwh": 1038.4093624714428,
+      "generation_mwh": 1998.4093624714428,
+      "energy_revenue": 124739.3629971353,
+      "true_cost": 85121.76900830836,
+      "reported_uplift": 196.58463073290113,
+      "adder_exposure_revenue": 15567.833162172437,
+      "best_reported_profit": 24246.3454573874,
+      "self_schedule_upper_bound": 24246.3454573874,
+      "true_profit": 39814.17861955984,
+      "extra_profit_vs_truthful": 2524.8663045218273,
+      "profit_upper_bound": 39814.17861955984
+    },
+    {
+      "delta": 15.061999999999765,
+      "rho": 0.3587728073936393,
+      "physical_region": 8,
+      "physical_plan_delta": 15.03670391271621,
+      "physical_exposure_mwh": 1038.4093624714428,
+      "generation_mwh": 1998.4093624714428,
+      "energy_revenue": 124766.98924293902,
+      "true_cost": 85121.76900830836,
+      "reported_uplift": 185.43571582734512,
+      "adder_exposure_revenue": 15640.521817544628,
+      "best_reported_profit": 24190.134132913383,
+      "self_schedule_upper_bound": 24190.134132913383,
+      "true_profit": 39830.65595045801,
+      "extra_profit_vs_truthful": 2541.343635419995,
+      "profit_upper_bound": 39830.65595045801
+    },
+    {
+      "delta": 15.061999999999765,
+      "rho": 0.3587728073936393,
+      "physical_region": 9,
+      "physical_plan_delta": 15.074475898935916,
+      "physical_exposure_mwh": 980.2701758225212,
+      "generation_mwh": 1940.2701758225214,
+      "energy_revenue": 121433.01067025178,
+      "true_cost": 82721.89966181417,
+      "reported_uplift": 243.8525127143621,
+      "adder_exposure_revenue": 14764.829388238584,
+      "best_reported_profit": 24190.134132913383,
+      "self_schedule_upper_bound": 24190.134132913383,
+      "true_profit": 38954.96352115196,
+      "extra_profit_vs_truthful": 1665.651206113951,
+      "profit_upper_bound": 38954.96352115196
+    },
+    {
+      "delta": 15.062000000000076,
+      "rho": 0.3587728073936467,
+      "physical_region": 9,
+      "physical_plan_delta": 15.074475898935916,
+      "physical_exposure_mwh": 980.2701758225212,
+      "generation_mwh": 1940.2701758225214,
+      "energy_revenue": 121433.01067025188,
+      "true_cost": 82721.89966181417,
+      "reported_uplift": 243.85251271431116,
+      "adder_exposure_revenue": 14764.829388238888,
+      "best_reported_profit": 24190.134132913143,
+      "self_schedule_upper_bound": 24190.13413291315,
+      "true_profit": 38954.96352115203,
+      "extra_profit_vs_truthful": 1665.6512061140165,
+      "profit_upper_bound": 38954.963521152036
+    },
+    {
+      "delta": 15.120258735837133,
+      "rho": 0.36016051488345324,
+      "physical_region": 9,
+      "physical_plan_delta": 15.074475898935916,
+      "physical_exposure_mwh": 980.2701758225212,
+      "generation_mwh": 1940.2701758225214,
+      "energy_revenue": 121460.34035942805,
+      "true_cost": 82721.89966181417,
+      "reported_uplift": 233.31532741863703,
+      "adder_exposure_revenue": 14821.938689461078,
+      "best_reported_profit": 24149.817335571443,
+      "self_schedule_upper_bound": 24149.817335571443,
+      "true_profit": 38971.75602503252,
+      "extra_profit_vs_truthful": 1682.4437099945062,
+      "profit_upper_bound": 38971.75602503252
+    },
+    {
+      "delta": 15.120258735837293,
+      "rho": 0.360160514883457,
+      "physical_region": 9,
+      "physical_plan_delta": 15.074475898935916,
+      "physical_exposure_mwh": 980.2701758225212,
+      "generation_mwh": 1940.2701758225214,
+      "energy_revenue": 121460.34035942813,
+      "true_cost": 82721.89966181417,
+      "reported_uplift": 233.31532741860792,
+      "adder_exposure_revenue": 14821.938689461236,
+      "best_reported_profit": 24149.817335571326,
+      "self_schedule_upper_bound": 24149.817335571326,
+      "true_profit": 38971.75602503256,
+      "extra_profit_vs_truthful": 1682.4437099945499,
+      "profit_upper_bound": 38971.75602503256
+    },
+    {
+      "delta": 15.120258735837293,
+      "rho": 0.360160514883457,
+      "physical_region": 10,
+      "physical_plan_delta": 15.403186910106418,
+      "physical_exposure_mwh": 905.1617641495001,
+      "generation_mwh": 1865.1617641495,
+      "energy_revenue": 117150.46847520774,
+      "true_cost": 79568.6983229574,
+      "reported_uplift": 254.32725504835616,
+      "adder_exposure_revenue": 13686.280071727375,
+      "best_reported_profit": 24149.817335571326,
+      "self_schedule_upper_bound": 24149.817335571326,
+      "true_profit": 37836.0974072987,
+      "extra_profit_vs_truthful": 546.7850922606885,
+      "profit_upper_bound": 37836.0974072987
+    },
+    {
+      "delta": 15.192412634391019,
+      "rho": 0.36187920142897,
+      "physical_region": 10,
+      "physical_plan_delta": 15.403186910106418,
+      "physical_exposure_mwh": 905.1617641495001,
+      "generation_mwh": 1865.1617641495,
+      "energy_revenue": 117175.88634098903,
+      "true_cost": 79568.6983229574,
+      "reported_uplift": 240.46137441251267,
+      "adder_exposure_revenue": 13751.591021832528,
+      "best_reported_profit": 24096.05837061162,
+      "self_schedule_upper_bound": 24096.05837061162,
+      "true_profit": 37847.649392444146,
+      "extra_profit_vs_truthful": 558.3370774061332,
+      "profit_upper_bound": 37847.649392444146
+    },
+    {
+      "delta": 15.5946180826253,
+      "rho": 0.3714596275219213,
+      "physical_region": 10,
+      "physical_plan_delta": 15.403186910106418,
+      "physical_exposure_mwh": 905.1617641495001,
+      "generation_mwh": 1865.1617641495,
+      "energy_revenue": 117319.40625256553,
+      "true_cost": 79568.6983229574,
+      "reported_uplift": 159.35962280801323,
+      "adder_exposure_revenue": 14115.65201490681,
+      "best_reported_profit": 23794.41553750934,
+      "self_schedule_upper_bound": 23794.41553750934,
+      "true_profit": 37910.06755241615,
+      "extra_profit_vs_truthful": 620.7552373781364,
+      "profit_upper_bound": 37910.06755241615
+    },
+    {
+      "delta": 15.66409000651945,
+      "rho": 0.3731144301490984,
+      "physical_region": 10,
+      "physical_plan_delta": 15.403186910106418,
+      "physical_exposure_mwh": 905.1617641495001,
+      "generation_mwh": 1865.1617641495,
+      "energy_revenue": 117336.14362475381,
+      "true_cost": 79568.6983229574,
+      "reported_uplift": 163.54404387332397,
+      "adder_exposure_revenue": 14178.5353440977,
+      "best_reported_profit": 23752.45400157203,
+      "self_schedule_upper_bound": 23752.45400157203,
+      "true_profit": 37930.98934566973,
+      "extra_profit_vs_truthful": 641.6770306317194,
+      "profit_upper_bound": 37930.98934566973
+    },
+    {
+      "delta": 15.696000000212676,
+      "rho": 0.3738745176554875,
+      "physical_region": 10,
+      "physical_plan_delta": 15.403186910106418,
+      "physical_exposure_mwh": 905.1617641495001,
+      "generation_mwh": 1865.1617641495,
+      "energy_revenue": 117347.82043316588,
+      "true_cost": 79568.6983229574,
+      "reported_uplift": 156.58421289864782,
+      "adder_exposure_revenue": 14207.419050283059,
+      "best_reported_profit": 23728.28727282407,
+      "self_schedule_upper_bound": 23728.28727282407,
+      "true_profit": 37935.70632310713,
+      "extra_profit_vs_truthful": 646.3940080691173,
+      "profit_upper_bound": 37935.70632310713
+    },
+    {
+      "delta": 15.696000000212676,
+      "rho": 0.3738745176554875,
+      "physical_region": 11,
+      "physical_plan_delta": 15.779666980607725,
+      "physical_exposure_mwh": 854.7269815411021,
+      "generation_mwh": 1814.726981541102,
+      "energy_revenue": 114484.91579549483,
+      "true_cost": 77486.85136644807,
+      "reported_uplift": 146.01754622822773,
+      "adder_exposure_revenue": 13415.794702450918,
+      "best_reported_profit": 23728.28727282407,
+      "self_schedule_upper_bound": 23728.28727282407,
+      "true_profit": 37144.08197527499,
+      "extra_profit_vs_truthful": -145.23033976302395,
+      "profit_upper_bound": 37144.08197527499
+    },
+    {
+      "delta": 15.703276955737543,
+      "rho": 0.37404785278780295,
+      "physical_region": 11,
+      "physical_plan_delta": 15.779666980607725,
+      "physical_exposure_mwh": 854.7269815411021,
+      "generation_mwh": 1814.726981541102,
+      "energy_revenue": 114487.33291919921,
+      "true_cost": 77486.85136644807,
+      "reported_uplift": 144.3091000362183,
+      "adder_exposure_revenue": 13422.014512681497,
+      "best_reported_profit": 23722.776140105867,
+      "self_schedule_upper_bound": 23722.776140105867,
+      "true_profit": 37144.790652787364,
+      "extra_profit_vs_truthful": -144.52166225064866,
+      "profit_upper_bound": 37144.790652787364
+    },
+    {
+      "delta": 15.715112129875168,
+      "rho": 0.37432976346708513,
+      "physical_region": 11,
+      "physical_plan_delta": 15.779666980607725,
+      "physical_exposure_mwh": 854.7269815411021,
+      "generation_mwh": 1814.726981541102,
+      "energy_revenue": 114488.1012913317,
+      "true_cost": 77486.85136644807,
+      "reported_uplift": 143.96567051091552,
+      "adder_exposure_revenue": 13432.130355348161,
+      "best_reported_profit": 23713.085240046385,
+      "self_schedule_upper_bound": 23713.08524004639,
+      "true_profit": 37145.21559539455,
+      "extra_profit_vs_truthful": -144.0967196434649,
+      "profit_upper_bound": 37145.21559539455
+    },
+    {
+      "delta": 15.824258735723731,
+      "rho": 0.3769296063961634,
+      "physical_region": 11,
+      "physical_plan_delta": 15.779666980607725,
+      "physical_exposure_mwh": 854.7269815411021,
+      "generation_mwh": 1814.726981541102,
+      "energy_revenue": 114504.7889916814,
+      "true_cost": 77486.85136644807,
+      "reported_uplift": 119.50838106136507,
+      "adder_exposure_revenue": 13525.42090431056,
+      "best_reported_profit": 23612.02510198413,
+      "self_schedule_upper_bound": 23612.025101984134,
+      "true_profit": 37137.44600629469,
+      "extra_profit_vs_truthful": -151.86630874332332,
+      "profit_upper_bound": 37137.4460062947
+    },
+    {
+      "delta": 15.824258735723731,
+      "rho": 0.3769296063961634,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109051.3304686374,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 169.36968358617014,
+      "adder_exposure_revenue": 12027.968396926002,
+      "best_reported_profit": 23612.02510198413,
+      "self_schedule_upper_bound": 23612.025101984134,
+      "true_profit": 35639.99349891013,
+      "extra_profit_vs_truthful": -1649.3188161278813,
+      "profit_upper_bound": 35639.99349891014
+    },
+    {
+      "delta": 15.824258735838134,
+      "rho": 0.37692960639888845,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109051.33046865395,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 169.36968355674253,
+      "adder_exposure_revenue": 12027.96839701296,
+      "best_reported_profit": 23612.0251018843,
+      "self_schedule_upper_bound": 23612.0251018843,
+      "true_profit": 35639.99349889726,
+      "extra_profit_vs_truthful": -1649.3188161407525,
+      "profit_upper_bound": 35639.99349889726
+    },
+    {
+      "delta": 15.896412634301583,
+      "rho": 0.37864829294225105,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109058.83001559111,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 150.0433686670367,
+      "adder_exposure_revenue": 12082.812344203621,
+      "best_reported_profit": 23545.3543867411,
+      "self_schedule_upper_bound": 23545.3543867411,
+      "true_profit": 35628.16673094472,
+      "extra_profit_vs_truthful": -1661.1455840932904,
+      "profit_upper_bound": 35628.16673094472
+    },
+    {
+      "delta": 16.131079300960916,
+      "rho": 0.38423799011388016,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109101.56959589338,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 100.12839088783585,
+      "adder_exposure_revenue": 12261.181726146195,
+      "best_reported_profit": 23359.809607321582,
+      "self_schedule_upper_bound": 23359.809607321582,
+      "true_profit": 35620.99133346778,
+      "extra_profit_vs_truthful": -1668.3209815702357,
+      "profit_upper_bound": 35620.99133346778
+    },
+    {
+      "delta": 16.23463438553377,
+      "rho": 0.3867046445032102,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109120.42996884629,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 78.10161640401202,
+      "adder_exposure_revenue": 12339.893614354354,
+      "best_reported_profit": 23277.931317582515,
+      "self_schedule_upper_bound": 23277.931317582515,
+      "true_profit": 35617.82493193687,
+      "extra_profit_vs_truthful": -1671.4873831011428,
+      "profit_upper_bound": 35617.82493193687
+    },
+    {
+      "delta": 16.248723280356497,
+      "rho": 0.38704023820581435,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109122.99596366934,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 75.10482575692731,
+      "adder_exposure_revenue": 12350.602538197518,
+      "best_reported_profit": 23266.79159791531,
+      "self_schedule_upper_bound": 23266.79159791531,
+      "true_profit": 35617.39413611283,
+      "extra_profit_vs_truthful": -1671.9181789251816,
+      "profit_upper_bound": 35617.39413611283
+    },
+    {
+      "delta": 16.30997621448169,
+      "rho": 0.3884992666971962,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109146.7612436548,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 77.77908348829806,
+      "adder_exposure_revenue": 12397.160697298745,
+      "best_reported_profit": 23246.672976530906,
+      "self_schedule_upper_bound": 23246.672976530906,
+      "true_profit": 35643.83367382965,
+      "extra_profit_vs_truthful": -1645.4786412083631,
+      "profit_upper_bound": 35643.83367382965
+    },
+    {
+      "delta": 16.3429641421772,
+      "rho": 0.3892850303029203,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109159.04156219354,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 71.52751838935,
+      "adder_exposure_revenue": 12422.234715515215,
+      "best_reported_profit": 23227.627711754245,
+      "self_schedule_upper_bound": 23227.627711754245,
+      "true_profit": 35649.86242726946,
+      "extra_profit_vs_truthful": -1639.4498877685546,
+      "profit_upper_bound": 35649.86242726946
+    },
+    {
+      "delta": 16.397976214483652,
+      "rho": 0.39059540313666935,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109179.52074408208,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 61.10214234125306,
+      "adder_exposure_revenue": 12464.049215530793,
+      "best_reported_profit": 23195.867017579112,
+      "self_schedule_upper_bound": 23195.867017579112,
+      "true_profit": 35659.91623310991,
+      "extra_profit_vs_truthful": -1629.3960819281056,
+      "profit_upper_bound": 35659.91623310991
+    },
+    {
+      "delta": 16.41943527018251,
+      "rho": 0.39110655209810186,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109191.92944419177,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 57.19315292488318,
+      "adder_exposure_revenue": 12480.360175057198,
+      "best_reported_profit": 23188.055768746024,
+      "self_schedule_upper_bound": 23188.055768746028,
+      "true_profit": 35668.41594380322,
+      "extra_profit_vs_truthful": -1620.8963712347904,
+      "profit_upper_bound": 35668.41594380322
+    },
+    {
+      "delta": 16.424412634300566,
+      "rho": 0.39122511157878537,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109194.80760526023,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 56.28647446081595,
+      "adder_exposure_revenue": 12484.143453586183,
+      "best_reported_profit": 23186.24397282143,
+      "self_schedule_upper_bound": 23186.243972821434,
+      "true_profit": 35670.387426407615,
+      "extra_profit_vs_truthful": -1618.9248886303976,
+      "profit_upper_bound": 35670.387426407615
+    },
+    {
+      "delta": 16.469628154506296,
+      "rho": 0.3923021331643632,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109219.57203289791,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 49.43144814898551,
+      "adder_exposure_revenue": 12518.51162571783,
+      "best_reported_profit": 23169.785202015628,
+      "self_schedule_upper_bound": 23169.78520201563,
+      "true_profit": 35688.29682773346,
+      "extra_profit_vs_truthful": -1601.015487304554,
+      "profit_upper_bound": 35688.29682773346
+    },
+    {
+      "delta": 16.57718972428927,
+      "rho": 0.3948642209587268,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109271.91218779805,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 59.773481641794206,
+      "adder_exposure_revenue": 12600.268830505735,
+      "best_reported_profit": 23150.710185620672,
+      "self_schedule_upper_bound": 23150.710185620672,
+      "true_profit": 35750.97901612641,
+      "extra_profit_vs_truthful": -1538.3332989116025,
+      "profit_upper_bound": 35750.97901612641
+    },
+    {
+      "delta": 16.600412634300948,
+      "rho": 0.3954173844576473,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109280.20632724868,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 61.91625259082139,
+      "adder_exposure_revenue": 12617.920490047583,
+      "best_reported_profit": 23143.495436478483,
+      "self_schedule_upper_bound": 23143.495436478486,
+      "true_profit": 35761.41592652607,
+      "extra_profit_vs_truthful": -1527.8963885119447,
+      "profit_upper_bound": 35761.41592652607
+    },
+    {
+      "delta": 16.635481235596657,
+      "rho": 0.39625270915146155,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109286.8999969241,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 72.54182419302379,
+      "adder_exposure_revenue": 12644.576021605404,
+      "best_reported_profit": 23134.159146198283,
+      "self_schedule_upper_bound": 23134.159146198283,
+      "true_profit": 35778.73516780369,
+      "extra_profit_vs_truthful": -1510.5771472343258,
+      "profit_upper_bound": 35778.73516780369
+    },
+    {
+      "delta": 16.650510636145416,
+      "rho": 0.39661070544865457,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109296.36402973306,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 73.84019014618389,
+      "adder_exposure_revenue": 12655.999820839494,
+      "best_reported_profit": 23133.49774572631,
+      "self_schedule_upper_bound": 23133.497745726312,
+      "true_profit": 35789.4975665658,
+      "extra_profit_vs_truthful": -1499.814748472214,
+      "profit_upper_bound": 35789.497566565806
+    },
+    {
+      "delta": 16.988489583566377,
+      "rho": 0.4046612734878371,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109464.42080965875,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 120.00167573212457,
+      "adder_exposure_revenue": 12912.896536590755,
+      "best_reported_profit": 23090.819295486694,
+      "self_schedule_upper_bound": 23090.819295486697,
+      "true_profit": 36003.71583207745,
+      "extra_profit_vs_truthful": -1285.5964829605655,
+      "profit_upper_bound": 36003.715832077454
+    },
+    {
+      "delta": 17.50934546269234,
+      "rho": 0.41706792107789864,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109703.69908712148,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 198.61011817680628,
+      "adder_exposure_revenue": 13308.797422572678,
+      "best_reported_profit": 23012.805129412172,
+      "self_schedule_upper_bound": 23012.805129412176,
+      "true_profit": 36321.60255198485,
+      "extra_profit_vs_truthful": -967.7097630531644,
+      "profit_upper_bound": 36321.602551984855
+    },
+    {
+      "delta": 17.58756768491248,
+      "rho": 0.4189311534684503,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109716.90284971925,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 203.87381567805278,
+      "adder_exposure_revenue": 13368.253883220477,
+      "best_reported_profit": 22971.816128863393,
+      "self_schedule_upper_bound": 22971.816128863393,
+      "true_profit": 36340.070012083874,
+      "extra_profit_vs_truthful": -949.2423029541387,
+      "profit_upper_bound": 36340.070012083874
+    },
+    {
+      "delta": 17.653586818433663,
+      "rho": 0.420503711553372,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 109738.31058334446,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 229.7417028295531,
+      "adder_exposure_revenue": 13418.43481522158,
+      "best_reported_profit": 22968.910817638993,
+      "self_schedule_upper_bound": 22968.910817638993,
+      "true_profit": 36387.345632860575,
+      "extra_profit_vs_truthful": -901.9666821774372,
+      "profit_upper_bound": 36387.345632860575
+    },
+    {
+      "delta": 18.08114521022396,
+      "rho": 0.43068803797398786,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 110000.63610279412,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 273.5863390940067,
+      "adder_exposure_revenue": 13743.420579811267,
+      "best_reported_profit": 22950.09520876342,
+      "self_schedule_upper_bound": 22950.09520876342,
+      "true_profit": 36693.51578857469,
+      "extra_profit_vs_truthful": -595.796526463324,
+      "profit_upper_bound": 36693.51578857469
+    },
+    {
+      "delta": 18.928874329741006,
+      "rho": 0.45088071863515333,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 110737.90720566321,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 346.82030627687345,
+      "adder_exposure_revenue": 14387.776769190688,
+      "best_reported_profit": 23116.24408943596,
+      "self_schedule_upper_bound": 23116.24408943596,
+      "true_profit": 37504.02085862665,
+      "extra_profit_vs_truthful": 214.70854358864017,
+      "profit_upper_bound": 37504.02085862665
+    },
+    {
+      "delta": 19.58400000000359,
+      "rho": 0.46648563670152904,
+      "physical_region": 12,
+      "physical_plan_delta": 17.019759312872225,
+      "physical_exposure_mwh": 760.0967980744974,
+      "generation_mwh": 1720.0967980744972,
+      "energy_revenue": 111333.87586841689,
+      "true_cost": 73580.70665331343,
+      "reported_uplift": 403.41556852760914,
+      "adder_exposure_revenue": 14885.735693493687,
+      "best_reported_profit": 23270.849090137377,
+      "self_schedule_upper_bound": 23270.849090137377,
+      "true_profit": 38156.584783631064,
+      "extra_profit_vs_truthful": 867.2724685930516,
+      "profit_upper_bound": 38156.584783631064
+    },
+    {
+      "delta": 19.58400000000359,
+      "rho": 0.46648563670152904,
+      "physical_region": 13,
+      "physical_plan_delta": 19.85476330006176,
+      "physical_exposure_mwh": 751.8823053208741,
+      "generation_mwh": 1711.8823053208741,
+      "energy_revenue": 110864.80977781583,
+      "true_cost": 73235.84581853083,
+      "reported_uplift": 366.7481982590725,
+      "adder_exposure_revenue": 14724.863067406699,
+      "best_reported_profit": 23270.849090137377,
+      "self_schedule_upper_bound": 23270.849090137377,
+      "true_profit": 37995.712157544076,
+      "extra_profit_vs_truthful": 706.3998425060636,
+      "profit_upper_bound": 37995.712157544076
+    },
+    {
+      "delta": 19.937224216858283,
+      "rho": 0.47489934297694925,
+      "physical_region": 13,
+      "physical_plan_delta": 19.85476330006176,
+      "physical_exposure_mwh": 751.8823053208741,
+      "generation_mwh": 1711.8823053208741,
+      "energy_revenue": 111186.13830106959,
+      "true_cost": 73235.84581853083,
+      "reported_uplift": 394.3611174723228,
+      "adder_exposure_revenue": 14990.446105870566,
+      "best_reported_profit": 23354.20749414052,
+      "self_schedule_upper_bound": 23354.207494140523,
+      "true_profit": 38344.65360001109,
+      "extra_profit_vs_truthful": 1055.341284973074,
+      "profit_upper_bound": 38344.65360001109
+    },
+    {
+      "delta": 19.93722421685852,
+      "rho": 0.4748993429769549,
+      "physical_region": 13,
+      "physical_plan_delta": 19.85476330006176,
+      "physical_exposure_mwh": 751.8823053208741,
+      "generation_mwh": 1711.8823053208741,
+      "energy_revenue": 111186.13830106978,
+      "true_cost": 73235.84581853083,
+      "reported_uplift": 394.36111747234827,
+      "adder_exposure_revenue": 14990.446105870744,
+      "best_reported_profit": 23354.20749414056,
+      "self_schedule_upper_bound": 23354.20749414056,
+      "true_profit": 38344.653600011305,
+      "extra_profit_vs_truthful": 1055.3412849732922,
+      "profit_upper_bound": 38344.653600011305
+    },
+    {
+      "delta": 19.93722421685852,
+      "rho": 0.4748993429769549,
+      "physical_region": 14,
+      "physical_plan_delta": 20.117683547265578,
+      "physical_exposure_mwh": 724.909731492271,
+      "generation_mwh": 1684.909731492271,
+      "energy_revenue": 109478.5418204416,
+      "true_cost": 72084.49453208307,
+      "reported_uplift": 412.84805952613533,
+      "adder_exposure_revenue": 14452.687853744113,
+      "best_reported_profit": 23354.20749414056,
+      "self_schedule_upper_bound": 23354.20749414056,
+      "true_profit": 37806.895347884674,
+      "extra_profit_vs_truthful": 517.5830328466618,
+      "profit_upper_bound": 37806.895347884674
+    },
+    {
+      "delta": 20.28799999999988,
+      "rho": 0.483254728216852,
+      "physical_region": 14,
+      "physical_plan_delta": 20.117683547265578,
+      "physical_exposure_mwh": 724.909731492271,
+      "generation_mwh": 1684.909731492271,
+      "energy_revenue": 109756.6171736237,
+      "true_cost": 72084.49453208307,
+      "reported_uplift": 439.0950030752974,
+      "adder_exposure_revenue": 14706.968632515107,
+      "best_reported_profit": 23404.249012100812,
+      "self_schedule_upper_bound": 23404.249012100812,
+      "true_profit": 38111.21764461592,
+      "extra_profit_vs_truthful": 821.9053295779086,
+      "profit_upper_bound": 38111.21764461592
+    },
+    {
+      "delta": 20.28799999999988,
+      "rho": 0.483254728216852,
+      "physical_region": 15,
+      "physical_plan_delta": 20.332650433483693,
+      "physical_exposure_mwh": 670.5908909125608,
+      "generation_mwh": 1630.590890912561,
+      "energy_revenue": 106727.72319621858,
+      "true_cost": 69842.3214306338,
+      "reported_uplift": 123.79524134999883,
+      "adder_exposure_revenue": 13604.947994833952,
+      "best_reported_profit": 23404.249012100812,
+      "self_schedule_upper_bound": 23404.249012100812,
+      "true_profit": 37009.197006934766,
+      "extra_profit_vs_truthful": -280.1153081032462,
+      "profit_upper_bound": 37009.197006934766
+    },
+    {
+      "delta": 20.64122421685691,
+      "rho": 0.4916684344923279,
+      "physical_region": 15,
+      "physical_plan_delta": 20.332650433483693,
+      "physical_exposure_mwh": 670.5908909125608,
+      "generation_mwh": 1630.590890912561,
+      "energy_revenue": 107007.7395302293,
+      "true_cost": 69842.3214306338,
+      "reported_uplift": 131.03866004368683,
+      "adder_exposure_revenue": 13841.816937107998,
+      "best_reported_profit": 23454.639822531182,
+      "self_schedule_upper_bound": 23454.639822531186,
+      "true_profit": 37296.45675963918,
+      "extra_profit_vs_truthful": 7.1444446011664695,
+      "profit_upper_bound": 37296.456759639186
+    },
+    {
+      "delta": 20.64122421685691,
+      "rho": 0.4916684344923279,
+      "physical_region": 16,
+      "physical_plan_delta": 20.991,
+      "physical_exposure_mwh": 608.236902344913,
+      "generation_mwh": 1568.236902344913,
+      "energy_revenue": 103102.93172334216,
+      "true_cost": 67224.57628258682,
+      "reported_uplift": 131.03866004368683,
+      "adder_exposure_revenue": 12554.754278267848,
+      "best_reported_profit": 23454.639822531182,
+      "self_schedule_upper_bound": 23454.639822531186,
+      "true_profit": 36009.39410079903,
+      "extra_profit_vs_truthful": -1279.9182142389836,
+      "profit_upper_bound": 36009.394100799036
+    },
+    {
+      "delta": 20.641224216856976,
+      "rho": 0.4916684344923295,
+      "physical_region": 16,
+      "physical_plan_delta": 20.991,
+      "physical_exposure_mwh": 608.236902344913,
+      "generation_mwh": 1568.236902344913,
+      "energy_revenue": 103102.93172334222,
+      "true_cost": 67224.57628258682,
+      "reported_uplift": 131.0386600436832,
+      "adder_exposure_revenue": 12554.75427826789,
+      "best_reported_profit": 23454.639822531193,
+      "self_schedule_upper_bound": 23454.639822531193,
+      "true_profit": 36009.39410079908,
+      "extra_profit_vs_truthful": -1279.9182142389327,
+      "profit_upper_bound": 36009.39410079908
+    },
+    {
+      "delta": 20.991,
+      "rho": 0.5,
+      "physical_region": 16,
+      "physical_plan_delta": 20.991,
+      "physical_exposure_mwh": 608.236902344913,
+      "generation_mwh": 1568.236902344913,
+      "energy_revenue": 103321.0950005999,
+      "true_cost": 67224.57628258682,
+      "reported_uplift": 138.21136317478886,
+      "adder_exposure_revenue": 12767.500817122069,
+      "best_reported_profit": 23467.22926406581,
+      "self_schedule_upper_bound": 23467.229264065812,
+      "true_profit": 36234.73008118788,
+      "extra_profit_vs_truthful": -1054.5822338501312,
+      "profit_upper_bound": 36234.73008118788
+    }
+  ],
+  "unique_self_schedule_solves": 100,
+  "maximizing_candidate": {
+    "delta": 13.204080443599175,
+    "rho": 0.31451766098802286,
+    "physical_region": 2,
+    "physical_plan_delta": 12.954003254249237,
+    "physical_exposure_mwh": 1464.0608695652177,
+    "generation_mwh": 2424.0608695652177,
+    "energy_revenue": 148201.04319071863,
+    "true_cost": 103116.43141449272,
+    "reported_uplift": 16.25564101724376,
+    "adder_exposure_revenue": 19331.577496064892,
+    "best_reported_profit": 25769.289921178268,
+    "self_schedule_upper_bound": 25769.28992117827,
+    "true_profit": 45100.867417243164,
+    "extra_profit_vs_truthful": 7811.555102205151,
+    "profit_upper_bound": 45100.867417243164
+  },
+  "conditional_maximum_is_full_range": true,
+  "profit_max_solver_gap_usd": 0.0,
+  "total_seconds": 17.654414400050882,
+  "theorem": "On each common physical-plan interval intersected with an affine selected-price interval, Pi_true=M_rep+delta*D. M_rep is the maximum of affine self-schedule surplus functions, hence Pi_true is convex and its maximum is at an endpoint. At physical boundaries both adjacent plan values are retained, with the stated tie-break; no continuity of profit is asserted."
+}

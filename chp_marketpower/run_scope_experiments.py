@@ -10,6 +10,7 @@ import numpy as np
 
 from benchmark_oracle_queries import benchmark
 from engine import load_case
+from engine import ScheduleRunMILP
 from postprocess_oracle import postprocess
 from price_vulnerability.range_vulnerability import range_price_impact
 from price_vulnerability.oracle_compression import query_compact
@@ -149,9 +150,42 @@ def bidirectional(root):
         save(folder/'range_price_impact.json', report)
 
 
+def select_contrasting_generator(rows, main_generator=0):
+    """Choose by baseline operation, never by oracle complexity or strategic profit."""
+    eligible = [r for r in rows if r['generator_index'] != main_generator
+                and r['incremental_energy_mwh'] > 1e-6]
+    if not eligible:
+        raise ValueError('No contrasting unit with positive baseline offer exposure')
+    return min(eligible, key=lambda r: (r['online_hours'], r['generator_index']))['generator_index']
+
+
+def contrasting_generator(root):
+    gens, net = load_case('30', 'ptdf', 24, 3, 'tight')
+    uc = ScheduleRunMILP(gens, net)
+    p, u, _ = uc.solve(require_optimal=True, mip_gap=0.)
+    rows = [dict(generator_index=i, unit=gen.unit_id, bus_1based=net.gen_bus_idx(i)+1,
+        pmin_mw=gen.P_min, pmax_mw=gen.P_max, ramp_up_mw=gen.R_up,
+        reference_slope=gen.pwl_slopes[len(gen.pwl_slopes)//2], online_hours=float(u[i].sum()),
+        generation_mwh=float(p[i].sum()),
+        incremental_energy_mwh=float(np.sum(p[i]-gen.P_min*u[i]))) for i, gen in enumerate(gens)]
+    g = select_contrasting_generator(rows)
+    save(root/'contrasting_generator_plan.json', dict(selected_generator_index=g,
+        selection_rule='Among units other than G1 with positive truthful above-minimum output, choose the fewest online hours; break ties by generator index. Fixed before any new oracle/profit computation.',
+        baseline=rows, baseline_uc_info=uc.solve_info, rho=[0., .5],
+        query_workload=dict(queries=1000, order='shuffled', seed=20261017)))
+    np.savez_compressed(root/'baseline_30_physical.npz', output=p, commitment=u)
+    folder = root/f'30_G{g+1}_bracket_0to50'
+    run(['run_affine_oracle.py', '--discover', '--complete', '--case', '30', '--generator', str(g),
+         '--upper', str(.5*rows[g]['reference_slope']), '--max-points', '600',
+         '--checkpoint-every', '0', '--out-dir', str(folder)], folder)
+    postprocess(folder)
+    result = benchmark(folder, 1000, skip_fresh=True, order='shuffled', seed=20261017)
+    save(root/f'query_30_G{g+1}_q1000.json', result)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--stage', choices=('algorithms', 'queries', 'bidirectional'), required=True)
+    parser.add_argument('--stage', choices=('algorithms', 'queries', 'bidirectional', 'contrasting-generator'), required=True)
     parser.add_argument('--root', type=Path, required=True)
     parser.add_argument('--resume', action='store_true', help='Continue frozen construction runs without rerunning completed models')
     args = parser.parse_args()
@@ -161,7 +195,8 @@ def main():
     if args.stage == 'algorithms':
         algorithms(args.root, args.resume)
     else:
-        {'queries': queries, 'bidirectional': bidirectional}[args.stage](args.root)
+        {'queries': queries, 'bidirectional': bidirectional,
+         'contrasting-generator': contrasting_generator}[args.stage](args.root)
 
 
 if __name__ == '__main__':

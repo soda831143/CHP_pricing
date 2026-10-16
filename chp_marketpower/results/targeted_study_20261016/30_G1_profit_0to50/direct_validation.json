@@ -1,0 +1,327 @@
+{
+  "status": "passed",
+  "points": [
+    {
+      "delta": 4.6090502720956055,
+      "physical_plan_gap_to_global_bound_usd": 0.0,
+      "direct_uc_objective": 190474.75473148664,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 190474.75473148664,
+        "lower_bound": 190474.75473148664,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2519.060869565217,
+      "solver_selected_physical_generation_mwh": 2519.0608695652177,
+      "declared_profit": 40164.04009735664,
+      "solver_dispatch_profit_at_same_price": 40164.04009735661
+    },
+    {
+      "delta": 10.305800837277673,
+      "physical_plan_gap_to_global_bound_usd": 8.731149137020111e-11,
+      "direct_uc_objective": 199265.55520904818,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 199265.55520904818,
+        "lower_bound": 199265.55520904815,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2435.6000000000004,
+      "solver_selected_physical_generation_mwh": 2435.6000000000004,
+      "declared_profit": 43717.269326928305,
+      "solver_dispatch_profit_at_same_price": 43717.26932692823
+    },
+    {
+      "delta": 12.298790786981654,
+      "physical_plan_gap_to_global_bound_usd": 2.9103830456733704e-11,
+      "direct_uc_objective": 202195.96492340247,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 202195.96492340247,
+        "lower_bound": 202195.96492340244,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2424.0608695652177,
+      "solver_selected_physical_generation_mwh": 2424.0608695652177,
+      "declared_profit": 44627.592404582014,
+      "solver_dispatch_profit_at_same_price": 44627.59240458199
+    },
+    {
+      "delta": 13.203870533599174,
+      "physical_plan_gap_to_global_bound_usd": 2.9103830456733704e-11,
+      "direct_uc_objective": 203521.0567642612,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 203521.0567642612,
+        "lower_bound": 203521.05676426116,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2424.0608695652177,
+      "solver_selected_physical_generation_mwh": 2424.0608695652177,
+      "declared_profit": 45100.71769376876,
+      "solver_dispatch_profit_at_same_price": 45100.71769376871
+    },
+    {
+      "delta": 13.204080443599175,
+      "physical_plan_gap_to_global_bound_usd": 1.1641532182693481e-10,
+      "direct_uc_objective": 203521.36408527824,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 203521.36408527824,
+        "lower_bound": 203521.3640852782,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2424.0608695652177,
+      "solver_selected_physical_generation_mwh": 2318.9913043478264,
+      "declared_profit": 45100.86741724322,
+      "solver_dispatch_profit_at_same_price": 43713.52042593874
+    },
+    {
+      "delta": 13.204290353599175,
+      "physical_plan_gap_to_global_bound_usd": 0.0,
+      "direct_uc_objective": 203521.64935114293,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 203521.64935114293,
+        "lower_bound": 203521.6493511429,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2318.9913043478264,
+      "solver_selected_physical_generation_mwh": 2318.9913043478264,
+      "declared_profit": 43713.64809426076,
+      "solver_dispatch_profit_at_same_price": 43713.648094260745
+    },
+    {
+      "delta": 13.429040221799516,
+      "physical_plan_gap_to_global_bound_usd": -2.9103830456733704e-11,
+      "direct_uc_objective": 203827.0824676805,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 203827.0824676805,
+        "lower_bound": 203827.0824676805,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2318.9913043478264,
+      "solver_selected_physical_generation_mwh": 2318.9913043478264,
+      "declared_profit": 43669.25830254138,
+      "solver_dispatch_profit_at_same_price": 43669.25830254138
+    },
+    {
+      "delta": 13.790964815598588,
+      "physical_plan_gap_to_global_bound_usd": 0.0,
+      "direct_uc_objective": 204307.27413924178,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 204307.27413924178,
+        "lower_bound": 204307.27413924178,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2233.854810056836,
+      "solver_selected_physical_generation_mwh": 2233.854810056836,
+      "declared_profit": 42651.306963220806,
+      "solver_dispatch_profit_at_same_price": 42651.30696322082
+    },
+    {
+      "delta": 14.142964815598507,
+      "physical_plan_gap_to_global_bound_usd": 0.0,
+      "direct_uc_objective": 204734.44904358758,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 204734.44904358758,
+        "lower_bound": 204734.44904358758,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2135.164036018175,
+      "solver_selected_physical_generation_mwh": 2135.164036018175,
+      "declared_profit": 41478.26092448679,
+      "solver_dispatch_profit_at_same_price": 41478.26092448679
+    },
+    {
+      "delta": 14.387129367918956,
+      "physical_plan_gap_to_global_bound_usd": 2.9103830456733704e-11,
+      "direct_uc_objective": 205019.3604558195,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 205019.3604558195,
+        "lower_bound": 205019.36045581946,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2065.749947418584,
+      "solver_selected_physical_generation_mwh": 2065.749947418584,
+      "declared_profit": 40634.30145548626,
+      "solver_dispatch_profit_at_same_price": 40634.301455486246
+    },
+    {
+      "delta": 14.704129367919382,
+      "physical_plan_gap_to_global_bound_usd": -5.820766091346741e-11,
+      "direct_uc_objective": 205359.9683389899,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 205359.9683389899,
+        "lower_bound": 205359.9683389899,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 2031.3079131960808,
+      "solver_selected_physical_generation_mwh": 2031.3079131960799,
+      "declared_profit": 40230.161170278734,
+      "solver_dispatch_profit_at_same_price": 40230.16117027871
+    },
+    {
+      "delta": 15.027000000000156,
+      "physical_plan_gap_to_global_bound_usd": 2.9103830456733704e-11,
+      "direct_uc_objective": 205704.71075280124,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 205704.71075280124,
+        "lower_bound": 205704.7107528012,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1998.4093624714428,
+      "solver_selected_physical_generation_mwh": 1998.4093624714428,
+      "declared_profit": 39822.41728500897,
+      "solver_dispatch_profit_at_same_price": 39822.41728500892
+    },
+    {
+      "delta": 15.09112936791853,
+      "physical_plan_gap_to_global_bound_usd": 2.9103830456733704e-11,
+      "direct_uc_objective": 205769.60973109867,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 205769.60973109867,
+        "lower_bound": 205769.60973109864,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1940.2701758225214,
+      "solver_selected_physical_generation_mwh": 1940.2701758225214,
+      "declared_profit": 38963.35977309226,
+      "solver_dispatch_profit_at_same_price": 38963.359773092256
+    },
+    {
+      "delta": 15.408129368024984,
+      "physical_plan_gap_to_global_bound_usd": 2.9103830456733704e-11,
+      "direct_uc_objective": 206058.73387098787,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 206058.73387098787,
+        "lower_bound": 206058.73387098784,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1865.1617641495,
+      "solver_selected_physical_generation_mwh": 1865.1617641495,
+      "declared_profit": 37881.12641680501,
+      "solver_dispatch_profit_at_same_price": 37881.12641680499
+    },
+    {
+      "delta": 15.760129367968204,
+      "physical_plan_gap_to_global_bound_usd": 1.0739313438534737e-08,
+      "direct_uc_objective": 206374.11646118478,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 206374.11646118478,
+        "lower_bound": 206374.11646118478,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1814.726981541102,
+      "solver_selected_physical_generation_mwh": 1814.7269815408044,
+      "declared_profit": 37142.01104826825,
+      "solver_dispatch_profit_at_same_price": 37142.011048263535
+    },
+    {
+      "delta": 17.70412936786366,
+      "physical_plan_gap_to_global_bound_usd": 0.0,
+      "direct_uc_objective": 207857.8132104092,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 207857.8132104092,
+        "lower_bound": 207857.8132104092,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1720.0967980744972,
+      "solver_selected_physical_generation_mwh": 1720.0967980744974,
+      "declared_profit": 36423.53863135226,
+      "solver_dispatch_profit_at_same_price": 36423.538631352254
+    },
+    {
+      "delta": 19.760612108431054,
+      "physical_plan_gap_to_global_bound_usd": 0.0,
+      "direct_uc_objective": 209419.48837792504,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 209419.48837792504,
+        "lower_bound": 209419.48837792504,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1711.8823053208741,
+      "solver_selected_physical_generation_mwh": 1711.8823053208741,
+      "declared_profit": 38170.182878777705,
+      "solver_dispatch_profit_at_same_price": 38170.18287877769
+    },
+    {
+      "delta": 20.1126121084292,
+      "physical_plan_gap_to_global_bound_usd": -2.9103830456733704e-11,
+      "direct_uc_objective": 209679.42028654253,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 209679.42028654253,
+        "lower_bound": 209679.42028654253,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1684.909731492271,
+      "solver_selected_physical_generation_mwh": 1684.909731492271,
+      "declared_profit": 37959.0564962503,
+      "solver_dispatch_profit_at_same_price": 37959.0564962503
+    },
+    {
+      "delta": 20.464612108428394,
+      "physical_plan_gap_to_global_bound_usd": -2.9103830456733704e-11,
+      "direct_uc_objective": 209924.99514706506,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 209924.99514706506,
+        "lower_bound": 209924.99514706506,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1630.590890912561,
+      "solver_selected_physical_generation_mwh": 1630.590890912561,
+      "declared_profit": 37152.826883286965,
+      "solver_dispatch_profit_at_same_price": 37152.82688328698
+    },
+    {
+      "delta": 20.816112108428456,
+      "physical_plan_gap_to_global_bound_usd": -2.9103830456733704e-11,
+      "direct_uc_objective": 210149.80288762922,
+      "direct_uc_info": {
+        "status": 2,
+        "objective": 210149.80288762922,
+        "lower_bound": 210149.80288762922,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "selected_physical_generation_mwh": 1568.236902344913,
+      "solver_selected_physical_generation_mwh": 1568.2369023449137,
+      "declared_profit": 36122.06209099345,
+      "solver_dispatch_profit_at_same_price": 36122.06209099347
+    }
+  ],
+  "max_abs_physical_plan_gap_usd": 1.0739313438534737e-08,
+  "purpose": "Independent region-interior and winning-boundary-neighborhood checks. Profit comparison keeps the same CHP selector; different UC tie choices at the switch are reported, not treated as errors. Sampling corroborates, but does not replace the endpoint-bound argument."
+}

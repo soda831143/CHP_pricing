@@ -1,0 +1,578 @@
+{
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 0,
+    "parameter": "all-day absolute adder"
+  },
+  "source_oracle": "results\\scope_study_20261016\\30_bracket_repeat1",
+  "source_sha256": "2aa983e6c28d4f0c8906c4d4c7c879d4e43b46d45a8dd1b28ba58651da661880",
+  "compact_sha256": "f9ed496035e2cbf25cd6e06250fdc15f7105439881991be8ca75c97b74f52d3b",
+  "rho_interval": [
+    0.0,
+    0.5
+  ],
+  "physical_tolerance_usd": 1e-05,
+  "uc_solves": 33,
+  "physical_regions": [
+    {
+      "left": 0.0,
+      "right": 9.218100544191211,
+      "witness_delta": 0.0,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 9.218100544191211,
+      "right": 11.393501130364132,
+      "witness_delta": 9.482334555893866,
+      "common_plan_gap_usd": 5.820766091346741e-11,
+      "ready": true
+    },
+    {
+      "left": 11.393501130364132,
+      "right": 13.204080443599175,
+      "witness_delta": 12.954003254249237,
+      "common_plan_gap_usd": 5.820766091346741e-11,
+      "ready": true
+    },
+    {
+      "left": 13.204080443599175,
+      "right": 13.653999999999858,
+      "witness_delta": 13.204080443599175,
+      "common_plan_gap_usd": 0.0,
+      "ready": true
+    },
+    {
+      "left": 13.653999999999858,
+      "right": 13.927929631197317,
+      "witness_delta": 13.793738566219194,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 13.927929631197317,
+      "right": 14.357999999999697,
+      "witness_delta": 14.158355232089534,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 14.357999999999697,
+      "right": 14.416258735838216,
+      "witness_delta": 14.377320472582205,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 14.416258735838216,
+      "right": 14.992000000000546,
+      "witness_delta": 14.934110858651453,
+      "common_plan_gap_usd": 0.0,
+      "ready": true
+    },
+    {
+      "left": 14.992000000000546,
+      "right": 15.061999999999765,
+      "witness_delta": 15.03670391271621,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 15.061999999999765,
+      "right": 15.120258735837293,
+      "witness_delta": 15.074475898935916,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 15.120258735837293,
+      "right": 15.696000000212676,
+      "witness_delta": 15.403186910106418,
+      "common_plan_gap_usd": 2.7066562324762344e-09,
+      "ready": true
+    },
+    {
+      "left": 15.696000000212676,
+      "right": 15.824258735723731,
+      "witness_delta": 15.779666980607725,
+      "common_plan_gap_usd": 4.685716703534126e-09,
+      "ready": true
+    },
+    {
+      "left": 15.824258735723731,
+      "right": 19.58400000000359,
+      "witness_delta": 17.019759312872225,
+      "common_plan_gap_usd": 4.685716703534126e-09,
+      "ready": true
+    },
+    {
+      "left": 19.58400000000359,
+      "right": 19.93722421685852,
+      "witness_delta": 19.85476330006176,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 19.93722421685852,
+      "right": 20.28799999999988,
+      "witness_delta": 20.117683547265578,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 20.28799999999988,
+      "right": 20.64122421685691,
+      "witness_delta": 20.332650433483693,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 20.64122421685691,
+      "right": 20.991,
+      "witness_delta": 20.991,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    }
+  ],
+  "physical_points": [
+    {
+      "intercept": 183288.96480640344,
+      "exposure": 1559.0608695652174,
+      "lower_bound": 183288.96480640347,
+      "solver_info": {
+        "status": 2,
+        "objective": 183288.96480640347,
+        "lower_bound": 183288.96480640347,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 0.0
+    },
+    {
+      "intercept": 184058.3154935612,
+      "exposure": 1475.6000000000001,
+      "lower_bound": 197660.54465656978,
+      "solver_info": {
+        "status": 2,
+        "objective": 197660.54465656978,
+        "lower_bound": 197660.54465656978,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.218100544191211
+    },
+    {
+      "intercept": 184058.31549356124,
+      "exposure": 1475.6000000000004,
+      "lower_bound": 198050.44836423823,
+      "solver_info": {
+        "status": 2,
+        "objective": 198050.44836423823,
+        "lower_bound": 198050.44836423823,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.482334555893866
+    },
+    {
+      "intercept": 184189.78658921347,
+      "exposure": 1464.0608695652184,
+      "lower_bound": 200870.5657615266,
+      "solver_info": {
+        "status": 2,
+        "objective": 200870.56576152664,
+        "lower_bound": 200870.5657615266,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 11.393501130364132
+    },
+    {
+      "intercept": 184189.78658921336,
+      "exposure": 1464.0608695652177,
+      "lower_bound": 203155.2358579802,
+      "solver_info": {
+        "status": 2,
+        "objective": 203155.2358579802,
+        "lower_bound": 203155.2358579802,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 12.954003254249237
+    },
+    {
+      "intercept": 185577.13358051775,
+      "exposure": 1358.9913043478264,
+      "lower_bound": 203521.3640852782,
+      "solver_info": {
+        "status": 2,
+        "objective": 203521.36408527824,
+        "lower_bound": 203521.3640852782,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.204080443599175
+    },
+    {
+      "intercept": 185577.13358051778,
+      "exposure": 1358.9913043478264,
+      "lower_bound": 203795.04402360736,
+      "solver_info": {
+        "status": 2,
+        "objective": 203795.0440236074,
+        "lower_bound": 203795.04402360736,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.405465056917572
+    },
+    {
+      "intercept": 186739.58727356698,
+      "exposure": 1273.8548100568357,
+      "lower_bound": 204132.80085008277,
+      "solver_info": {
+        "status": 2,
+        "objective": 204132.8008500828,
+        "lower_bound": 204132.80085008277,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.653999999999858
+    },
+    {
+      "intercept": 186739.58727356695,
+      "exposure": 1273.8548100568357,
+      "lower_bound": 204310.8074948117,
+      "solver_info": {
+        "status": 2,
+        "objective": 204310.80749481174,
+        "lower_bound": 204310.8074948117,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.793738566219194
+    },
+    {
+      "intercept": 186739.58727356698,
+      "exposure": 1273.854810056836,
+      "lower_bound": 204481.74742840076,
+      "solver_info": {
+        "status": 2,
+        "objective": 204481.74742840076,
+        "lower_bound": 204481.74742840076,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.927929631197317
+    },
+    {
+      "intercept": 188114.14542962582,
+      "exposure": 1175.164036018175,
+      "lower_bound": 204752.53530754716,
+      "solver_info": {
+        "status": 2,
+        "objective": 204752.5353075472,
+        "lower_bound": 204752.53530754716,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.158355232089534
+    },
+    {
+      "intercept": 188447.39868488593,
+      "exposure": 1151.9537521861548,
+      "lower_bound": 204987.1506587744,
+      "solver_info": {
+        "status": 2,
+        "objective": 204987.15065877442,
+        "lower_bound": 204987.1506587744,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.357999999999697
+    },
+    {
+      "intercept": 189110.79291373873,
+      "exposure": 1105.7499474185838,
+      "lower_bound": 205008.51427031663,
+      "solver_info": {
+        "status": 2,
+        "objective": 205008.51427031663,
+        "lower_bound": 205008.51427031663,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.377320472582205
+    },
+    {
+      "intercept": 189238.22231226793,
+      "exposure": 1096.9106638801695,
+      "lower_bound": 205051.57025286453,
+      "solver_info": {
+        "status": 2,
+        "objective": 205051.57025286453,
+        "lower_bound": 205051.57025286453,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.416258735838216
+    },
+    {
+      "intercept": 189607.31819047892,
+      "exposure": 1071.3079131960808,
+      "lower_bound": 205606.34932989973,
+      "solver_info": {
+        "status": 2,
+        "objective": 205606.34932989973,
+        "lower_bound": 205606.34932989973,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.934110858651453
+    },
+    {
+      "intercept": 189666.15635859483,
+      "exposure": 1067.3832755149213,
+      "lower_bound": 205668.36642511515,
+      "solver_info": {
+        "status": 2,
+        "objective": 205668.36642511515,
+        "lower_bound": 205668.36642511515,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 14.992000000000546
+    },
+    {
+      "intercept": 190100.5332629427,
+      "exposure": 1038.4093624714428,
+      "lower_bound": 205714.78738661818,
+      "solver_info": {
+        "status": 2,
+        "objective": 205714.7873866182,
+        "lower_bound": 205714.78738661818,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.03670391271621
+    },
+    {
+      "intercept": 190838.7483176674,
+      "exposure": 989.3976074107143,
+      "lower_bound": 205741.0550804873,
+      "solver_info": {
+        "status": 2,
+        "objective": 205741.05508048733,
+        "lower_bound": 205741.0550804873,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.061999999999765
+    },
+    {
+      "intercept": 190976.22569224876,
+      "exposure": 980.2701758225212,
+      "lower_bound": 205753.284832131,
+      "solver_info": {
+        "status": 2,
+        "objective": 205753.28483213103,
+        "lower_bound": 205753.284832131,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.074475898935916
+    },
+    {
+      "intercept": 192100.15707631427,
+      "exposure": 905.9373615697073,
+      "lower_bound": 205798.16438171,
+      "solver_info": {
+        "status": 2,
+        "objective": 205798.16438171003,
+        "lower_bound": 205798.16438171,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.120258735837293
+    },
+    {
+      "intercept": 192111.88430998262,
+      "exposure": 905.1617641495001,
+      "lower_bound": 206054.26014705905,
+      "solver_info": {
+        "status": 2,
+        "objective": 206054.26014705905,
+        "lower_bound": 206054.26014705905,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.403186910106418
+    },
+    {
+      "intercept": 192311.88319693913,
+      "exposure": 892.4197351639928,
+      "lower_bound": 206319.30336026297,
+      "solver_info": {
+        "status": 2,
+        "objective": 206319.303360263,
+        "lower_bound": 206319.30336026297,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.696000000212676
+    },
+    {
+      "intercept": 192903.50865781476,
+      "exposure": 854.7269815411021,
+      "lower_bound": 206390.81578586265,
+      "solver_info": {
+        "status": 2,
+        "objective": 206390.81578586265,
+        "lower_bound": 206390.81578586265,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.779666980607725
+    },
+    {
+      "intercept": 193747.37745791307,
+      "exposure": 801.3994409468671,
+      "lower_bound": 206428.92956212064,
+      "solver_info": {
+        "status": 2,
+        "objective": 206428.92956212067,
+        "lower_bound": 206428.92956212064,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.824258735723731
+    },
+    {
+      "intercept": 194400.96116519932,
+      "exposure": 760.0967980744974,
+      "lower_bound": 207337.62572291214,
+      "solver_info": {
+        "status": 2,
+        "objective": 207337.62572291214,
+        "lower_bound": 207337.62572291214,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 17.019759312872225
+    },
+    {
+      "intercept": 194400.96116519938,
+      "exposure": 760.0967980744974,
+      "lower_bound": 209286.69685869303,
+      "solver_info": {
+        "status": 2,
+        "objective": 209286.69685869303,
+        "lower_bound": 209286.69685869303,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 19.58400000000359
+    },
+    {
+      "intercept": 194561.8337912863,
+      "exposure": 751.8823053208741,
+      "lower_bound": 209490.27899293703,
+      "solver_info": {
+        "status": 2,
+        "objective": 209490.27899293703,
+        "lower_bound": 209490.27899293703,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 19.85476330006176
+    },
+    {
+      "intercept": 194838.20976791138,
+      "exposure": 738.0199956222461,
+      "lower_bound": 209552.27989715704,
+      "solver_info": {
+        "status": 2,
+        "objective": 209552.27989715704,
+        "lower_bound": 209552.27989715704,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 19.93722421685852
+    },
+    {
+      "intercept": 195099.59204341294,
+      "exposure": 724.909731492271,
+      "lower_bound": 209683.0966219077,
+      "solver_info": {
+        "status": 2,
+        "objective": 209683.0966219077,
+        "lower_bound": 209683.0966219077,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.117683547265578
+    },
+    {
+      "intercept": 195579.56495935493,
+      "exposure": 701.2517604777781,
+      "lower_bound": 209806.56067592802,
+      "solver_info": {
+        "status": 2,
+        "objective": 209806.56067592802,
+        "lower_bound": 209806.56067592802,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.28799999999988
+    },
+    {
+      "intercept": 196201.6126810941,
+      "exposure": 670.5908909125608,
+      "lower_bound": 209836.50284989757,
+      "solver_info": {
+        "status": 2,
+        "objective": 209836.50284989757,
+        "lower_bound": 209836.50284989757,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.332650433483693
+    },
+    {
+      "intercept": 196840.5090134344,
+      "exposure": 639.6384471220149,
+      "lower_bound": 210043.4296182021,
+      "solver_info": {
+        "status": 2,
+        "objective": 210043.4296182021,
+        "lower_bound": 210043.4296182021,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.64122421685691
+    },
+    {
+      "intercept": 197488.67533993424,
+      "exposure": 608.236902344913,
+      "lower_bound": 210256.17615705632,
+      "solver_info": {
+        "status": 2,
+        "objective": 210256.17615705635,
+        "lower_bound": 210256.17615705632,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 20.991
+    }
+  ],
+  "status": "numerically_validated_complete",
+  "profit_assessment_status": "not_started",
+  "physical_discovery_seconds": 11.748171900049783,
+  "physical_selection": "Each interval fixes its archived common full-system plan. At a shared boundary choose the adjacent archived plan with the higher true profit. This is a declared optimistic boundary tie-break, not a claim about an ISO rule or all optimal schedules.",
+  "scope_limit": "Conditional on the declared CHP selector, physical tie-break, reported LOC uplift and floating-point COPT optimality/bounds. A small UC cost gap is NOT a bound on dispatch or profit error.",
+  "physical_coverage_fraction": 1.0
+}

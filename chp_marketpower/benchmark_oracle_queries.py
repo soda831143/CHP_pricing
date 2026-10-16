@@ -170,6 +170,7 @@ def main() -> None:
     if output.exists():
         parser.error('Use a fresh output file to preserve earlier timed results')
     result = benchmark(args.oracle_dir, args.queries, args.skip_fresh, args.order, args.seed)
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2), encoding="utf-8")
     fresh = (f"{result['fresh_chp_batch_seconds']:.2f}s"
              if result["fresh_chp_batch_seconds"] is not None else "not run")

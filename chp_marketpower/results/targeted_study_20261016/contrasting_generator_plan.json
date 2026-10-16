@@ -1,0 +1,94 @@
+{
+  "selected_generator_index": 1,
+  "selection_rule": "Among units other than G1 with positive truthful above-minimum output, choose the fewest online hours; break ties by generator index. Fixed before any new oracle/profit computation.",
+  "baseline": [
+    {
+      "generator_index": 0,
+      "unit": "G1",
+      "bus_1based": 1,
+      "pmin_mw": 40,
+      "pmax_mw": 120,
+      "ramp_up_mw": 60,
+      "reference_slope": 41.982,
+      "online_hours": 24.0,
+      "generation_mwh": 2519.060869565217,
+      "incremental_energy_mwh": 1559.0608695652174
+    },
+    {
+      "generator_index": 1,
+      "unit": "G2",
+      "bus_1based": 2,
+      "pmin_mw": 20,
+      "pmax_mw": 50,
+      "ramp_up_mw": 25.0,
+      "reference_slope": 70.8786,
+      "online_hours": 4.0,
+      "generation_mwh": 102.03236910216519,
+      "incremental_energy_mwh": 22.03236910216519
+    },
+    {
+      "generator_index": 2,
+      "unit": "G3",
+      "bus_1based": 22,
+      "pmin_mw": 30,
+      "pmax_mw": 80,
+      "ramp_up_mw": 40.0,
+      "reference_slope": 61.566,
+      "online_hours": 18.0,
+      "generation_mwh": 706.5156801477939,
+      "incremental_energy_mwh": 166.5156801477939
+    },
+    {
+      "generator_index": 3,
+      "unit": "G4",
+      "bus_1based": 27,
+      "pmin_mw": 8,
+      "pmax_mw": 20,
+      "ramp_up_mw": 10.0,
+      "reference_slope": 115.4676,
+      "online_hours": 0.0,
+      "generation_mwh": 0.0,
+      "incremental_energy_mwh": 0.0
+    },
+    {
+      "generator_index": 4,
+      "unit": "G5",
+      "bus_1based": 23,
+      "pmin_mw": 25,
+      "pmax_mw": 100,
+      "ramp_up_mw": 50.0,
+      "reference_slope": 58.260000000000005,
+      "online_hours": 12.0,
+      "generation_mwh": 385.7041246630845,
+      "incremental_energy_mwh": 85.70412466308443
+    },
+    {
+      "generator_index": 5,
+      "unit": "G6",
+      "bus_1based": 13,
+      "pmin_mw": 10,
+      "pmax_mw": 30,
+      "ramp_up_mw": 15.0,
+      "reference_slope": 87.0906,
+      "online_hours": 4.0,
+      "generation_mwh": 40.00000000000002,
+      "incremental_energy_mwh": 2.3092638912203256e-14
+    }
+  ],
+  "baseline_uc_info": {
+    "status": 2,
+    "objective": 183288.96480640347,
+    "lower_bound": 183288.96480640347,
+    "relative_gap": 0.0,
+    "requested_mip_gap": 0.0
+  },
+  "rho": [
+    0.0,
+    0.5
+  ],
+  "query_workload": {
+    "queries": 1000,
+    "order": "shuffled",
+    "seed": 20261017
+  }
+}
