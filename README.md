@@ -20,15 +20,18 @@ CHP engine and data.
 - `research/market-power-parametric-regimes`: objective-parametric CHP,
   price-impact regime analysis, and the proposed solver-assisted 1D oracle.
 
-The research branch must preserve the direct COPT solve as ground truth. A
-grid-level slope change is only a candidate breakpoint until a basis/reduced-
-cost calculation certifies the interval and direct solves reproduce its value
-and selected price within tolerance.
+The current research algorithm uses persistent CHP solves and adaptive
+bracket-and-validate discovery, with complete-dual affine selection and
+common-primal interval witnesses. It does not require degenerate-basis
+enumeration. Direct COPT solves check value and primal-dual optimality;
+different legal optimal price selections need not agree componentwise.
 
-The parametric branch is intentionally gated: first run the basis/dual audit in
-`chp_marketpower/run_basis_dual_audit.py`; only then implement exact 1D
-continuation. The mathematical contract and stop criteria are documented in
-`chp_marketpower/PARAMETRIC_FORMULATION.md`.
+The [CHP Oracle Explorer](chp_marketpower/dashboard/README.md) adds a local
+interactive workbench and a solver-free offline demonstration for the four
+existing 30/118-bus bid directions. Price lookup, physical UC and reported-LOC
+settlement are separate capabilities. The independent 118-G11 Q500 experiment
+and its measured amortization are documented [here](chp_marketpower/results/dashboard_study_20261017/README.md).
+Current theory and scope are linked from [the research README](chp_marketpower/README.md).
 
 ## Minimal checks
 
