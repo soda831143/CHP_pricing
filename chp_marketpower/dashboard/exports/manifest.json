@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "data_sha256": "4f7c2509257c247f79a1fbe53791201bf9a3fbed737b66bc6fc297edf358af69",
+  "data_sha256": "90ba6f61eee501173818e7065f9ecbaa98b58f7412c15b4b0791c54b09ee37d6",
   "source_hashes": {
     "results/figure_study_20261016/generator_settlements.csv": "ce5251a442f7d47087c5776eb32d7531f5bb908dc98f38c525324ead5a445148",
     "results/figure_study_20261016/economic_source_audit.json": "8fdaa9e9d8951e78a295f23fc54202754c0404b01b06ffd245afc40b911f6448",

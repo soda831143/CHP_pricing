@@ -156,12 +156,14 @@ def test_streamlit_boundary_and_unavailable_direction():
     assert any('物理方案' in r.label and len(r.options)==2 for r in app.radio)
     app.sidebar.selectbox(key='target_30').set_value(5).run()
     assert not app.exception
-    assert any('not_available' in w.value for w in app.warning)
+    assert any('CHP电价' in m.label for m in app.metric)
     app.sidebar.selectbox(key='target_30').set_value(1).run()
     assert not app.exception
     app.sidebar.selectbox[0].set_value('118').run()
     assert not app.exception
     assert app.sidebar.selectbox(key='target_118').value == 10
+    app.sidebar.selectbox(key='target_118').set_value(0).run()
+    assert any('not_available' in w.value for w in app.warning)
 
 
 def test_standalone_has_no_external_script_or_data_fetch():
@@ -222,12 +224,12 @@ def test_lazy_pages_share_unit_bus_and_profit_selection():
     from streamlit.testing.v1 import AppTest
     app = AppTest.from_file(str(Path(__file__).resolve().parents[1]/'dashboard/app.py'),default_timeout=30).run()
     assert not app.exception
-    assert len(app.get('plotly_chart'))==2
+    assert len(app.get('plotly_chart'))==3
     app.selectbox(key='observe_unit').set_value(2).run()
     assert app.selectbox(key='observe_node').value==21
     app.radio(key='page').set_value('结算与市场力').run()
     assert not app.exception and len(app.get('plotly_chart'))==1
-    assert app.radio(key='profit_mode').value=='额外利润'
+    assert app.radio(key='profit_mode').value=='利润增量'
     app.number_input(key='bid_pct').set_value(31.451766098802286).run()
     assert any(m.value=='45,100.87' for m in app.metric)
     plan = next(r for r in app.radio if r.label=='选择物理方案')

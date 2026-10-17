@@ -80,3 +80,67 @@ both bind only127.0.0.1. No public deployment or license/configuration changes.
 The runtime settlement cache is intentionally local/ignored. The export manifest
 is a SHA-256 provenance record, not a digital signature. The old retrospective
 model binding is disclosed; no new claim of historical snapshot identity is made.
+
+## Price-coverage / mathematical-explanation revision, 2026-10-17
+
+- Added a hash-checked lazy catalog, per-scenario immutable payloads and automatic
+  registration after source/model/full-interval independent validation. The local
+  app and its UC/LOC worker use the same exact generator/hour lookup. The standalone
+  remains the original four curated directions; no 150-map embedded HTML.
+- All six IEEE30 all-day price maps are independently checked. Their saved UC maps
+  contain respectively 17, 6, 21, 1, 7, 1 common-plan regions for G1–G6. New UC
+  archives check full-system feasibility and endpoint global MIP bounds, not only
+  the target generator. Shared boundaries retain both adjacent plans.
+- Original four curated selectors were independently revalidated to bind reports
+  to raw witness and verified model hashes. Their original model and compact price
+  selector hashes remain unchanged. Direct validation prices can differ under dual
+  nonuniqueness; the release gate uses complete-dual KKT and objective residuals.
+- Actual browser: method page rendered equations and an actual archived IEEE30-G1
+  interval. Numerical-validation page displayed endpoint/interior residuals,
+  zero-offer comparison, source versions and a separate explicit validation action.
+- Actual browser: IEEE30-G1 at 16.7% passed a new bounded independent CHP check in
+  about 5.7s, with value error 2.04e-10 USD and selected complete-dual gap 1.16e-10 USD.
+  This action did not create settlement results or run physical UC.
+- Actual browser: new IEEE30-G3 all-day at 16.812345% queried prices and reused UC
+  region 8, then completed all six unit self-schedules. S changed to solved_on_demand,
+  G3 baseline profit was 0 USD and current profit about 1585.50 USD; percentage was
+  correctly undefined for the zero baseline. This is a UI acceptance point, not an
+  optimal bid or cross-generator market-power ranking.
+- Browser testing found a real completion-rerun widget-cleanup exception not caught
+  by the earlier suite. Observation values now have a non-widget backup and recover
+  without losing generator/bus/hour. Repeated the browser completion successfully;
+  added a regression with persistent context but absent widget state.
+- Batch testing found a complete map with coverage-length sum 0.9999999999999999.
+  Publication now checks all individual interval-ready flags and full validated
+  coverage, rather than exact floating-point equality of the summed fraction.
+  An unready interval still fails. The interrupted queue resumes validated archives.
+- Read-only code review caught and corrected wrong-direction checkpoint reuse,
+  stale compact handling, validation/model source binding, stale UC publication
+  and validation display after selector changes. The reviewer found no remaining
+  Critical/Important issue in those fixes, and did not independently rerun solvers.
+- Full regression after these corrections and final coverage check: 130 tests passed. Startup laziness,
+  scope/hash rejection, unchanged curated prices, UC ties, baseline disclosure,
+  method pages, exact settlement cache and bounded native jobs are covered.
+
+Terminology: use CHP nodal price; network-constrained UC and generation schedule;
+energy market revenue; reported-cost lost-opportunity-cost (LOC) compensation;
+actual operating cost; generator profit and profit increment. Base-case PTDF limits
+are not an N−1 security-constrained UC model. The historical price_tolerance_usd
+parameter bounds common-primal OBJECTIVE gaps in USD, not price error in USD/MWh;
+the interface now separates this from price-path compression/projection tolerances.
+
+Current published direction counts, per-map timing/residual summaries and baseline
+comparisons are in exports/coverage.csv and coverage.json. Raw newly computed LP
+witnesses and runtime settlements stay local under ignored results directories;
+the published lightweight payloads retain their provenance hashes. Offline HTML
+structure was regression-tested; this revision's visual/interactive browser QA
+was performed on the localhost Streamlit app, not a new file-protocol browser run.
+
+Final published inventory: all 150 IEEE30 scalar directions (6 all-day + 144 hourly),
+all source-bound and independently validated; six all-day UC maps. Their 981
+independent interior checks have maximum objective error 3.49246e-10 USD and
+maximum selected complete-dual objective gap 5.58794e-9 USD. All 150 zero-adder
+price arrays exactly match the original G1 all-day reference in this experiment;
+no endpoint was rewritten to force agreement. IEEE118 G11 all-day remains included,
+so the lazy catalog contains 151 scenarios. The curated offline HTML is about
+10.50 MiB and remains limited to four selected scenarios.

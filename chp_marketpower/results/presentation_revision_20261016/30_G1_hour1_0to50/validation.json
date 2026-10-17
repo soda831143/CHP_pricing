@@ -10,46 +10,26 @@
     "parameter": "single-hour absolute adder",
     "bid_hour_1based": 1
   },
+  "source_sha256": "16d6ab0fe14d2638dd0f5941aa97fb8587ab6327aa91dc1a39937cf9402b61fe",
+  "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+  "limits": {
+    "value_error_usd": 1e-06,
+    "selector_dual_gap_usd": 1e-06,
+    "selector_stationarity": 1e-07,
+    "selector_dual_sign": 1e-07,
+    "selector_complementarity": 1e-06,
+    "selector_price_projection": 1e-09,
+    "direct_complete_dual_gap_usd": 1e-06,
+    "direct_complete_dual_stationarity": 1e-07
+  },
   "validation_sampling": {
     "fractions": [
-      0.001,
-      0.25,
-      0.5,
-      0.75,
-      0.999
+      0.5
     ],
     "extra_deltas": []
   },
   "validation_solver": "independently rebuilt persistent CHP",
   "direct_checks": [
-    {
-      "interval": 1,
-      "delta": 0.020991,
-      "value_error_usd": 2.9103830456733704e-11,
-      "selector_dual_gap_usd": 2.9103830456733704e-11,
-      "selector_stationarity": 5.820766091346741e-11,
-      "selector_dual_sign": 1.4210854715202004e-17,
-      "selector_complementarity": 1.3373468157911537e-12,
-      "selector_price_projection": 7.105427357601002e-15,
-      "selector_vs_direct_price_gap_usd_per_mwh": 1.2789769243681803e-13,
-      "direct_complete_dual_gap_usd": 5.820766091346741e-11,
-      "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 3.494746199983638
-    },
-    {
-      "interval": 1,
-      "delta": 5.24775,
-      "value_error_usd": 0.0,
-      "selector_dual_gap_usd": 0.0,
-      "selector_stationarity": 5.820766091346741e-11,
-      "selector_dual_sign": 3.552713678800501e-15,
-      "selector_complementarity": 8.024080894746921e-13,
-      "selector_price_projection": 1.4210854715202004e-14,
-      "selector_vs_direct_price_gap_usd_per_mwh": 1.7053025658242404e-13,
-      "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
-      "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.12701270001707599
-    },
     {
       "interval": 1,
       "delta": 10.4955,
@@ -59,54 +39,26 @@
       "selector_dual_sign": 7.105427357601002e-15,
       "selector_complementarity": 8.024080894746921e-13,
       "selector_price_projection": 1.4210854715202004e-14,
-      "selector_vs_direct_price_gap_usd_per_mwh": 2.4158453015843406e-13,
+      "selector_vs_direct_price_gap_usd_per_mwh": 1.1368683772161603e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
-      "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.12709429999813437
-    },
-    {
-      "interval": 1,
-      "delta": 15.74325,
-      "value_error_usd": 2.9103830456733704e-11,
-      "selector_dual_gap_usd": 2.9103830456733704e-11,
-      "selector_stationarity": 5.093170329928398e-11,
-      "selector_dual_sign": 1.0658141036401503e-14,
-      "selector_complementarity": 8.024080894746919e-13,
-      "selector_price_projection": 1.4210854715202004e-14,
-      "selector_vs_direct_price_gap_usd_per_mwh": 2.984279490192421e-13,
-      "direct_complete_dual_gap_usd": 8.731149137020111e-11,
-      "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.12208589998772368
-    },
-    {
-      "interval": 1,
-      "delta": 20.970009,
-      "value_error_usd": 2.9103830456733704e-11,
-      "selector_dual_gap_usd": 0.0,
-      "selector_stationarity": 5.820766091346741e-11,
-      "selector_dual_sign": 1.4196643860486803e-14,
-      "selector_complementarity": 8.024080894746918e-13,
-      "selector_price_projection": 0.0,
-      "selector_vs_direct_price_gap_usd_per_mwh": 1.4210854715202004e-13,
-      "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 0.09757889999309555
+      "direct_chp_seconds": 4.552438999991864
     }
   ],
   "maximums": {
-    "value_error_usd": 2.9103830456733704e-11,
+    "value_error_usd": 0.0,
     "selector_dual_gap_usd": 2.9103830456733704e-11,
     "selector_stationarity": 5.820766091346741e-11,
-    "selector_dual_sign": 1.4196643860486803e-14,
-    "selector_complementarity": 1.3373468157911537e-12,
+    "selector_dual_sign": 7.105427357601002e-15,
+    "selector_complementarity": 8.024080894746921e-13,
     "selector_price_projection": 1.4210854715202004e-14,
-    "selector_vs_direct_price_gap_usd_per_mwh": 2.984279490192421e-13,
-    "direct_complete_dual_gap_usd": 8.731149137020111e-11,
-    "direct_complete_dual_stationarity": 5.093170329928398e-11,
-    "direct_chp_seconds": 3.494746199983638
+    "selector_vs_direct_price_gap_usd_per_mwh": 1.1368683772161603e-13,
+    "direct_complete_dual_gap_usd": 5.820766091346741e-11,
+    "direct_complete_dual_stationarity": 4.3655745685100555e-11,
+    "direct_chp_seconds": 4.552438999991864
   },
-  "online_mean_seconds_loaded": 4.2574999970383945e-06,
-  "direct_mean_seconds_independent": 0.7937035999959334,
+  "online_mean_seconds_loaded": 5.300499964505434e-06,
+  "direct_mean_seconds_independent": 4.552438999991864,
   "full_price_coverage": true,
   "saved_oracle_bytes": 147501,
   "performance_evidence": "Use measured fixed-workload batches; validation-point timings do not estimate a break-even threshold.",

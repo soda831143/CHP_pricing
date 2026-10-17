@@ -2,7 +2,8 @@
 
 The dashboard is a research instrument, not a new pricing algorithm. Reuse the
 existing compact selector, global UC model and unit self-schedule settlement.
-The four published directions are the release scope; an unavailable direction
+The standalone contains four curated directions; the local catalog expands only
+through fully validated independent scalar maps. An unavailable direction
 must never silently fall back to another generator or hour.
 
 Visual direction: a quiet laboratory workbench, paper background `#F5F7F8`,
@@ -50,3 +51,21 @@ units. Retain Segoe UI for body/headings and Consolas for quotation/version data
 Long UC/LOC runs move into a bounded local child process with progress, cancel
 and timeout, so a native solver call cannot freeze the UI. Results remain bound
 to their original query; switching the screen never re-labels an old result.
+
+## Coverage and mathematical explanation revision
+
+The local app reads a small catalog and shared model/timing payload, then only
+the selected scenario. Publish the content-addressed payload before atomically
+replacing the catalog, with a cross-process lock for exporters and batch workers.
+Never embed all 150 IEEE30 directions into the standalone demo. Existing paper
+selectors remain unchanged; audit zero-offer selection differences instead of
+rewriting price endpoints. A completed validation must match the displayed model
+and price-selector version.
+
+The overview emphasizes the already completed nodal-price query, absolute price
+and price-change heatmaps, and explicitly separate UC/LOC work. New method and
+numerical-validation views reuse the real archived common-primal intervals; they
+do not animate a fictional experiment or claim uniqueness of CHP prices. Use
+standard terms: network-constrained unit commitment, generation schedule, energy
+market revenue, reported-cost LOC compensation, actual operating cost and profit
+increment. Do not call this N−1 SCUC when only base-case PTDF limits are modeled.

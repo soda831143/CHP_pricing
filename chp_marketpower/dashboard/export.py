@@ -55,6 +55,8 @@ def build(output, refresh=False):
         if not check_model_identity(directory, gens, net, audit):
             raise ValueError('Export requires an explicit model-data binding')
         stamp = model_identity(gens, net)
+        from dashboard.catalog import check_validation
+        check_validation(directory,audit,stamp['model_sha256'])
         models[scope['case']] = dict(generators=[asdict(g) for g in gens], demand=net.demand.tolist(),
             gen_bus_map=[net.gen_bus_idx(i) for i in range(len(gens))],
             PTDF=net.PTDF.tolist(), PTDF_Gen=net.PTDF_Gen.tolist(), F_max=net.F_max.tolist(),
@@ -67,6 +69,8 @@ def build(output, refresh=False):
             source_oracle=directory.relative_to(ROOT).as_posix(), value_regions=compression['merged_value_intervals'],
             price_segments=compression['selected_price_intervals'], offline_seconds=audit['offline_seconds'],
             value_tolerance_usd=audit['value_tolerance_usd'], price_tolerance_usd=audit['price_tolerance_usd'],
+            common_primal_tolerance_usd=audit['price_tolerance_usd'],
+            price_compression_tolerance_usd_per_mwh=compression['price_tolerance_usd_per_mwh'],
             export_validation='Original raw witnesses matched compact arrays and model identity at export; not revalidated by browser',
             identity_scope='Retrospective representative-point binding for these legacy archives',
             physical_regions=[], settlements=[], profit_candidates=[])
@@ -127,6 +131,8 @@ def build(output, refresh=False):
             source_hashes[(folder/report_name).relative_to(ROOT).as_posix()] = file_sha(folder/report_name)
             source_hashes[(folder/'physical_plans.npz').relative_to(ROOT).as_posix()] = file_sha(folder/'physical_plans.npz')
         row['physical_sha256'] = hashlib.sha256(json.dumps(row['physical_regions'], sort_keys=True).encode()).hexdigest()
+        from dashboard.catalog import validation_summary
+        row['validation'] = validation_summary(directory,audit)
         scenarios.append(row)
         source_hashes[(directory/'oracle.npz').relative_to(ROOT).as_posix()] = row['raw_witness_sha256']
         for name in ['audit.json','compression.json','compact.npz','model_identity.json']:
@@ -167,6 +173,16 @@ def build(output, refresh=False):
     html = template.replace('/*PLOTLY_BUNDLE*/', get_plotlyjs()).replace('/*EXPORTED_DATA*/', raw.decode().replace('<', r'\u003c'))
     html = html.replace('/*EXPORTED_MANIFEST*/', json.dumps(manifest).replace('<', r'\u003c'))
     (output/'explorer.html').write_text(html, encoding='utf-8')
+    from dashboard.catalog import seed, register, write_inventory
+    seed(payload,output)
+    for directory in sorted((ROOT/'results/dashboard_precompute').glob('*')):
+        if directory.is_dir() and (directory/'validation.json').exists():
+            try:
+                register(directory,output)
+                print(f'Registered verified extension: {directory.name}',flush=True)
+            except (ValueError,KeyError,OSError) as error:
+                print(f'Not registered: {directory.name}: {error}',flush=True)
+    write_inventory(output)
 
 
 if __name__ == '__main__':

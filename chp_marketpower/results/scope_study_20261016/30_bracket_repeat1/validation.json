@@ -9,6 +9,18 @@
     "generator_index": 0,
     "parameter": "all-day absolute adder"
   },
+  "source_sha256": "2aa983e6c28d4f0c8906c4d4c7c879d4e43b46d45a8dd1b28ba58651da661880",
+  "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+  "limits": {
+    "value_error_usd": 1e-06,
+    "selector_dual_gap_usd": 1e-06,
+    "selector_stationarity": 1e-07,
+    "selector_dual_sign": 1e-07,
+    "selector_complementarity": 1e-06,
+    "selector_price_projection": 1e-09,
+    "direct_complete_dual_gap_usd": 1e-06,
+    "direct_complete_dual_stationarity": 1e-07
+  },
   "validation_sampling": {
     "fractions": [
       0.5
@@ -29,7 +41,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.5631940186722204e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 3.728021099988837
+      "direct_chp_seconds": 4.281197100062855
     },
     {
       "interval": 2,
@@ -43,7 +55,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.5980106127244653e-11,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.1369569000089541
+      "direct_chp_seconds": 0.12153160001616925
     },
     {
       "interval": 3,
@@ -57,7 +69,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.055333763768431e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 5.820766091346741e-11,
-      "direct_chp_seconds": 0.1518254999537021
+      "direct_chp_seconds": 0.12424589996226132
     },
     {
       "interval": 4,
@@ -71,7 +83,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.427409632829949e-10,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.9112713895738125e-11,
-      "direct_chp_seconds": 0.13782960001844913
+      "direct_chp_seconds": 0.12749810004606843
     },
     {
       "interval": 5,
@@ -85,7 +97,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.8474111129762605e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.638422979041934e-11,
-      "direct_chp_seconds": 0.13200709997909144
+      "direct_chp_seconds": 0.13421799999196082
     },
     {
       "interval": 6,
@@ -99,7 +111,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.50706180447014e-12,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 5.820766091346741e-11,
-      "direct_chp_seconds": 0.1386021999642253
+      "direct_chp_seconds": 0.14076610002666712
     },
     {
       "interval": 7,
@@ -113,7 +125,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.7038814803527202e-11,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 7.275957614183426e-11,
-      "direct_chp_seconds": 0.13488189998315647
+      "direct_chp_seconds": 0.13818740006536245
     },
     {
       "interval": 8,
@@ -127,7 +139,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.947598300641403e-14,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 5.820766091346741e-11,
-      "direct_chp_seconds": 0.14255789999151602
+      "direct_chp_seconds": 0.13197959994431585
     },
     {
       "interval": 9,
@@ -141,7 +153,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.0964566728216596e-12,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.16531339997891337
+      "direct_chp_seconds": 0.1313706999644637
     },
     {
       "interval": 10,
@@ -155,7 +167,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 8.526512829121202e-14,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.16685290000168607
+      "direct_chp_seconds": 0.1343994999770075
     },
     {
       "interval": 11,
@@ -169,7 +181,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.8459900275047403e-11,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 0.14624370000092313
+      "direct_chp_seconds": 0.1457644000183791
     },
     {
       "interval": 12,
@@ -183,7 +195,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.7053025658242404e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 7.548806024715304e-11,
-      "direct_chp_seconds": 0.13675710000097752
+      "direct_chp_seconds": 0.13008600007742643
     },
     {
       "interval": 13,
@@ -197,7 +209,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.684341886080802e-14,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 7.548806024715304e-11,
-      "direct_chp_seconds": 0.14693129999795929
+      "direct_chp_seconds": 0.15977109991945326
     },
     {
       "interval": 14,
@@ -211,7 +223,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.4146905868983595e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.1322163000004366
+      "direct_chp_seconds": 0.14583419996779412
     },
     {
       "interval": 15,
@@ -225,7 +237,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.1316282072803006e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 6.093614501878619e-11,
-      "direct_chp_seconds": 0.13588570000138134
+      "direct_chp_seconds": 0.1310157000552863
     },
     {
       "interval": 16,
@@ -239,7 +251,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.512337005100562e-10,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.638422979041934e-11,
-      "direct_chp_seconds": 0.1358718000119552
+      "direct_chp_seconds": 0.13999289995990694
     },
     {
       "interval": 17,
@@ -253,7 +265,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.3713474800169934e-12,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 3.183231456205249e-11,
-      "direct_chp_seconds": 0.139533500012476
+      "direct_chp_seconds": 0.1423941000830382
     },
     {
       "interval": 18,
@@ -267,7 +279,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.2737367544323206e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1506908999872394
+      "direct_chp_seconds": 0.14942709996830672
     },
     {
       "interval": 19,
@@ -281,7 +293,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.299671895249048e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.12978749995818362
+      "direct_chp_seconds": 0.14917290001176298
     },
     {
       "interval": 20,
@@ -295,7 +307,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 7.258904588525183e-11,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.13477110001258552
+      "direct_chp_seconds": 0.1573779999744147
     },
     {
       "interval": 21,
@@ -309,7 +321,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.122568952880101e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.1408600999857299
+      "direct_chp_seconds": 0.14309289993252605
     },
     {
       "interval": 22,
@@ -323,7 +335,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.5631940186722204e-13,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 0.1373557000188157
+      "direct_chp_seconds": 0.12936479994095862
     },
     {
       "interval": 23,
@@ -337,7 +349,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9895196601282805e-13,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13647570001194254
+      "direct_chp_seconds": 0.14416560006793588
     },
     {
       "interval": 24,
@@ -351,7 +363,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.0797585875698132e-11,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1480716999503784
+      "direct_chp_seconds": 0.1968057999620214
     },
     {
       "interval": 25,
@@ -365,7 +377,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.071409875905374e-12,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.13309590000426397
+      "direct_chp_seconds": 0.12792840006295592
     },
     {
       "interval": 26,
@@ -379,7 +391,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.1368683772161603e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13017120002768934
+      "direct_chp_seconds": 0.14463650004472584
     },
     {
       "interval": 27,
@@ -393,7 +405,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.3379519714362686e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.12986950000049546
+      "direct_chp_seconds": 0.13166140008252114
     },
     {
       "interval": 28,
@@ -407,7 +419,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9895196601282805e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13245729997288436
+      "direct_chp_seconds": 0.12608969991561025
     },
     {
       "interval": 29,
@@ -421,7 +433,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.684341886080802e-14,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.13451659999554977
+      "direct_chp_seconds": 0.1292551999213174
     },
     {
       "interval": 30,
@@ -435,7 +447,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.312994406063808e-12,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 3.9108272176235914e-11,
-      "direct_chp_seconds": 0.14066030003596097
+      "direct_chp_seconds": 0.1339835999533534
     },
     {
       "interval": 31,
@@ -449,7 +461,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.8474111129762605e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 5.3660187404602766e-11,
-      "direct_chp_seconds": 0.16076780000003055
+      "direct_chp_seconds": 0.12679789995308965
     },
     {
       "interval": 32,
@@ -463,7 +475,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.97335497837048e-11,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.130249299982097
+      "direct_chp_seconds": 0.12779240007512271
     },
     {
       "interval": 33,
@@ -477,7 +489,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.4210854715202004e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 0.13401930005056784
+      "direct_chp_seconds": 0.12951590004377067
     },
     {
       "interval": 34,
@@ -491,7 +503,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.2789769243681803e-13,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1420279000303708
+      "direct_chp_seconds": 0.1593422000296414
     },
     {
       "interval": 35,
@@ -505,7 +517,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.7142732506035827e-12,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1407057999749668
+      "direct_chp_seconds": 0.1313712999690324
     },
     {
       "interval": 36,
@@ -519,7 +531,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9895196601282805e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.638422979041934e-11,
-      "direct_chp_seconds": 0.14435379998758435
+      "direct_chp_seconds": 0.12831689999438822
     },
     {
       "interval": 37,
@@ -533,7 +545,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.4317436125566019e-11,
       "direct_complete_dual_gap_usd": 2.0372681319713593e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13284119998570532
+      "direct_chp_seconds": 0.12815779994707555
     },
     {
       "interval": 38,
@@ -547,7 +559,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 8.630252068542177e-11,
       "direct_complete_dual_gap_usd": 2.3283064365386963e-10,
       "direct_complete_dual_stationarity": 2.4556356947869062e-11,
-      "direct_chp_seconds": 0.13499990000855178
+      "direct_chp_seconds": 0.1301868000300601
     },
     {
       "interval": 39,
@@ -561,7 +573,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.1316282072803006e-13,
       "direct_complete_dual_gap_usd": 2.6193447411060333e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.1344239999889396
+      "direct_chp_seconds": 0.1315233000786975
     },
     {
       "interval": 40,
@@ -575,7 +587,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.0871303857129533e-12,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1429144000285305
+      "direct_chp_seconds": 0.13356740004383028
     },
     {
       "interval": 41,
@@ -589,7 +601,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.339550858072471e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13266730000032112
+      "direct_chp_seconds": 0.1314231000142172
     },
     {
       "interval": 42,
@@ -603,7 +615,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.826450433232822e-13,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12895909999497235
+      "direct_chp_seconds": 0.13671630003955215
     },
     {
       "interval": 43,
@@ -617,7 +629,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.592326932761353e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13872300001094118
+      "direct_chp_seconds": 0.17304179992061108
     },
     {
       "interval": 44,
@@ -631,7 +643,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.5702994460298214e-12,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 0.1476630999823101
+      "direct_chp_seconds": 0.1571626999648288
     },
     {
       "interval": 45,
@@ -645,7 +657,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.552713678800501e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.13663250004174188
+      "direct_chp_seconds": 0.13308950001373887
     },
     {
       "interval": 46,
@@ -659,7 +671,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.4158453015843406e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 3.183231456205249e-11,
-      "direct_chp_seconds": 0.134561599988956
+      "direct_chp_seconds": 0.15270360000431538
     },
     {
       "interval": 47,
@@ -673,7 +685,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.16889633925166e-10,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 2.8194335754960775e-11,
-      "direct_chp_seconds": 0.14080079999985173
+      "direct_chp_seconds": 0.12986089999321848
     },
     {
       "interval": 48,
@@ -687,7 +699,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.126388037344441e-13,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 3.54702933691442e-11,
-      "direct_chp_seconds": 0.12328989995876327
+      "direct_chp_seconds": 0.12292329990305007
     },
     {
       "interval": 49,
@@ -701,7 +713,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.115197154736961e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.127278900006786
+      "direct_chp_seconds": 0.1406831000931561
     },
     {
       "interval": 50,
@@ -715,7 +727,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.3732127374387346e-12,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 3.9108272176235914e-11,
-      "direct_chp_seconds": 0.13285390002420172
+      "direct_chp_seconds": 0.12051779998000711
     },
     {
       "interval": 51,
@@ -729,7 +741,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.050093593832571e-13,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12717500003054738
+      "direct_chp_seconds": 0.1261411999585107
     },
     {
       "interval": 52,
@@ -743,7 +755,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.9543481256696396e-12,
       "direct_complete_dual_gap_usd": 2.0372681319713593e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.14151009998749942
+      "direct_chp_seconds": 0.12739939999300987
     },
     {
       "interval": 53,
@@ -757,7 +769,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.8421709430404007e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12280290003400296
+      "direct_chp_seconds": 0.13266660005319864
     },
     {
       "interval": 54,
@@ -771,7 +783,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.126672254438745e-10,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1418658000184223
+      "direct_chp_seconds": 0.1422528000548482
     },
     {
       "interval": 55,
@@ -785,7 +797,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.694822225952521e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.15800330002093688
+      "direct_chp_seconds": 0.14333919994533062
     },
     {
       "interval": 56,
@@ -799,7 +811,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.757794158649631e-11,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 3.183231456205249e-11,
-      "direct_chp_seconds": 0.12908769998466596
+      "direct_chp_seconds": 0.12848099996335804
     },
     {
       "interval": 57,
@@ -813,7 +825,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 7.176481631177012e-13,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 3.183231456205249e-11,
-      "direct_chp_seconds": 0.14784700004383922
+      "direct_chp_seconds": 0.16260689997579902
     },
     {
       "interval": 58,
@@ -827,7 +839,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.044853423896711e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.14223940001102164
+      "direct_chp_seconds": 0.12042389996349812
     },
     {
       "interval": 59,
@@ -841,7 +853,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.2647660696529783e-12,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.13363989995559677
+      "direct_chp_seconds": 0.12558230001013726
     },
     {
       "interval": 60,
@@ -855,7 +867,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.684341886080801e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 3.9108272176235914e-11,
-      "direct_chp_seconds": 0.13011139997979626
+      "direct_chp_seconds": 0.1221315999282524
     },
     {
       "interval": 61,
@@ -869,7 +881,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.311253410880454e-10,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12685689999489114
+      "direct_chp_seconds": 0.13471959996968508
     },
     {
       "interval": 62,
@@ -883,7 +895,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.536993168992922e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12254999997094274
+      "direct_chp_seconds": 0.1319863999960944
     },
     {
       "interval": 63,
@@ -897,7 +909,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.163105250474473e-10,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12152429996058345
+      "direct_chp_seconds": 0.13372249994426966
     },
     {
       "interval": 64,
@@ -911,7 +923,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.2791547255328624e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12190630001714453
+      "direct_chp_seconds": 0.1334381999913603
     },
     {
       "interval": 65,
@@ -925,7 +937,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.110667527536862e-13,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12431869999272749
+      "direct_chp_seconds": 0.16945529996883124
     },
     {
       "interval": 66,
@@ -939,7 +951,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 7.673861546209082e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.10096369998063892
+      "direct_chp_seconds": 0.10659089998807758
     },
     {
       "interval": 67,
@@ -953,7 +965,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.341007305200037e-10,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 3.183231456205249e-11,
-      "direct_chp_seconds": 0.13651889999164268
+      "direct_chp_seconds": 0.14173929998651147
     },
     {
       "interval": 68,
@@ -967,7 +979,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.3208989457780262e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.11770479998085648
+      "direct_chp_seconds": 0.19227440003305674
     },
     {
       "interval": 69,
@@ -981,7 +993,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.5631940186722204e-13,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.13145669997902587
+      "direct_chp_seconds": 0.12124949996359646
     },
     {
       "interval": 70,
@@ -995,7 +1007,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.97264443563472e-11,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12905200000386685
+      "direct_chp_seconds": 0.12749879993498325
     },
     {
       "interval": 71,
@@ -1009,7 +1021,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.2737367544323206e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.14129110000794753
+      "direct_chp_seconds": 0.12908859993331134
     },
     {
       "interval": 72,
@@ -1023,7 +1035,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.984279490192421e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.1242929000291042
+      "direct_chp_seconds": 0.12145169998984784
     },
     {
       "interval": 73,
@@ -1037,7 +1049,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.3798739928461146e-11,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.1190484999679029
+      "direct_chp_seconds": 0.11567680002190173
     },
     {
       "interval": 74,
@@ -1051,7 +1063,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.8822277070285054e-11,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12064929999178275
+      "direct_chp_seconds": 0.13002289994619787
     },
     {
       "interval": 75,
@@ -1065,7 +1077,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.263256414560601e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12235959997633472
+      "direct_chp_seconds": 0.1295611000386998
     },
     {
       "interval": 76,
@@ -1079,7 +1091,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.376943252282217e-12,
       "direct_complete_dual_gap_usd": 2.0372681319713593e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12316789996111766
+      "direct_chp_seconds": 0.15960640006233007
     },
     {
       "interval": 77,
@@ -1093,7 +1105,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9895196601282805e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12771979998797178
+      "direct_chp_seconds": 0.18016860005445778
     },
     {
       "interval": 78,
@@ -1107,7 +1119,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 0.2865953389101037,
       "direct_complete_dual_gap_usd": 2.0372681319713593e-10,
       "direct_complete_dual_stationarity": 3.2741809263825417e-11,
-      "direct_chp_seconds": 0.13920169998891652
+      "direct_chp_seconds": 0.15342030010651797
     },
     {
       "interval": 79,
@@ -1121,7 +1133,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.758220484291087e-10,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 4.001776687800884e-11,
-      "direct_chp_seconds": 0.12087829998927191
+      "direct_chp_seconds": 0.1900663000997156
     },
     {
       "interval": 80,
@@ -1135,7 +1147,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.710276364974561e-11,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 4.001776687800884e-11,
-      "direct_chp_seconds": 0.11975499999243766
+      "direct_chp_seconds": 0.1577038000104949
     },
     {
       "interval": 81,
@@ -1149,7 +1161,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.094947017729282e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 5.4569682106375694e-11,
-      "direct_chp_seconds": 0.12655039998935536
+      "direct_chp_seconds": 0.12111209996510297
     },
     {
       "interval": 82,
@@ -1163,7 +1175,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.947598300641403e-14,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 4.729372449219227e-11,
-      "direct_chp_seconds": 0.13959579996298999
+      "direct_chp_seconds": 0.12153260002378374
     },
     {
       "interval": 83,
@@ -1177,7 +1189,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.394884621840902e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.13183199998456985
+      "direct_chp_seconds": 0.12960089999251068
     },
     {
       "interval": 84,
@@ -1191,7 +1203,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.0321522242738865e-12,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 5.093170329928398e-11,
-      "direct_chp_seconds": 0.14046480000251904
+      "direct_chp_seconds": 0.13052510004490614
     },
     {
       "interval": 85,
@@ -1205,7 +1217,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.7000623958883807e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.3655745685100555e-11,
-      "direct_chp_seconds": 0.12940340000204742
+      "direct_chp_seconds": 0.13361699995584786
     },
     {
       "interval": 86,
@@ -1219,7 +1231,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.984279490192421e-13,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.1261333999573253
+      "direct_chp_seconds": 0.13467130006756634
     },
     {
       "interval": 87,
@@ -1233,7 +1245,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.044853423896711e-12,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 3.637978807091713e-11,
-      "direct_chp_seconds": 0.15115510002942756
+      "direct_chp_seconds": 0.12849429994821548
     },
     {
       "interval": 88,
@@ -1247,7 +1259,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.947598300641403e-14,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 4.092726157978177e-11,
-      "direct_chp_seconds": 0.12470109999412671
+      "direct_chp_seconds": 0.13017530005890876
     },
     {
       "interval": 89,
@@ -1261,7 +1273,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.5579538487363607e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 3.115019353572279e-11,
-      "direct_chp_seconds": 0.12232750002294779
+      "direct_chp_seconds": 0.13672479998786002
     },
     {
       "interval": 90,
@@ -1275,7 +1287,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.5067947717616335e-11,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 4.069988790433854e-11,
-      "direct_chp_seconds": 0.1389074000180699
+      "direct_chp_seconds": 0.1335873999632895
     },
     {
       "interval": 91,
@@ -1289,7 +1301,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.2789769243681803e-13,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 5.1386450650170445e-11,
-      "direct_chp_seconds": 0.1283807000145316
+      "direct_chp_seconds": 0.14547919994220138
     },
     {
       "interval": 92,
@@ -1303,7 +1315,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9895196601282805e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 5.3432813729159534e-11,
-      "direct_chp_seconds": 0.09856210002908483
+      "direct_chp_seconds": 0.09509210009127855
     },
     {
       "interval": 93,
@@ -1317,7 +1329,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.532019369842601e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 4.18367562815547e-11,
-      "direct_chp_seconds": 0.1181427999981679
+      "direct_chp_seconds": 0.13717370002996176
     },
     {
       "interval": 94,
@@ -1331,7 +1343,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.4430237267079065e-11,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.09265020000748336
+      "direct_chp_seconds": 0.10375799995381385
     },
     {
       "interval": 95,
@@ -1345,7 +1357,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.405364961712621e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 3.54702933691442e-11,
-      "direct_chp_seconds": 0.12345060001825914
+      "direct_chp_seconds": 0.14095709996763617
     },
     {
       "interval": 96,
@@ -1359,7 +1371,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.623767952376511e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 4.320099833421409e-11,
-      "direct_chp_seconds": 0.10190320003312081
+      "direct_chp_seconds": 0.1048793001100421
     },
     {
       "interval": 97,
@@ -1373,7 +1385,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 7.225509079944459e-11,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 4.934008757118136e-11,
-      "direct_chp_seconds": 0.12670770002296194
+      "direct_chp_seconds": 0.1349164000712335
     },
     {
       "interval": 98,
@@ -1387,7 +1399,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.8421709430404007e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 5.661604518536478e-11,
-      "direct_chp_seconds": 0.11399270000401884
+      "direct_chp_seconds": 0.12671879993285984
     },
     {
       "interval": 99,
@@ -1401,7 +1413,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 7.247535904753022e-13,
       "direct_complete_dual_gap_usd": 0.0,
       "direct_complete_dual_stationarity": 4.433786671143025e-11,
-      "direct_chp_seconds": 0.1289647999801673
+      "direct_chp_seconds": 0.18817370000761002
     },
     {
       "interval": 100,
@@ -1415,7 +1427,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.0179413695586845e-12,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12390649999724701
+      "direct_chp_seconds": 0.15445110003929585
     },
     {
       "interval": 101,
@@ -1429,7 +1441,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.268496584496461e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.9899638320785016e-11,
-      "direct_chp_seconds": 0.1323841999983415
+      "direct_chp_seconds": 0.1360650999704376
     },
     {
       "interval": 102,
@@ -1443,7 +1455,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.334310688136611e-13,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12151100003393367
+      "direct_chp_seconds": 0.12800939998123795
     },
     {
       "interval": 103,
@@ -1457,7 +1469,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.7000623958883807e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 4.1382008930668235e-11,
-      "direct_chp_seconds": 0.12683249998372048
+      "direct_chp_seconds": 0.1445389000000432
     },
     {
       "interval": 104,
@@ -1471,7 +1483,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.765876499528531e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 3.319655661471188e-11,
-      "direct_chp_seconds": 0.12264150002738461
+      "direct_chp_seconds": 0.12553640000987798
     },
     {
       "interval": 105,
@@ -1485,7 +1497,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.258016244624741e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11832399998093024
+      "direct_chp_seconds": 0.12819640000816435
     },
     {
       "interval": 106,
@@ -1499,7 +1511,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.09645667282166e-11,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 3.728928277269006e-11,
-      "direct_chp_seconds": 0.12545529997441918
+      "direct_chp_seconds": 0.17942760000005364
     },
     {
       "interval": 107,
@@ -1513,7 +1525,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.907985046680551e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.1214206000440754
+      "direct_chp_seconds": 0.14119340002071112
     },
     {
       "interval": 108,
@@ -1527,7 +1539,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 7.773337529215496e-11,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-11,
       "direct_complete_dual_stationarity": 1.864464138634503e-11,
-      "direct_chp_seconds": 0.12536120001459494
+      "direct_chp_seconds": 0.18449280003551394
     },
     {
       "interval": 109,
@@ -1541,7 +1553,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.892264536872972e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11968449997948483
+      "direct_chp_seconds": 0.13671250001061708
     },
     {
       "interval": 110,
@@ -1555,7 +1567,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.9969271508889506e-10,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 1.77351466845721e-11,
-      "direct_chp_seconds": 0.1269046000088565
+      "direct_chp_seconds": 0.13644310005474836
     },
     {
       "interval": 111,
@@ -1569,7 +1581,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.258016244624741e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.523847797419876e-11,
-      "direct_chp_seconds": 0.11969879997195676
+      "direct_chp_seconds": 0.1305333999916911
     },
     {
       "interval": 112,
@@ -1583,7 +1595,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.468691834816127e-11,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 1.8189894035458565e-11,
-      "direct_chp_seconds": 0.12675869994563982
+      "direct_chp_seconds": 0.14948080002795905
     },
     {
       "interval": 113,
@@ -1597,7 +1609,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.968558980384842e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 3.524291969370097e-11,
-      "direct_chp_seconds": 0.12503180000931025
+      "direct_chp_seconds": 0.13886289997026324
     },
     {
       "interval": 114,
@@ -1611,7 +1623,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.780087354243733e-12,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.546585164964199e-11,
-      "direct_chp_seconds": 0.09213889995589852
+      "direct_chp_seconds": 0.09885449998546392
     },
     {
       "interval": 115,
@@ -1625,7 +1637,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.552713678800501e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.432898327242583e-11,
-      "direct_chp_seconds": 0.12399019999429584
+      "direct_chp_seconds": 0.13773940003011376
     },
     {
       "interval": 116,
@@ -1639,7 +1651,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 9.237055564881302e-13,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12208569998620078
+      "direct_chp_seconds": 0.12733450008090585
     },
     {
       "interval": 117,
@@ -1653,7 +1665,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.836930773104541e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 4.001776687800884e-11,
-      "direct_chp_seconds": 0.12406459997873753
+      "direct_chp_seconds": 0.13724790001288056
     },
     {
       "interval": 118,
@@ -1667,7 +1679,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.3803181647963356e-12,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12239400000544265
+      "direct_chp_seconds": 0.13316199998371303
     },
     {
       "interval": 119,
@@ -1681,7 +1693,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9895196601282805e-12,
       "direct_complete_dual_gap_usd": 5.529727786779404e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12943470000755042
+      "direct_chp_seconds": 0.23005320003721863
     },
     {
       "interval": 120,
@@ -1695,7 +1707,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.2292389328649733e-11,
       "direct_complete_dual_gap_usd": 5.820766091346741e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12016099999891594
+      "direct_chp_seconds": 0.1446252999594435
     },
     {
       "interval": 121,
@@ -1709,7 +1721,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.055333763768431e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12143020000075921
+      "direct_chp_seconds": 0.1962175000226125
     },
     {
       "interval": 122,
@@ -1723,7 +1735,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 0.0008339666598971007,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 1.4551915228366852e-11,
-      "direct_chp_seconds": 0.12090790004003793
+      "direct_chp_seconds": 0.12561250000726432
     },
     {
       "interval": 123,
@@ -1737,7 +1749,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.2789769243681803e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12285629997495562
+      "direct_chp_seconds": 0.13474060001317412
     },
     {
       "interval": 124,
@@ -1751,7 +1763,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.7711166694643907e-13,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12086090003140271
+      "direct_chp_seconds": 0.1277578000444919
     },
     {
       "interval": 125,
@@ -1765,7 +1777,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.3798739928461146e-11,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12394399999175221
+      "direct_chp_seconds": 0.16002240008674562
     },
     {
       "interval": 126,
@@ -1779,7 +1791,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 0.07097174514315441,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12419040000531822
+      "direct_chp_seconds": 0.13220110000111163
     },
     {
       "interval": 127,
@@ -1793,7 +1805,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 0.0709717451431402,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12307789997430518
+      "direct_chp_seconds": 0.12878979998640716
     },
     {
       "interval": 128,
@@ -1807,7 +1819,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.304023721284466e-12,
       "direct_complete_dual_gap_usd": 2.0372681319713593e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11813020001864061
+      "direct_chp_seconds": 0.14639569993596524
     },
     {
       "interval": 129,
@@ -1821,7 +1833,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.311129148642067e-12,
       "direct_complete_dual_gap_usd": 2.3283064365386963e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.12303539999993518
+      "direct_chp_seconds": 0.17846970004029572
     },
     {
       "interval": 130,
@@ -1835,7 +1847,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.5141665699047735e-11,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12033069995231926
+      "direct_chp_seconds": 0.13361570006236434
     },
     {
       "interval": 131,
@@ -1849,7 +1861,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.1368683772161603e-13,
       "direct_complete_dual_gap_usd": 2.6193447411060333e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12221120001049712
+      "direct_chp_seconds": 0.12485719996038824
     },
     {
       "interval": 132,
@@ -1863,7 +1875,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 5.471179065352771e-13,
       "direct_complete_dual_gap_usd": 2.3283064365386963e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12037690001307055
+      "direct_chp_seconds": 0.12529829994309694
     },
     {
       "interval": 133,
@@ -1877,7 +1889,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.94910795573378e-12,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.1204324999707751
+      "direct_chp_seconds": 0.137059900094755
     },
     {
       "interval": 134,
@@ -1891,7 +1903,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.9184653865522705e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.13519910001195967
+      "direct_chp_seconds": 0.1339476000284776
     },
     {
       "interval": 135,
@@ -1905,7 +1917,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.6005864128819667e-12,
       "direct_complete_dual_gap_usd": 2.0372681319713593e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12535540002863854
+      "direct_chp_seconds": 0.1303475999739021
     },
     {
       "interval": 136,
@@ -1919,7 +1931,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.4424017535930034e-12,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 1.4551915228366852e-11,
-      "direct_chp_seconds": 0.11626239999895915
+      "direct_chp_seconds": 0.12054870009887964
     },
     {
       "interval": 137,
@@ -1933,7 +1945,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 6.465938895416912e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12434429995482787
+      "direct_chp_seconds": 0.12635820009745657
     },
     {
       "interval": 138,
@@ -1947,7 +1959,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.382893964953837e-11,
       "direct_complete_dual_gap_usd": 1.1641532182693481e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.09328140004072338
+      "direct_chp_seconds": 0.09847959992475808
     },
     {
       "interval": 139,
@@ -1961,7 +1973,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.552713678800501e-13,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11925049999263138
+      "direct_chp_seconds": 0.13641600008122623
     },
     {
       "interval": 140,
@@ -1975,7 +1987,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.6782133722444996e-11,
       "direct_complete_dual_gap_usd": 2.6193447411060333e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12142789998324588
+      "direct_chp_seconds": 0.13379400002304465
     },
     {
       "interval": 141,
@@ -1989,7 +2001,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.8421709430404007e-13,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11992140003712848
+      "direct_chp_seconds": 0.12997810007072985
     },
     {
       "interval": 142,
@@ -2003,7 +2015,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.1368683772161603e-13,
       "direct_complete_dual_gap_usd": 2.6193447411060333e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12023550004232675
+      "direct_chp_seconds": 0.12705910007935017
     },
     {
       "interval": 143,
@@ -2017,7 +2029,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.1020517831639154e-11,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12232439999934286
+      "direct_chp_seconds": 0.15189870004542172
     },
     {
       "interval": 144,
@@ -2031,7 +2043,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.263256414560601e-14,
       "direct_complete_dual_gap_usd": 1.7462298274040222e-10,
       "direct_complete_dual_stationarity": 1.4551915228366852e-11,
-      "direct_chp_seconds": 0.12162980000721291
+      "direct_chp_seconds": 0.18710720003582537
     },
     {
       "interval": 145,
@@ -2045,7 +2057,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 0.38799090086472177,
       "direct_complete_dual_gap_usd": 8.731149137020111e-11,
       "direct_complete_dual_stationarity": 1.4551915228366852e-11,
-      "direct_chp_seconds": 0.12376329995458946
+      "direct_chp_seconds": 0.17414450005162507
     },
     {
       "interval": 146,
@@ -2059,7 +2071,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 1.1704006866087724,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11824420001357794
+      "direct_chp_seconds": 0.13536559999920428
     },
     {
       "interval": 147,
@@ -2073,7 +2085,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.913225216616411e-13,
       "direct_complete_dual_gap_usd": 2.3283064365386963e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12860550003824756
+      "direct_chp_seconds": 0.16533519991207868
     },
     {
       "interval": 148,
@@ -2087,7 +2099,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 3.5626612771011423e-11,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12047999998321757
+      "direct_chp_seconds": 0.12378519994672388
     },
     {
       "interval": 149,
@@ -2101,7 +2113,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.842170943040401e-14,
       "direct_complete_dual_gap_usd": 2.9103830456733704e-10,
       "direct_complete_dual_stationarity": 1.8189894035458565e-11,
-      "direct_chp_seconds": 0.11797560000559315
+      "direct_chp_seconds": 0.14082800003234297
     },
     {
       "interval": 150,
@@ -2115,7 +2127,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.405364961712621e-13,
       "direct_complete_dual_gap_usd": 2.6193447411060333e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.1190131000475958
+      "direct_chp_seconds": 0.14479310007300228
     },
     {
       "interval": 151,
@@ -2129,7 +2141,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.842170943040401e-14,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.9103830456733704e-11,
-      "direct_chp_seconds": 0.11549210001248866
+      "direct_chp_seconds": 0.13069530006032437
     },
     {
       "interval": 152,
@@ -2143,7 +2155,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 2.842170943040401e-14,
       "direct_complete_dual_gap_usd": 1.4551915228366852e-10,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.12017330003436655
+      "direct_chp_seconds": 0.12560160004068166
     },
     {
       "interval": 153,
@@ -2157,7 +2169,7 @@
       "selector_vs_direct_price_gap_usd_per_mwh": 4.263256414560601e-13,
       "direct_complete_dual_gap_usd": 5.820766091346741e-11,
       "direct_complete_dual_stationarity": 2.1827872842550278e-11,
-      "direct_chp_seconds": 0.11984629998914897
+      "direct_chp_seconds": 0.15557499998249114
     }
   ],
   "maximums": {
@@ -2170,10 +2182,10 @@
     "selector_vs_direct_price_gap_usd_per_mwh": 1.1704006866087724,
     "direct_complete_dual_gap_usd": 5.820766091346741e-10,
     "direct_complete_dual_stationarity": 7.548806024715304e-11,
-    "direct_chp_seconds": 3.728021099988837
+    "direct_chp_seconds": 4.281197100062855
   },
-  "online_mean_seconds_loaded": 4.236407843159719e-06,
-  "direct_mean_seconds_independent": 0.15236551503177573,
+  "online_mean_seconds_loaded": 4.6450379083931345e-06,
+  "direct_mean_seconds_independent": 0.16576222745774716,
   "full_price_coverage": true,
   "saved_oracle_bytes": 9784988,
   "performance_evidence": "Use measured fixed-workload batches; validation-point timings do not estimate a break-even threshold.",

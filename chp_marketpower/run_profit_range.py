@@ -85,7 +85,7 @@ def physical_regions(solve, lower, upper, *, max_solves=400, tolerance=1e-5):
     return points, merged
 
 
-def assess(oracle_dir, out_dir, *, max_solves=400, tolerance=1e-5):
+def assess(oracle_dir, out_dir, *, max_solves=400, tolerance=1e-5, physical_only=False):
     if out_dir.exists():
         raise ValueError('Use a new output directory; previous studies are preserved')
     audit, compression, compact = load_matched_compact(oracle_dir)
@@ -150,7 +150,14 @@ def assess(oracle_dir, out_dir, *, max_solves=400, tolerance=1e-5):
         scope_limit='Conditional on the declared CHP selector, physical tie-break, reported LOC uplift and floating-point COPT optimality/bounds. A small UC cost gap is NOT a bound on dispatch or profit error.')
     covered = sum(r['right']-r['left'] for r in regions if r['ready'])/(vb[-1]-vb[0])
     report['physical_coverage_fraction'] = float(covered)
+    report['model_sha256'] = audit.get('model_identity',{}).get('model_sha256')
+    report['physical_archive_sha256'] = hashlib.sha256((out_dir/'physical_plans.npz').read_bytes()).hexdigest()
+    if physical_only:
+        report['physical_selection'] = 'Retain each archived common optimal UC plan separately at shared boundaries; no optimistic profit tie-break is imposed.'
     (out_dir/'physical_regions.json').write_text(json.dumps(report, indent=2, allow_nan=False), encoding='utf-8')
+    if physical_only:
+        print(f'{report["status"]}: {len(points)} UC solves, {len(regions)} UC regions; no self-schedule/profit computation',flush=True)
+        return report
     settlements = {}
 
     def settle(delta):
@@ -271,12 +278,13 @@ def main():
     parser.add_argument('--out-dir', type=Path, required=True)
     parser.add_argument('--max-uc-solves', type=int, default=400)
     parser.add_argument('--validate-existing', action='store_true', help='Check archived region interiors and the maximizing boundary with independent UC')
+    parser.add_argument('--physical-only', action='store_true', help='Build UC regions only; do not start self-schedule or profit analysis')
     args = parser.parse_args()
     if args.validate_existing:
         result = validate_existing(args.oracle_dir, args.out_dir)
         print(f"Independent UC: {len(result['points'])} checks passed")
     else:
-        assess(args.oracle_dir, args.out_dir, max_solves=args.max_uc_solves)
+        assess(args.oracle_dir, args.out_dir, max_solves=args.max_uc_solves,physical_only=args.physical_only)
 
 
 if __name__ == '__main__':

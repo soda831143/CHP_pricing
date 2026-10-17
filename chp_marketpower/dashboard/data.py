@@ -17,8 +17,32 @@ def load_export(directory=EXPORTS):
 
 
 def get_scenario(data, case, generator, hour=None):
-    return next((s for s in data['scenarios'] if s['case'] == str(case)
+    row = next((s for s in data['scenarios'] if s['case'] == str(case)
                  and s['generator_index'] == generator and s['bid_hour_1based'] == hour), None)
+    if row is None or 'payload' not in row:
+        return row
+    scenario = _read_payload(Path(data['_export_directory']),row['payload'],row['sha256'])
+    if (any(scenario[k]!=row[k] for k in ('id','case','generator_index','bid_hour_1based','model_sha256','price_selector_sha256'))
+            or scenario['model_sha256']!=data['models'][str(case)]['model_sha256']):
+        raise ValueError('Scenario scope/model differs from its catalog entry')
+    return scenario
+
+
+def _read_payload(directory, name, sha):
+    path = (directory/name).resolve()
+    if not path.is_relative_to(directory.resolve()):
+        raise ValueError('Payload path escapes the export directory')
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=sha:
+        raise ValueError('Catalog payload checksum differs')
+    return json.loads(raw)
+
+
+def load_catalog(directory=EXPORTS):
+    catalog = json.loads((directory/'catalog.json').read_text(encoding='utf-8'))
+    data = _read_payload(directory,catalog['shared_payload'],catalog['shared_sha256'])
+    data.update(scenarios=catalog['scenarios'], _export_directory=str(directory.resolve()))
+    return data,catalog
 
 
 def evaluate(scenario, rho):

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -11,7 +12,12 @@ import numpy as np
 
 from engine import PrimalCHPLP, load_case
 from price_vulnerability.affine_oracle import audited_solution, dual_audit_passed, query, bid_adder_matrix
-from price_vulnerability.model_identity import check_model_identity
+from price_vulnerability.model_identity import check_model_identity, model_identity
+
+VALIDATION_LIMITS = {"value_error_usd": 1e-6, "selector_dual_gap_usd": 1e-6,
+    "selector_stationarity": 1e-7, "selector_dual_sign": 1e-7,
+    "selector_complementarity": 1e-6, "selector_price_projection": 1e-9,
+    "direct_complete_dual_gap_usd": 1e-6, "direct_complete_dual_stationarity": 1e-7}
 
 
 def validate_point(generators, network, generator_index, delta, k, data, persistent=None, *, aggregate_output=False, hour=None):
@@ -152,17 +158,15 @@ def main() -> None:
             for delta in samples:
                 query(delta, boundaries, values, prices)
         online_mean = (time.perf_counter() - started) / (1000 * len(samples))
-    limits = {"value_error_usd": 1e-6, "selector_dual_gap_usd": 1e-6,
-              "selector_stationarity": 1e-7, "selector_dual_sign": 1e-7,
-              "selector_complementarity": 1e-6,
-              "selector_price_projection": 1e-9,
-              "direct_complete_dual_gap_usd": 1e-6,
-              "direct_complete_dual_stationarity": 1e-7}
+    limits = VALIDATION_LIMITS
     passed = all(item[key] <= limit for item in checks for key, limit in limits.items())
     direct_mean = float(np.mean([item["direct_chp_seconds"] for item in checks]))
     full_coverage = bool(np.all(ready))
     result = {
         "status": "passed" if passed else "failed", "scope": scope,
+        "source_sha256": hashlib.sha256((args.oracle_dir / 'oracle.npz').read_bytes()).hexdigest(),
+        "model_sha256": model_identity(generators,network)['model_sha256'],
+        "limits": limits,
         'validation_sampling': dict(fractions=args.fractions, extra_deltas=args.extra_deltas),
         'validation_solver': 'independently rebuilt persistent CHP' if persistent else 'independent fresh CHP per point',
         "direct_checks": checks,

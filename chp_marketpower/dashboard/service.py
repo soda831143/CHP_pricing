@@ -69,7 +69,7 @@ def solve(scenario, rho, region_index=None, progress=lambda message: None, direc
             physical_audit = dict(common_plan_gap_usd=region['common_plan_gap_usd'],
                 witness_delta=region['witness_delta'], region_left=region['left'], region_right=region['right'])
         else:
-            progress('求解当前报价的全局物理 UC…')
+            progress('求解当前报价的全局机组组合（UC）…')
             uc = ScheduleRunMILP(gens, net, bid_adders=adders)
             p, u, _ = uc.solve(require_optimal=True, mip_gap=0.)
             uc_status = 'solved_on_demand'

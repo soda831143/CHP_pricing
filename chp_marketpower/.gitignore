@@ -1,3 +1,6 @@
 __pycache__/
 .pytest_cache/
 results/
+dashboard/exports/catalog.lock
+dashboard/exports/*.pending
+dashboard/exports/scenarios/*.pending

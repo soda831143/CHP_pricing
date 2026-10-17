@@ -46,7 +46,8 @@ def main() -> None:
     parser.add_argument('--checkpoint-every', type=int, default=1,
                         help='Archive every N points, or 0 for final-only; all archive costs count')
     parser.add_argument("--value-tolerance", type=float, default=1e-6)
-    parser.add_argument("--price-tolerance", type=float, default=1e-6)
+    parser.add_argument("--price-tolerance", type=float, default=1e-6,
+                        help='Common-primal endpoint objective-gap tolerance in USD, NOT a nodal-price error bound')
     parser.add_argument("--focus-lower", type=float)
     parser.add_argument("--focus-upper", type=float)
     parser.add_argument("--focus-budget", type=int, default=12)
