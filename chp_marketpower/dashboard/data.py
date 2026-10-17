@@ -57,3 +57,36 @@ def cache_key(scenario, delta, region_index, engine_sha):
         selector=scenario['price_selector_sha256'], physical=scenario['physical_sha256'],
         delta=float(delta).hex(), region=region_index, engine=engine_sha)
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+
+
+def profit_summary(rows, baseline_rows, generator):
+    current = next((r['true_profit'] for r in rows or [] if r['generator_index']==generator), None)
+    baseline = next((r['true_profit'] for r in baseline_rows or [] if r['generator_index']==generator), None)
+    extra = current-baseline if current is not None and baseline is not None else None
+    percent = 100*extra/abs(baseline) if extra is not None and abs(baseline)>1e-9 else None
+    return dict(baseline=baseline, current=current, additional=extra, percent=percent)
+
+
+def bid_response(scenario, node, hour, samples=201):
+    """Rendering grid includes every selected-price knot; does not discover new regimes."""
+    prices = np.asarray(scenario['prices'])
+    if not 0<=node<prices.shape[1] or not 0<=hour<prices.shape[2] or samples<2:
+        raise ValueError('Invalid observation or rendering sample count')
+    b = np.asarray(scenario['price_boundaries'])
+    delta = np.unique(np.r_[b,np.linspace(b[0],b[-1],samples)])
+    time = np.stack([np.interp(delta,b,prices[:,node,t])-prices[0,node,t] for t in range(prices.shape[2])])
+    space = np.stack([np.interp(delta,b,prices[:,n,hour])-prices[0,n,hour] for n in range(prices.shape[1])])
+    return delta/scenario['reference_slope']*100,time,space
+
+
+def parameter_rows(model):
+    physical,costs = [],[]
+    fields = ['P_min','P_max','R_up','R_down','SU_ramp','SD_ramp','T_on_min','T_off_min',
+              'cost_su','cost_sd','cost_nl','initial_status','initial_power','initial_up_time','initial_down_time']
+    for i,g in enumerate(model['generators']):
+        physical.append(dict(unit=g['unit_id'],bus=model['gen_bus_map'][i]+1,**{k:g[k] for k in fields}))
+        slopes,widths = g['pwl_slopes'] or [g['cost_var']],g['pwl_widths'] or [g['P_max']-g['P_min']]
+        for k,(slope,width) in enumerate(zip(slopes,widths)):
+            costs.append(dict(unit=g['unit_id'],segment=k+1,incremental_width_mw=width,
+                slope_usd_mwh=slope,reference_slope_usd_mwh=slopes[len(slopes)//2]))
+    return physical,costs

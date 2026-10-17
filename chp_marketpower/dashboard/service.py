@@ -3,6 +3,7 @@ import hashlib
 import json
 import threading
 import time
+from uuid import uuid4
 from pathlib import Path
 
 import numpy as np
@@ -90,7 +91,7 @@ def solve(scenario, rho, region_index=None, progress=lambda message: None, direc
             model_sha256=scenario['model_sha256'], price_selector_sha256=scenario['price_selector_sha256'],
             physical_audit=physical_audit, output=p.tolist(), commitment=u.tolist(), rows=rows)
         directory.mkdir(parents=True, exist_ok=True)
-        pending = directory/f'{key}.pending'
+        pending = directory/f'{key}.{uuid4().hex}.pending'
         pending.write_text(json.dumps(result, allow_nan=False), encoding='utf-8')
         pending.replace(directory/f'{key}.json')
         return result

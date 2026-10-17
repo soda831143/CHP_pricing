@@ -1,5 +1,39 @@
 # Release checks — 2026-10-17
 
+## UI revision after 804cb9b
+
+- Full suite after the revision: **118 passed**, including22 dashboard and3 native
+  job tests. The first full run exposed a real Windows progress-file sharing race;
+  bounded read/replace retries and a deterministic sharing-violation test fix it.
+- AppTest verifies that only the current page renders (overview2 plots,
+  settlement1, price5), shared unit/bus controls, left/right boundary metrics,
+  missing-scene isolation and readable parameter tables. Response grids include
+  all selected-price knots and match the existing affine selector, not new solves.
+- Actual localhost browser verified the revised P/U/S/profit overview, switching
+  IEEE118 without stale IEEE30 values, and the two space/time response modes.
+- An actual browser-launched IEEE118-G11 zero-bid job completed54-unit settlement.
+  A separate25.123456789% offer was stopped at a1-second budget; its saved task
+  state was `timed_out` at1.0073s, not a successful settlement. Retrying that same
+  offer at600s completed both required baseline/current exact caches in about12.6s.
+  Current-result UC/LOC itself took6.125s; baseline took6.060s on this workstation.
+  These are UI acceptance timings, not a new paper benchmark or speedup claim.
+- At this acceptance offer, G11 baseline/current/extra profit were respectively
+  57627.163321 /38107.946382 /−19519.216939USD. Both caches contain54 unit rows;
+  maximum physical residual was9.095e-13, accounting residual0 at saved precision,
+  maximum self-schedule gap6.822e-12USD. This offer is not claimed optimal or
+  representative of the full market-power strategy range. Caches remain local.
+- Cancel, timeout, invalid model failure and successful same-quote retry were
+  exercised with native subprocess tests. Terminal elapsed time is frozen;
+  completed tasks no longer keep increasing their reported duration.
+- Offline HTML was re-exported from the same four validated maps. Structural
+  checks cover unique element IDs, one visible initial view, inline assets and
+  no unresolved export placeholders. This round's browser tool could not inspect
+  the user's `file://` tab because its URL policy forbids that protocol. We did
+  not bypass the restriction or claim a new complete offline-browser acceptance;
+  earlier HTTP offline-page checks below belong to the preceding release.
+
+## Preceding release checks (804cb9b)
+
 - Export verified all four raw/compact/model bindings on the research workstation;
   IEEE118 raw witness remains local. Browser uses the exported scenario only.
 - Export reconciled all 1290 all-day and12 hourly saved unit rows against displayed

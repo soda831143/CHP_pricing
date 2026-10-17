@@ -11,11 +11,12 @@ select,input,button{font:inherit;color:var(--ink);max-width:100%}select,input[ty
 input[type=range]{width:100%;accent-color:var(--teal)}button{padding:7px 11px;border:1px solid #afc2ca;background:white;border-radius:4px;cursor:pointer;margin:4px 4px 4px 0}
 button:hover{border-color:var(--teal);color:var(--teal)}:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
 .scope{border-left:4px solid var(--teal);background:#e4f0f1;padding:12px 18px;margin:20px 0}.warning{border-color:var(--ochre);background:#f9eedc}.columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.capabilities,.economics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}.capability{background:#e4f0f1;border-left:4px solid var(--teal);padding:12px 14px;border-radius:0 6px 6px 0}.capability.wait{background:#f8f0e2;border-color:var(--ochre)}.capability small{display:block}.economics>div{padding:12px 0}.economics .number{font-size:25px}.bidvalues{font:13px/1.7 Consolas,monospace;overflow-wrap:anywhere}nav button[aria-pressed=true]{background:var(--teal);color:white;border-color:var(--teal)}
 .plot{min-height:300px}.ruler{height:160px;min-height:160px}.summary{display:flex;flex-wrap:wrap;gap:30px;margin:20px 0}.number{font:26px Consolas,monospace;color:var(--teal)}
 table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:right;padding:8px;border-bottom:1px solid #d4dfe3;white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:var(--teal)}.scroll{overflow:auto}
 .controls{display:flex;flex-wrap:wrap;align-items:end;gap:20px}.controls label{margin:0}.controls select{width:140px}code{font:12px Consolas,monospace;overflow-wrap:anywhere}details{margin:15px 0}pre{white-space:pre-wrap;max-height:350px;overflow:auto}
 nav{display:flex;gap:18px;flex-wrap:wrap;margin:24px 0}a{color:var(--teal);text-underline-offset:4px}
-@media(max-width:850px){aside{position:relative;width:auto;height:auto}main{margin:0;padding:22px}.columns{grid-template-columns:1fr}h1{font-size:28px}}
+@media(max-width:850px){aside{position:relative;width:auto;height:auto}main{margin:0;padding:22px}.columns{grid-template-columns:1fr}.capabilities,.economics{grid-template-columns:1fr}h1{font-size:28px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style><script>/*PLOTLY_BUNDLE*/</script></head><body>
 <aside><div class="eyebrow">BID → PRICE → EXECUTION</div><h2>报价控制</h2>
@@ -30,27 +31,33 @@ nav{display:flex;gap:18px;flex-wrap:wrap;margin:24px 0}a{color:var(--teal);text-
 <div class="scope"><strong>离线只读版</strong><br><small>本页不调用求解器、不连接网络。新的物理调度与 LOC 结算请使用本地 Streamlit 工作台。</small></div>
 </aside>
 <main><div class="eyebrow">PARAMETRIC CHP · RESEARCH WORKBENCH</div><h1>CHP Oracle Explorer</h1>
-<p class="muted">研究连续报价下的合法价格路径、物理切换与获利边界。</p><div id="status" class="scope" role="status" aria-live="polite"></div>
-<div id="content"><div class="controls"><label>观察节点<select id="node"></select></label><label>观察小时<select id="viewhour"></select></label><label>观察机组<select id="unit"></select></label><label>物理执行方案<select id="plan"></select></label></div>
-<nav><a href="#prices">价格响应</a><a href="#physical">物理 UC</a><a href="#settlement">结算</a><a href="#parameters">模型与下载</a><a href="#timing">累计时间</a></nav>
-<div id="ruler" class="plot ruler"></div><div class="summary"><div><small>CHP 最优目标值 ($)</small><div id="value" class="number"></div></div><div><small>观察节点 / 小时价格 ($/MWh)</small><div id="price" class="number"></div></div><div><small>价值 / 选价区间数</small><div id="regions" class="number"></div></div></div>
-<h2 id="prices">价格响应</h2><p class="muted">这是一个合法最优对偶选择，不声称 CHP 价格唯一。价格连续查表；利润不做样本插值。</p>
+<p class="muted">改变报价后，价格、物理执行和真实利润分别发生什么？</p><div id="status" class="scope" role="status" aria-live="polite"></div>
+<div id="content"><p id="bidvalues" class="bidvalues"></p><div class="capabilities" id="capabilities"></div><div class="economics"><div><small>战略机组 · 真实报价基准利润 (USD)</small><div class="number" id="baseProfit"></div></div><div><small>当前真实总利润 (USD)</small><div class="number" id="currentProfit"></div></div><div><small>相对基准额外利润 (USD)</small><div class="number" id="extraProfit"></div><small id="profitPercent"></small></div></div>
+<div class="controls"><label for="unit">观察机组<select id="unit"></select></label><label for="node">观察节点<select id="node"></select></label><label for="viewhour">观察小时<select id="viewhour"></select></label><label for="plan">物理执行方案<select id="plan"></select></label></div>
+<nav aria-label="研究视图"><button data-page="overview" aria-pressed="true">总览</button><button data-page="prices">价格响应</button><button data-page="physical">物理 UC</button><button data-page="settlement">结算与市场力</button><button data-page="parameters">模型与下载</button><button data-page="timing">累计计算时间</button></nav>
+<section id="overview" class="view"><div id="ruler" class="plot ruler"></div><div class="summary"><div><small>CHP 最优目标值 (USD)</small><div id="value" class="number"></div></div><div><small>观察节点 / 小时价格 ($/MWh)</small><div id="price" class="number"></div></div><div><small>价值 / 选价区间数</small><div id="regions" class="number"></div></div></div><p class="muted">价格影响、物理执行变化与可获利性是三个不同对象；区间数不是唯一经济机制数。</p><div id="overviewChange" class="plot"></div></section>
+<section id="prices" class="view" hidden>
+<h2>价格响应</h2><p class="muted">这是一个合法最优对偶选择，不声称 CHP 价格唯一。价格连续查表；利润不做样本插值。</p>
 <div class="columns"><div id="heat" class="plot"></div><div id="change" class="plot"></div><div id="daily" class="plot"></div><div id="response" class="plot"></div></div>
-<h2 id="physical">物理 UC 与可执行出力</h2><p id="ucstatus"></p><div class="columns" id="ucplots"><div id="commitment" class="plot"></div><div id="dispatch" class="plot"></div><div id="output" class="plot"></div><div id="outputchange" class="plot"></div></div>
-<h2 id="settlement">逐机组结算与市场力</h2><p id="moneyStatus"></p><div class="scroll" id="money"></div><div id="profit" class="plot"></div>
-<h2 id="parameters">模型参数与可追溯数据</h2><p id="source"></p><button id="queryDownload">下载当前查询 JSON</button><button id="priceDownload">下载价格 CSV</button><button id="modelDownload">下载完整模型 JSON</button><button id="manifestDownload">下载校验清单 JSON</button>
-<details><summary>机组、成本、初态完整参数</summary><pre id="generators"></pre></details><details><summary>导出与校验清单</summary><pre id="manifest"></pre></details><div id="load" class="plot"></div>
-<h2 id="timing">同一查询流的真实累计计算时间</h2><label for="trace">独立工作负载</label><select id="trace"></select><div id="timeplot" class="plot"></div><p id="timeSummary"></p><p class="muted">每条曲线来自单次固定查询流，旧 Q200 与新 Q500 不拼接。Oracle 包括原离线建图、后处理、加载与实际查询；不包含 UC / LOC。</p>
+<h2>报价—时空价格响应</h2><label for="responseMode">响应维度</label><select id="responseMode"><option value="time">固定节点：报价 × 小时</option><option value="space">固定小时：报价 × 节点</option></select><div id="bidResponse" class="plot"></div><p class="muted">绘图包含全部选价折点及均匀采样；只是显示已有仿射路径，不是新增区域证明。Δλ = 当前选定价格 − 真实报价选定价格；红色上涨，蓝色下降，最小色域±1e-6 $/MWh。</p></section>
+<section id="physical" class="view" hidden>
+<h2>物理 UC 与可执行出力</h2><p id="ucstatus"></p><div class="columns" id="ucplots"><div id="commitment" class="plot"></div><div id="dispatch" class="plot"></div><div id="output" class="plot"></div><div id="outputchange" class="plot"></div></div>
+</section><section id="settlement" class="view" hidden>
+<h2>逐机组结算与市场力</h2><p id="moneyStatus"></p><div class="scroll" id="money"></div><label for="profitMode">候选利润口径</label><select id="profitMode"><option value="additional">额外利润</option><option value="total">真实总利润</option></select><div id="profit" class="plot"></div></section>
+<section id="parameters" class="view" hidden>
+<h2>模型参数与可追溯数据</h2><p id="source"></p><button id="queryDownload">下载当前查询 JSON</button><button id="priceDownload">下载价格 CSV</button><button id="modelDownload">下载完整模型 JSON</button><button id="manifestDownload">下载校验清单 JSON</button>
+<h3>物理参数与初态</h3><div id="physicalParameters" class="scroll"></div><h3>增量 PWL 成本分段</h3><div id="costParameters" class="scroll"></div><details><summary>完整原始参数 JSON</summary><pre id="generators"></pre></details><details><summary>导出与校验清单</summary><pre id="manifest"></pre></details><div id="load" class="plot"></div></section>
+<section id="timing" class="view" hidden><h2>同一查询流的真实累计计算时间</h2><label for="trace">独立工作负载</label><select id="trace"></select><div id="timeplot" class="plot"></div><p id="timeSummary"></p><p class="muted">每条曲线来自单次固定查询流，旧 Q200 与新 Q500 不拼接。Oracle 包括原离线建图、后处理、加载与实际查询；不包含 UC / LOC。</p></section>
 </div><p class="muted">固定负荷、PTDF、线限、机组成本及冷启动初态；改变固定输入需要重新建图。结算采用本研究的申报 LOC 规则，不等价于所有真实市场规则。</p></main>
 <script>
 const archive = /*EXPORTED_DATA*/;
 const manifest = /*EXPORTED_MANIFEST*/;
 const $=id=>document.getElementById(id), hours=Array.from({length:24},(_,i)=>i+1), config={responsive:true,displaylogo:false};
-let scenario=null, current=null, model=null;
+let scenario=null, current=null, model=null, activePage='overview',responseCache=null;
 const fmt=(x,n=2)=>Number(x).toLocaleString('en-US',{minimumFractionDigits:n,maximumFractionDigits:n});
 function options(id,items){$(id).replaceChildren(...items.map(([value,text])=>new Option(text,value)));}
 function plot(id,traces,title='',extra={}){Plotly.react(id,traces,{template:'plotly_white',title:{text:title,font:{size:16}},font:{family:'Segoe UI, Microsoft YaHei, sans-serif',color:'#203442'},paper_bgcolor:'#f5f7f8',plot_bgcolor:'#ffffff',margin:{l:55,r:25,t:50,b:45},height:340,...extra},config);}
-function heat(id,z,title,unit='$/MWh',scale='Viridis'){const bound=scale==='RdBu'?Math.max(1e-6,...z.flat().map(Math.abs)):undefined;plot(id,[{type:'heatmap',z,x:hours,y:z.map((_,i)=>i+1),colorscale:scale,zmin:bound===undefined?undefined:-bound,zmax:bound,colorbar:{title:unit}}],title,{xaxis:{title:'小时'},yaxis:{title:'节点 / 机组编号'}});}
+function heat(id,z,title,unit='$/MWh',scale='Viridis',yaxis='节点编号',x=hours,xaxis='小时'){const bound=scale==='RdBu_r'?Math.max(1e-6,...z.flat().map(Math.abs)):undefined;plot(id,[{type:'heatmap',z,x,y:z.map((_,i)=>i+1),colorscale:scale,zmin:bound===undefined?undefined:-bound,zmax:bound,colorbar:{title:unit}}],title,{xaxis:{title:xaxis},yaxis:{title:yaxis}});}
 function evaluate(s,rho){
  if(!Number.isFinite(rho)||rho<s.rho_lower||rho>s.rho_upper)throw Error('报价超出已验证区间');
  const requested=rho*s.reference_slope;let delta=requested;
@@ -65,46 +72,83 @@ function selectScenario(resetViews=true){
  const caseId=$('case').value,g=Number($('target').value),hour=$('direction').value==='all'?null:Number($('hour').value);
  model=archive.models[caseId];scenario=archive.scenarios.find(s=>s.case===caseId&&s.generator_index===g&&s.bid_hour_1based===hour);
  $('content').hidden=!scenario;$('hour').disabled=$('direction').value==='all';
+ current=null;responseCache=null;
+ $('root').replaceChildren();$('jump').disabled=true;
  if(!scenario){$('status').className='scope warning';$('status').textContent='not_available：此机组 / 报价时段尚未建完整地图。请选择 30-G1/G2 全日、30-G1 第1小时或 118-G11 全日；不会返回其他方向结果。';return;}
- if(resetViews){options('node',scenario.prices[0].map((_,i)=>[i,`节点 ${i+1}`]));$('node').value=model.gen_bus_map[g];options('unit',model.generators.map((_,i)=>[i,`G${i+1}`]));$('unit').value=g;}
+ if(resetViews){options('node',scenario.prices[0].map((_,i)=>[i,`节点 ${i+1}`]));$('node').value=model.gen_bus_map[g];options('unit',model.generators.map((_,i)=>[i,`G${i+1}`]));$('unit').value=g;$('viewhour').value=hour||1;$('plan').replaceChildren();}
  options('root',scenario.physical_regions.slice(0,-1).map(r=>[r.right,`${fmt(100*r.right/scenario.reference_slope,9)}%`]));$('jump').disabled=!$('root').options.length;
  render();
 }
 function render(){
  if(!scenario)return;
- try{current=evaluate(scenario,Number($('rho').value)/100);}catch(e){$('content').hidden=true;$('status').textContent=e.message;return;}
+ current=null;
+ try{if($('rho').value.trim()==='')throw Error('请输入报价百分比');current=evaluate(scenario,Number($('rho').value)/100);}catch(e){$('content').hidden=true;$('status').className='scope warning';$('status').textContent=e.message;return;}
  $('content').hidden=false;const s=scenario,q=current,node=Number($('node').value),t=Number($('viewhour').value)-1,g=Number($('unit').value),base=evaluate(s,0);
  const previous=$('plan').value;options('plan',q.physical.map((r,i)=>[r.region_index,`区域 ${r.region_index+1}${q.physical.length>1?(i===0?' · 左侧方案':' · 右侧方案'):''}`]));
  if(q.physical.some(r=>String(r.region_index)===previous))$('plan').value=previous;
  const region=q.physical.find(r=>String(r.region_index)===$('plan').value),ucstatus=region?'precomputed_verified':'not_available';
  const settlements=s.settlements.filter(r=>Math.abs(r.delta-q.delta)<1e-10&&r.physical_region===region?.region_index).sort((a,b)=>a.generator_index-b.generator_index);
  const complete=settlements.length===s.generator_count;
+ const baseline=s.settlements.find(r=>r.delta===0&&r.generator_index===s.generator_index);
+ const target=complete?settlements.find(r=>r.generator_index===s.generator_index):null;
+ const extra=target&&baseline?target.true_profit-baseline.true_profit:null;
+ $('baseProfit').textContent=baseline?fmt(baseline.true_profit):'待计算';$('currentProfit').textContent=target?fmt(target.true_profit):'待计算';$('extraProfit').textContent=extra===null?'待计算':`${extra>=0?'+':''}${fmt(extra)}`;
+ $('profitPercent').textContent=extra!==null&&Math.abs(baseline.true_profit)>1e-9?`${fmt(extra/Math.abs(baseline.true_profit)*100)}% 相对基准`:extra!==null?'基准接近零，百分比不定义':'';
+ $('bidvalues').textContent=`请求：ρ=${fmt(Number($('rho').value),9)}% / δ=${fmt(q.requested_delta,12)} $/MWh；实际评估：ρ=${fmt(q.rho*100,9)}% / δ=${fmt(q.delta,12)} $/MWh`;
+ $('capabilities').replaceChildren();for(const [title,message,status] of [['P · CHP 价格','完整地图，即时查表','precomputed_verified'],['U · 物理执行',region?'已存区域共同方案':'本报价需要全局 UC',ucstatus],['S · 逐机组结算',complete?'精确报价的存档直接样本':'需本地工作台计算，不插值利润',complete?'sampled_only':'not_available']]){const panel=document.createElement('div');panel.className=`capability ${status==='not_available'?'wait':''}`;const heading=document.createElement('b');heading.textContent=title;const text=document.createElement('div');text.textContent=message;const code=document.createElement('small');code.textContent=status;panel.append(heading,text,code);$('capabilities').append(panel);}
+ document.querySelectorAll('.view').forEach(el=>{el.hidden=el.id!==activePage;});document.querySelectorAll('[data-page]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.page===activePage)));
  $('status').className=q.physical.length>1?'scope warning':'scope';
  $('status').textContent=`${s.id} | δ=${fmt(q.delta,9)} $/MWh | ρ=${fmt(q.rho*100,9)}% | P: precomputed_verified · U: ${ucstatus} · S: ${complete?'sampled_only':'not_available'}. `+(q.physical.length>1?'两套并列最优物理方案，切换查看，不平均利润。 ':'')+(q.delta!==q.requested_delta?'请求报价已显式对齐存档 UC 边界。':'');
  $('value').textContent=fmt(q.value);$('price').textContent=fmt(q.price[node][t],6);$('regions').textContent=`${s.value_regions} / ${s.price_segments}`;
+ if(activePage==='overview'){
  plot('ruler',[{x:s.price_boundaries.map(d=>100*d/s.reference_slope),y:s.price_boundaries.map(()=>1),mode:'markers',marker:{symbol:'line-ns',size:13,color:'#68818e'},name:'选价分段'},
  {x:s.physical_regions.slice(0,-1).map(r=>100*r.right/s.reference_slope),y:s.physical_regions.slice(0,-1).map(()=>0),mode:'markers',marker:{symbol:'diamond',size:9,color:'#ba7b25'},name:'物理 UC 切换'}], '',
  {height:160,margin:{l:65,r:20,t:20,b:45},xaxis:{title:'报价加数 / 参考斜率 (%)',range:[0,50]},yaxis:{tickvals:[0,1],ticktext:['物理执行','选定价格'],range:[-.5,1.5]},legend:{orientation:'h',y:1.5},shapes:[{type:'line',x0:q.rho*100,x1:q.rho*100,y0:-.4,y1:1.4,line:{color:'#087e8b',width:3}}]});
- heat('heat',q.price,'当前节点 × 24h CHP 价格');heat('change',q.price.map((row,i)=>row.map((v,t)=>v-base.price[i][t])),'相对真实报价的变化','Δ $/MWh','RdBu');
+ heat('overviewChange',q.price.map((row,i)=>row.map((v,t)=>v-base.price[i][t])),'相对真实报价的节点价格变化','Δ $/MWh','RdBu_r');
+ }
+ if(activePage==='prices'){
+ heat('heat',q.price,'当前节点 × 24h CHP 价格');heat('change',q.price.map((row,i)=>row.map((v,t)=>v-base.price[i][t])),'相对真实报价的变化','Δ $/MWh','RdBu_r');
  plot('daily',[{x:hours,y:base.price[node],name:'真实报价',line:{color:'#68818e',dash:'dot'}},{x:hours,y:q.price[node],name:'当前报价',line:{color:'#087e8b'}}],`节点 ${node+1} · 24h 价格`,{xaxis:{title:'小时'},yaxis:{title:'$/MWh'}});
  plot('response',[{x:s.price_boundaries.map(d=>100*d/s.reference_slope),y:s.prices.map(p=>p[node][t]),line:{color:'#087e8b'},name:'合法选价路径'}],`节点 ${node+1} · 小时 ${t+1} 的报价响应`,{xaxis:{title:'报价 (%)'},yaxis:{title:'$/MWh'}});
+ const key=`${s.id}/${node}/${t}`;
+ if(!responseCache||responseCache.key!==key){const b=s.price_boundaries,delta=[...new Set([...b,...Array.from({length:201},(_,i)=>b[0]+i*(b.at(-1)-b[0])/200)])].sort((a,b)=>a-b),time=hours.map(()=>[]),space=q.price.map(()=>[]);let k=0;for(const d of delta){while(k<b.length-2&&b[k+1]<=d)k++;const theta=(d-b[k])/(b[k+1]-b[k]);for(let h=0;h<24;h++)time[h].push((1-theta)*s.prices[k][node][h]+theta*s.prices[k+1][node][h]-s.prices[0][node][h]);for(let n=0;n<space.length;n++)space[n].push((1-theta)*s.prices[k][n][t]+theta*s.prices[k+1][n][t]-s.prices[0][n][t]);}responseCache={key,x:delta.map(d=>100*d/s.reference_slope),time,space};}
+ const timeMode=$('responseMode').value==='time';heat('bidResponse',timeMode?responseCache.time:responseCache.space,timeMode?`节点 ${node+1} · 报价×小时`:`小时 ${t+1} · 报价×节点`,'Δ $/MWh','RdBu_r',timeMode?'小时':'节点编号',responseCache.x,'报价加数 / 参考斜率 (%)');
+ }
+ if(activePage==='physical'){
  $('ucplots').hidden=!region;$('ucstatus').textContent=region?`precomputed_verified：区域 [${fmt(region.left,9)}, ${fmt(region.right,9)}]，共同方案全局间隙 ${region.common_plan_gap_usd.toExponential(3)} $。`:'not_available：没有全域物理 UC 图。需在本地工作台按需解全局 UC，不能使用凸化出力替代。';
- if(region){heat('commitment',region.commitment,'物理开停机','u');heat('dispatch',region.output,'可执行出力','MW');plot('output',[{x:hours,y:region.output[g],name:`G${g+1}`,line:{color:'#087e8b'}},{x:hours,y:base.physical[0].output[g],name:'真实报价',line:{color:'#68818e',dash:'dot'}}],`G${g+1} · 物理出力`,{xaxis:{title:'小时'},yaxis:{title:'MW'}});heat('outputchange',region.output.map((row,i)=>row.map((v,t)=>v-base.physical[0].output[i][t])),'出力相对真实报价变化','Δ MW','RdBu');}
+ if(region){heat('commitment',region.commitment,'物理开停机','u','Viridis','机组编号');heat('dispatch',region.output,'可执行出力','MW','Viridis','机组编号');plot('output',[{x:hours,y:region.output[g],name:`G${g+1}`,line:{color:'#087e8b'}},{x:hours,y:base.physical[0].output[g],name:'真实报价',line:{color:'#68818e',dash:'dot'}}],`G${g+1} · 物理出力`,{xaxis:{title:'小时'},yaxis:{title:'MW'}});heat('outputchange',region.output.map((row,i)=>row.map((v,t)=>v-base.physical[0].output[i][t])),'出力相对真实报价变化','Δ MW','RdBu_r','机组编号');}
+ }
+ if(activePage==='settlement'){
  $('moneyStatus').textContent=complete?'sampled_only：以下是当前精确报价与物理方案已经直接求解的结算，不是插值。真实利润 = 能量收入 + 申报 LOC − 真实成本。':'not_available：此精确报价 / 物理方案没有全部机组结算。离线页不计算或插值利润；本地工作台可直接求解并缓存。';
- $('money').replaceChildren();if(complete){const table=document.createElement('table'),head=table.createTHead().insertRow();['机组','发电 MWh','能量收入 $','LOC $','申报成本 $','真实成本 $','真实利润 $','利润变化 $'].forEach(v=>{const th=document.createElement('th');th.textContent=v;head.append(th);});for(const r of settlements){const tr=table.insertRow(),output=region.output[r.generator_index].reduce((a,b)=>a+b,0);tr.tabIndex=0;tr.title='选择此机组观察出力';const select=()=>{$('unit').value=r.generator_index;render();};tr.onclick=select;tr.onkeydown=e=>{if(e.key==='Enter')select();};[r.unit,fmt(output),fmt(r.energy_revenue),fmt(r.reported_uplift),fmt(r.reported_cost),fmt(r.true_cost),fmt(r.true_profit),fmt(r.true_profit_change)].forEach(v=>{tr.insertCell().textContent=v;});}$('money').append(table);}
- const candidates=s.profit_candidates;plot('profit',[{x:candidates.map(r=>100*r.delta/s.reference_slope),y:candidates.map(r=>r.true_profit),mode:'markers',marker:{color:'#ba7b25',size:7},name:'目标机组候选'}],'有限报价 / 物理方案候选；非插值利润曲线',{xaxis:{title:'报价 (%)'},yaxis:{title:'真实利润 ($)'}});
- $('source').textContent=`Model ${s.model_sha256} · Selector ${s.price_selector_sha256}. ${s.export_validation}. ${s.identity_scope}. 价格容差 ${s.price_tolerance_usd} $；价值容差 ${s.value_tolerance_usd} $。网络以 PTDF 表示，完整线限见参数下载。`;
+ $('money').replaceChildren();if(complete){const table=document.createElement('table'),head=table.createTHead().insertRow();['机组','发电 MWh','能量收入 USD','LOC USD','申报成本 USD','真实成本 USD','真实利润 USD','额外利润 USD'].forEach(v=>{const th=document.createElement('th');th.textContent=v;head.append(th);});for(const r of settlements){const tr=table.insertRow(),output=region.output[r.generator_index].reduce((a,b)=>a+b,0);tr.tabIndex=0;tr.title='选择此机组并联动其所在节点';const select=()=>{$('unit').value=r.generator_index;$('node').value=model.gen_bus_map[r.generator_index];render();};tr.onclick=select;tr.onkeydown=e=>{if(e.key==='Enter')select();};[r.unit,fmt(output),fmt(r.energy_revenue),fmt(r.reported_uplift),fmt(r.reported_cost),fmt(r.true_cost),fmt(r.true_profit),fmt(r.true_profit_change)].forEach(v=>{tr.insertCell().textContent=v;});}$('money').append(table);}
+ const candidates=s.profit_candidates,additional=$('profitMode').value==='additional',show=!additional||!!baseline;plot('profit',[{x:show?candidates.map(r=>100*r.delta/s.reference_slope):[],y:show?candidates.map(r=>r.true_profit-(additional?baseline.true_profit:0)):[],mode:'markers',marker:{color:'#ba7b25',size:7},name:'目标机组候选'}],show?'有限报价 / 物理方案候选；非插值利润曲线':'缺少基准，不绘制额外利润',{xaxis:{title:'报价 (%)'},yaxis:{title:additional?'额外利润 (USD)':'真实总利润 (USD)'},shapes:additional?[{type:'line',xref:'paper',x0:0,x1:1,y0:0,y1:0,line:{color:'#68818e',dash:'dot'}}]:[]});
+ }
+ if(activePage==='parameters'){
+ $('source').textContent=`Model ${s.model_sha256} · Selector ${s.price_selector_sha256}. ${s.export_validation}. ${s.identity_scope}. 价格容差 ${s.price_tolerance_usd} $/MWh；价值容差 ${s.value_tolerance_usd} USD。网络以 PTDF 表示，完整线限见参数下载。`;
  $('generators').textContent=JSON.stringify(model.generators,null,2);heat('load',model.demand,'固定节点负荷','MW');
+ parameterTables();
+ }
+ if(activePage==='timing')timePlot();
  current.settlement=complete?settlements:null;current.physical_region=region?.region_index??null;current.uc_status=ucstatus;current.settlement_status=complete?'sampled_only':'not_available';
+}
+function parameterTables(){
+ function table(id,headers,rows){const el=document.createElement('table'),head=el.createTHead().insertRow();for(const h of headers){const th=document.createElement('th');th.textContent=h;head.append(th);}for(const r of rows){const tr=el.insertRow();for(const v of r)tr.insertCell().textContent=typeof v==='number'?fmt(v,3):String(v);}$(id).replaceChildren(el);}
+ const fields=['P_min','P_max','R_up','R_down','SU_ramp','SD_ramp','T_on_min','T_off_min','cost_su','cost_sd','cost_nl','initial_status','initial_power','initial_up_time','initial_down_time'];
+ table('physicalParameters',['机组','节点','Pmin MW','Pmax MW','升坡 MW/h','降坡 MW/h','启动爬坡 MW','停机爬坡 MW','最小开机 h','最小停机 h','启动 USD','停机 USD','空载 USD/h','初始开机','初始出力 MW','初始连续开机 h','初始连续停机 h'],model.generators.map((g,i)=>[g.unit_id,model.gen_bus_map[i]+1,...fields.map(k=>g[k])]));
+ const costs=[];for(const g of model.generators){const slopes=g.pwl_slopes.length?g.pwl_slopes:[g.cost_var],widths=g.pwl_widths.length?g.pwl_widths:[g.P_max-g.P_min];slopes.forEach((v,k)=>costs.push([g.unit_id,k+1,widths[k],v,slopes[Math.floor(slopes.length/2)]]));}
+ table('costParameters',['机组','增量段','增量段宽 MW','成本斜率 $/MWh','参考斜率 $/MWh'],costs);
 }
 function timePlot(){const r=archive.timing[Number($('trace').value)],fixed=r.oracle_offline_seconds_prior_run+(r.postprocessing_seconds||0)+r.oracle_file_load_seconds,x=r.same_model_cumulative_seconds.map((_,i)=>i+1),oracle=r.oracle_cumulative_online_seconds.map(v=>fixed+v),cross=r.same_model_cumulative_seconds.findIndex((v,i)=>v>=oracle[i]);const extra={xaxis:{title:'固定查询流前缀 Q'},yaxis:{title:'累计时间 (s)'},height:420};if(cross>=0){extra.shapes=[{type:'line',x0:cross+1,x1:cross+1,yref:'paper',y0:0,y1:1,line:{color:'#ba7b25',dash:'dot'}}];extra.annotations=[{x:cross+1,y:1,yref:'paper',text:`首次实测摊销 Q=${cross+1}`,showarrow:false,xanchor:'left'}];}plot('timeplot',[{x,y:r.same_model_cumulative_seconds,name:'持久模型重优化',line:{color:'#68818e'}},{x,y:oracle,name:'Oracle 全部成本',line:{color:'#087e8b'}}],r.name,extra);const end=x.length-1;$('timeSummary').textContent=`Q=${x.length}: 重优化 ${fmt(r.same_model_cumulative_seconds[end],3)}s；Oracle ${fmt(oracle[end],3)}s；累计比 ${fmt(r.same_model_cumulative_seconds[end]/oracle[end],3)}×；${cross>=0?`首次实测摊销 Q=${cross+1}`:'本次范围内尚未摊销'}。`;}
 function download(name,content,type='application/json'){const url=URL.createObjectURL(new Blob([content],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function caseChanged(){model=archive.models[$('case').value];options('target',model.generators.map((_,i)=>[i,`G${i+1} · 节点 ${model.gen_bus_map[i]+1}`]));$('target').value=$('case').value==='118'?10:0;selectScenario();}
 options('hour',hours.map(h=>[h,`${h}`]));options('viewhour',hours.map(h=>[h,`${h}`]));options('trace',archive.timing.map((r,i)=>[i,r.name]));$('manifest').textContent=JSON.stringify(manifest,null,2);
-$('case').onchange=caseChanged;for(const id of ['target','direction','hour'])$(id).onchange=()=>selectScenario();for(const id of ['node','unit','viewhour','plan'])$(id).onchange=render;
-$('rho').oninput=()=>{$('slider').value=$('rho').value;render();};$('slider').oninput=()=>{$('rho').value=$('slider').value;render();};
+$('case').onchange=caseChanged;for(const id of ['target','direction','hour'])$(id).onchange=()=>selectScenario();for(const id of ['node','viewhour','plan','profitMode','responseMode'])$(id).onchange=render;
+$('unit').onchange=()=>{$('node').value=model.gen_bus_map[Number($('unit').value)];render();};
+let scheduled=false;function scheduleRender(){if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;render();});}}
+$('rho').oninput=()=>{$('slider').value=$('rho').value;scheduleRender();};$('slider').oninput=()=>{$('rho').value=$('slider').value;scheduleRender();};
+document.querySelectorAll('[data-page]').forEach(button=>button.onclick=()=>{activePage=button.dataset.page;render();});
 function bid(v){$('rho').value=v;$('slider').value=v;render();}$('truth').onclick=()=>bid(0);$('upper').onclick=()=>bid(50);$('jump').onclick=()=>bid(100*Number($('root').value)/scenario.reference_slope);$('trace').onchange=timePlot;
 $('queryDownload').onclick=()=>{if(scenario&&current)download('query.json',JSON.stringify({scenario:scenario.id,model_sha256:scenario.model_sha256,price_selector_sha256:scenario.price_selector_sha256,...current},null,2));};
 $('priceDownload').onclick=()=>{if(current)download('prices.csv','node,'+hours.join(',')+'\n'+current.price.map((r,i)=>[i+1,...r].join(',')).join('\n'),'text/csv');};$('modelDownload').onclick=()=>download('model.json',JSON.stringify(model,null,2));$('manifestDownload').onclick=()=>download('manifest.json',JSON.stringify(manifest,null,2));
-caseChanged();timePlot();
+caseChanged();
 </script></body></html>

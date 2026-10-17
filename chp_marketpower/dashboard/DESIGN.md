@@ -29,3 +29,24 @@ SHA-256 records data integrity and provenance, not a digital signature.
 
 The Q500 workload is fixed before measurement, run from a fresh persistent model,
 and kept independent of the earlier Q200 stream. Do not extend Q to force a crossing.
+
+## Interaction revision
+
+Keep the laboratory palette and quotation ruler; avoid another decorative KPI wall.
+The first screen answers one question: what changes when this generator changes
+its offer? Show P/U/S as three distinct capability panels, then baseline/current/
+additional profit for the strategic generator, with unavailable values explicitly
+unknown. The requested and evaluated offer remain visible side by side.
+
+Use a persistent page selector instead of eagerly rendering every tab. Shared unit,
+bus and hour controls drive all views, and settlement-row selection updates those
+same controls. A new case/generator/direction resets the observation context.
+Bid-response heatmaps show space/time versus bid using the existing compact map;
+they are rendering samples, not newly discovered mathematical regions.
+
+Changes use red for positive differences and blue for negative differences, a
+white zero centre, explicit bus/generator axes and separate USD versus USD/MWh
+units. Retain Segoe UI for body/headings and Consolas for quotation/version data.
+Long UC/LOC runs move into a bounded local child process with progress, cancel
+and timeout, so a native solver call cannot freeze the UI. Results remain bound
+to their original query; switching the screen never re-labels an old result.
