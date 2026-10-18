@@ -14,5 +14,11 @@ manifests and preservation patches are not added to that remote commit. Running
 the documented commands with the existing local archives recreates the audit.
 
 The numerical results and scientific limits reported in the analysis are
-unchanged. E2-E4 have not run. The local complete archive is the reviewable
-source for the raw-precision evidence.
+unchanged. E2/E3 subsequently returned passed in the original Windows session;
+E4 returned failed. Their new source, checkpoints and failure log remain in
+that now unavailable workspace. This update publishes an analytical summary
+and task audit, not those missing artifacts. Rejected raw attachments were not
+retried through another route. The local archive remains the raw-precision source.
+
+See [current task audit](TASK_COMPLETION_AUDIT.md) for missing paths and recovery
+order. New summaries are not independently revalidated solver certificates.

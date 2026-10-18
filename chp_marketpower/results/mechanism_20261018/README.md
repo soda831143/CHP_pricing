@@ -1,7 +1,17 @@
-# E0–E1 mechanism audit, 2026-10-18
+# CHP mechanism study, 2026-10-18
+
+Current status: [task completion audit](TASK_COMPLETION_AUDIT.md) and
+[reported E2/E3 evidence](E2_E3_REVIEW.md). E2/E3 returned passed in the previous
+Windows session, but their source/checkpoints are not yet in this repository.
+E4 failed and is unresolved. This is not a complete E0–E4 delivery.
+Continue on `research/market-power-parametric-regimes`, as the user directed.
+
+The list below describes the original local E0–E1 archive. Raw artifacts are
+not all on GitHub; see [publication scope](PUBLICATION_SCOPE.md). The historical
+report and QA notes retain their original phase scope.
 
 Scope is deliberately limited to the original IEEE30 G1 all-day boundary and its
-two prespecified perturbations. E2–E4 have not run.
+two prespecified perturbations. The published audit CLI still runs E0–E1 only.
 
 - [Mechanism report](MECHANISM_REPORT.md): findings, exact ledgers, physical substitution, literature limits and next steps.
 - [Mathematical propositions](../../notes/mechanism_propositions.md): hypotheses, P1–P4 proofs, counterexamples and validation status.

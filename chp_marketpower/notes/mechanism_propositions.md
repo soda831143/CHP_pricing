@@ -2,7 +2,11 @@
 
 Status, 2026-10-18: P1–P2 are proved below and numerically checked by the E0–E1
 IEEE30 audit. P3–P4 are mathematical statements with analytic toy checks; their
-new IEEE30 local-channel validation is **pending E2**. These are accounting and
+new IEEE30 E2 validation later returned passed in the Windows session, but its
+raw certificates and source are not yet in this repository. See the
+[current audit](../results/mechanism_20261018/TASK_COMPLETION_AUDIT.md).
+Phase-specific validation paragraphs below retain the original E0–E1 scope;
+they are not a fresh revalidation of inaccessible E2 files. These are accounting and
 envelope/convex-analysis consequences, not claims of first discovery of CHP
 market power, bid-price derivatives, or a general profit decomposition.
 

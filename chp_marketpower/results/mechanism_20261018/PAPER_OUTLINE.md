@@ -1,5 +1,8 @@
 # IEEE T-EMPR 论文组织建议：以已验证的获利机制为切入口
 
+> 保留 E0–E1 时点的结构建议。后续状态见 [完成审计](TASK_COMPLETION_AUDIT.md)。
+> E4 未通过，条件性因果贡献不能列为已完成。
+
 这是 E0–E1 后的结构建议，不是宣布 E2–E4 已完成。
 
 **候选题目：** From Price Impact to Strategic Profit under Multi-Period Convex Hull Pricing

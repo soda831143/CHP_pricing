@@ -1,5 +1,9 @@
 # CHP 市场力机理研究：E0–E1 数据审计与核心机制验证
 
+> 历史 E0–E1 报告，保留原执行分支和阶段状态。当前按用户修订在原分支
+> `research/market-power-parametric-regimes` 继续。E2/E3 后续返回通过，E4 失败；
+> 后续源码及证书尚未同步。见 [完成审计](TASK_COMPLETION_AUDIT.md) 和 [摘要](E2_E3_REVIEW.md)。
+
 2026-10-18。执行代码基线：`af051bd`；独立分支：
 `research/market-power-mechanisms-20261018`。
 范围：IEEE30、24 小时、G1 全天统一绝对增量报价、原 tight PTDF 网络、
