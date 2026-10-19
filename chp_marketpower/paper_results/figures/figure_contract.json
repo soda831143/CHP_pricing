@@ -1,0 +1,13 @@
+{
+  "main_figure_count": 4,
+  "main_tables": 2,
+  "backend": "python",
+  "width_mm": 183,
+  "png_dpi": 600,
+  "uncertainty": "Single measured timing streams and deterministic optimization; no statistical replication or confidence bands",
+  "reference": "Original PTDF reference bus 1; G1 congestion component is zero by this convention",
+  "price_hours": "Hour 1 physical start, hour 2 a tied largest positive price-effect hour, hour 19 baseline peak demand",
+  "profit_curve": "Certified common self-schedules on all 99 joint intervals; lines never bridge a physical jump",
+  "fig4_cost_display": "Same δ-dependent pair-mean subtracted from both actual cost lines; the crossing is unchanged",
+  "startup_control": "G5 true startup cost +50 USD/start leaves the supported threshold unchanged; not a strategic-offer experiment"
+}

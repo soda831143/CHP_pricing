@@ -1,0 +1,11 @@
+Failed to find real location of C:\Users\250010153\anaconda3\python.exe
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\250010153\Documents\BaiduSyncdisk\phd\academic\convex_hull\CHP_dual\chp_primal\chp_project\chp_marketpower\paper_results\build_results.py", line 270, in <module>
+    main(parser.parse_args().resume)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\250010153\Documents\BaiduSyncdisk\phd\academic\convex_hull\CHP_dual\chp_primal\chp_project\chp_marketpower\paper_results\build_results.py", line 49, in main
+    assert digest(path)==expected,relative
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: results/presentation_revision_20261016/30_G1_hour1_0to50/validation.json

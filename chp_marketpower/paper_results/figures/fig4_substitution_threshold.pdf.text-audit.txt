@@ -1,0 +1,9 @@
+Failed to find real location of C:\Users\250010153\anaconda3\python.exe
+Nature Figure PDF Text Audit
+pdf: C:\Users\250010153\Documents\BaiduSyncdisk\phd\academic\convex_hull\CHP_dual\chp_primal\chp_project\chp_marketpower\paper_results\figures\fig4_substitution_threshold.pdf
+minimum required: 7 pt
+minimum found: 7 pt
+text runs: 16
+below minimum: 0
+verdict: PASS
+note: content-stream scanning does not replace final-size visual inspection or account for every PDF transform (e.g. Form XObject matrices)

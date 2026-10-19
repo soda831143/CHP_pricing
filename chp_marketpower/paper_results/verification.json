@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "source_hashes": 76,
+  "nodal_price_values": 110880,
+  "max_price_decomposition_error": 1.4210854715202004e-14,
+  "reconstructed_SS_witnesses": 102,
+  "common_SS_intervals": 99,
+  "candidate_records": 116,
+  "max_curve_ledger_error": 1.692387741059065e-08,
+  "max_candidate_profit_error": 6.1409082263708115e-09,
+  "max_legacy_curve_error": 2.5414919946342707e-08,
+  "profit_path_residual": -5.560650606639683e-09,
+  "new_optimization_solves": 0
+}

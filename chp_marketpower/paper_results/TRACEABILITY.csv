@@ -1,0 +1,11 @@
+result,historical_source_relative_to_chp_marketpower,consolidated_source_relative_to_paper_results,display_or_scope
+Model definitions,../../chp_5th.tex,SYMBOLS.md,All results; definitions only
+Measured pricing queries,results/finalization_20261017/figures/; results/figure_study_20261016/,source_data/fig1_measured_query_prefixes.csv; source_data/table_I_computation.csv,Fig. 1; Table I
+Full pricing duals,results/scope_study_20261016/30_bracket_repeat1/,source_data/price_components.npz; source_data/nodal_price_components.csv; source_data/price_boundary_continuity.csv,Fig. 2
+Common physical schedules and candidates,results/targeted_study_20261016/30_G1_profit_0to50/; results/dashboard_uc_regions/30-G2-all/,source_data/certified_full_range_pieces.csv; source_data/table_I_computation.csv,Fig. 3; Table I
+Price-related profit path,results/mechanism_20261019/P1_profit_path_io_recovery/,source_data/price_effect_subintervals.csv; source_data/price_effect_by_hour.csv,Fig. 2; profit reconciliation
+Six-generator settlement,results/figure_study_20261016/economic_source_audit.json; results/figure_study_20261016/generator_settlements.csv,source_data/absolute_generator_settlements.csv; source_data/table_II_settlement_changes.csv; source_data/network_settlement_identity.csv,Table II
+Missing full-range self-schedules,paper_results/supplement/missing_self_schedules/,source_data/fig3_profit_uplift_curves.csv; source_data/certified_full_range_pieces.csv,Fig. 3; 64 new single-unit solves
+Substitution and threshold,results/mechanism_20261019/P0_threshold_io_recovery/; results/targeted_study_20261016/30_G1_profit_0to50/,source_data/fig4_generation_substitution.csv; source_data/fig4_cost_competition.csv; source_data/fig4_threshold_predictions.csv,Fig. 4
+Line 30 intervention,results/mechanism_20261018/followup/E4_causal_recovery_02/; results/mechanism_20261019/network_lower_envelope.json,source_data/network_counterfactual_settlements.csv; source_data/network_counterfactual_hourly_prices.csv; source_data/network_pricing_duals_vs_physical_flows.csv,Network mechanism analysis
+Active pricing lines and reference,results/scope_study_20261016/30_bracket_repeat1/,source_data/active_line_congestion_prices_at_G5.csv; source_data/line_effect_on_G1_G5_spread.csv; analysis_summary.json,Supplementary diagnostic; not G1 congestion revenue

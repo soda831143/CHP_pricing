@@ -1,0 +1,40 @@
+{
+  "snapshot": "C:\\Users\\250010153\\Documents\\BaiduSyncdisk\\phd\\academic\\convex_hull\\tmp\\CHP_recovery_20261018_before_continuation",
+  "files": [
+    {
+      "path": "chp_energy/chp_solver/schedule_run.py",
+      "sha256": "1a2f9c53e96e6bb6fb6a1b5ca89dc04c0940f8407600b6bc8cb8f1098871a16f",
+      "content_matches_snapshot": true
+    },
+    {
+      "path": "chp_energy/data/cases/IEEE118/SCUC_118.xls",
+      "sha256": "dfdd14d928d1170743c7f85564883a971a3e42035ab53adc0c69cf98ffa73df6",
+      "content_matches_snapshot": true
+    },
+    {
+      "path": "chp_marketpower/dashboard/DESIGN.md",
+      "sha256": "f8703ae1a91fdead1c096f061bc5e7f02e1065cab8c873b367e32d89efb16f6c",
+      "content_matches_snapshot": true
+    },
+    {
+      "path": "chp_marketpower/dashboard/README.md",
+      "sha256": "ec4b52adc6843a5f519991791420b0e0a1d71b73bf94c15a23a91426104395ef",
+      "content_matches_snapshot": true
+    },
+    {
+      "path": "chp_marketpower/dashboard/app.py",
+      "sha256": "0cf19bb4b133f3a2526a4b4d04ff1e27e4541b16fb3be0773615babdd3942d10",
+      "content_matches_snapshot": true
+    },
+    {
+      "path": "chp_marketpower/dashboard/method.py",
+      "sha256": "48083ff39718008073d317a4b8ec5d3f098f97902f6155853dd716d7acb0ba1d",
+      "content_matches_snapshot": true
+    },
+    {
+      "path": "chp_marketpower/tests/test_dashboard_catalog.py",
+      "sha256": "f7c670a42880acfee11a72bf1e6ac04b3e6e35d1c6dc23ef3540b715c41f2fde",
+      "content_matches_snapshot": true
+    }
+  ]
+}
