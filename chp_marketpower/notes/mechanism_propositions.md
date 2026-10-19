@@ -39,6 +39,33 @@ value beyond tolerance is rejected; it is not silently converted to a different
 settlement rule. These are counterfactual complete-LOC payments, not a statement
 about any actual ISO's make-whole rules.
 
+## General affine bid direction (theory, not an additional experiment)
+
+Let C_rep(s;δ)=C_true(s)+δB(s), with the same fixed compact S_g and a
+continuous bounded exposure B. Define M_B=max_s{λ^T p(s)−C_true(s)−δB(s)}.
+Substitution in the complete reported LOC definition gives Π=M_B+δB_U.
+At a common δ and λ, subtraction therefore gives Π_A−Π_B=δ(B_A−B_B).
+Under P3's envelope hypotheses and fixed physical plan,
+Π'=p_SS^Tλ'+B_U−B_SS. Under P4's affine-price/common-plan hypotheses,
+each fixed self-schedule objective is affine in δ, so its supremum plus
+δB_U is convex and has the same endpoint-extension property. These proofs
+use exactly the cancellation, envelope and affine-supremum arguments below;
+no positivity of B or differentiability at a switch is assumed.
+
+For the current numerical study B=D=Σ(p−Pmin·u). Other mathematical
+examples are the number of actual startup events and, with one-hour periods,
+Σu for online hours. An event count is continuous on each component of the
+finite mixed-integer physical set; it must include the declared initial-state
+convention. The startup direction has units USD/start, unlike the current
+USD/MWh direction, so their δ values are not directly comparable.
+
+This extension adds no startup/no-load implementation or numerical result.
+Before such an experiment, independently verify identical exposure accounting
+in CHP, physical UC and self-scheduling, fixed true costs/feasible sets,
+and the new direction's model/price witnesses. Current D-based maps cannot
+be relabeled as startup maps. Capacity withholding and other changes to S_g
+remain outside these statements; incomplete LOC still breaks the cancellation.
+
 ## P1. Accounting identity and truthful-dispatch invariance
 
 **Statement.** For any feasible execution s_U (system optimality is unnecessary),
