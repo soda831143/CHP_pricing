@@ -1,3 +1,5 @@
+> Historical audit at a3dd0c1. Recovery code and updated local findings are now published in [the continuation report](followup/MECHANISM_REPORT.md); raw archives remain local under [publication scope](PUBLICATION_SCOPE.md).
+
 # 本次状态审计提交的检查
 
 基于远端原分支 `7a709a14baba972cc7adf6c1a5ddd38d95f903d9`。

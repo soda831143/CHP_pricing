@@ -85,7 +85,9 @@ class ScheduleRunMILP:
             raise ValueError('bid_adders must be a finite generator-by-hour matrix')
         self._incremental_dispatch = None
 
-    def solve(self, require_optimal: bool = False, mip_gap: float = 1e-6) -> Tuple[np.ndarray, np.ndarray, float]:
+    def solve(self, require_optimal: bool = False, mip_gap: float = 1e-6, *,
+              minimize_output: tuple[int, int] | None = None,
+              force_off: tuple[int, ...] = ()) -> Tuple[np.ndarray, np.ndarray, float]:
         """
         求解 UC MILP，返回物理调度结果。
 
@@ -104,8 +106,15 @@ class ScheduleRunMILP:
         N, T = self.N, self.T
         gens = self.generators
         demand = self.demand
+        if minimize_output is not None and (
+                len(minimize_output) != 2 or any(not isinstance(k, (int, np.integer)) for k in minimize_output)
+                or not 0 <= minimize_output[0] < N or not 0 <= minimize_output[1] < T):
+            raise ValueError('minimize_output must be a valid zero-based (generator, hour)')
+        if any(not isinstance(i, (int, np.integer)) or not 0 <= i < N for i in force_off):
+            raise ValueError('force_off contains an invalid generator')
 
         model = gp.Model("ScheduleRun")
+        self._model = model
         model.Params.OutputFlag = 0
         if not np.isfinite(mip_gap) or mip_gap < 0:
             raise ValueError('mip_gap must be finite and nonnegative')
@@ -251,6 +260,13 @@ class ScheduleRunMILP:
                         name=f"mdt_{i}_{t}"
                     )
 
+        # Structural studies reuse exactly the original constraints and change only
+        # the objective or add an explicitly declared whole-horizon outage.
+        for i in force_off:
+            for t in range(T):
+                model.addConstr(u[i, t] == 0, name=f"study_forced_off_{i}_{t}")
+        if minimize_output is not None:
+            model.setObjective(p[minimize_output], GRB.MINIMIZE)
         model.optimize()
 
         if model.Status not in (GRB.OPTIMAL, GRB.SUBOPTIMAL):

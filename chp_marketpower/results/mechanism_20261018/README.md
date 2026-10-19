@@ -1,17 +1,11 @@
-# CHP mechanism study, 2026-10-18
+> Publication note (2026-10-19): this branch contains source and analysis documents. Referenced raw results, logs, figures and machine-specific manifests remain in the local archive; see [publication scope](PUBLICATION_SCOPE.md).
 
-Current status: [task completion audit](TASK_COMPLETION_AUDIT.md) and
-[reported E2/E3 evidence](E2_E3_REVIEW.md). E2/E3 returned passed in the previous
-Windows session, but their source/checkpoints are not yet in this repository.
-E4 failed and is unresolved. This is not a complete E0–E4 delivery.
-Continue on `research/market-power-parametric-regimes`, as the user directed.
+# E0–E1 mechanism audit, 2026-10-18
 
-The list below describes the original local E0–E1 archive. Raw artifacts are
-not all on GitHub; see [publication scope](PUBLICATION_SCOPE.md). The historical
-report and QA notes retain their original phase scope.
+> 本地接续更新：E2/E3源码、原始证书与E4失败日志已恢复；E4六组重建结算与八个一致价格泛函端点通过，既定有限集合的E5初步筛选完成。当前报告、三张机制图与恢复记录见 [完整接续报告](followup/MECHANISM_REPORT.md) 和 [恢复状态](followup/RECOVERY_STATUS.md)。下文保留E0–E1历史说明。
 
 Scope is deliberately limited to the original IEEE30 G1 all-day boundary and its
-two prespecified perturbations. The published audit CLI still runs E0–E1 only.
+two prespecified perturbations. E2–E4 have not run.
 
 - [Mechanism report](MECHANISM_REPORT.md): findings, exact ledgers, physical substitution, literature limits and next steps.
 - [Mathematical propositions](../../notes/mechanism_propositions.md): hypotheses, P1–P4 proofs, counterexamples and validation status.

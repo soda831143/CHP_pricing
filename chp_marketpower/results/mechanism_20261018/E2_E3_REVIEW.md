@@ -1,3 +1,5 @@
+> Historical audit at a3dd0c1. Recovery code and updated local findings are now published in [the continuation report](followup/MECHANISM_REPORT.md); raw archives remain local under [publication scope](PUBLICATION_SCOPE.md).
+
 # 从价格影响到真实利润：E2–E3 已报告证据
 
 来源：2026-10-18 前一 Windows 执行会话的工具输出及结果摘要。本次仅独立复核

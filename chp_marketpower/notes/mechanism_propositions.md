@@ -1,12 +1,11 @@
 # Complete reported LOC: profit mechanisms and their limits
 
 Status, 2026-10-18: P1–P2 are proved below and numerically checked by the E0–E1
-IEEE30 audit. P3–P4 are mathematical statements with analytic toy checks; their
-new IEEE30 E2 validation later returned passed in the Windows session, but its
-raw certificates and source are not yet in this repository. See the
-[current audit](../results/mechanism_20261018/TASK_COMPLETION_AUDIT.md).
-Phase-specific validation paragraphs below retain the original E0–E1 scope;
-they are not a fresh revalidation of inaccessible E2 files. These are accounting and
+IEEE30 audit. The recovered IEEE30 E2 raw witnesses now numerically verify P3
+in six declared neighborhoods (maximum difference residual 2.19e-7); P4 retains
+its common-plan/affine-selector hypotheses and existing endpoint analysis.
+See `results/mechanism_20261018/followup/MECHANISM_REPORT.md` for the recovery
+audit and the completed E4 directional optimal-price-face checks. These are accounting and
 envelope/convex-analysis consequences, not claims of first discovery of CHP
 market power, bid-price derivatives, or a general profit decomposition.
 
@@ -139,10 +138,14 @@ required; the displayed fixed-plan formula cannot be applied unchanged.
 At δ=5 the left derivative is 0, the right derivative is 1. Neither an ordinary
 derivative nor a centered difference can replace these one-sided statements.
 
-**Validation scope.** Analytic toy test only in this delivery. E2 must intersect
-actual selected-price/UC regions, solve self-schedules and check direct finite
-differences. E1 left/right perturbations check the boundary execution and ledger,
-not P3 over an interval.
+**Validation scope.** The recovered E2 intersects selected-price and common-UC
+regions in six prespecified neighborhoods. A common SS witness meets the saved
+global upper bounds at both sample endpoints; direct one-sided differences
+agree with P3 within 2.19e-7. Zero bid has only a right domain derivative. The
+critical UC switch itself has a P2 jump, not an ordinary derivative. Raw saved
+prices, physical and SS schedules, selected full-dual interpolation and hashes
+were rechecked by `mechanism_study.verify_recovery`; this is a local result,
+not a new full-domain derivative or an integral decomposition of the total gain.
 
 ## P4. Convexity on a common-plan/affine-price interval
 
@@ -172,6 +175,27 @@ the interior. A plan switch also invalidates applying P4 across the whole domain
 **Validation scope.** Max-affine toy tests and the existing common-plan region
 tests are reused. This delivery does not create new global profit curves or
 re-run the archived 0–50% optimum calculation.
+
+## Numerical certificate for the complete optimal dual face
+
+For an LP `min c^T x` with `E x=b`, `A x<=h`, and finite variable bounds,
+fix a certified optimal primal `x*`. Every dual optimum satisfies stationarity,
+dual signs and complementary slackness against `x*`. Conversely, any dual-feasible
+vector satisfying those complementarity conditions is optimal: the primal-dual
+gap is the sum of nonnegative slack-times-multiplier terms, all zero. Therefore
+forcing multipliers of strictly inactive rows/bounds to zero, while retaining
+stationarity and signs, describes the same complete optimal dual face. A single
+optimal primal suffices even when primal and dual optima are not unique.
+
+In `mechanism_study.linear_audit`, rows/bounds with saved primal slack above
+1e-7 are fixed inactive. Smaller numerical slacks are left unrestricted, so
+uncertain activity is not silently fixed. Each candidate full dual is then
+checked against the ORIGINAL, unscaled stationarity and strong-duality equations
+and bounds, with maximum residual below 1e-6. These are numerical certificates
+at declared tolerances; the exact-face equivalence above assumes an exact primal
+optimum. This formulation avoids using the large cost equality as a solver row,
+while retaining it as an independent acceptance check. It does not relax the
+economic optimum into an epsilon-cost band or concatenate separate nodal extrema.
 
 ## Literature boundary
 

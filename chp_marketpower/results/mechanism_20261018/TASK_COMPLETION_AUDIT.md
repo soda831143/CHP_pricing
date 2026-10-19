@@ -1,3 +1,5 @@
+> Historical audit at a3dd0c1. Recovery code and updated local findings are now published in [the continuation report](followup/MECHANISM_REPORT.md); raw archives remain local under [publication scope](PUBLICATION_SCOPE.md).
+
 # 任务书完成审计（2026-10-18）
 
 **尚未全部完成。** E0–E1 的程序、证明和报告已在原研究分支；E2–E3 在上轮

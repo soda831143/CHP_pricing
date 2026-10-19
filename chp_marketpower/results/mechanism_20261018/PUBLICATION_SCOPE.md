@@ -1,24 +1,24 @@
-# Publication scope
+# Publication scope, updated 2026-10-19
 
-The complete E0-E1 audit, raw solver arrays, numerical ledgers and checksums are
-preserved in the local research commit `70fb17840af8ee6e2419f377851d5dfe9e344028`.
+The current research branch publishes the recovery source, regression tests,
+mathematical proofs and analysis documents corresponding to local commits
+42a054a and 2659b40. Its earlier publication/audit history is retained.
 
-Automatic approval review rejected uploading the raw binary solver arrays and
-some numerical attachments to GitHub because explicit authorization to disclose
-those internal research payloads was not established. No rejected raw attachment
-was retried through another encoding or route.
+The complete local research archive remains separate. Raw solver arrays and
+checkpoints (.npz/.json), numerical CSV attachments, execution/failure logs,
+figure assets, machine-specific delivery manifests and preservation bundles
+are not included in this publication. They have not been retried through a
+different encoding or transport. No local raw-data ancestor is merged into
+the publication history.
 
-The remote research branch contains only the new audit code, tests, mathematical
-proofs and analysis documents. Raw numerical outputs, figure files, machine-specific
-manifests and preservation patches are not added to that remote commit. Running
-the documented commands with the existing local archives recreates the audit.
+The recovered E2/E3 and rebuilt E4 findings were validated locally; the public
+reports describe that validation and its limits. Publication does not itself
+constitute an independent rerun. Scripts that verify saved checkpoints, the
+archive-dependent high-bid regression, figure generation and table assembly
+require the matching local archives. A public checkout alone cannot reproduce
+those archive checks. Source code does not embed the excluded numerical arrays.
 
-The numerical results and scientific limits reported in the analysis are
-unchanged. E2/E3 subsequently returned passed in the original Windows session;
-E4 returned failed. Their new source, checkpoints and failure log remain in
-that now unavailable workspace. This update publishes an analytical summary
-and task audit, not those missing artifacts. Rejected raw attachments were not
-retried through another route. The local archive remains the raw-precision source.
-
-See [current task audit](TASK_COMPLETION_AUDIT.md) for missing paths and recovery
-order. New summaries are not independently revalidated solver certificates.
+Current findings: [continuation report](followup/MECHANISM_REPORT.md).
+Research framing: [paper outline](followup/PAPER_OUTLINE.md).
+Earlier task audits are historical records, superseded by the continuation
+report for current local completion status.
