@@ -128,6 +128,31 @@ global UC lower bounds at δ*=13.204080443599175. Shared 30×24 selected prices 
 their complete dual witness are saved in `boundary.npz`. `paired_identity`
 operates on independently reconstructed ledgers. No rounded total is an input.
 
+### Predicting a physical substitution threshold (2026-10-19 extension)
+
+For two fixed feasible system plans A/B, let their true system costs be
+C_A,C_B and strategic exposures D_A>D_B. Their reported cost lines cross at
+δ*=(C_B−C_A)/(D_A−D_B). Add εH(s) to one nonstrategic unit's true and
+reported cost, keeping the entire feasible set fixed. If the same plans
+remain on the global UC lower envelope around the crossing, then
+δ*(ε)=δ*(0)+ε(H_B−H_A)/(D_A−D_B).
+
+**Proof.** Equate C_A+εH_A+δD_A and C_B+εH_B+δD_B and solve for δ.
+The line intersection alone does not establish global optimality. When the
+fixed A plan attains the global UC lower bound at both ends of the left
+neighborhood, concavity of the UC value and its feasible affine cost line
+certify A throughout that neighborhood; apply the same argument to B on
+the right. A third dominating plan invalidates the threshold interpretation.
+
+In the archived case H=G5 online hours gives H_B−H_A=5 and slope
+5/105.0695652173913=0.047587519655714644. Actual G5 startup counts are both
+one, giving zero predicted shift for an additive startup-cost perturbation.
+The new 2026-10-19 experiments use ε=−1,0,1 and a predeclared held-out ε=5,
+plus a separate +50 USD/start negative control, and verify candidate gaps
+against independent global UC bounds. This is a conditional, locally
+certified cost-competition mechanism; it is not a new claim about arbitrary
+system perturbations or the global profit maximizer in changed markets.
+
 ## P3. Local and one-sided profit response
 
 **Statement.** On an open interval assume λ(δ) is differentiable and a fixed
@@ -173,6 +198,22 @@ critical UC switch itself has a P2 jump, not an ordinary derivative. Raw saved
 prices, physical and SS schedules, selected full-dual interpolation and hashes
 were rechecked by `mechanism_study.verify_recovery`; this is a local result,
 not a new full-domain derivative or an integral decomposition of the total gain.
+
+**Subsequent path validation (2026-10-19).** A separate study now covers the
+entire path from δ=0 to the archived best candidate: 37 joint intervals,
+38 self-schedule solves and explicit physical jumps. Common SS witnesses
+attain global upper bounds at both ends of every interval; price/exposure
+integrals plus jumps reconcile the 7,811.555102 USD gain within 5.5e-9 USD.
+This is a pathwise accounting decomposition, not independent causal effects.
+The original six-neighborhood E2 scope and manifests remain unchanged.
+
+**Local profitable-deviation corollary.** If the finite right derivative at
+the actual truthful settlement exists and is strictly positive, the
+definition of the derivative implies Π(h)>Π(0) for all sufficiently small
+positive h. Use the matching right-side price, physical and SS rules in P3.
+A nonpositive local derivative does not rule out profitable distant bids
+after region changes. This is a local sufficient condition, not a validated
+market-wide screening index or a claim that LOC incentives imply price manipulation.
 
 ## P4. Convexity on a common-plan/affine-price interval
 

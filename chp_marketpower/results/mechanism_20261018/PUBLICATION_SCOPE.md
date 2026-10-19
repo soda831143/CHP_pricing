@@ -1,3 +1,5 @@
+> 2026-10-19 continuation: source and analysis from local commit e77b92ef893cedd866810085cc90271691fe72a4 are now published. Current results: [predictive substitution and complete profit path](../mechanism_20261019/MECHANISM_ADVANCE_REPORT.md). The exclusions below continue to apply.
+
 # Publication scope, updated 2026-10-19
 
 The current research branch publishes the recovery source, regression tests,

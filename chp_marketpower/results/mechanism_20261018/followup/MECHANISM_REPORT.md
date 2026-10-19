@@ -1,6 +1,6 @@
-> Publication note (2026-10-19): this branch contains source and analysis documents. Referenced raw results, logs, figures and machine-specific manifests remain in the local archive; see [publication scope](../PUBLICATION_SCOPE.md).
-
 # CHP 市场力：价格、自调度与物理执行如何共同形成真实利润
+
+> 2026-10-19更新：替代成本临界预测、空载成本扰动/启动费负对照及完整7,811.56美元获利路径现已验证，见[最新机制推进报告](../../mechanism_20261019/MECHANISM_ADVANCE_REPORT.md)。本文件保留10月18日恢复研究的阶段证据与原始范围。
 
 2026-10-18，本地恢复与接续版。研究分支仍为 `research/market-power-parametric-regimes`。
 本报告接续上级目录的历史 E0–E1 报告，不覆盖历史原始数据、价格地图或计时基准。
