@@ -1,0 +1,4 @@
+/build/
+/qa/
+/compile_attempt.json
+__pycache__/

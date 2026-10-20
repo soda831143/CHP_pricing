@@ -1,0 +1,18 @@
+{
+  "paper_results\\source_data\\absolute_generator_settlements.csv": "b2bce4f46ac937a61cd5bfead7f5032e2df752880200e4607f7138b417d5d31a",
+  "paper_results\\source_data\\table_I_computation.csv": "209e2b0fd2397e52610b4edde3514d24fb32596cdb6914fd9b3135a22e0e97d5",
+  "results\\dashboard_study_20261017\\trace_118_G11_q500.json": "d0d8b0941032fe42e78874e730ab2c4943b05f2f13ff85eb87272ae71687da31",
+  "results\\figure_study_20261016\\trace_30_G1_q1000.json": "ef944b59abae5a95c4119d3f2250ac9447749380e0a65e87a68bc55ad06a191c",
+  "results\\figure_study_20261016\\trace_30_G2_q1000.json": "7a5fa511d71df9a9fdd9a3577cfbca257cf7b27112d3864bbc121ce2f876203b",
+  "results\\finalization_20261017\\initial_audit\\initial_condition_audit.json": "de045dee20710cc194f297afe4899ea96472c0a59d5e9ab49a42e8df7d626be0",
+  "results\\finalization_20261017\\localized_economics\\localized_economic_followup.json": "a76ba2748836901b7dafe0e2f7819bedca11fa5273000125bcaa580e84b978e8",
+  "results\\finalization_20261017\\localized_economics\\physical_plans.npz": "64d064ba7bb759647871b6af0d3dd0b122bed7027a4eef2eccfb0d82cd901606",
+  "results\\presentation_revision_20261016\\30_G1_hour1_0to50\\audit.json": "35c9a24483ccf5c09fff1532ba46d31d66c7a59b7dac68297ef7b9ebc575a47b",
+  "results\\presentation_revision_20261016\\30_G1_hour1_0to50\\compact.npz": "37397098615afa0db2e0a8794f60c6cb3677f1cd756078487b37324339efc384",
+  "results\\presentation_revision_20261016\\30_G1_hour1_0to50\\compression.json": "bb1aa87a2d8f347c1a9a516a215d65a5449188a94d7af27679e242bf38a7eb8f",
+  "results\\presentation_revision_20261016\\30_G1_hour1_0to50\\model_identity.json": "fc725c30e503c86793248eabd428b787a237c0cccd23e24a7ac0e9cec1354462",
+  "results\\presentation_revision_20261016\\30_G1_hour1_0to50\\oracle.npz": "16d6ab0fe14d2638dd0f5941aa97fb8587ab6327aa91dc1a39937cf9402b61fe",
+  "results\\presentation_revision_20261016\\30_G1_hour1_0to50\\validation.json": "6b529b91a8faa27cfc0bd21d32d8b11c56256f5abd5bc52c292f75ce51d63c75",
+  "results\\presentation_revision_20261016\\trace_118_G11_q200.json": "c4ae10106f56557de540cbf31a47be852b7fa09404061085f73486c6d6606037",
+  "results\\targeted_study_20261016\\30_G1_profit_0to50\\profit_range.json": "723dbfe0053f0713582055d570f517bd334623d0d2c73a7b8de485d7fde03178"
+}

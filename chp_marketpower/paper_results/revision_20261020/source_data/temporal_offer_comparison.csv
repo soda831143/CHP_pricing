@@ -1,0 +1,3 @@
+offer_direction,lower,upper,price_intervals,common_UC_regions,candidate_records,baseline_profit,maximum_additional_profit
+All 24 hours,0.0,20.991,83,17,116,37289.31231503801,7811.555102205151
+Hour 1 only,0.0,20.991,1,2,4,37289.31231503801,0.0

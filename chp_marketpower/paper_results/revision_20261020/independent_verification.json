@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "input_hashes": 16,
+  "timing_streams": 4,
+  "measured_prefixes": 2700,
+  "max_prefix_reconstruction_error": 0.0,
+  "localized_candidates": 4,
+  "original_delivery_files_unchanged": 198,
+  "new_optimization_solves": 0
+}
