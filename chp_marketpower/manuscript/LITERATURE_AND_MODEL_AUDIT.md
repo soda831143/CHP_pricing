@@ -1,5 +1,7 @@
 # CHP market power: literature and direct-power model audit
 
+> 本文件保留初版12条文献核查；第二版新增的竞价激励、自调度策略和参数LP教材条目及核实来源见REVISION_02.md，当前文献库共15条。
+
 Date: 2026-10-20. This file records source checks and recommended model statements for the new manuscript. It does not change any historical experiment or claim a new CHP convexification algorithm.
 
 ## 1. Evidence and citation corrections

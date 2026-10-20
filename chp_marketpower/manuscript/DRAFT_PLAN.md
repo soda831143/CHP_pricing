@@ -1,5 +1,7 @@
 # 论文初稿配置与论证依据（2026-10-20）
 
+> 第二版已按用户要求调整：12–13页工作稿，引言三段开场、Related Work和三点Our Contributions；方法以固定网络流定价模型、物理UC区域和有限利润候选构成完整链条。当前术语和修改依据见TERMINOLOGY.md及REVISION_02.md，下方初版配置保留为起点记录。
+
 本轮用户明确授权依据既定结构、阶段评审及旧稿模板生成新论文初稿，并完成必要定向实验整理。沿用先前已确定的配置与四图两表安排，不重复发起选题或提纲确认。
 
 - 目标：IEEE Transactions on Energy Markets, Policy, and Regulation；英文研究论文，IEEE编号引用，IEEEtran journal双栏。

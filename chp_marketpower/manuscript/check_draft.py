@@ -20,6 +20,15 @@ def main():
     labels = re.findall(r'\\label\{([^}]+)\}', source)
     refs = re.findall(r'\\(?:eqref|ref)\{([^}]+)\}', source)
     assert len(labels) == len(set(labels)) and set(refs) <= set(labels)
+    introduction = source.split(r'\section{Introduction}')[1].split(r'\section{Market Model')[0]
+    opening = introduction.split(r'\subsection{Related Work}')[0].strip()
+    assert len([p for p in opening.split('\n\n') if p.strip()]) == 3
+    contributions = introduction.split(r'\subsection{Our Contributions}')[1]
+    assert len(re.findall(r'\\item\b', contributions)) == 3
+    assert {'eq:flow', 'eq:aggregation', 'eq:lp-direction', 'eq:dual-feasibility',
+            'eq:uc-common', 'eq:uc-probe', 'eq:candidate-value', 'eq:supremum'} <= set(labels)
+    assert r'\delta^{\UC}' in source and r'\delta^{\Pi}' in source
+    assert r'\delta^*' not in source
     assert len(re.findall(r'\\begin\{figure\*?\}', source)) == 4
     assert len(re.findall(r'\\begin\{table\*?\}', source)) == 2
     figures = [(ROOT / name).resolve() for name in re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', source)]
@@ -57,12 +66,15 @@ def main():
     assert not re.search(r'Overfull|undefined|LaTeX Error', log)
     pdf = ROOT / 'CHP_market_power_draft.pdf'
     with fitz.open(pdf) as document:
-        assert len(document) <= 10
+        assert len(document) <= 13
         text = '\n'.join(page.get_text() for page in document)
-        assert 'REFERENCES' in text and '[12]' in text
+        assert 'REFERENCES' in text and f'[{len(keys)}]' in text
         pages = len(document)
     sources = [ROOT / 'main.tex', ROOT / 'references.bib', pdf, *figures]
-    result = dict(status='passed', pages=pages, abstract_words=len(abstract.split()), citations=len(keys),
+    result = dict(status='passed', pages=pages, manuscript_page_budget=13,
+                  introductory_paragraphs=3, contribution_items=3,
+                  critical_and_profit_offers_distinguished=True,
+                  abstract_words=len(abstract.split()), citations=len(keys),
                   figures=4, tables=2, unresolved_references=0, overfull_boxes=0,
                   settlement_transcription='passed', timing_transcription='passed', new_optimization_solves=0,
                   assets_sha256={str(p.relative_to(ROOT.parent)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})
