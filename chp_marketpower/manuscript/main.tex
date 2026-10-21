@@ -24,7 +24,7 @@
 \maketitle
 
 \begin{abstract}
-Convex hull pricing addresses nonconvex generation costs, but reduced lost-opportunity compensation does not by itself characterize profitable strategic offers. This paper develops a continuous-offer evaluation framework for network-constrained, multiperiod markets with complete reported lost-opportunity-cost uplift. An interval network-flow model provides the fixed pricing formulation. Common primal optima and complete endpoint duals construct a reusable selected-price map, while feasible schedule cost lines and global unit commitment bounds identify executable-schedule regions. Intersecting the two partitions reduces strategic-profit evaluation to finitely many endpoint and physical-plan candidates. The evaluation distinguishes an attained favorable-boundary maximum from a one-sided profit supremum under alternative adjacent-plan execution. A profit identity separates price effects from offer-exposure changes, and substitution costs predict physical switching thresholds. Modified IEEE systems demonstrate cumulative pricing speedups of 6.74, 20.54, and 2.00 for the longer measured workloads; a shorter workload does not amortize preprocessing. In the principal case, additional profit is 7,811.56 dollars while uplift decreases by 578.36 dollars, and a nearby interior offer earns 7,810.84 dollars. Temporal offer scope and transmission capacity shape this opportunity through price responses and feasible generation replacement.
+Convex hull pricing addresses nonconvex generation costs, but reduced lost-opportunity compensation does not by itself characterize profitable strategic offers. This paper develops a continuous-offer evaluation framework for network-constrained, multiperiod markets with complete reported lost-opportunity-cost uplift. An interval network-flow model provides the fixed pricing formulation. Common primal optima and complete endpoint duals construct a reusable selected-price map, while feasible schedule cost lines and global unit commitment bounds identify executable-schedule regions. Intersecting the partitions reduces strategic-profit evaluation to finitely many endpoint and physical-plan candidates, distinguishing attained boundary maxima from one-sided suprema. A settlement identity shows that, at a continuous selected price, pure physical switches under increasing nonnegative offers cannot raise producer profit. At an offered system-cost tie, the profit difference between executions equals their actual system-cost difference with reversed sign. Modified IEEE systems demonstrate cumulative pricing speedups of 6.74, 20.54, and 2.00 for the longer measured workloads. The principal case earns 7,811.56 dollars of additional profit, and tied executions differ by 1,387.35 dollars at identical prices. A fixed-offer network comparison shows that greater generation replacement can coexist with higher additional profit relative to each network's truthful baseline.
 \end{abstract}
 \begin{IEEEkeywords}
 Convex hull pricing, market power, parametric optimization, strategic offers, unit commitment, uplift payment.
@@ -51,7 +51,7 @@ The contributions are organized around this progression from prices to executabl
 \begin{enumerate}
 \item \emph{Reusable parametric CHP pricing from a network-flow model.} We express affine offer changes as objective updates in the fixed network-flow pricing LP and construct a selected-price map using common primal optima and complete optimal endpoint duals. Adaptive value bounds identify where further optimization is needed, while shared endpoint duals retain a reproducible legal price path across the range. Measured cumulative costs include map construction and online queries.
 \item \emph{Finite strategic-profit evaluation through physical UC regions.} We identify intervals with a common complete UC schedule using feasible cost lines and global mixed-integer lower bounds. Intersecting them with price segments yields regions on which actual profit is convex under complete reported uplift. This structure reduces evaluation of the continuous offer range to endpoint/physical-plan candidates. Boundary execution and one-sided branch limits are distinguished explicitly.
-\item \emph{Settlement and substitution mechanisms of profitable market power.} We connect actual profit to reported self-scheduling profit and physical offer exposure, separating price effects from exposure and execution changes. A substitution-cost threshold predicts physical switching, while controlled cost and line-capacity comparisons explain how competing generation and network conditions shape the opportunity to earn additional profit. The analysis distinguishes a physical switching threshold from a profit-maximizing offer.
+\item \emph{Settlement and substitution mechanisms of profitable market power.} Combining reported self-scheduling profit with physical offer exposure characterizes nonpositive physical switching losses at continuous selected prices. At a reported system-cost tie, it also quantifies the producer's profit difference by the executions' actual system-cost difference. Cost perturbations test a predicted substitution threshold, and a network intervention compares offer-induced price and settlement changes against each network's own truthful baseline. The analysis distinguishes physical switching from profit maximization.
 \end{enumerate}
 Section~\ref{sec:model} establishes the common market and network-flow formulation. Section~\ref{sec:method} develops the interval algorithms and finite-candidate result. Section~\ref{sec:mechanism} interprets profit formation and substitution. Section~\ref{sec:results} presents the computational and market evidence, followed by the conclusion.
 
@@ -380,7 +380,11 @@ For two optimal physical schedules $A$ and $B$ at the same offer and selected pr
 \begin{equation}
  \Pi_g^A-\Pi_g^B=\delta\,[Q_g(s_g^A)-Q_g(s_g^B)].\label{eq:tie-profit}
 \end{equation}
-The common reported self-scheduling value cancels between the two executions. At truthful bidding this difference is zero; at a positive adder, the schedule retaining more offer-exposed generation earns more actual profit after complete uplift. The reported system-cost tie does not resolve this producer-level difference.
+The common reported self-scheduling value cancels between the two executions. Let $C_A,C_B$ be their actual total system costs. With all other units reporting actual costs, the offered system-cost tie gives $C_A+\delta Q_A=C_B+\delta Q_B$, and hence
+\begin{equation}
+ \boxed{\Pi_g^A-\Pi_g^B=C_B-C_A.}\label{eq:tie-system-cost}
+\end{equation}
+Thus, identical offers, selected prices, and optimal reported system costs can conceal different actual producer profits. The execution with lower actual system cost gives this producer the higher profit. At truthful bidding both differences vanish. This conclusion uses full reported uplift; its magnitude is determined by the complete physical schedules.
 
 Within a differentiable joint region, an optimal self-schedule gives the envelope relation
 \begin{align}
@@ -395,7 +399,23 @@ At self-scheduling switches, the relation applies on differentiable pieces, whic
 \begin{equation}
  J_g(b)=b[Q_g^{\UC,+}(b)-Q_g^{\UC,-}(b)].\label{eq:physical-jump}
 \end{equation}
-Thus, along a path from truthful bidding to offer $\delta_f$, the full change is
+The sign of this jump follows from optimal physical clearing, independently of which constraints produce the replacement.
+\begin{corollary}[Offer exposure and physical switching]\label{cor:exposure}
+Fix the physical feasible set and all other offers. For $\delta_1<\delta_2$, any globally optimal executions satisfy
+\begin{equation}
+ Q_g^{\UC}(\delta_2)\le Q_g^{\UC}(\delta_1).\label{eq:exposure-monotonicity}
+\end{equation}
+At a nonnegative switching offer $b$ with a continuous selected CHP price, complete reported uplift therefore gives $J_g(b)\le0$. If other offers equal actual costs, adjacent complete schedules additionally satisfy
+\begin{equation}
+ J_g(b)=-(C_+-C_-)\le0.\label{eq:jump-replacement-cost}
+\end{equation}
+\end{corollary}
+\begin{proof}
+Write the fixed objective intercept as $C_0(s)$. Optimality at the two offers gives $C_0(s_1)+\delta_1Q_1\le C_0(s_2)+\delta_1Q_2$ and $C_0(s_2)+\delta_2Q_2\le C_0(s_1)+\delta_2Q_1$. Adding yields $(\delta_2-\delta_1)(Q_2-Q_1)\le0$. Take adjacent limits and apply~\eqref{eq:physical-jump}. At the boundary, equality of the two offered cost lines gives $C_+-C_-=b(Q_--Q_+)$ when $C_0$ is actual system cost.
+\end{proof}
+The optimality argument is a standard property of affine objective perturbations~\cite{bertsimas1997}. Its settlement implication identifies what replacement can do: a pure physical switch cannot create a positive profit jump under these assumptions, although price responses between switches may increase profit. A discontinuous price selection requires the additional self-scheduling value change described below.
+
+Along a path from truthful bidding to offer $\delta_f$, the full change is
 \begin{align}
  \Delta\Pi_g(\delta_f)={}&\int_0^{\delta_f}(\bp_g^{\SSched})^\top
                \frac{d\blambda_g^{\CHP}}{d\delta}\,d\delta\notag\\
@@ -423,6 +443,17 @@ For an online-cost perturbation, $\chi_j$ is the substitute's online duration. E
 
 \subsection{Transmission Prices and Feasible Competition}
 Network constraints can affect both terms involved in strategic opportunity. They shape the optimal dual prices in~\eqref{eq:lmp} and restrict the alternative schedules available in~\eqref{eq:uc-line}. Energy/congestion accounting identifies price components under a fixed reference. A controlled change to a line limit additionally reveals changes in feasible competition. These two analyses are used together.
+
+Physical supply dependence, price influence, and additional profit are distinct objects. Minimum required output measures feasible generation; $Q_g$ measures the specific incremental quantity exposed to the offer. A unit required to operate near minimum output can have substantial physical dependence but little mandatory incremental exposure. Neither measure alone determines the price or self-scheduling terms in~\eqref{eq:identity}.
+
+For a network scenario $S$, define $\Delta_\delta\lambda^S=\lambda^S(\delta)-\lambda^S(0)$ and $\Delta\Pi_g^S=\Pi_g^S(\delta)-\Pi_g^S(0)$. Comparing relaxed ($r$) and original ($o$) networks uses
+\begin{align}
+ \mathcal I_{n,t}^{\lambda}(\delta)&=\Delta_\delta\lambda_{n,t}^{r}-\Delta_\delta\lambda_{n,t}^{o},\label{eq:network-response}\\
+ \mathcal I_g^{\Pi}(\delta)&=\Delta\Pi_g^{r}-\Delta\Pi_g^{o}\notag\\
+ &= (\Delta R_g^{r}-\Delta R_g^{o})+(\Delta U_g^{r}-\Delta U_g^{o})\notag\\
+ &\quad -(\Delta C_g^{r}-\Delta C_g^{o}).\label{eq:network-profit-response}
+\end{align}
+These deterministic contrasts measure how the same offer changes prices and settlement relative to each network's baseline. The terms are complete accounting contributions; they do not assign independent causal shares to prices and physical constraints.
 
 For settlement consistency, define
 \begin{equation}
@@ -531,7 +562,7 @@ The critical offer reflects the cost of replacing G1 generation. In schedule A, 
 \begin{equation}
  \delta^{\UC}=\frac{1387.346991}{105.069565}=13.204080444\ \mathrm{USD/MWh}.\label{eq:threshold-numeric}
 \end{equation}
-This physical threshold coincides with the highest upper-branch profit candidate in this case: $\delta^{\Pi}=\delta^{\UC}$. At the common offer and selected CHP,~\eqref{eq:tie-profit} predicts the observed $1{,}387.35$ actual-profit difference between the two executions. The incoming branch retains more G1 offer-exposed generation; the alternative substitutes earlier G5 operation. Its lower G1 profit explains the drop adjacent to the best candidate in Fig.~\ref{fig:profits}.
+This physical threshold coincides with the highest upper-branch profit candidate in this case: $\delta^{\Pi}=\delta^{\UC}$. At the common offer and selected CHP, the $1{,}387.35$ actual-profit difference between executions is exactly the additional actual system cost of replacing G1, as predicted by~\eqref{eq:tie-system-cost}. Both executions minimize the ISO's reported objective, yet they allocate different actual profits to G1. Across all 17 archived common physical regions, the offer-exposed quantity is nonincreasing. All 16 adjacent boundary contrasts satisfy~\eqref{eq:jump-replacement-cost}; their reported system-cost tie residuals are below $4\times10^{-11}$ dollars. This verifies the sign and magnitude of the pure physical losses separately from the price gains in Fig.~\ref{fig:profits}.
 
 Figure~\ref{fig:substitution}(c) tests the cost mechanism. Increasing G5's actual online cost by $\epsilon$ dollars per online hour gives
 \begin{equation}
@@ -539,16 +570,22 @@ Figure~\ref{fig:substitution}(c) tests the cost mechanism. Increasing G5's actua
 \end{equation}
 The predefined $\epsilon=-1,0,1,5$ cases yield thresholds 13.15649, 13.20408, 13.25167, and 13.44202 USD/MWh. Global UC bounds at each crossing and neighboring offers support the candidate schedules. Increasing actual startup cost by \$50 per start leaves the threshold unchanged, as predicted by equal startup counts. These comparisons identify extra online operation as the relevant substitution expense in this transition.
 
-The line-30 intervention then separates price effects from feasible competition. At the fixed offer $\delta^{\UC}-0.001$, relaxing line 30 lowers the hour-19 energy component from 114.8846 to 104.2192 USD/MWh. G5's congestion component rises from $-58.5446$ to $-45.9592$, so its nodal CHP increases from 56.34 to 58.26 despite the lower energy component. G5's cleared hour-19 output increases from 41.42 to 73.01 MW. The line-30 pricing multiplier becomes zero, while another line restriction remains active.
+The line-30 intervention compares the offer's effect in two feasible networks. At the fixed offer $\delta^{\UC}-0.001$, relaxing line 30 lowers the hour-19 energy component from 114.8846 to 104.2192 USD/MWh. G5's congestion component rises from $-58.5446$ to $-45.9592$, so its nodal CHP increases from 56.34 to 58.26 despite the lower energy component. G5's cleared hour-19 output increases from 41.42 to 73.01 MW. The line-30 pricing multiplier becomes zero, while another line restriction remains active.
+
+The response to the offer differs from this comparison of price levels. In hour 19, G1's price changes by $-1.7543$ USD/MWh from truthful bidding in the original network but by $+1.9113$ after relaxation: $\mathcal I_{G1,19}^{\lambda}=3.6656$ USD/MWh. G5's price response remains $-1.92$ in both networks. In hours 2, 4, and 5, G1's response remains $+13.2031$ in both. The network intervention therefore preserves some major positive hourly responses while reversing another response's sign; it does not uniformly attenuate the offer's price influence.
 
 The relaxed system can also use a substitute schedule with a line-30 flow magnitude of approximately 39.01 MW, exceeding the original 20.8 MW limit. The original A/B schedules remain feasible and retain their mutual cost intersection, but the new schedule dominates them by approximately $2{,}196.5$ near that intersection. Transmission expansion changes the set of economic competitors that constrain G1's offer.
 
-Finally, use each network's own truthful baseline. G1 baseline profit is $37{,}289.31$ in the original network and $31{,}911.46$ after relaxation. At $\delta^{\UC}-0.001$, total profit falls from $45{,}100.15$ to $40{,}302.15$, while additional profit rises from $7{,}810.84$ to $8{,}390.69$. Immediately above the original threshold, the corresponding increments are $6{,}424.82$ and $8{,}392.45$. These fixed-offer comparisons show how the direction of a market-power change can differ from the direction of a total-profit change. They connect the transmission price mechanism with the physical alternatives that the market can execute.
+Finally, use each network's own truthful baseline. G1 baseline profit is $37{,}289.31$ in the original network and $31{,}911.46$ after relaxation. At $\delta^{\UC}-0.001$, total profit falls from $45{,}100.15$ to $40{,}302.15$, while additional profit rises from $7{,}810.84$ to $8{,}390.69$. Equation~\eqref{eq:network-profit-response} gives the cross-network change
+\begin{equation}
+ \mathcal I_{G1}^{\Pi}=-2127.85+59.92+2647.77=579.84\ \mathrm{USD}.\label{eq:network-response-result}
+\end{equation}
+Relative to the respective baselines, G1 output falls by 95.00 MWh in the original network and 157.50 MWh after relaxation. Greater generation replacement thus coexists with higher additional profit at this offer: the larger actual-cost saving exceeds the reduction in incremental energy revenue. This comparison changes the entire pricing and execution problem, whereas Corollary~\ref{cor:exposure} holds within a fixed feasible set. Immediately above the original threshold, additional profits are $6{,}424.82$ and $8{,}392.45$. These are two fixed-offer comparisons, not a calculation of the relaxed network's maximum over the full offer domain.
 
 \section{Conclusion}
 Continuous strategic offers can be evaluated by jointly representing selected CHP prices and executable UC schedules over the offer range. The network-flow pricing model supplies the common LP structure, while physical cost competition identifies the schedules used for settlement. Their joint intervals support finite profit candidates and reusable price queries, with preprocessing costs accounted for in the measured workloads. Boundary maxima and approachable one-sided profits are distinct outputs of the same evaluation.
 
-The market interpretation follows from combining prices with reported uplift and actual operating cost. In the principal case, additional producer profit rises while both individual and system uplift decline. The timing of admissible offer changes alters the gain, and substitute generation imposes a physical switching threshold that can be predicted from incremental replacement cost. Transmission capacity affects both nodal price differences and the feasible replacement schedules. These mechanisms provide a settlement-consistent explanation of how price influence becomes a profitable opportunity within the specified strategy set.
+The market interpretation follows from combining prices with reported uplift and actual operating cost. At continuous selected prices, increasing a nonnegative offer cannot create a positive profit jump through physical switching alone. When reported system costs tie, the producer's execution-dependent profit difference equals the actual system-cost difference with reversed sign. Replacement costs predict the tested switching threshold and its response to online-cost changes. Across networks, greater replacement need not imply smaller additional profit: the fixed-offer line relaxation increases that gain by 579.84 dollars because actual-cost savings outweigh reduced incremental revenue. These results turn price and dispatch responses into explicit settlement and substitution tests within the specified strategy set.
 
 \section*{Data and Code Availability}
 The result tables, plotting data, implementation, numerical verification records, and supplementary self-scheduling witnesses are available in the \href{https://github.com/soda831143/CHP_pricing}{CHP\_pricing project repository}, under \path{chp_marketpower/paper_results}. The accompanying manuscript record identifies the source versions and the independent query workloads.

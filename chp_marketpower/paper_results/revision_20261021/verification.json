@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "input_hashes": 17,
+  "network_cases": 6,
+  "nodal_response_comparisons": 1440,
+  "physical_regions": 17,
+  "physical_boundaries": 16,
+  "max_settlement_residual": 0.0,
+  "max_offered_cost_tie_residual": 3.637978807091713e-11,
+  "highlighted_tie_cost_residual": 8.731149137020111e-11,
+  "new_optimization_solves": 0,
+  "scope": "Deterministic contrasts at two fixed offers; no relaxed-network profit maximum or causal-share estimate."
+}

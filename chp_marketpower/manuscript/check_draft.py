@@ -60,6 +60,19 @@ def main():
     independent = json.loads((PAPER / 'revision_20261020/independent_verification.json').read_text(encoding='utf-8'))
     assert summary['status'] == independent['status'] == 'passed'
     assert independent['measured_prefixes'] == 2700 and independent['new_optimization_solves'] == 0
+    response_root = PAPER / 'revision_20261021'
+    response_check = json.loads((response_root / 'verification.json').read_text(encoding='utf-8'))
+    assert response_check['status'] == 'passed' and response_check['new_optimization_solves'] == 0
+    assert response_check['physical_boundaries'] == 16 and response_check['nodal_response_comparisons'] == 1440
+    fingerprints = json.loads((response_root / 'input_manifest.json').read_text(encoding='utf-8'))
+    assert all(hashlib.sha256((ROOT.parent / p).read_bytes()).hexdigest() == sha for p, sha in fingerprints.items())
+    with (response_root / 'source_data/network_response_contrasts.csv').open(encoding='utf-8') as stream:
+        contrast = next(csv.DictReader(stream))
+    for key, value in [('DDelta_R', -2127.85), ('DDelta_U', 59.92),
+                       ('minus_DDelta_C', 2647.77), ('DDelta_Pi', 579.84)]:
+        assert abs(float(contrast[key])-value) < .0051
+    assert {'eq:tie-system-cost', 'cor:exposure', 'eq:exposure-monotonicity',
+            'eq:jump-replacement-cost', 'eq:network-response', 'eq:network-response-result'} <= set(labels)
     build = json.loads((ROOT / 'compile_attempt.json').read_text(encoding='utf-8-sig'))
     assert build['exitCode'] == 0 and build['pdfExists']
     log = (ROOT / 'build/main.log').read_text(encoding='utf-8', errors='replace')
@@ -77,6 +90,7 @@ def main():
                   abstract_words=len(abstract.split()), citations=len(keys),
                   figures=4, tables=2, unresolved_references=0, overfull_boxes=0,
                   settlement_transcription='passed', timing_transcription='passed', new_optimization_solves=0,
+                  network_response_transcription='passed', physical_switching_boundaries=16,
                   assets_sha256={str(p.relative_to(ROOT.parent)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})
     (ROOT / 'validation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     print({key: value for key, value in result.items() if key != 'assets_sha256'})

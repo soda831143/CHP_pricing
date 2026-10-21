@@ -1,0 +1,19 @@
+{
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\original_bid0.json": "39b9d3f4a76cd2ae2b8aff21566d9ae1ca62ac55dcc27ac7ff663dfe79d2c8f0",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\original_bid0.npz": "5a58b0d571cf8384d56e446c8d43babc77a7cc93a6ebc00ef9c4bf9459080ff3",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\original_bid1.json": "c9657b197b879405b31dca096727f1bce62e606a53ccf90d9d72b9ceead384c9",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\original_bid1.npz": "61171f315d3fc3bafef5abd5cf90b87e18a720d19ffe7c924fd9b8e1d8d6e75e",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\original_bid2.json": "25056fd75307ca94813b92db27ff8035b65297f67f05df66fa118b3affc9a99e",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\original_bid2.npz": "ee65074f32fc6301b83c0ea2d47a8d3fea51525980a11720256e6a16d7750607",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\relaxed_bid0.json": "c2fa250daf58230eb6266e090297f07dc78a45d2ffe7e9d911390d04c273b50c",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\relaxed_bid0.npz": "dad9d11c1938fcc3ab8abc72de3b11caee4b9559da9801879cc9015d9626b294",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\relaxed_bid1.json": "1a952d9091f5348296909c620fae65295b80e7cac071c3716fa578a45c51c9b3",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\relaxed_bid1.npz": "939b59e3cb2aac49376d5c8142ee7bc1ae66d49ff92d8ea1f3042af0ae0f49ff",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\relaxed_bid2.json": "6aaf577a2976b375c44e648b8f905944e4012918d729edaf458abdb42d8069f2",
+  "results\\mechanism_20261018\\followup\\E4_causal_recovery_02\\relaxed_bid2.npz": "8c3982dfb0e1367ddf58f582e7a3768c4ca1402402448fade69917f0334f4a1c",
+  "results\\targeted_study_20261016\\30_G1_profit_0to50\\profit_range.json": "723dbfe0053f0713582055d570f517bd334623d0d2c73a7b8de485d7fde03178",
+  "results\\targeted_study_20261016\\30_G1_profit_0to50\\physical_plans.npz": "1483c58c40d45ec846c905d85e92d9aff9b1c72c27a17531d1de63e4a0caa993",
+  "paper_results\\source_data\\network_counterfactual_settlements.csv": "eef502888b7ab92b26ab496de1252393327aaf0f290da1c99069c57b855ff506",
+  "paper_results\\source_data\\network_counterfactual_hourly_prices.csv": "21f7ec1da57d8d513b169bc0822f03f9d1ce048bcf10c39d261fa734f421469b",
+  "results\\mechanism_20261019\\P0_threshold_io_recovery\\summary.json": "f180c367555633248f3af659241646230a423ed4fbdee5573afaeb35d3eae68a"
+}
