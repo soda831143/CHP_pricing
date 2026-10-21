@@ -42,6 +42,6 @@ python -X utf8 C:/Users/250010153/.codex/plugins/cache/openai-bundled/latex/0.2.
 
 ## 期刊与初稿边界
 
-2026-10-20已查阅[IEEE T-EMPR官方页面](https://ieee-pes.org/publications/transactions-on-energy-markets-policy-and-regulation/)与[PES作者指南](https://ieee-pes.org/publications/authors-kit/information-for-authors-of-ieee-power-energy-society-transactions-papers/)：首次投稿不超过10页，摘要约150–200词。当前按用户要求先完成12–13页工作稿，未按正式投稿页数压缩方法。本文采用IEEEtran双栏，英文摘要178词；最终编译页数和无未定义引用记录见QA报告。
+2026-10-20已查阅[IEEE T-EMPR官方页面](https://ieee-pes.org/publications/transactions-on-energy-markets-policy-and-regulation/)与[PES作者指南](https://ieee-pes.org/publications/authors-kit/information-for-authors-of-ieee-power-energy-society-transactions-papers/)：首次投稿不超过10页，摘要约150–200词。当前按用户要求先完成12–13页工作稿，未按正式投稿页数压缩方法。本文采用IEEEtran双栏；当前摘要词数、编译页数和引用核验见validation.json，初版QA报告保留为历史记录。
 
 当前第三版13页、英文摘要185词，引用与版面核验见validation.json。作者/单位暂沿用用户旧稿，基金、贡献分工与利益冲突需作者确认。本稿没有提交期刊；研究范围是已声明方向、报价域、选价和执行规则。IEEE118两个工作负载是独立测量，计时比例不是UC/LOC利润评价的整体加速；线路放松结果是各网络自身基准下的同报价比较。
