@@ -73,6 +73,20 @@ def main():
         assert abs(float(contrast[key])-value) < .0051
     assert {'eq:tie-system-cost', 'cor:exposure', 'eq:exposure-monotonicity',
             'eq:jump-replacement-cost', 'eq:network-response', 'eq:network-response-result'} <= set(labels)
+    factorial_root = PAPER / 'revision_20261102'
+    factorial = json.loads((factorial_root / 'verification.json').read_text(encoding='utf-8'))
+    assert factorial['status'] == 'passed' and factorial['new_optimization_solves'] == 17
+    assert factorial['factorial_cases'] == 12 and factorial['fixed_offers'] == 2
+    fingerprints = json.loads((factorial_root / 'input_manifest.json').read_text(encoding='utf-8'))
+    assert all(hashlib.sha256((ROOT.parent / p).read_bytes()).hexdigest() == sha for p, sha in fingerprints.items())
+    assert {'eq:competition-gap', 'eq:competitor-exclusion'} <= set(labels)
+    assert r'\subsection{Changes in Feasible Competition}' in source
+    with (factorial_root / 'source_data/factorial_settlements.csv').open(encoding='utf-8') as stream:
+        cells = list(csv.DictReader(stream))
+    for network, epsilon, expected in [('original', 0., 6377.54), ('original', 5., 7695.41),
+                                      ('relaxed', 0., 8600.35), ('relaxed', 5., 8693.98)]:
+        row = next(r for r in cells if r['network']==network and float(r['epsilon'])==epsilon and r['quote']=='2')
+        assert abs(float(row['delta_Pi'])-expected) < .0051
     build = json.loads((ROOT / 'compile_attempt.json').read_text(encoding='utf-8-sig'))
     assert build['exitCode'] == 0 and build['pdfExists']
     log = (ROOT / 'build/main.log').read_text(encoding='utf-8', errors='replace')
@@ -89,8 +103,9 @@ def main():
                   critical_and_profit_offers_distinguished=True,
                   abstract_words=len(abstract.split()), citations=len(keys),
                   figures=4, tables=2, unresolved_references=0, overfull_boxes=0,
-                  settlement_transcription='passed', timing_transcription='passed', new_optimization_solves=0,
+                  settlement_transcription='passed', timing_transcription='passed', new_optimization_solves=17,
                   network_response_transcription='passed', physical_switching_boundaries=16,
+                  factorial_transcription='passed', factorial_conditions=4, fixed_factorial_offers=2,
                   assets_sha256={str(p.relative_to(ROOT.parent)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources})
     (ROOT / 'validation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     print({key: value for key, value in result.items() if key != 'assets_sha256'})

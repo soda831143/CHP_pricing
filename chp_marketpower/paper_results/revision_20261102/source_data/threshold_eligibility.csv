@@ -1,0 +1,3 @@
+epsilon,predicted_pair_threshold,original_pair_supported,relaxed_pair_supported,relaxed_frozen_C_advantage_at_crossing,original_A_G5_hours,original_B_G5_hours,relaxed_C_G5_hours
+0.0,13.204080443598345,True,False,2196.580047759693,19.0,24.0,18.0
+5.0,13.442018041876917,True,False,2211.691361175239,19.0,24.0,18.0

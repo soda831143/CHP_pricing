@@ -1,0 +1,137 @@
+{
+  "delta": 13.441018041876918,
+  "generation_mwh": 2318.9913043478264,
+  "online_hours": 24.0,
+  "pmin_committed_mwh": 960.0,
+  "exposure_mwh": 1358.9913043478264,
+  "energy_revenue_usd": 142263.10952972108,
+  "true_cost_usd": 98699.53222028984,
+  "reported_cost_usd": 116965.75886078282,
+  "reported_dispatch_surplus_usd": 25297.350668938263,
+  "loc_usd": 103.2761120992327,
+  "best_reported_profit_usd": 25400.626781037496,
+  "bid_wedge_usd": 18266.22664049298,
+  "true_profit_usd": 43666.85342153048,
+  "identity_residual_usd": 7.275957614183426e-12,
+  "reported_system_cost_usd": 203843.36022101072,
+  "uc_global_bound_usd": 203843.36022101072,
+  "selected_actual_system_cost": 185577.13358051775,
+  "selected_G5_online_hours": 24.0,
+  "candidate_gaps": [
+    24.894930434791604,
+    0.0,
+    -2181.753935088287
+  ],
+  "feasibility": {
+    "balance": 0.0,
+    "binary": 0.0,
+    "capacity": 0.0,
+    "initial_ramp": 0.0,
+    "later_ramp": 0.0,
+    "residual_initial_duration": 0.0,
+    "minimum_up_down": 0.0,
+    "line_capacity": 7.105427357601002e-15
+  },
+  "lp_audit": {
+    "primal_feasibility": 4.547473508864641e-13,
+    "stationarity": 2.9103830456733704e-11,
+    "dual_sign": 0.0,
+    "duality_gap": 2.9103830456733704e-11,
+    "row_complementarity": 1.2076437154876934e-12,
+    "bound_complementarity": 0.0
+  },
+  "self_schedule_gap_usd": 0.0,
+  "model_identity": {
+    "schema": 1,
+    "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+    "components": {
+      "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+      "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+      "demand": {
+        "shape": [
+          30,
+          24
+        ],
+        "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+      },
+      "PTDF": {
+        "shape": [
+          41,
+          30
+        ],
+        "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+      },
+      "PTDF_Gen": {
+        "shape": [
+          41,
+          6
+        ],
+        "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+      },
+      "F_max": {
+        "shape": [
+          41
+        ],
+        "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+      }
+    },
+    "initial_conditions": [
+      {
+        "unit": "G1",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 6,
+        "minimum_down_time": 6
+      },
+      {
+        "unit": "G2",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 4,
+        "minimum_down_time": 4
+      },
+      {
+        "unit": "G3",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 5,
+        "minimum_down_time": 5
+      },
+      {
+        "unit": "G4",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 3,
+        "minimum_down_time": 3
+      },
+      {
+        "unit": "G5",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 5,
+        "minimum_down_time": 5
+      },
+      {
+        "unit": "G6",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 4,
+        "minimum_down_time": 4
+      }
+    ]
+  },
+  "source": "original_epsilon0_quote2",
+  "old_oracle_reused": false
+}

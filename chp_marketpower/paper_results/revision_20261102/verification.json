@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "factorial_cases": 12,
+  "fixed_offers": 2,
+  "new_optimization_solves": 17,
+  "new_uc_solves": 5,
+  "new_chp_solves": 6,
+  "new_self_schedule_solves": 6,
+  "maximum_price_projection_error": 2.842170943040401e-14,
+  "maximum_ledger_error": 0.0,
+  "maximum_saved_feasibility_or_KKT_residual": 6.548361852765083e-11,
+  "frozen_C_strict_dominance_margin_over_offer_cost_box": 1635.464037952188,
+  "frozen_C_G5_online_hours": 18.0,
+  "original_interior_curve_recovery": "passed",
+  "input_hashes": 26,
+  "new_optimizer_calls_by_this_audit": 0
+}
