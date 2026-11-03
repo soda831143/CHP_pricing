@@ -1,4 +1,4 @@
-"""Four main figures from the consolidated source tables, with editable exports."""
+"""Current mechanism figures and retained historical displays from audited data."""
 from pathlib import Path
 import sys
 import matplotlib
@@ -24,6 +24,86 @@ def save(fig,name,axes):
     fig.savefig(out/(name+'.svg'))
     fig.savefig(out/(name+'.png'),dpi=600)
     plt.close(fig)
+
+
+def competition_conditions():
+    """Show the different effects of operating costs and network feasibility."""
+    folder=PAPER/'revision_20261102/source_data'
+    thresholds=rows(folder/'threshold_eligibility.csv')
+    predictions=rows(folder/'frozen_competition_predictions.csv')
+    assert len(thresholds)==2
+    assert all(r['original_pair_supported']=='True' and r['relaxed_pair_supported']=='False' for r in thresholds)
+    plt.rcParams.update({'font.family':'sans-serif','font.sans-serif':['Arial','DejaVu Sans'],
+        'font.size':8,'axes.titlesize':8,'axes.labelsize':8,'legend.fontsize':7,
+        'pdf.fonttype':42,'svg.fonttype':'none','axes.spines.top':False,'axes.spines.right':False,
+        'axes.linewidth':.7,'legend.frameon':False,'xtick.labelsize':7,'ytick.labelsize':7})
+    fig,axes=plt.subplots(1,2,figsize=(183/25.4,84/25.4))
+    fig.subplots_adjust(left=.10,right=.98,bottom=.30,top=.84,wspace=.47)
+    x=[float(r['epsilon']) for r in thresholds]
+    y=[float(r['predicted_pair_threshold']) for r in thresholds]
+    axes[0].plot(x,y,color=BLUE,lw=1.4)
+    axes[0].scatter(x,y,facecolor='white',edgecolor=BLUE,s=32,zorder=3)
+    for epsilon,threshold in zip(x,y):
+        axes[0].annotate(f'{threshold:.3f}',(epsilon,threshold),xytext=(0,9),
+                         textcoords='offset points',ha='center',fontsize=8)
+    axes[0].set(xlabel='G5 online-cost increase (USD/hour)',
+        ylabel='Physical switching offer (USD/MWh)',xticks=x,xlim=(-.7,5.7),ylim=(13.12,13.57),
+        title='a  Cost of existing substitution',)
+    corner_margins=[]
+    for plan,color in [('A',BLUE),('B',ORANGE)]:
+        for epsilon,style in [(0.,'-'),(5.,'--')]:
+            endpoints=sorted([r for r in predictions if float(r['epsilon'])==epsilon
+                              and float(r['delta']) in (0.,20.991)],key=lambda r:float(r['delta']))
+            assert len(endpoints)==2
+            margins=[float(r[f'{plan}_minus_frozen_C']) for r in endpoints]
+            assert min(margins)>0
+            corner_margins.extend(margins)
+            axes[1].plot([float(r['delta']) for r in endpoints],np.array(margins)/1000,
+                         color=color,ls=style,lw=1.5,label=f'{plan} vs C, cost +{epsilon:g}')
+    assert abs(min(corner_margins)-1635.464037952188)<1e-6
+    axes[1].set(xlabel='G1 offer adder (USD/MWh)',
+        ylabel='Offered system cost above C (thousand USD)',xlim=(0,20.991),ylim=(0,3.4),
+        xticks=[0,10,20.991],xticklabels=['0','10','20.991'],title='b  A new feasible substitute')
+    axes[1].text(.05,.07,'Relaxed network: C is cheaper throughout\nthe specified offer and cost rectangle',
+                 transform=axes[1].transAxes,fontsize=7,va='bottom')
+    fig.legend(*axes[1].get_legend_handles_labels(),loc='lower center',
+               bbox_to_anchor=(.54,.015),ncols=2,columnspacing=2.0)
+    save(fig,'fig2_competition_conditions',axes)
+
+
+def substitution_mechanism():
+    """Display the operating substitution and its supported cost crossing."""
+    dispatch=rows(DATA/'fig4_generation_substitution.csv')
+    costs=rows(DATA/'fig4_cost_competition.csv')
+    assert len(dispatch)==36 and len(costs)==3
+    plt.rcParams.update({'font.family':'sans-serif','font.sans-serif':['Arial','DejaVu Sans'],
+        'font.size':8,'axes.titlesize':8,'axes.labelsize':8,'legend.fontsize':7,
+        'pdf.fonttype':42,'svg.fonttype':'none','axes.spines.top':False,'axes.spines.right':False,
+        'axes.linewidth':.7,'legend.frameon':False,'xtick.labelsize':7,'ytick.labelsize':7})
+    fig,axes=plt.subplots(1,2,figsize=(183/25.4,84/25.4))
+    fig.subplots_adjust(left=.10,right=.98,bottom=.30,top=.84,wspace=.47)
+    changes=[]
+    for offset,unit,color in [(-.24,'G1',BLUE),(0.,'G3',GRAY),(.24,'G5',ORANGE)]:
+        output=lambda plan:np.array([float(r['p_UC']) for r in dispatch if r['plan']==plan and r['unit']==unit])
+        change=output('B_right')-output('A_left')
+        changes.append(change)
+        axes[0].bar(np.arange(1,7)+offset,change,.24,label=unit,color=color)
+    assert np.max(abs(np.sum(changes,axis=0)))<1e-7
+    axes[0].axhline(0,color=GRAY,lw=.5)
+    axes[0].set(xlabel='Hour',ylabel='Cleared generation B minus A (MW)',
+                xticks=range(1,7),title='a  Earlier G5 operation replaces G1')
+    axes[0].legend(loc='lower left',bbox_to_anchor=(-.03,-.42),ncols=3,columnspacing=1.4)
+    for name,color,style in [('A',BLUE,'-'),('B',ORANGE,'--')]:
+        axes[1].plot([float(r['delta']) for r in costs],
+                     [float(r['relative_cost_'+name]) for r in costs],color=color,ls=style,label='Schedule '+name)
+    critical=float(costs[1]['delta'])
+    assert max(abs(float(costs[1]['relative_cost_'+name])) for name in ('A','B'))<1e-6
+    axes[1].axhline(0,color=GRAY,lw=.5)
+    axes[1].axvline(critical,color=GRAY,lw=.5,ls=':')
+    axes[1].set(xlabel='G1 offer adder (USD/MWh)',ylabel='Offered cost minus pair mean (USD)',
+                title='b  Substitution becomes economic')
+    axes[1].legend(loc='lower left',bbox_to_anchor=(-.03,-.42),ncols=2)
+    save(fig,'fig4_generation_substitution',axes)
 
 
 def main():
@@ -118,6 +198,8 @@ def main():
         profit_curve='Certified common self-schedules on all 99 joint intervals; lines never bridge a physical jump',
         fig4_cost_display='Same δ-dependent pair-mean subtracted from both actual cost lines; the crossing is unchanged',
         startup_control='G5 true startup cost +50 USD/start leaves the supported threshold unchanged; not a strategic-offer experiment'))
+    competition_conditions()
+    substitution_mechanism()
 
 
 if __name__=='__main__':main()

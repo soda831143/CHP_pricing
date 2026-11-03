@@ -1,4 +1,4 @@
-# Table II. Changes in generator revenues, uplift, actual costs and profits
+# Current Table I. Changes in generator revenues, uplift, actual costs and profits
 
 |Generator|ΔR (USD)|ΔU (USD)|ΔC (USD)|ΔΠ (USD)|
 |---|---:|---:|---:|---:|
@@ -9,4 +9,4 @@
 |G5|+11,707.21|-312.43|+11,394.79|-0.00|
 |G6|+13.64|-13.64|-0.00|+0.00|
 
-Each change is best-offer minus truthful bidding for the same market conditions and declared upper-profit boundary plan. ΔΠ=ΔR+ΔU−ΔC. U is the full reported lost-opportunity-cost uplift payment. Negative ΔC means lower actual operating cost. Absolute amounts and energy/congestion revenue components are in source_data/absolute_generator_settlements.csv; the price-component allocation uses the original bus 1 PTDF reference.
+Historical filename TABLE_II.md is retained for existing links; the current manuscript numbers this settlement table I. Each change is best-offer minus truthful bidding for the same market conditions and declared upper-profit boundary plan. Before rounding, ΔΠ=ΔR+ΔU−ΔC. U is full reported lost-opportunity-cost uplift. Negative ΔC means lower actual operating cost. Absolute amounts and energy/congestion components are in source_data/absolute_generator_settlements.csv; the component allocation uses the original bus 1 PTDF reference.

@@ -1,5 +1,3 @@
-> Publication note: code, proofs and analytical reports are public; raw arrays, checkpoints, logs, figures and local manifests remain in the local research archive. See [publication scope](../mechanism_20261018/PUBLICATION_SCOPE.md).
-
 # 可替代运行方案的成本竞争如何形成策略获利临界值
 
 2026-10-19。接续10月18日的机制恢复研究；依据用户提供的最初导师意见分析与266f281阶段性评审开展。本轮保留原Oracle、选价路径和既有档案，优先完成临界预测与完整获利路径，不扩展指标排名或策略维数。

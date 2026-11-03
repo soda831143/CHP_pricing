@@ -41,10 +41,16 @@ def main():
     assert np.isclose(float(certificate[0]['right']), float(certificate[1]['left']), rtol=0, atol=1e-10)
     assert all(float(r['maximum_endpoint_bound_gap']) < 1e-6 for r in certificate)
     old = read(PAPER/'delivery_manifest.json')
-    assert all(digest(ROOT/p) == expected for p, expected in old['files'].items())
+    # Scientific evidence is immutable; current prose and plotting code can be revised.
+    evidence = {p: expected for p, expected in old['files'].items()
+                if p.startswith(('paper_results/source_data/', 'paper_results/supplement/',
+                                 'paper_results/figures/')) or p in (
+                                     'paper_results/analysis_summary.json',
+                                     'paper_results/input_manifest.json')}
+    assert evidence and all(digest(ROOT/p) == expected for p, expected in evidence.items())
     result = dict(status='passed', input_hashes=len(manifest), timing_streams=len(timing),
         measured_prefixes=len(prefixes), max_prefix_reconstruction_error=maximum,
-        localized_candidates=len(verified), original_delivery_files_unchanged=len(old['files']), new_optimization_solves=0)
+        localized_candidates=len(verified), original_evidence_files_unchanged=len(evidence), new_optimization_solves=0)
     write(folder/'independent_verification.json', result)
     print(result)
 

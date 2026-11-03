@@ -1,0 +1,2 @@
+epsilon,predicted_critical,predicted_shift,candidate_true_cost_difference,exposure_difference,online_hour_difference,startup_difference,max_candidate_gap_to_global_bound,supported,truthful_profit,near_left_profit,near_left_extra_profit
+5.0,13.442018041876917,0.23793759827774252,1412.3469913043373,105.0695652173913,5.0,0.0,2.9103830456733704e-11,True,37516.201223921205,45211.60634803446,7695.405124113255

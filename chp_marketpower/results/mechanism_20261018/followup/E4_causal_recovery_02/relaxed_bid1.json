@@ -1,0 +1,451 @@
+{
+  "settlement": {
+    "scenario": "relaxed",
+    "bid_index": 1,
+    "delta": 13.203080443599175,
+    "generation_mwh": 2381.565217391304,
+    "online_hours": 24.0,
+    "pmin_committed_mwh": 960.0,
+    "exposure_mwh": 1421.5652173913045,
+    "energy_revenue_usd": 141597.19539631024,
+    "true_cost_usd": 101315.09115362317,
+    "reported_cost_usd": 120084.1310746631,
+    "reported_dispatch_surplus_usd": 21513.064321647136,
+    "loc_usd": 20.043877973432245,
+    "best_reported_profit_usd": 21533.10819962057,
+    "bid_wedge_usd": 18769.03992103994,
+    "true_profit_usd": 40302.148120660495,
+    "identity_residual_usd": -1.4551915228366852e-11,
+    "self_schedule_upper_bound_usd": 21533.10819962057,
+    "self_schedule_gap_usd": 0.0,
+    "reported_system_cost_usd": 201323.36247230117,
+    "uc_global_bound_usd": 201323.36247230115,
+    "uc_residuals": {
+      "balance": 2.842170943040401e-14,
+      "binary": 0.0,
+      "capacity": 3.552713678800501e-14,
+      "initial_ramp": 0.0,
+      "later_ramp": 0.0,
+      "residual_initial_duration": 0.0,
+      "minimum_up_down": 0.0,
+      "line_capacity": 0.0
+    },
+    "chp_kkt_residuals": {
+      "primal_feasibility": 6.821210263296962e-13,
+      "dual_sign": 8.659739592076221e-15,
+      "stationarity": 2.9103830456733704e-11,
+      "duality_gap": 5.820766091346741e-11,
+      "row_complementarity": 4.568789790937435e-13,
+      "bound_complementarity": 0.0,
+      "objective_reconstruction": 8.731149137020111e-11,
+      "price_projection": 0.0
+    },
+    "chp_value_usd": 200059.76056547894,
+    "model_identity": {
+      "schema": 1,
+      "model_sha256": "eab2c9156053dbe2c62606a3edf087dcbe76b8006c5f7cd1d268b7b670f62003",
+      "components": {
+        "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+        "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+        "demand": {
+          "shape": [
+            30,
+            24
+          ],
+          "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+        },
+        "PTDF": {
+          "shape": [
+            41,
+            30
+          ],
+          "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+        },
+        "PTDF_Gen": {
+          "shape": [
+            41,
+            6
+          ],
+          "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+        },
+        "F_max": {
+          "shape": [
+            41
+          ],
+          "sha256": "101f1d80c1fba71ff52806b8b94ba5e5ca18fa4baf726ca3aa57cf99f7bb316b"
+        }
+      },
+      "initial_conditions": [
+        {
+          "unit": "G1",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 6,
+          "minimum_down_time": 6
+        },
+        {
+          "unit": "G2",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 4,
+          "minimum_down_time": 4
+        },
+        {
+          "unit": "G3",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G4",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 3,
+          "minimum_down_time": 3
+        },
+        {
+          "unit": "G5",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 5,
+          "minimum_down_time": 5
+        },
+        {
+          "unit": "G6",
+          "initial_status": 0,
+          "initial_power": 0.0,
+          "initial_up_time": 0,
+          "initial_down_time": 1000000,
+          "minimum_up_time": 4,
+          "minimum_down_time": 4
+        }
+      ]
+    }
+  },
+  "faces": [],
+  "activity": [
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 1,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -24.492786633333335,
+      "chp_flow_mw": -24.492786633333335,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 56.34,
+      "price_G5": 56.34
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 2,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -10.48860978405797,
+      "chp_flow_mw": -10.48860978405797,
+      "upper_dual": 0.0,
+      "lower_dual": -0.0,
+      "price_G1": 55.88908044359917,
+      "price_G5": 55.88908044359917
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 3,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -10.620290481159419,
+      "chp_flow_mw": -10.620290481159419,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 4,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -10.48860978405797,
+      "chp_flow_mw": -10.48860978405797,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.88908044359917,
+      "price_G5": 55.88908044359917
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 5,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -10.027727344202898,
+      "chp_flow_mw": -10.027727344202898,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.88908044359917,
+      "price_G5": 55.88908044359917
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 6,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -19.736847700000016,
+      "chp_flow_mw": -17.074670993549553,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 56.34,
+      "price_G5": 56.34
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 7,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -19.05874349999999,
+      "chp_flow_mw": -28.014360087099067,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 66.86625595748382,
+      "price_G5": 58.260000000000005
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 8,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -12.2578106,
+      "chp_flow_mw": -23.665230113043467,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 56.974000000000004,
+      "price_G5": 56.974000000000004
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 9,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -12.455694904347823,
+      "chp_flow_mw": -10.939282270162153,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 56.34,
+      "price_G5": 56.34
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 10,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": 1.0615709130434792,
+      "chp_flow_mw": -10.760849535236318,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.88908044359917,
+      "price_G5": 55.88908044359917
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 11,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": 0.5348481246376817,
+      "chp_flow_mw": -11.287572323642117,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 12,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": 0.13980603333333308,
+      "chp_flow_mw": -11.682614414946464,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 13,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": 0.008125336231883828,
+      "chp_flow_mw": -11.814295112047914,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 54.481080443599176,
+      "price_G5": 54.481080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 14,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": 0.27148673043478233,
+      "chp_flow_mw": -11.550933717845016,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 15,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": 0.929890215942029,
+      "chp_flow_mw": -10.89253023233777,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 16,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -12.324014207246378,
+      "chp_flow_mw": -13.206259903495482,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 56.34,
+      "price_G5": 56.34
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 17,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -12.174938766666685,
+      "chp_flow_mw": -23.84394896397562,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 57.6195571428572,
+      "price_G5": 57.6195571428572
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 18,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -33.71233133333337,
+      "chp_flow_mw": -35.58804237866386,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 60.958460567823344,
+      "price_G5": 58.26
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 19,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -39.00545435776737,
+      "chp_flow_mw": -39.00545435776737,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 104.21915972155922,
+      "price_G5": 58.260000000000005
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 20,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -35.47603694140534,
+      "chp_flow_mw": -36.280754097407396,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 60.958460567823344,
+      "price_G5": 58.26
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 21,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -25.568676798550726,
+      "chp_flow_mw": -25.56867679855072,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 56.974000000000004,
+      "price_G5": 56.974000000000004
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 22,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -11.79729141884058,
+      "chp_flow_mw": -11.79729141884058,
+      "upper_dual": 0.0,
+      "lower_dual": -0.0,
+      "price_G1": 55.88908044359917,
+      "price_G5": 55.88908044359917
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 23,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -12.587375601449278,
+      "chp_flow_mw": -12.587375601449278,
+      "upper_dual": -0.0,
+      "lower_dual": 0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "hour": 24,
+      "line_number": 30,
+      "capacity_mw": 81.05996809999999,
+      "uc_flow_mw": -13.114098389855073,
+      "chp_flow_mw": -13.114098389855073,
+      "upper_dual": 0.0,
+      "lower_dual": -0.0,
+      "price_G1": 55.185080443599176,
+      "price_G5": 55.185080443599176
+    }
+  ]
+}

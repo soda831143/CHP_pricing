@@ -1,48 +1,27 @@
-# CHP Research Code
+# CHP Research
 
-This repository root contains the executable convex-hull-pricing research code.
+当前主线是多时段网络约束凸包定价下的连续策略利润评价，以及价格响应和竞争性发电替代如何共同形成获利机会。2026-11-03完成第五版论文与结果整合；主分支为 `master`。
+
+- [英文论文 PDF](chp_marketpower/manuscript/CHP_market_power_draft.pdf)与[可编辑正文](chp_marketpower/manuscript/main.tex)
+- [当前进度与复现入口](chp_marketpower/README.md)
+- [统一实验分析](chp_marketpower/paper_results/RESULTS_ANALYSIS.md)
+- [论文修订与建议落实](chp_marketpower/manuscript/REVISION_05.md)
+- [仓库整理说明](chp_marketpower/CLEANUP.md)
 
 ```text
-chp_project/
-├── chp_energy/       # COPT-based UC and exact CHP engine
-└── chp_marketpower/  # price vulnerability, mechanism, and profit experiments
+chp_energy/       UC、精确 CHP 引擎、算例和基础测试
+chp_marketpower/  连续报价方法、利润评价、论文及证据
 ```
 
-`energy-reserve/` is a local legacy checkout of an earlier solver branch. It is
-kept on disk for comparison but ignored by this repository because the active
-market-power code does not import it and tracking it would duplicate the full
-CHP engine and data.
+G1 案例的完整结算额外利润为 7,811.56 USD。报价路径上的价格收益积累与 G5 提前启动的替代成本承担不同的解释任务；在线成本变化移动原有替代门槛，线路放松则允许另一套更便宜的运行方案。方法将该连续报价域归结为 116 个报价/物理方案候选。计算计时覆盖 30、118 节点，比例专指重复 CHP 价格查询。
 
-## Branches
-
-- `master`: stable COPT CHP engine plus the finite-difference/profit
-  market-power baseline.
-- `research/market-power-parametric-regimes`: objective-parametric CHP,
-  price-impact regime analysis, and the proposed solver-assisted 1D oracle.
-
-The current research algorithm uses persistent CHP solves and adaptive
-bracket-and-validate discovery, with complete-dual affine selection and
-common-primal interval witnesses. It does not require degenerate-basis
-enumeration. Direct COPT solves check value and primal-dual optimality;
-different legal optimal price selections need not agree componentwise.
-
-The [CHP Oracle Explorer](chp_marketpower/dashboard/README.md) adds a local
-interactive workbench and a solver-free offline demonstration for the four
-existing 30/118-bus bid directions. Price lookup, physical UC and reported-LOC
-settlement are separate capabilities. The independent 118-G11 Q500 experiment
-and its measured amortization are documented [here](chp_marketpower/results/dashboard_study_20261017/README.md).
-Current theory and scope are linked from [the research README](chp_marketpower/README.md).
-
-## Minimal checks
+核心复现从 `chp_marketpower` 执行：
 
 ```powershell
-cd chp_energy
-python -m pytest -q tests/test_primal_lp_static.py tests/test_interval_coordinate_equivalence.py
-
-cd ..\chp_marketpower
-python -m pytest -q tests
-python tests/check_chp_integration.py
+python -m paper_results.audit_results
+python -m paper_results.audit_revision_20261020
+python -m paper_results.revise_20261021
+python -m paper_results.competition_analysis_20261102
 ```
 
-Generated `results/`, solver dumps, caches, and the legacy `energy-reserve/`
-checkout are intentionally not versioned.
+这些命令核对已有见证和源表，不新增优化求解。完整环境、论文编译和测试说明见市场力目录。原始算例与必要结果保留；本地 `energy-reserve/` 是未被当前代码导入的旧引擎副本，不纳入版本控制。旧研究分支保留历史，后续常规推进同步到 `master`。

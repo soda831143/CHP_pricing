@@ -1,10 +1,20 @@
 # CHP market power: literature and direct-power model audit
 
-> 本文件保留初版12条文献核查；第二版新增的竞价激励、自调度策略和参数LP教材条目及核实来源见REVISION_02.md，当前文献库共15条。
+> 本文件保留基础12条文献核查，并在下表补齐竞价激励、自调度策略和参数LP教材来源，当前文献库共15条。第五版于2026-11-03复核关键文献归属，未新增引用。
 
 Date: 2026-10-20. This file records source checks and recommended model statements for the new manuscript. It does not change any historical experiment or claim a new CHP convexification algorithm.
 
 ## 1. Evidence and citation corrections
+
+The three additions to the initial bibliography are preserved here so the current audit is complete:
+
+| BibTeX key | Publication | Primary source and verified scope |
+|---|---|---|
+| `wang2023incentive` | Y. Wang, Z. Yang, J. Yu, International Journal of Electrical Power & Energy Systems 144, 108569, January 2023; DOI 10.1016/j.ijepes.2022.108569 | [Publisher](https://www.sciencedirect.com/science/article/pii/S014206152200566X). The paper distinguishes dispatch-following and truthful-bidding properties. The year in the DOI differs from the assigned issue year. |
+| `byers2022auction` | C. Byers and B. Eldridge, Auction Designs to Increase Incentive Compatibility and Reduce Self-Scheduling in Electricity Markets, arXiv:2212.10234v3, revised 2 October 2024 | [Author preprint](https://arxiv.org/abs/2212.10234v3). Strategic self-commitment/self-scheduling is studied in multiperiod simulations. The historical citation key retains 2022; the cited version is 2024. |
+| `bertsimas1997` | D. Bertsimas and J. N. Tsitsiklis, Introduction to Linear Optimization, Athena Scientific, 1997, ISBN 1-886529-19-1 | The standard textbook supplies parametric LP, duality and value-function facts. Those facts are attributed as foundations rather than claimed as new market theory. |
+
+On 2026-11-03 the publisher record for Jiang–Wu again confirmed volume 262, article 113675 and the assigned January 2027 issue despite its 2026 DOI. Sun–Gu–Wu metadata are supported by the [author's institutional publication list](https://myweb.cuhk.edu.cn/wuchenye/Home/AcademicPublications); ACM full-record access remained restricted, so substantive checks retain the previously verified local published PDFs and author records.
 
 The local `paper/primal/Network-Flow-Based_Formulations_for_Convex_Hull_Pricing_With_Maximum_Start-Ups.txt` is a saved conversation, not a faithful article transcript. Its instructions and model claims were not used as evidence. The nine-page PDF was read directly, including equations (3)--(6), its initial-state discussion, and Theorem 1. The local `Polynomial time algorithms...txt` is an explicitly selected extract of the 2016 preprint; its author order differs from the 2018 published article. The formal publication controls the bibliography.
 

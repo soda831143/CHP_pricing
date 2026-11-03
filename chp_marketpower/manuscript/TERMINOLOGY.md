@@ -1,12 +1,13 @@
 # 当前符号与术语账本
 
-2026-11-02更新。本文模型、方法、机制、图注和结果采用以下约定；既有原始归档中的变量名不改写。
+2026-11-03更新。本文模型、方法、机制、图注和结果采用以下约定；既有原始归档中的变量名不改写。两项贡献依次为continuous-offer, settlement-consistent strategic-profit evaluation，以及通过price responses和competing operating schedules解释获利。
 
 |符号/术语|统一含义|避免的混用|
 |---|---|---|
 |i；g|i为一般机组索引；g指定策略机组；单机物理约束为便于衔接也以g书写|不把其他机组的结算变化称为其自身策略收益|
 |δ；w_t|绝对增量成本报价加数USD/MWh；固定时段权重|百分比为归一化报价参数，不是电价涨幅|
 |Q_g(s_g)|Σw_t(p−Pmin u)，受报价影响的增量电量MWh|不同于总发电量、最小必需发电量或最大启动次数|
+|Q_g^UC；Q_g^SS|分别在实际物理执行、最佳申报自调度上计算的Q_g|Q_g^UC−Q_g^SS是利润导数中的报价暴露差；不是出力差的普遍替代写法|
 |p^UC、p^CHP、p^SS|可执行物理出清、凸化定价点、单机最优自调度|不以定价LP出力结算，不给单机SS施加系统平衡|
 |R_g、U_g、C_g、Π_g、ΔΠ_g|能量收入、uplift payment、实际成本、实际利润、相对同实例真实报价的额外利润|U固定为完整申报LOC补偿；不是其他ISO补偿规则|
 |Ĉ_g；Πhat_g^SS|申报成本；按申报成本计算的最佳自调度利润|战略报价的uplift用申报成本，实际利润用实际成本|
@@ -24,9 +25,16 @@
 |ℓ_j(δ,ε)；Γ_AB^S|固定方案的申报系统成本线；A/B中较低成本减场景S的全局UC值|Γ>0排除该对；Γ=0在单个点不自动证明邻域中A/B相邻最优|
 |方案C；C_g、C_j|C为冻结的第三套可行执行方案；后两者分别为机组实际成本、完整系统实际成本|C方案在原网络不可行，不能把其负的直接成本差称为原网络最优性差距|
 |C_A、C_B、C_±|完整执行方案的实际系统总成本|不同于机组自身成本C_g或凸化定价值；其他报价等于实际成本时才与报价目标截距相同|
+|s^0；C_0；Q_0|真实报价的全局UC最优方案、其实际系统成本及目标机组报价暴露|共同构成K_g的基准，不是变化后市场直接沿用的基准|
+|q；q_max|相对Q_0至少减少的报价暴露；Q_0−min_F Q_g的最大可行减少量|定义域0≤q≤q_max；仅为理论定义，本文未数值求出整个q_max或前沿|
+|K_g(q)|在完整物理可行集内至少减少q MWh报价暴露所需的最小额外实际系统成本|generation substitution cost frontier是理论组织视角；A/B比值是两方案平均替代成本，不是已计算的整条曲线或一般边际成本|
 |I^λ、I_g^Π；o、r|放松减原网络的报价响应差、额外利润差；原网络和放松网络|每个网络使用自己的真实报价基准，是确定性情景对照，不是因果份额或统计差分估计|
 |M_g^cand；ρ|有限端点/物理方案候选的额外利润值；边界执行规则|有利边界最大值与相邻分支的可逼近上确界分开|
 |K(δ_f)|积分路径实际跨越的物理执行变化点|不复用表示节点集合的B|
 |Δ^TX|线路定价乘子与物理潮流共同决定的输电侧结算调整|不是节点拥塞电价，也不是G1额外uplift|
 
-英文统一使用actual profit、additional profit、cleared generation、selected CHP price、common optimal physical schedule、uplift payment。economic results以市场含义为主；complete dual、certificate、checkpoint等实现词汇集中在方法和复现材料。
+英文统一使用actual profit（首次采用actual producer profit也可）、additional profit、cleared generation、selected CHP price、common optimal physical schedule、best self-schedule、generation substitution、competing operating schedules、uplift payment。price-response effect用最佳自调度p^SS加权，energy revenue用物理出清p^UC加权；二者分别服务利润形成解释和最终结算账目。
+
+本例的costly generation substitution发生在CHP结算环境下；本文未跨定价规则比较，因此用under CHP表述。原网络G1全天报价是完整连续域评价；G1第1小时方向是同机组时序对照；G2和118-G11在当前论文中提供定价计算证据。既有不同口径网格不构成跨机组最优获利排名。
+
+公式K_g与值函数的等价关系要求真实报价基准为全局最优、其他机组如实报价、δ≥0和固定物理可行集。K_g可非凸，本文不要求将它凸化。Γ与四角排除在附录B；参考节点下的能量/拥塞分量在附录A；输电侧结算调整在附录C。经济结果以市场含义为主，数值残差和来源指纹集中在复现材料。

@@ -1,0 +1,191 @@
+{
+  "status": "passed",
+  "protocol": {
+    "date": "2026-10-19",
+    "original_critical": 13.204080443599175,
+    "candidate_lines": [
+      {
+        "plan": "A_left",
+        "cost": 184189.7865892134,
+        "unit_cost": [
+          103116.43141449275,
+          8398.174620574147,
+          35658.5361853755,
+          0.0,
+          33253.75636877102,
+          3762.888
+        ],
+        "exposure": 1464.0608695652177,
+        "g5_online_hours": 19.0,
+        "g5_starts": 1.0
+      },
+      {
+        "plan": "B_right",
+        "cost": 185577.13358051775,
+        "unit_cost": [
+          98699.53222028984,
+          8398.174620574146,
+          34508.03237088275,
+          0.0,
+          40208.50636877102,
+          3762.888
+        ],
+        "exposure": 1358.9913043478264,
+        "g5_online_hours": 24.0,
+        "g5_starts": 1.0
+      }
+    ],
+    "predicted_critical": 13.204080443598345,
+    "predicted_slope": 0.047587519655714644,
+    "training_epsilons_usd_per_online_hour": [
+      -1.0,
+      0.0,
+      1.0
+    ],
+    "held_out_epsilon": 5.0,
+    "threshold_half_width": 0.001,
+    "uc_cost_tolerance_usd": 1e-05,
+    "selector": "Cold COPT dual simplex, single thread, seed 20261018; fixed separately for every changed model",
+    "inputs": {
+      "results\\targeted_study_20261016\\30_G1_profit_0to50\\profit_range.json": "723dbfe0053f0713582055d570f517bd334623d0d2c73a7b8de485d7fde03178",
+      "results\\targeted_study_20261016\\30_G1_profit_0to50\\physical_plans.npz": "1483c58c40d45ec846c905d85e92d9aff9b1c72c27a17531d1de63e4a0caa993",
+      "results\\scope_study_20261016\\30_bracket_repeat1\\compact.npz": "f9ed496035e2cbf25cd6e06250fdc15f7105439881991be8ca75c97b74f52d3b"
+    },
+    "scope": "Fixed original A/B candidates; third-plan domination is a recorded falsification, not an excuse to scan",
+    "path_budget_self_schedule": 400,
+    "path_per_interval_budget": 20,
+    "path_cost_tolerance_usd": 1e-06,
+    "external_scope": "Held-out economic perturbation, not an independent system or statistical validation"
+  },
+  "records": [
+    {
+      "epsilon": 5.0,
+      "predicted_critical": 13.442018041876917,
+      "predicted_shift": 0.23793759827774252,
+      "candidate_true_cost_difference": 1412.3469913043373,
+      "exposure_difference": 105.0695652173913,
+      "online_hour_difference": 5.0,
+      "startup_difference": 0.0,
+      "max_candidate_gap_to_global_bound": 2.9103830456733704e-11,
+      "supported": true,
+      "truthful_profit": 37516.201223921205,
+      "near_left_profit": 45211.60634803446,
+      "near_left_extra_profit": 7695.405124113255,
+      "outcomes": {
+        "baseline": {
+          "delta": 0.0,
+          "value": 183348.9648064035,
+          "lower_bound": 183348.96480640347,
+          "solver_info": {
+            "status": 2,
+            "objective": 183348.9648064035,
+            "lower_bound": 183348.96480640347,
+            "relative_gap": 0.0,
+            "requested_mip_gap": 0.0
+          },
+          "residual": {
+            "balance": 0.0,
+            "binary": 0.0,
+            "capacity": 5.684341886080802e-14,
+            "initial_ramp": 0.0,
+            "later_ramp": 0.0,
+            "residual_initial_duration": 0.0,
+            "minimum_up_down": 0.0,
+            "line_capacity": 1.4210854715202004e-14
+          },
+          "candidate_gaps": [
+            935.8217828099441,
+            2348.1687741142814
+          ],
+          "selected_exposure": 1559.0608695652174,
+          "g5_online_hours": 12.0
+        },
+        "left": {
+          "delta": 13.441018041876918,
+          "value": 203963.25515144548,
+          "lower_bound": 203963.25515144548,
+          "solver_info": {
+            "status": 2,
+            "objective": 203963.25515144548,
+            "lower_bound": 203963.25515144548,
+            "relative_gap": 0.0,
+            "requested_mip_gap": 0.0
+          },
+          "residual": {
+            "balance": 0.0,
+            "binary": 0.0,
+            "capacity": 7.105427357601002e-15,
+            "initial_ramp": 1.4210854715202004e-14,
+            "later_ramp": 8.526512829121202e-14,
+            "residual_initial_duration": 0.0,
+            "minimum_up_down": 0.0,
+            "line_capacity": 7.105427357601002e-15
+          },
+          "candidate_gaps": [
+            2.9103830456733704e-11,
+            0.10506956523749977
+          ],
+          "selected_exposure": 1464.0608695652177,
+          "g5_online_hours": 19.0
+        },
+        "tie": {
+          "delta": 13.442018041876917,
+          "value": 203964.71921231505,
+          "lower_bound": 203964.71921231505,
+          "solver_info": {
+            "status": 2,
+            "objective": 203964.71921231505,
+            "lower_bound": 203964.71921231505,
+            "relative_gap": 0.0,
+            "requested_mip_gap": 0.0
+          },
+          "residual": {
+            "balance": 0.0,
+            "binary": 0.0,
+            "capacity": 7.105427357601002e-15,
+            "initial_ramp": 0.0,
+            "later_ramp": 8.526512829121202e-14,
+            "residual_initial_duration": 0.0,
+            "minimum_up_down": 0.0,
+            "line_capacity": 7.105427357601002e-15
+          },
+          "candidate_gaps": [
+            2.9103830456733704e-11,
+            2.9103830456733704e-11
+          ],
+          "selected_exposure": 1464.0608695652177,
+          "g5_online_hours": 19.0
+        },
+        "right": {
+          "delta": 13.443018041876917,
+          "value": 203966.07820361943,
+          "lower_bound": 203966.07820361943,
+          "solver_info": {
+            "status": 2,
+            "objective": 203966.07820361943,
+            "lower_bound": 203966.07820361943,
+            "relative_gap": 0.0,
+            "requested_mip_gap": 0.0
+          },
+          "residual": {
+            "balance": 0.0,
+            "binary": 0.0,
+            "capacity": 7.105427357601002e-15,
+            "initial_ramp": 0.0,
+            "later_ramp": 8.526512829121202e-14,
+            "residual_initial_duration": 0.0,
+            "minimum_up_down": 0.0,
+            "line_capacity": 7.105427357601002e-15
+          },
+          "candidate_gaps": [
+            0.10506956520839594,
+            0.0
+          ],
+          "selected_exposure": 1358.9913043478264,
+          "g5_online_hours": 24.0
+        }
+      }
+    }
+  ],
+  "scope": "A/B common-plan optimality certified by endpoint global-bound chords only on the stated narrow neighborhoods"
+}

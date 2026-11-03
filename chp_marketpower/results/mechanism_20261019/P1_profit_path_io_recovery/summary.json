@@ -1,0 +1,88 @@
+{
+  "status": "passed",
+  "protocol": {
+    "date": "2026-10-19",
+    "original_critical": 13.204080443599175,
+    "candidate_lines": [
+      {
+        "plan": "A_left",
+        "cost": 184189.7865892134,
+        "unit_cost": [
+          103116.43141449275,
+          8398.174620574147,
+          35658.5361853755,
+          0.0,
+          33253.75636877102,
+          3762.888
+        ],
+        "exposure": 1464.0608695652177,
+        "g5_online_hours": 19.0,
+        "g5_starts": 1.0
+      },
+      {
+        "plan": "B_right",
+        "cost": 185577.13358051775,
+        "unit_cost": [
+          98699.53222028984,
+          8398.174620574146,
+          34508.03237088275,
+          0.0,
+          40208.50636877102,
+          3762.888
+        ],
+        "exposure": 1358.9913043478264,
+        "g5_online_hours": 24.0,
+        "g5_starts": 1.0
+      }
+    ],
+    "predicted_critical": 13.204080443598345,
+    "predicted_slope": 0.047587519655714644,
+    "training_epsilons_usd_per_online_hour": [
+      -1.0,
+      0.0,
+      1.0
+    ],
+    "held_out_epsilon": 5.0,
+    "threshold_half_width": 0.001,
+    "uc_cost_tolerance_usd": 1e-05,
+    "selector": "Cold COPT dual simplex, single thread, seed 20261018; fixed separately for every changed model",
+    "inputs": {
+      "results\\targeted_study_20261016\\30_G1_profit_0to50\\profit_range.json": "723dbfe0053f0713582055d570f517bd334623d0d2c73a7b8de485d7fde03178",
+      "results\\targeted_study_20261016\\30_G1_profit_0to50\\physical_plans.npz": "1483c58c40d45ec846c905d85e92d9aff9b1c72c27a17531d1de63e4a0caa993",
+      "results\\scope_study_20261016\\30_bracket_repeat1\\compact.npz": "f9ed496035e2cbf25cd6e06250fdc15f7105439881991be8ca75c97b74f52d3b"
+    },
+    "scope": "Fixed original A/B candidates; third-plan domination is a recorded falsification, not an excuse to scan",
+    "path_budget_self_schedule": 400,
+    "path_per_interval_budget": 20,
+    "path_cost_tolerance_usd": 1e-06,
+    "external_scope": "Held-out economic perturbation, not an independent system or statistical validation"
+  },
+  "channels": {
+    "price_channel_usd": 8741.602192558714,
+    "exposure_channel_usd": -29.225307549150628,
+    "physical_jump_usd": -900.821782809915
+  },
+  "total_extra_profit": 7811.555102205151,
+  "reconciliation_residual": -5.503352440427989e-09,
+  "max_piece_residual": 1.1538370703334522e-08,
+  "interval_count": 37,
+  "self_schedule_piece_count": 37,
+  "self_schedule_solves": 38,
+  "physical_jumps": [
+    {
+      "delta": 9.218100544191211,
+      "old_exposure": 1559.0608695652174,
+      "new_exposure": 1475.6000000000004,
+      "profit_jump": -769.3506871577993,
+      "price_jump": 0.0
+    },
+    {
+      "delta": 11.393501130364132,
+      "old_exposure": 1475.6000000000004,
+      "new_exposure": 1464.0608695652177,
+      "profit_jump": -131.47109565211576,
+      "price_jump": 0.0
+    }
+  ],
+  "scope": "Accounting along the archived continuous selected-price path and stated UC rule; channel integrals are not independent causal effects"
+}

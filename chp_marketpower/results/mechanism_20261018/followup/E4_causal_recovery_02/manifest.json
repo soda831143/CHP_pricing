@@ -1,0 +1,409 @@
+{
+  "stage": "E4_causal_recovery_02",
+  "status": "passed",
+  "identity": {
+    "code": {
+      "chp_marketpower\\mechanism_study\\assemble_recovery.py": "109d46da3cf5fd5b2643ebedb77518bd912d2033cab41f4dd11743e29412e19f",
+      "chp_marketpower\\mechanism_study\\certify_settlements.py": "947146f58192cd7e8fb8eac724fc0094b853c0629107c8c3df81658c5991f1f1",
+      "chp_marketpower\\mechanism_study\\constraint_attribution.py": "469fbf1a9d42eec94eeaae6d76fecbd5852e88286b95a34c9d51b968457578eb",
+      "chp_marketpower\\mechanism_study\\linear_audit.py": "89d419707ddb59ac5492bdb9683169ba0c92787ced1c39caf619ed4b01b0d8e9",
+      "chp_marketpower\\mechanism_study\\local_response.py": "fff9dda92ec54eb6238bee44fc4a33a9c87f601bf49e75ce67aa7b4c6d73e29b",
+      "chp_marketpower\\mechanism_study\\make_mechanism_figures.py": "658c6fcb88cae9ec3f3ba55edb615d3c06c5e4cb946c040b6b330b2418eb26e1",
+      "chp_marketpower\\mechanism_study\\profit_identity.py": "8d0a063fdadae47761df9613e63f028fe24933813b261833c7846ffca1675d81",
+      "chp_marketpower\\mechanism_study\\runtime.py": "6dd65a17be53fab6c8f39a67a91d799c09a68c5368454f4b5c7b9535cf2e8321",
+      "chp_marketpower\\mechanism_study\\run_followup.py": "2a6fc7aa4ee780d54c64621c2cd68121922c8d49f16993467734a8c674e86a5d",
+      "chp_marketpower\\mechanism_study\\run_study.py": "dc603022d7843bde0c581365fae6ee80de8804038fc84481331ea2c2560723b9",
+      "chp_marketpower\\mechanism_study\\structural_pivotality.py": "8c9a35d9ba1c605a375e0527f34fa40bc8624c7ca071353dbed37e409ff7ea30",
+      "chp_marketpower\\mechanism_study\\verify_recovery.py": "d31969831a255a45670521a7b55071219e5f9de184d6e2d5842d0eabfc08554b",
+      "chp_marketpower\\mechanism_study\\__init__.py": "72ae3e523467ce4d47f4cc1e938627d88c31fc871ce1afd03fdf0b59f374132a",
+      "chp_energy\\accelerate_dchp_118.py": "976346584f87783d1ccf2657508b776de462f3e86d97662c4b4485de2c18fc94",
+      "chp_energy\\accelerate_schp_118.py": "9b6afccbc8ac0546b01468149990c7202bee36330de22a109e7bb2a3c0ef6061",
+      "chp_energy\\diag_system_dchp_vs_xiao.py": "13db0b07d4eff56e3f2c0ba78cdf61c69847f73333bdd307171565af303887ee",
+      "chp_energy\\export_paper_main_results.py": "d6ba40a391ae73048b16a1d7388c9e3908e0a107331265fdd8dc4133115e0eb8",
+      "chp_energy\\generate_current_30base_outputs.py": "56076736ec3f00470dfb3646d78ad54feae0cb2cb3c393947dcd009a50205293",
+      "chp_energy\\run_experiments.py": "4ed56e5628af7a5c0926ee43555ec74056751367d988bd1f21ef4d78e68f4bd5",
+      "chp_energy\\run_network_capacity_audit_30.py": "c39f7d21c6a26fc7686e013f19ddf00928b0b05aaf5289d3a3df506971103eef",
+      "chp_energy\\scan_118_setting.py": "de5633ac6f494ebdf26ba72ceebf86cf051af61eedf4e2ca5cb4878067523d0e",
+      "chp_energy\\benchmarks\\comparison_runner.py": "d4cc84f6ffbb45da227395f2ac0199efc3000e13fe8cd2e591331437e7ab2f34",
+      "chp_energy\\benchmarks\\dantzig_wolfe_pricing.py": "22c15de6529ddfc55a7a673691bb4e9793c0ea2143597affe5f31acd964692f9",
+      "chp_energy\\benchmarks\\dantzig_wolfe_pricing_rebuild.py": "2df8ef99f1bee17c6df9f2ee1d1014cff2b7d1010b56b7f192453113d35a31a5",
+      "chp_energy\\benchmarks\\lagrangian_relaxation.py": "58df51255e608591bd01a97c327d937232022b6d4c43cb2849bdf377efb51b2c",
+      "chp_energy\\benchmarks\\level_method_pricing.py": "434fe63df7506d9afc921406da98c1e5a0cbf8eb890099c38f2b98c9b2e77a35",
+      "chp_energy\\benchmarks\\lmp_pricing.py": "14c90c7f10f69143bbb846c6377c4b1b90640ad3502669c52dd961b369d1299f",
+      "chp_energy\\benchmarks\\mirp_pricing.py": "2d85803bb3f852d34727e113d8d523d36265f1a3bd337b9f216e59965f788435",
+      "chp_energy\\benchmarks\\unit_self_schedule.py": "c449c09444d41ee2445e246fa6d01e6b4d8fa528099b64100ef1d3ed5dfd5947",
+      "chp_energy\\benchmarks\\xiao_explicit_pricing.py": "c27b2b714190569984335aeac0ecd82cf736ef5b8913f13d3d39b84619594641",
+      "chp_energy\\benchmarks\\__init__.py": "4d072e0a9deb1baf62e5a141e8b6a15f52f7c95371c84a9a6ff5ab5a6b6f4d54",
+      "chp_energy\\chp_core\\graph_builder.py": "c6a6607dcd19b058335e7f93697a1383287348eaa967cf64b619a95ac1e02138",
+      "chp_energy\\chp_core\\ramping_polymatroid.py": "3ab981027e4e2314cbc1eb928abab39752f92d5c40b96ecd8b1c15617564e4a1",
+      "chp_energy\\chp_core\\__init__.py": "f01a374e9c81e3db89b3a42940c4d6a5447684986a1296e42bf13f196eed6295",
+      "chp_energy\\chp_solver\\chp_master_lp.py": "3e3bc1827a8b48d64647ebebc3edfeb09153c90eda8d534f274d9aa4e78bc4d6",
+      "chp_energy\\chp_solver\\schedule_run.py": "1a2f9c53e96e6bb6fb6a1b5ca89dc04c0940f8407600b6bc8cb8f1098871a16f",
+      "chp_energy\\chp_solver\\vertex_oracle.py": "cf6e75f89517dba3dbfd2529c5e5ea43bc98c98cd8e2b611262444354a659084",
+      "chp_energy\\chp_solver\\__init__.py": "f01a374e9c81e3db89b3a42940c4d6a5447684986a1296e42bf13f196eed6295",
+      "chp_energy\\data\\__init__.py": "298be75f6542fcd560ce98af1e8a65be1dcfdccf443eb30d2dce36a7c977b521",
+      "chp_energy\\lib\\dp_shortest_path.py": "66caed07053eaaee6b28bdbd345ec8ccec193842923cdadaebb3aa3bcb63f5e6",
+      "chp_energy\\lib\\flexitroid.py": "062ddfab980ab9a3d6a7c81fd42b72de1c2a4b4d2d564be40bef65fd05ee0a81",
+      "chp_energy\\lib\\thermal_unit.py": "0facfc8c001323c578c2de304c2ec367a1ef39d8a5fe9f865239e9bdfeeb93eb",
+      "chp_energy\\lib\\__init__.py": "f01a374e9c81e3db89b3a42940c4d6a5447684986a1296e42bf13f196eed6295",
+      "chp_energy\\models\\generator.py": "de8e4d0f67cf99d58b7f8597a4fbf5b549d15e6ebffb34137f5223508fdd6303",
+      "chp_energy\\models\\network.py": "dd45c442cb02cc0f334dec5bd30ee7e8f7a0d6f0286898d4a588e91a9cb995f7",
+      "chp_energy\\models\\__init__.py": "f01a374e9c81e3db89b3a42940c4d6a5447684986a1296e42bf13f196eed6295",
+      "chp_energy\\scripts\\audit_paired_algorithm_agreement.py": "6a8a9cc1ff26986a3a46dd185322abb48c7be1240279a8b6d8fdbfee0b4e6b8e",
+      "chp_energy\\scripts\\run_algorithm_stability_diagnostic.py": "e36b5464c3c6fcacf37b4b3d39acb7be5674c312abae897dce9888c5234f14e5",
+      "chp_energy\\scripts\\run_tps_numerical_stability.py": "25331c71e468182bb5e30d8bbfadf884833d290829ea07e193e7e62ff5e2a86f",
+      "chp_energy\\scripts\\summarize_robustness_5levels.py": "dad3b5e0dc7be9e938d5ad25aac427176a3f7adf7822b30ae0f7a9c1b8561430",
+      "chp_energy\\scripts\\summarize_tps_sensitivity.py": "03006a64b376ef61c50412e31b8c2f73d153ccf4d8079ea80fc5f665c29d314e",
+      "chp_energy\\scripts\\validate_gp_block_dw.py": "dbeede3fba8b2c6f1f747e597c2ffa8ce43ba07fa1f182d8be26afd3874cb4a2",
+      "chp_energy\\scripts\\validate_pwl_conditional_greedy.py": "91e926983b82ad935acb1a2fe800ca0715856c6ac20f34ff0082ea855a4f5b18",
+      "chp_energy\\tests\\test_alternating_dag_revision.py": "d0532088b795576097ae5435fa93cd9a5615c4bcc2e0dc334741a8963663877a",
+      "chp_energy\\tests\\test_interval_absolute_output.py": "719ed18a58a4d667fda50e5251d772b5f39b8d0ebb9d9de55ef2a29a50e1cbc3",
+      "chp_energy\\tests\\test_primal_lp_static.py": "820e22d7173537133ca690e1bc629ee3533265a7ac3035bcd23d4b11fd71c8c9",
+      "chp_energy\\data\\cases\\case_118ww.py": "ef2861d346f747165a4fe097ca79e56d7e742e8c368a6b3b07826a036d2277d2",
+      "chp_energy\\data\\cases\\case_118ww_branches_raw.py": "d9c40356335564663392dbd475a2b39b26cbd971f8539a6aab8abd24aff8b9eb",
+      "chp_energy\\data\\cases\\case_118ww_branch_map.py": "ca63e08ba706d0260ee2264170f9f1b054a1731b145d21052703350b2633ee57",
+      "chp_energy\\data\\cases\\case_118ww_buses_raw.py": "0cdd975ec7a86fc94987257eca85db4cd59e5519b890971317a48f3225be4816",
+      "chp_energy\\data\\cases\\case_118ww_gencost_raw.py": "5ff3b504a13f0f4f5a2f0a2f016905c8ebed7301b9bd03d7ca3d60e652ca1a2b",
+      "chp_energy\\data\\cases\\case_118ww_gens_raw.py": "700e7c82abfa3af387260689e2358d868c9bf80b62748c7b6b145cdf11e8b483",
+      "chp_energy\\data\\cases\\case_30ww.py": "8cf856dcc2a707990b056c70708a5975b51db62662ebd65f754a6d27c8463b60",
+      "chp_energy\\data\\cases\\case_6ww.py": "1ffbc5e6dbddf930f101e02b4c4ef70672945baa3b2a9daba6e219ca6fe6c174",
+      "chp_energy\\data\\cases\\case_common.py": "5f1e8f70541c9656fe8f702595030bf3de8593155a187e14159c5fa34a7e346e",
+      "chp_energy\\data\\cases\\__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "chp_marketpower\\price_vulnerability\\affine_oracle.py": "48f3e59bdb7abca509410ec32e346ed52c74d2d5bd7374d2a1a78e7f01f2ef99",
+      "chp_marketpower\\price_vulnerability\\budgeted_oracle.py": "f017cea45ac7fcab0d3e0592e4b3a0f4194635708e4fce934b01d0a31faacf83",
+      "chp_marketpower\\price_vulnerability\\diagnostics.py": "d69c3c8f37e736b8eebef51e01d54ceb0c891f0cac4683536cd53148c04d3020",
+      "chp_marketpower\\price_vulnerability\\hourly.py": "5d8050162b34578ff161fafb56e50ce929ac092bdc4e39df668431310f12c961",
+      "chp_marketpower\\price_vulnerability\\model_identity.py": "dcd3ced48848c05a341ef9c981ce18b23af782709a5ec7693156f1285ec076ea",
+      "chp_marketpower\\price_vulnerability\\optimality_region.py": "e0dc6210433998ee4b6214f6781dcc87b51cc5ba72e817884df1492a16183b55",
+      "chp_marketpower\\price_vulnerability\\oracle_compression.py": "21063c655b6423ca0373ec98b3f810906122b9d831b9ac6c99418be909b02ffb",
+      "chp_marketpower\\price_vulnerability\\persistent_chp.py": "5e0b8b2935eb4eb00a00764d50ef4baed2f44dbf3b69596d360ab63523a15e16",
+      "chp_marketpower\\price_vulnerability\\price_oracle.py": "2dcf4794a031889179ab9361fb02d6c9fcd9d33affc1ea980fa48afd2537bfdf",
+      "chp_marketpower\\price_vulnerability\\range_vulnerability.py": "07ed26f5a4d5b84f28df3cb46122a070c719d066d58bcc39b6d269a165042c44",
+      "chp_marketpower\\price_vulnerability\\regime_scan.py": "6e7c9591b82f806eb44632fee96ade08401e922eb418b025c3c8fffe802ffe85",
+      "chp_marketpower\\price_vulnerability\\scalar_markup.py": "8c9ce69e4e086c4f873606dd0016bd955ce6ed9bcee33c15995ab3c3672ec826",
+      "chp_marketpower\\price_vulnerability\\value_oracle.py": "fff8627111dba0f933eae1484b081e8e16c7f0fa40b0ee3e615b3c1f19ee2dc3",
+      "chp_marketpower\\price_vulnerability\\__init__.py": "7ca2a176f6374172dc9ede8c15981c3df527fe04cdc0a2d01b58c580bd81af04"
+    },
+    "budgets": {
+      "uc": 6,
+      "chp": 6,
+      "self_schedule": 14,
+      "auxiliary": 8
+    },
+    "seconds": 600.0,
+    "seed": 20261018,
+    "plan": {
+      "intervention": {
+        "kind": "line_capacity",
+        "line_index_0based": 29,
+        "line_number_1based": 30,
+        "old_capacity_mw": 20.8,
+        "new_capacity_mw": 81.05996809999999,
+        "score": 8.196566075545194,
+        "scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          8.196566075545194,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hours_used_1based": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "scope": "Both flow directions, all 24 hours; all other model data fixed"
+      },
+      "deltas": [
+        0.0,
+        13.203080443599175,
+        13.205080443599174
+      ],
+      "selector": "Fresh cold-start COPT dual simplex (method=1,crossover=1), threads=1, seed=20261018",
+      "physical_selector": "Fresh UC optimizer, zero relative gap, absolute gap 1e-8; no favorable boundary tie selection",
+      "dual_face_scope": "Two coherent extrema of ONE frozen truthful G1 SS price functional, not profit extrema",
+      "dual_face_formulation": "Complementarity with a certified optimal primal; full unscaled strong-duality equality independently checked"
+    }
+  },
+  "calls": [
+    {
+      "kind": "uc",
+      "job": "original_bid0",
+      "status": "completed",
+      "seconds": 0.19619779998902231
+    },
+    {
+      "kind": "chp",
+      "job": "original_bid0",
+      "status": "completed",
+      "seconds": 5.396682500024326
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid0",
+      "status": "completed",
+      "seconds": 0.01533449999988079
+    },
+    {
+      "kind": "auxiliary",
+      "job": "original_bid0_min",
+      "status": "completed",
+      "seconds": 0.17767350003123283
+    },
+    {
+      "kind": "auxiliary",
+      "job": "original_bid0_max",
+      "status": "completed",
+      "seconds": 0.041934600099921227
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid0_face_min",
+      "status": "completed",
+      "seconds": 0.016181900049559772
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid0_face_max",
+      "status": "completed",
+      "seconds": 0.015478700050152838
+    },
+    {
+      "kind": "uc",
+      "job": "original_bid1",
+      "status": "completed",
+      "seconds": 0.19366019999142736
+    },
+    {
+      "kind": "chp",
+      "job": "original_bid1",
+      "status": "completed",
+      "seconds": 5.427607999998145
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid1",
+      "status": "completed",
+      "seconds": 0.016543100005947053
+    },
+    {
+      "kind": "uc",
+      "job": "original_bid2",
+      "status": "completed",
+      "seconds": 0.19207400002051145
+    },
+    {
+      "kind": "chp",
+      "job": "original_bid2",
+      "status": "completed",
+      "seconds": 5.1134590000147
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid2",
+      "status": "completed",
+      "seconds": 0.016860199975781143
+    },
+    {
+      "kind": "auxiliary",
+      "job": "original_bid2_min",
+      "status": "completed",
+      "seconds": 0.1784468999831006
+    },
+    {
+      "kind": "auxiliary",
+      "job": "original_bid2_max",
+      "status": "completed",
+      "seconds": 0.04103409999515861
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid2_face_min",
+      "status": "completed",
+      "seconds": 0.015802600071765482
+    },
+    {
+      "kind": "self_schedule",
+      "job": "original_bid2_face_max",
+      "status": "completed",
+      "seconds": 0.015093499911017716
+    },
+    {
+      "kind": "uc",
+      "job": "relaxed_bid0",
+      "status": "completed",
+      "seconds": 0.17601850000210106
+    },
+    {
+      "kind": "chp",
+      "job": "relaxed_bid0",
+      "status": "completed",
+      "seconds": 6.80362579994835
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid0",
+      "status": "completed",
+      "seconds": 0.015280600055120885
+    },
+    {
+      "kind": "auxiliary",
+      "job": "relaxed_bid0_min",
+      "status": "completed",
+      "seconds": 0.16316760005429387
+    },
+    {
+      "kind": "auxiliary",
+      "job": "relaxed_bid0_max",
+      "status": "completed",
+      "seconds": 0.039386400021612644
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid0_face_min",
+      "status": "completed",
+      "seconds": 0.015412600012496114
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid0_face_max",
+      "status": "completed",
+      "seconds": 0.015063800034113228
+    },
+    {
+      "kind": "uc",
+      "job": "relaxed_bid1",
+      "status": "completed",
+      "seconds": 0.18537500000093132
+    },
+    {
+      "kind": "chp",
+      "job": "relaxed_bid1",
+      "status": "completed",
+      "seconds": 6.150583100039512
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid1",
+      "status": "completed",
+      "seconds": 0.014806400053203106
+    },
+    {
+      "kind": "uc",
+      "job": "relaxed_bid2",
+      "status": "completed",
+      "seconds": 0.18397390004247427
+    },
+    {
+      "kind": "chp",
+      "job": "relaxed_bid2",
+      "status": "completed",
+      "seconds": 7.449797099921852
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid2",
+      "status": "completed",
+      "seconds": 0.01521729992236942
+    },
+    {
+      "kind": "auxiliary",
+      "job": "relaxed_bid2_min",
+      "status": "completed",
+      "seconds": 0.17774299997836351
+    },
+    {
+      "kind": "auxiliary",
+      "job": "relaxed_bid2_max",
+      "status": "completed",
+      "seconds": 0.045608899905346334
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid2_face_min",
+      "status": "completed",
+      "seconds": 0.015724599943496287
+    },
+    {
+      "kind": "self_schedule",
+      "job": "relaxed_bid2_face_max",
+      "status": "completed",
+      "seconds": 0.013972499989904463
+    }
+  ],
+  "jobs": {
+    "original_bid0": {
+      "json_sha256": "39b9d3f4a76cd2ae2b8aff21566d9ae1ca62ac55dcc27ac7ff663dfe79d2c8f0",
+      "npz_sha256": "5a58b0d571cf8384d56e446c8d43babc77a7cc93a6ebc00ef9c4bf9459080ff3"
+    },
+    "original_bid1": {
+      "json_sha256": "c9657b197b879405b31dca096727f1bce62e606a53ccf90d9d72b9ceead384c9",
+      "npz_sha256": "61171f315d3fc3bafef5abd5cf90b87e18a720d19ffe7c924fd9b8e1d8d6e75e"
+    },
+    "original_bid2": {
+      "json_sha256": "25056fd75307ca94813b92db27ff8035b65297f67f05df66fa118b3affc9a99e",
+      "npz_sha256": "ee65074f32fc6301b83c0ea2d47a8d3fea51525980a11720256e6a16d7750607"
+    },
+    "relaxed_bid0": {
+      "json_sha256": "c2fa250daf58230eb6266e090297f07dc78a45d2ffe7e9d911390d04c273b50c",
+      "npz_sha256": "dad9d11c1938fcc3ab8abc72de3b11caee4b9559da9801879cc9015d9626b294"
+    },
+    "relaxed_bid1": {
+      "json_sha256": "1a952d9091f5348296909c620fae65295b80e7cac071c3716fa578a45c51c9b3",
+      "npz_sha256": "939b59e3cb2aac49376d5c8142ee7bc1ae66d49ff92d8ea1f3042af0ae0f49ff"
+    },
+    "relaxed_bid2": {
+      "json_sha256": "6aaf577a2976b375c44e648b8f905944e4012918d729edaf458abdb42d8069f2",
+      "npz_sha256": "8c3982dfb0e1367ddf58f582e7a3768c4ca1402402448fade69917f0334f4a1c"
+    }
+  },
+  "base_commit": "40ce22e9f99eca4686ee03d49e6f2afe4cbacd3d",
+  "branch": "research/market-power-parametric-regimes",
+  "solver": {
+    "name": "COPT",
+    "version": "8.0.6",
+    "threads": 1,
+    "relative_mip_gap": 0.0,
+    "absolute_mip_gap": 1e-08,
+    "feasibility_tolerance": 1e-09
+  },
+  "seconds_this_invocation": 39.96153009997215
+}

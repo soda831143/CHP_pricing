@@ -1,0 +1,13 @@
+# Preserve exported assets and byte-level scientific provenance across platforms.
+*.pdf binary
+*.npz binary
+*.png binary
+*.xls binary
+*.xlsx binary
+*.csv -text whitespace=cr-at-eol
+*.json -text whitespace=cr-at-eol
+chp_marketpower/results/** -text whitespace=cr-at-eol
+chp_marketpower/paper_results/** -text whitespace=cr-at-eol
+chp_marketpower/manuscript/** -text whitespace=cr-at-eol
+# Matplotlib's generated path coordinates intentionally end with spaces.
+*.svg whitespace=-trailing-space,cr-at-eol

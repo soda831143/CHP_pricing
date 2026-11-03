@@ -1,0 +1,117 @@
+{
+  "generation_mwh": 2519.0608695652177,
+  "online_hours": 24.0,
+  "pmin_committed_mwh": 960.0,
+  "exposure_mwh": 1559.0608695652177,
+  "energy_revenue_usd": 143851.27224626945,
+  "true_cost_usd": 107120.73792463768,
+  "reported_cost_usd": 107120.73792463768,
+  "reported_dispatch_surplus_usd": 36730.53432163177,
+  "loc_usd": 604.1557751828877,
+  "best_reported_profit_usd": 37334.69009681466,
+  "bid_wedge_usd": 0.0,
+  "true_profit_usd": 37334.69009681465,
+  "identity_residual_usd": -7.275957614183426e-12,
+  "lp_audit": {
+    "primal_feasibility": 1.4210854715202004e-13,
+    "stationarity": 4.3655745685100555e-11,
+    "dual_sign": 1.4210854715202004e-14,
+    "duality_gap": 2.9103830456733704e-11,
+    "row_complementarity": 2.0075785511626074e-13,
+    "bound_complementarity": 0.0
+  },
+  "self_schedule_upper_bound": 37334.69009681466,
+  "self_schedule_gap_usd": 0.0,
+  "model_identity": {
+    "schema": 1,
+    "model_sha256": "00cbad411c34270d3b15d7669a112cede0eec247a677c900c2996cc73871a553",
+    "components": {
+      "generators": "9531418082d20f541a6fcf2aaec510749bec27273d7f12c48a80da5944b8cc01",
+      "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+      "demand": {
+        "shape": [
+          30,
+          24
+        ],
+        "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+      },
+      "PTDF": {
+        "shape": [
+          41,
+          30
+        ],
+        "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+      },
+      "PTDF_Gen": {
+        "shape": [
+          41,
+          6
+        ],
+        "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+      },
+      "F_max": {
+        "shape": [
+          41
+        ],
+        "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+      }
+    },
+    "initial_conditions": [
+      {
+        "unit": "G1",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 6,
+        "minimum_down_time": 6
+      },
+      {
+        "unit": "G2",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 4,
+        "minimum_down_time": 4
+      },
+      {
+        "unit": "G3",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 5,
+        "minimum_down_time": 5
+      },
+      {
+        "unit": "G4",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 3,
+        "minimum_down_time": 3
+      },
+      {
+        "unit": "G5",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 5,
+        "minimum_down_time": 5
+      },
+      {
+        "unit": "G6",
+        "initial_status": 0,
+        "initial_power": 0.0,
+        "initial_up_time": 0,
+        "initial_down_time": 1000000,
+        "minimum_up_time": 4,
+        "minimum_down_time": 4
+      }
+    ]
+  },
+  "old_oracle_reused": false
+}

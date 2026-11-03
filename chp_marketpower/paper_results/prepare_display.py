@@ -37,17 +37,17 @@ def main():
                         mu_plus=float(m[0]),mu_minus=float(m[1]),
                         congestion_price_contribution=float(-ptdf[l,22]*(m[0]-m[1]))))
     table('active_line_congestion_prices_at_G5.csv',line_data)
-    timing=rows(DATA/'table_I_computation.csv');change=rows(DATA/'table_II_settlement_changes.csv')
-    content='# Table I. Parametric CHP representation and computational performance\n\n'
+    timing=rows(PAPER/'revision_20261020/source_data/table_I_four_workloads.csv');change=rows(DATA/'table_II_settlement_changes.csv')
+    content='# Current Table II. Parametric CHP representation and computational performance\n\n'
     content+='|Instance|Price intervals|Common UC regions|Queries|Direct (s)|Parametric, all costs (s)|Direct / parametric|First amortized query|\n|---|---:|---:|---:|---:|---:|---:|---:|\n'
     for r in timing:
         content+=f"|{r['instance']}|{r['price_intervals']}|{r['common_UC_regions']}|{r['queries']}|{float(r['direct_seconds']):.2f}|{float(r['parametric_total_seconds']):.2f}|{float(r['direct_over_parametric']):.2f}×|{r['first_amortized_query']}|\n"
-    content+='\nSingle measured streams, with archived construction, postprocessing, file loading and online lookup included. The 118-bus stream is not amortized within 200 queries. These are CHP-pricing costs; system UC and uplift evaluation are excluded. G1 has 99 joint intervals, 100 unique candidate offers and 116 offer/physical-plan candidates. G2 has six archived common UC regions; its full profit domain and the 118-bus physical/profit domain are not assessed here.\n'
+    content+='\nHistorical filename TABLE_I.md is retained for existing links; the current manuscript numbers this computation table II. Four measured streams include independent 118-bus Q500 and Q200 workloads; the latter is not amortized. Totals include construction, postprocessing, file loading and online lookup. These are CHP-pricing costs; system UC and uplift evaluation are separate. G1 has 99 joint intervals, 100 unique candidate offers and 116 offer/physical-plan candidates. G2 has six archived common UC regions; its full profit domain and the 118-bus physical/profit domain are not assessed here.\n'
     (PAPER/'TABLE_I.md').write_text(content,encoding='utf-8')
-    content='# Table II. Changes in generator revenues, uplift, actual costs and profits\n\n'
+    content='# Current Table I. Changes in generator revenues, uplift, actual costs and profits\n\n'
     content+='|Generator|ΔR (USD)|ΔU (USD)|ΔC (USD)|ΔΠ (USD)|\n|---|---:|---:|---:|---:|\n'
     for r in change:content+='|'+r['unit']+'|'+ '|'.join(f"{float(r[k]):+,.2f}" for k in ('delta_R','delta_U','delta_C','delta_Pi'))+'|\n'
-    content+='\nEach change is best-offer minus truthful bidding for the same market conditions and declared upper-profit boundary plan. ΔΠ=ΔR+ΔU−ΔC. U is the full reported lost-opportunity-cost uplift payment. Negative ΔC means lower actual operating cost. Absolute amounts and energy/congestion revenue components are in source_data/absolute_generator_settlements.csv; the price-component allocation uses the original bus 1 PTDF reference.\n'
+    content+='\nHistorical filename TABLE_II.md is retained for existing links; the current manuscript numbers this settlement table I. Each change is best-offer minus truthful bidding for the same market conditions and declared upper-profit boundary plan. Before rounding, ΔΠ=ΔR+ΔU−ΔC. U is full reported lost-opportunity-cost uplift. Negative ΔC means lower actual operating cost. Absolute amounts and energy/congestion components are in source_data/absolute_generator_settlements.csv; the component allocation uses the original bus 1 PTDF reference.\n'
     (PAPER/'TABLE_II.md').write_text(content,encoding='utf-8')
 
 

@@ -1,0 +1,217 @@
+{
+  "scope": {
+    "case": "30",
+    "network": "ptdf",
+    "T": 24,
+    "segments": 3,
+    "congestion": "tight",
+    "generator_index": 1,
+    "parameter": "all-day absolute adder"
+  },
+  "source_oracle": "C:\\Users\\250010153\\Documents\\BaiduSyncdisk\\phd\\academic\\convex_hull\\CHP_dual\\chp_primal\\chp_project\\chp_marketpower\\results\\targeted_study_20261016\\30_G2_bracket_0to50",
+  "source_sha256": "978f6cb5a37f6ae1a9ead2683dd622969853f65a16c050befe55961f3b8b47de",
+  "compact_sha256": "d5a877e8a0be7e456fdc6b69d3d89e69f9f0cd68e2fb7d66bc5ac1bf7bf04281",
+  "rho_interval": [
+    0.0,
+    0.5
+  ],
+  "physical_tolerance_usd": 1e-05,
+  "uc_solves": 11,
+  "physical_regions": [
+    {
+      "left": 0.0,
+      "right": 9.183948999343146,
+      "witness_delta": 0.0,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 9.183948999343146,
+      "right": 9.770148999337222,
+      "witness_delta": 9.607155516379072,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 9.770148999337222,
+      "right": 12.311554962913474,
+      "witness_delta": 11.549297610011427,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 12.311554962913474,
+      "right": 12.897754962916283,
+      "witness_delta": 12.518973874523397,
+      "common_plan_gap_usd": 2.9103830456733704e-11,
+      "ready": true
+    },
+    {
+      "left": 12.897754962916283,
+      "right": 15.439160926493146,
+      "witness_delta": 15.439160926493146,
+      "common_plan_gap_usd": 8.731149137020111e-11,
+      "ready": true
+    },
+    {
+      "left": 15.439160926493146,
+      "right": 35.4393,
+      "witness_delta": 35.4393,
+      "common_plan_gap_usd": 1.1641532182693481e-10,
+      "ready": true
+    }
+  ],
+  "physical_points": [
+    {
+      "intercept": 183288.96480640344,
+      "exposure": 22.03236910216519,
+      "lower_bound": 183288.96480640347,
+      "solver_info": {
+        "status": 2,
+        "objective": 183288.96480640347,
+        "lower_bound": 183288.96480640347,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 0.0
+    },
+    {
+      "intercept": 183288.96480640344,
+      "exposure": 22.03236910216522,
+      "lower_bound": 183491.30896057247,
+      "solver_info": {
+        "status": 2,
+        "objective": 183491.30896057247,
+        "lower_bound": 183491.30896057247,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.183948999343146
+    },
+    {
+      "intercept": 183307.62998058557,
+      "exposure": 19.999999999999986,
+      "lower_bound": 183499.77309091316,
+      "solver_info": {
+        "status": 2,
+        "objective": 183499.7730909132,
+        "lower_bound": 183499.77309091316,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.607155516379072
+    },
+    {
+      "intercept": 183307.62998058557,
+      "exposure": 19.99999999999998,
+      "lower_bound": 183503.03296057234,
+      "solver_info": {
+        "status": 2,
+        "objective": 183503.03296057234,
+        "lower_bound": 183503.03296057234,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 9.770148999337222
+    },
+    {
+      "intercept": 183359.18677150068,
+      "exposure": 14.723029206759108,
+      "lower_bound": 183529.22741753046,
+      "solver_info": {
+        "status": 2,
+        "objective": 183529.22741753046,
+        "lower_bound": 183529.22741753046,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 11.549297610011427
+    },
+    {
+      "intercept": 183359.18677150068,
+      "exposure": 14.723029206759158,
+      "lower_bound": 183540.45015480032,
+      "solver_info": {
+        "status": 2,
+        "objective": 183540.45015480032,
+        "lower_bound": 183540.45015480032,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 12.311554962913474
+    },
+    {
+      "intercept": 183417.33460517114,
+      "exposure": 10.0,
+      "lower_bound": 183542.52434391642,
+      "solver_info": {
+        "status": 2,
+        "objective": 183542.52434391642,
+        "lower_bound": 183542.52434391642,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 12.518973874523397
+    },
+    {
+      "intercept": 183417.33460517114,
+      "exposure": 10.0,
+      "lower_bound": 183546.31215480034,
+      "solver_info": {
+        "status": 2,
+        "objective": 183546.31215480037,
+        "lower_bound": 183546.31215480034,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 12.897754962916283
+    },
+    {
+      "intercept": 183450.69220669128,
+      "exposure": 7.413689311353043,
+      "lower_bound": 183547.83386140087,
+      "solver_info": {
+        "status": 2,
+        "objective": 183547.83386140087,
+        "lower_bound": 183547.83386140087,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 13.10301128491733
+    },
+    {
+      "intercept": 183450.6922066913,
+      "exposure": 7.413689311352805,
+      "lower_bound": 183565.1533490284,
+      "solver_info": {
+        "status": 2,
+        "objective": 183565.1533490284,
+        "lower_bound": 183565.1533490284,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 15.439160926493146
+    },
+    {
+      "intercept": 183478.90472541918,
+      "exposure": 5.5863543375015965,
+      "lower_bound": 183676.88121269224,
+      "solver_info": {
+        "status": 2,
+        "objective": 183676.88121269224,
+        "lower_bound": 183676.88121269224,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "delta": 35.4393
+    }
+  ],
+  "status": "numerically_validated_complete",
+  "profit_assessment_status": "not_started",
+  "physical_discovery_seconds": 4.132958200061694,
+  "physical_selection": "Retain each archived common optimal UC plan separately at shared boundaries; no optimistic profit tie-break is imposed.",
+  "scope_limit": "Conditional on the declared CHP selector, physical tie-break, reported LOC uplift and floating-point COPT optimality/bounds. A small UC cost gap is NOT a bound on dispatch or profit error.",
+  "physical_coverage_fraction": 1.0,
+  "model_sha256": null,
+  "physical_archive_sha256": "6043edcd79530c77d6f0a644413d7e577347b77f6f0367e5426a177f87c14340"
+}

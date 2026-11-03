@@ -1,0 +1,12 @@
+{
+  "treatment": "G5 true startup cost +50 USD/start, not a strategic startup bid",
+  "expected_critical": 13.204080443599175,
+  "predicted_from_fixed_cost_lines": 13.204080443598345,
+  "reason": "A and B each start G5 once; the pairwise relative cost is unchanged",
+  "deltas": [
+    13.203080443599175,
+    13.204080443599175,
+    13.205080443599174
+  ],
+  "scope": "Negative control of the physical threshold only; no new price/profit claim"
+}

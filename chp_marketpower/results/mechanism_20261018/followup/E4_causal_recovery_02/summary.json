@@ -1,0 +1,1110 @@
+{
+  "status": "passed",
+  "protocol": {
+    "intervention": {
+      "kind": "line_capacity",
+      "line_index_0based": 29,
+      "line_number_1based": 30,
+      "old_capacity_mw": 20.8,
+      "new_capacity_mw": 81.05996809999999,
+      "score": 8.196566075545194,
+      "scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        8.196566075545194,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "hours_used_1based": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "scope": "Both flow directions, all 24 hours; all other model data fixed"
+    },
+    "deltas": [
+      0.0,
+      13.203080443599175,
+      13.205080443599174
+    ],
+    "selector": "Fresh cold-start COPT dual simplex (method=1,crossover=1), threads=1, seed=20261018",
+    "physical_selector": "Fresh UC optimizer, zero relative gap, absolute gap 1e-8; no favorable boundary tie selection",
+    "dual_face_scope": "Two coherent extrema of ONE frozen truthful G1 SS price functional, not profit extrema",
+    "dual_face_formulation": "Complementarity with a certified optimal primal; full unscaled strong-duality equality independently checked"
+  },
+  "settlements": [
+    {
+      "scenario": "original",
+      "bid_index": 0,
+      "delta": 0.0,
+      "generation_mwh": 2519.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1559.0608695652177,
+      "energy_revenue_usd": 143815.43707318846,
+      "true_cost_usd": 107120.73792463768,
+      "reported_cost_usd": 107120.73792463768,
+      "reported_dispatch_surplus_usd": 36694.699148550775,
+      "loc_usd": 594.6131664872446,
+      "best_reported_profit_usd": 37289.31231503802,
+      "bid_wedge_usd": 0.0,
+      "true_profit_usd": 37289.31231503803,
+      "identity_residual_usd": 7.275957614183426e-12,
+      "self_schedule_upper_bound_usd": 37289.31231503803,
+      "self_schedule_gap_usd": 7.275957614183426e-12,
+      "reported_system_cost_usd": 183288.96480640347,
+      "uc_global_bound_usd": 183288.96480640347,
+      "uc_residuals": {
+        "balance": 2.842170943040401e-14,
+        "binary": 0.0,
+        "capacity": 1.4210854715202004e-14,
+        "initial_ramp": 0.0,
+        "later_ramp": 0.0,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 1.7763568394002505e-14
+      },
+      "chp_kkt_residuals": {
+        "primal_feasibility": 1.4210854715202004e-13,
+        "dual_sign": 2.042810365310288e-14,
+        "stationarity": 4.3655745685100555e-11,
+        "duality_gap": 1.1641532182693481e-10,
+        "row_complementarity": 2.0075785511625953e-13,
+        "bound_complementarity": 0.0,
+        "objective_reconstruction": 8.731149137020111e-11,
+        "price_projection": 0.0
+      },
+      "chp_value_usd": 179926.1831892774,
+      "model_identity": {
+        "schema": 1,
+        "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+        "components": {
+          "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+          "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+          "demand": {
+            "shape": [
+              30,
+              24
+            ],
+            "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+          },
+          "PTDF": {
+            "shape": [
+              41,
+              30
+            ],
+            "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+          },
+          "PTDF_Gen": {
+            "shape": [
+              41,
+              6
+            ],
+            "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+          },
+          "F_max": {
+            "shape": [
+              41
+            ],
+            "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+          }
+        },
+        "initial_conditions": [
+          {
+            "unit": "G1",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 6,
+            "minimum_down_time": 6
+          },
+          {
+            "unit": "G2",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          },
+          {
+            "unit": "G3",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G4",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 3,
+            "minimum_down_time": 3
+          },
+          {
+            "unit": "G5",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G6",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          }
+        ]
+      },
+      "max_price_difference_to_archived_selector": 1.0658141036401503e-13
+    },
+    {
+      "scenario": "original",
+      "bid_index": 1,
+      "delta": 13.203080443599175,
+      "generation_mwh": 2424.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1464.0608695652177,
+      "energy_revenue_usd": 148200.31522044956,
+      "true_cost_usd": 103116.43141449275,
+      "reported_cost_usd": 122446.54484968807,
+      "reported_dispatch_surplus_usd": 25753.770370761486,
+      "loc_usd": 16.27033666940042,
+      "best_reported_profit_usd": 25770.040707430886,
+      "bid_wedge_usd": 19330.11343519533,
+      "true_profit_usd": 45100.15414262621,
+      "identity_residual_usd": -3.637978807091713e-12,
+      "self_schedule_upper_bound_usd": 25770.040707430886,
+      "self_schedule_gap_usd": 0.0,
+      "reported_system_cost_usd": 203519.90002440874,
+      "uc_global_bound_usd": 203519.90002440874,
+      "uc_residuals": {
+        "balance": 0.0,
+        "binary": 0.0,
+        "capacity": 0.0,
+        "initial_ramp": 0.0,
+        "later_ramp": 6.394884621840902e-14,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 7.105427357601002e-15
+      },
+      "chp_kkt_residuals": {
+        "primal_feasibility": 4.547473508864641e-13,
+        "dual_sign": 3.552713678800501e-15,
+        "stationarity": 2.9103830456733704e-11,
+        "duality_gap": 1.1641532182693481e-10,
+        "row_complementarity": 5.453189589368666e-13,
+        "bound_complementarity": 0.0,
+        "objective_reconstruction": 1.4551915228366852e-10,
+        "price_projection": 0.0
+      },
+      "chp_value_usd": 201783.77309885557,
+      "model_identity": {
+        "schema": 1,
+        "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+        "components": {
+          "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+          "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+          "demand": {
+            "shape": [
+              30,
+              24
+            ],
+            "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+          },
+          "PTDF": {
+            "shape": [
+              41,
+              30
+            ],
+            "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+          },
+          "PTDF_Gen": {
+            "shape": [
+              41,
+              6
+            ],
+            "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+          },
+          "F_max": {
+            "shape": [
+              41
+            ],
+            "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+          }
+        },
+        "initial_conditions": [
+          {
+            "unit": "G1",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 6,
+            "minimum_down_time": 6
+          },
+          {
+            "unit": "G2",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          },
+          {
+            "unit": "G3",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G4",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 3,
+            "minimum_down_time": 3
+          },
+          {
+            "unit": "G5",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G6",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          }
+        ]
+      },
+      "max_price_difference_to_archived_selector": 3.18962634082709e-11
+    },
+    {
+      "scenario": "original",
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "generation_mwh": 2318.9913043478264,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1358.9913043478264,
+      "energy_revenue_usd": 142303.10408449045,
+      "true_cost_usd": 98699.53222028984,
+      "reported_cost_usd": 116645.12171635465,
+      "reported_dispatch_surplus_usd": 25657.982368135796,
+      "loc_usd": 110.55676678607051,
+      "best_reported_profit_usd": 25768.539134921866,
+      "bid_wedge_usd": 17945.589496064815,
+      "true_profit_usd": 43714.12863098667,
+      "identity_residual_usd": -1.0913936421275139e-11,
+      "self_schedule_upper_bound_usd": 25768.539134921866,
+      "self_schedule_gap_usd": 0.0,
+      "reported_system_cost_usd": 203522.72307658257,
+      "uc_global_bound_usd": 203522.72307658257,
+      "uc_residuals": {
+        "balance": 1.4210854715202004e-14,
+        "binary": 0.0,
+        "capacity": 7.105427357601002e-15,
+        "initial_ramp": 0.0,
+        "later_ramp": 6.394884621840902e-14,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 7.105427357601002e-15
+      },
+      "chp_kkt_residuals": {
+        "primal_feasibility": 9.094947017729282e-13,
+        "dual_sign": 0.0,
+        "stationarity": 2.9103830456733704e-11,
+        "duality_gap": 1.7462298274040222e-10,
+        "row_complementarity": 6.091719721249913e-13,
+        "bound_complementarity": 0.0,
+        "objective_reconstruction": 2.0372681319713593e-10,
+        "price_projection": 0.0
+      },
+      "chp_value_usd": 201786.71076945332,
+      "model_identity": {
+        "schema": 1,
+        "model_sha256": "4ea56e480582e67b70425331452ebf25de9177c7ec61e8883ab6d5b0aae136b0",
+        "components": {
+          "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+          "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+          "demand": {
+            "shape": [
+              30,
+              24
+            ],
+            "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+          },
+          "PTDF": {
+            "shape": [
+              41,
+              30
+            ],
+            "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+          },
+          "PTDF_Gen": {
+            "shape": [
+              41,
+              6
+            ],
+            "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+          },
+          "F_max": {
+            "shape": [
+              41
+            ],
+            "sha256": "8974880d8be5f50222dd7d045a26027cf1137cbdd8f943ac12e128b4d3708a60"
+          }
+        },
+        "initial_conditions": [
+          {
+            "unit": "G1",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 6,
+            "minimum_down_time": 6
+          },
+          {
+            "unit": "G2",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          },
+          {
+            "unit": "G3",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G4",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 3,
+            "minimum_down_time": 3
+          },
+          {
+            "unit": "G5",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G6",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          }
+        ]
+      },
+      "max_price_difference_to_archived_selector": 3.0112801141513046e-11
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 0,
+      "delta": 0.0,
+      "generation_mwh": 2539.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1579.0608695652177,
+      "energy_revenue_usd": 139340.16670097684,
+      "true_cost_usd": 107967.16693333333,
+      "reported_cost_usd": 107967.16693333333,
+      "reported_dispatch_surplus_usd": 31372.999767643516,
+      "loc_usd": 538.4627942028674,
+      "best_reported_profit_usd": 31911.462561846383,
+      "bid_wedge_usd": 0.0,
+      "true_profit_usd": 31911.46256184639,
+      "identity_residual_usd": 7.275957614183426e-12,
+      "self_schedule_upper_bound_usd": 31911.462561846387,
+      "self_schedule_gap_usd": 3.637978807091713e-12,
+      "reported_system_cost_usd": 180772.09545326052,
+      "uc_global_bound_usd": 180772.09545326052,
+      "uc_residuals": {
+        "balance": 0.0,
+        "binary": 0.0,
+        "capacity": 0.0,
+        "initial_ramp": 0.0,
+        "later_ramp": 0.0,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 3.552713678800501e-15
+      },
+      "chp_kkt_residuals": {
+        "primal_feasibility": 4.547473508864641e-13,
+        "dual_sign": 0.0,
+        "stationarity": 5.093170329928398e-11,
+        "duality_gap": 2.9103830456733704e-11,
+        "row_complementarity": 4.1890441732700775e-13,
+        "bound_complementarity": 0.0,
+        "objective_reconstruction": 2.9103830456733704e-11,
+        "price_projection": 0.0
+      },
+      "chp_value_usd": 178195.1949885648,
+      "model_identity": {
+        "schema": 1,
+        "model_sha256": "eab2c9156053dbe2c62606a3edf087dcbe76b8006c5f7cd1d268b7b670f62003",
+        "components": {
+          "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+          "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+          "demand": {
+            "shape": [
+              30,
+              24
+            ],
+            "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+          },
+          "PTDF": {
+            "shape": [
+              41,
+              30
+            ],
+            "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+          },
+          "PTDF_Gen": {
+            "shape": [
+              41,
+              6
+            ],
+            "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+          },
+          "F_max": {
+            "shape": [
+              41
+            ],
+            "sha256": "101f1d80c1fba71ff52806b8b94ba5e5ca18fa4baf726ca3aa57cf99f7bb316b"
+          }
+        },
+        "initial_conditions": [
+          {
+            "unit": "G1",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 6,
+            "minimum_down_time": 6
+          },
+          {
+            "unit": "G2",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          },
+          {
+            "unit": "G3",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G4",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 3,
+            "minimum_down_time": 3
+          },
+          {
+            "unit": "G5",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G6",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 1,
+      "delta": 13.203080443599175,
+      "generation_mwh": 2381.565217391304,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1421.5652173913045,
+      "energy_revenue_usd": 141597.19539631024,
+      "true_cost_usd": 101315.09115362317,
+      "reported_cost_usd": 120084.1310746631,
+      "reported_dispatch_surplus_usd": 21513.064321647136,
+      "loc_usd": 20.043877973432245,
+      "best_reported_profit_usd": 21533.10819962057,
+      "bid_wedge_usd": 18769.03992103994,
+      "true_profit_usd": 40302.148120660495,
+      "identity_residual_usd": -1.4551915228366852e-11,
+      "self_schedule_upper_bound_usd": 21533.10819962057,
+      "self_schedule_gap_usd": 0.0,
+      "reported_system_cost_usd": 201323.36247230117,
+      "uc_global_bound_usd": 201323.36247230115,
+      "uc_residuals": {
+        "balance": 2.842170943040401e-14,
+        "binary": 0.0,
+        "capacity": 3.552713678800501e-14,
+        "initial_ramp": 0.0,
+        "later_ramp": 0.0,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 0.0
+      },
+      "chp_kkt_residuals": {
+        "primal_feasibility": 6.821210263296962e-13,
+        "dual_sign": 8.659739592076221e-15,
+        "stationarity": 2.9103830456733704e-11,
+        "duality_gap": 5.820766091346741e-11,
+        "row_complementarity": 4.568789790937435e-13,
+        "bound_complementarity": 0.0,
+        "objective_reconstruction": 8.731149137020111e-11,
+        "price_projection": 0.0
+      },
+      "chp_value_usd": 200059.76056547894,
+      "model_identity": {
+        "schema": 1,
+        "model_sha256": "eab2c9156053dbe2c62606a3edf087dcbe76b8006c5f7cd1d268b7b670f62003",
+        "components": {
+          "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+          "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+          "demand": {
+            "shape": [
+              30,
+              24
+            ],
+            "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+          },
+          "PTDF": {
+            "shape": [
+              41,
+              30
+            ],
+            "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+          },
+          "PTDF_Gen": {
+            "shape": [
+              41,
+              6
+            ],
+            "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+          },
+          "F_max": {
+            "shape": [
+              41
+            ],
+            "sha256": "101f1d80c1fba71ff52806b8b94ba5e5ca18fa4baf726ca3aa57cf99f7bb316b"
+          }
+        },
+        "initial_conditions": [
+          {
+            "unit": "G1",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 6,
+            "minimum_down_time": 6
+          },
+          {
+            "unit": "G2",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          },
+          {
+            "unit": "G3",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G4",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 3,
+            "minimum_down_time": 3
+          },
+          {
+            "unit": "G5",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G6",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "generation_mwh": 2381.565217391304,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1421.5652173913045,
+      "energy_revenue_usd": 141599.04583142616,
+      "true_cost_usd": 101315.09115362317,
+      "reported_cost_usd": 120086.9742050979,
+      "reported_dispatch_surplus_usd": 21512.071626328267,
+      "loc_usd": 19.955808408263692,
+      "best_reported_profit_usd": 21532.02743473653,
+      "bid_wedge_usd": 18771.883051474724,
+      "true_profit_usd": 40303.91048621126,
+      "identity_residual_usd": 3.637978807091713e-12,
+      "self_schedule_upper_bound_usd": 21532.02743473653,
+      "self_schedule_gap_usd": 0.0,
+      "reported_system_cost_usd": 201326.20560273592,
+      "uc_global_bound_usd": 201326.20560273592,
+      "uc_residuals": {
+        "balance": 2.842170943040401e-14,
+        "binary": 0.0,
+        "capacity": 3.552713678800501e-14,
+        "initial_ramp": 0.0,
+        "later_ramp": 0.0,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 0.0
+      },
+      "chp_kkt_residuals": {
+        "primal_feasibility": 6.821210263296962e-13,
+        "dual_sign": 2.0650148258027912e-14,
+        "stationarity": 2.9103830456733704e-11,
+        "duality_gap": 0.0,
+        "row_complementarity": 4.568789790937435e-13,
+        "bound_complementarity": 0.0,
+        "objective_reconstruction": 2.9103830456733704e-11,
+        "price_projection": 0.0
+      },
+      "chp_value_usd": 200062.70143009938,
+      "model_identity": {
+        "schema": 1,
+        "model_sha256": "eab2c9156053dbe2c62606a3edf087dcbe76b8006c5f7cd1d268b7b670f62003",
+        "components": {
+          "generators": "e40fd8678ca92ec67256955df5da51f3595f5d5892890b9362cfe20a25867ca5",
+          "gen_bus_map": "9a2aba74b9a63129bbc4c5e823ff33a1e88dcefa2bb352b8f737242568abbe01",
+          "demand": {
+            "shape": [
+              30,
+              24
+            ],
+            "sha256": "810e9d180df5c31a7f06420ed70c116676713e248ae643a052d2f8dfb130e8f4"
+          },
+          "PTDF": {
+            "shape": [
+              41,
+              30
+            ],
+            "sha256": "d0caa36a6f5c7df83138c2a4a78611b1349af698d8a1334755d5a1bf9c0155d5"
+          },
+          "PTDF_Gen": {
+            "shape": [
+              41,
+              6
+            ],
+            "sha256": "b32009b64656d8f325f4036afb939cbf72bbbce04bc8407ead3bcceb65584339"
+          },
+          "F_max": {
+            "shape": [
+              41
+            ],
+            "sha256": "101f1d80c1fba71ff52806b8b94ba5e5ca18fa4baf726ca3aa57cf99f7bb316b"
+          }
+        },
+        "initial_conditions": [
+          {
+            "unit": "G1",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 6,
+            "minimum_down_time": 6
+          },
+          {
+            "unit": "G2",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          },
+          {
+            "unit": "G3",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G4",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 3,
+            "minimum_down_time": 3
+          },
+          {
+            "unit": "G5",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 5,
+            "minimum_down_time": 5
+          },
+          {
+            "unit": "G6",
+            "initial_status": 0,
+            "initial_power": 0.0,
+            "initial_up_time": 0,
+            "initial_down_time": 1000000,
+            "minimum_up_time": 4,
+            "minimum_down_time": 4
+          }
+        ]
+      }
+    }
+  ],
+  "dual_face_checks": [
+    {
+      "scenario": "original",
+      "bid_index": 0,
+      "delta": 0.0,
+      "extreme": "min",
+      "status": "optimal",
+      "functional_value": 144464.80564837134,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 8.731149137020111e-11,
+      "generation_mwh": 2519.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1559.0608695652177,
+      "energy_revenue_usd": 143815.43707318846,
+      "true_cost_usd": 107120.73792463768,
+      "reported_cost_usd": 107120.73792463768,
+      "reported_dispatch_surplus_usd": 36694.699148550775,
+      "loc_usd": 594.6131664872373,
+      "best_reported_profit_usd": 37289.31231503801,
+      "bid_wedge_usd": 0.0,
+      "true_profit_usd": 37289.312315038,
+      "identity_residual_usd": -1.4551915228366852e-11,
+      "self_schedule_upper_bound_usd": 37289.31231503801,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "scenario": "original",
+      "bid_index": 0,
+      "delta": 0.0,
+      "extreme": "max",
+      "status": "optimal",
+      "functional_value": 144464.8056483714,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 5.820766091346741e-11,
+      "generation_mwh": 2519.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1559.0608695652177,
+      "energy_revenue_usd": 143815.4370731885,
+      "true_cost_usd": 107120.73792463768,
+      "reported_cost_usd": 107120.73792463768,
+      "reported_dispatch_surplus_usd": 36694.69914855083,
+      "loc_usd": 594.6131664872519,
+      "best_reported_profit_usd": 37289.312315038085,
+      "bid_wedge_usd": 0.0,
+      "true_profit_usd": 37289.312315038085,
+      "identity_residual_usd": 0.0,
+      "self_schedule_upper_bound_usd": 37289.312315038085,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "scenario": "original",
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "extreme": "min",
+      "status": "optimal",
+      "functional_value": 153506.41129360322,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 2.0372681319713593e-10,
+      "generation_mwh": 2318.9913043478264,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1358.9913043478264,
+      "energy_revenue_usd": 142303.10408449042,
+      "true_cost_usd": 98699.53222028984,
+      "reported_cost_usd": 116645.12171635465,
+      "reported_dispatch_surplus_usd": 25657.982368135767,
+      "loc_usd": 110.55676678609234,
+      "best_reported_profit_usd": 25768.53913492186,
+      "bid_wedge_usd": 17945.589496064815,
+      "true_profit_usd": 43714.12863098667,
+      "identity_residual_usd": -3.637978807091713e-12,
+      "self_schedule_upper_bound_usd": 25768.53913492186,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "scenario": "original",
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "extreme": "max",
+      "status": "optimal",
+      "functional_value": 153506.4112936032,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 1.7462298274040222e-10,
+      "generation_mwh": 2318.9913043478264,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1358.9913043478264,
+      "energy_revenue_usd": 142303.1040844904,
+      "true_cost_usd": 98699.53222028984,
+      "reported_cost_usd": 116645.12171635465,
+      "reported_dispatch_surplus_usd": 25657.982368135737,
+      "loc_usd": 110.5567667860887,
+      "best_reported_profit_usd": 25768.539134921826,
+      "bid_wedge_usd": 17945.589496064815,
+      "true_profit_usd": 43714.12863098664,
+      "identity_residual_usd": 0.0,
+      "self_schedule_upper_bound_usd": 25768.539134921826,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 0,
+      "delta": 0.0,
+      "extreme": "min",
+      "status": "optimal",
+      "functional_value": 139086.9558951797,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 4.001776687800884e-11,
+      "generation_mwh": 2539.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1579.0608695652177,
+      "energy_revenue_usd": 139340.16670097678,
+      "true_cost_usd": 107967.16693333333,
+      "reported_cost_usd": 107967.16693333333,
+      "reported_dispatch_surplus_usd": 31372.999767643458,
+      "loc_usd": 538.4627942029074,
+      "best_reported_profit_usd": 31911.462561846365,
+      "bid_wedge_usd": 0.0,
+      "true_profit_usd": 31911.46256184636,
+      "identity_residual_usd": -3.637978807091713e-12,
+      "self_schedule_upper_bound_usd": 31911.462561846365,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 0,
+      "delta": 0.0,
+      "extreme": "max",
+      "status": "optimal",
+      "functional_value": 139086.95589517965,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 2.9103830456733704e-11,
+      "generation_mwh": 2539.0608695652177,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1579.0608695652177,
+      "energy_revenue_usd": 139340.16670097678,
+      "true_cost_usd": 107967.16693333333,
+      "reported_cost_usd": 107967.16693333333,
+      "reported_dispatch_surplus_usd": 31372.999767643458,
+      "loc_usd": 538.4627942028819,
+      "best_reported_profit_usd": 31911.46256184634,
+      "bid_wedge_usd": 0.0,
+      "true_profit_usd": 31911.462561846332,
+      "identity_residual_usd": -7.275957614183426e-12,
+      "self_schedule_upper_bound_usd": 31911.462561846343,
+      "self_schedule_gap_usd": 3.637978807091713e-12
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "extreme": "min",
+      "status": "optimal",
+      "functional_value": 149288.67292675123,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 5.820766091346741e-11,
+      "generation_mwh": 2381.565217391304,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1421.5652173913045,
+      "energy_revenue_usd": 141599.04583142616,
+      "true_cost_usd": 101315.09115362317,
+      "reported_cost_usd": 120086.9742050979,
+      "reported_dispatch_surplus_usd": 21512.071626328267,
+      "loc_usd": 19.955808408260054,
+      "best_reported_profit_usd": 21532.027434736527,
+      "bid_wedge_usd": 18771.883051474724,
+      "true_profit_usd": 40303.91048621126,
+      "identity_residual_usd": 7.275957614183426e-12,
+      "self_schedule_upper_bound_usd": 21532.027434736527,
+      "self_schedule_gap_usd": 0.0
+    },
+    {
+      "scenario": "relaxed",
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "extreme": "max",
+      "status": "optimal",
+      "functional_value": 149288.6729267512,
+      "face_formulation": "Complementarity at a certified optimal primal",
+      "inactive_slack_threshold": 1e-07,
+      "full_dual_residual": 1.1641532182693481e-10,
+      "generation_mwh": 2381.565217391304,
+      "online_hours": 24.0,
+      "pmin_committed_mwh": 960.0,
+      "exposure_mwh": 1421.5652173913045,
+      "energy_revenue_usd": 141599.04583142616,
+      "true_cost_usd": 101315.09115362317,
+      "reported_cost_usd": 120086.9742050979,
+      "reported_dispatch_surplus_usd": 21512.071626328267,
+      "loc_usd": 19.95580840824914,
+      "best_reported_profit_usd": 21532.027434736516,
+      "bid_wedge_usd": 18771.883051474724,
+      "true_profit_usd": 40303.91048621123,
+      "identity_residual_usd": -1.0913936421275139e-11,
+      "self_schedule_upper_bound_usd": 21532.027434736516,
+      "self_schedule_gap_usd": 0.0
+    }
+  ],
+  "effects": [
+    {
+      "bid_index": 1,
+      "delta": 13.203080443599175,
+      "original_extra_profit_usd": 7810.841827588185,
+      "relaxed_extra_profit_usd": 8390.685558814104,
+      "change_in_extra_profit_usd": 579.8437312259193
+    },
+    {
+      "bid_index": 2,
+      "delta": 13.205080443599174,
+      "original_extra_profit_usd": 6424.816315948643,
+      "relaxed_extra_profit_usd": 8392.447924364868,
+      "change_in_extra_profit_usd": 1967.6316084162245
+    }
+  ],
+  "old_oracle_rejected": true,
+  "scope": "Three fixed bids, one chosen constraint; coherent directional dual-face checks do not bound all profits"
+}

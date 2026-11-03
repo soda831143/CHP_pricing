@@ -1,0 +1,102 @@
+{
+  "status": "passed",
+  "protocol": {
+    "treatment": "G5 true startup cost +50 USD/start, not a strategic startup bid",
+    "expected_critical": 13.204080443599175,
+    "predicted_from_fixed_cost_lines": 13.204080443598345,
+    "reason": "A and B each start G5 once; the pairwise relative cost is unchanged",
+    "deltas": [
+      13.203080443599175,
+      13.204080443599175,
+      13.205080443599174
+    ],
+    "scope": "Negative control of the physical threshold only; no new price/profit claim"
+  },
+  "max_candidate_gap": 8.731149137020111e-11,
+  "records": [
+    {
+      "delta": 13.203080443599175,
+      "value": 203569.90002440874,
+      "lower_bound": 203569.90002440874,
+      "solver_info": {
+        "status": 2,
+        "objective": 203569.90002440874,
+        "lower_bound": 203569.90002440874,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "residual": {
+        "balance": 0.0,
+        "binary": 0.0,
+        "capacity": 0.0,
+        "initial_ramp": 0.0,
+        "later_ramp": 6.394884621840902e-14,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 7.105427357601002e-15
+      },
+      "candidate_gaps": [
+        0.0,
+        0.10506956515018828
+      ],
+      "selected_exposure": 1464.0608695652177,
+      "g5_online_hours": 19.0
+    },
+    {
+      "delta": 13.204080443599175,
+      "value": 203571.3640852782,
+      "lower_bound": 203571.3640852782,
+      "solver_info": {
+        "status": 2,
+        "objective": 203571.3640852782,
+        "lower_bound": 203571.3640852782,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "residual": {
+        "balance": 1.4210854715202004e-14,
+        "binary": 0.0,
+        "capacity": 7.105427357601002e-15,
+        "initial_ramp": 0.0,
+        "later_ramp": 6.394884621840902e-14,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 7.105427357601002e-15
+      },
+      "candidate_gaps": [
+        8.731149137020111e-11,
+        0.0
+      ],
+      "selected_exposure": 1358.9913043478264,
+      "g5_online_hours": 24.0
+    },
+    {
+      "delta": 13.205080443599174,
+      "value": 203572.72307658257,
+      "lower_bound": 203572.72307658257,
+      "solver_info": {
+        "status": 2,
+        "objective": 203572.72307658257,
+        "lower_bound": 203572.72307658257,
+        "relative_gap": 0.0,
+        "requested_mip_gap": 0.0
+      },
+      "residual": {
+        "balance": 1.4210854715202004e-14,
+        "binary": 0.0,
+        "capacity": 7.105427357601002e-15,
+        "initial_ramp": 0.0,
+        "later_ramp": 6.394884621840902e-14,
+        "residual_initial_duration": 0.0,
+        "minimum_up_down": 0.0,
+        "line_capacity": 7.105427357601002e-15
+      },
+      "candidate_gaps": [
+        0.10506956529570743,
+        0.0
+      ],
+      "selected_exposure": 1358.9913043478264,
+      "g5_online_hours": 24.0
+    }
+  ]
+}

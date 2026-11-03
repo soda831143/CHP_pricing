@@ -1,36 +1,24 @@
-# CHP Market Power论文初稿
+# 第五版论文与交付入口
 
-当前为2026-11-02第四版完整英文研究论文（按用户要求采用12–13页工作稿）。目标IEEE Transactions on Energy Markets, Policy, and Regulation。入口为[可编辑LaTeX](main.tex)、[编译PDF](CHP_market_power_draft.pdf)和[中文摘要](ABSTRACT_ZH.md)。
+更新：2026-11-03。当前英文题目为 **Strategic Profit Evaluation and Generation Substitution under Multiperiod Convex Hull Pricing**。本轮以首份重评建议为准，暂不按十页压缩；当前编译稿为13页，英文摘要172词、15条引用、四图两表。
 
-当前修订依据见[第四版修改记录](REVISION_04.md)、[成本与网络的机制区分实验](../paper_results/revision_20261102/README.md)、[全文术语账本](TERMINOLOGY.md)和[当前验证结果](validation.json)。引言保持三段开场、Related Work、三点Our Contributions。经济分析以替代门槛及其适用条件为主线；[第三版](REVISION_03.md)的结算关系和切换推论作为理论工具保留。当前文献15条。
+- [可阅读 PDF](CHP_market_power_draft.pdf)、[可编辑 LaTeX](main.tex)、[中文摘要](ABSTRACT_ZH.md)
+- [第五版建议落实](REVISION_05.md)、[独立修订核查](REVIEW_REVISION_05.md)、[机器验收](validation.json)
+- [论证与证据图](DRAFT_PLAN.md)、[统一术语](TERMINOLOGY.md)、[文献与基础模型核查](LITERATURE_AND_MODEL_AUDIT.md)
+- [统一实验分析](../paper_results/RESULTS_ANALYSIS.md)、[图表及数值源表](../paper_results/README.md)
+- [作者与投稿声明待确认项](SUBMISSION_DECLARATIONS.md)
 
-## 论文结构与本轮推进
+## 论文主线
 
-题目：**Parametric Convex Hull Pricing for Strategic Offer Evaluation and Market Power Analysis**。
+第一项贡献把合法参数化 CHP 价格、完整物理 UC 区间与申报 LOC 结算连接起来，使连续报价域可由有限候选评价。第二项贡献用这项能力解释价格收益如何积累，以及竞争机组的跨时段替代成本怎样改变获利机会。
 
-六节分别为Introduction、Market Model and Strategic Offers、Parametric Pricing and Finite Offer Evaluation、Profit Formation and Substitution Regimes、Numerical Results、Conclusion。数值结果保留四个既定小节和四图两表。第四版补齐原网络/放松网络与G5在线成本0/+5美元的2×2对照，固定两个报价并使用各条件自己的真实报价基准；新增5次物理UC、6次CHP和6次自调度求解。完整数据和来源进入定向实验目录，不另增主图。
+Section IV 先推导实际利润的局部报价响应和完整路径核算，再介绍有成本的发电替代。替代成本前沿提供统一解释：正文给出其定义和值函数关系，数值分析识别实际 A/B/C 竞争方案及成本比。主结果从 G1 的7,811.56美元额外利润出发，再解释G5提前运行；在线成本与线路条件的对照区分既有替代方案变贵和新替代方案可行。
 
-模型沿用旧稿的物理UC、PTDF和三种调度对象，参考经典网络流/扩展式，使用直接区间功率及相邻功率爬坡约束。当前引擎已经采用直接区间功率，不需要改动基础模型。基础UC凸化是已有研究基础；新稿的三点贡献依次为可复用参数化CHP、物理UC区域与有限利润候选、结算及替代机制；它们围绕计算能力和市场认识两条主线。
+Section V 的四小节依次为利润及结算、发电替代、成本与网络、计算表现。图1利润路径、图2两面板替代机制、图3两面板竞争条件、图4计算复用；表I为结算，表II为计算。历史绘图源文件编号保留。价格参考分量、全矩形排除和网络结算恒等式分别放入附录A–C。
 
-- [写作配置、提纲与主张—证据映射](DRAFT_PLAN.md)
-- [初版12条文献与直接功率模型核查](LITERATURE_AND_MODEL_AUDIT.md)；[BibTeX文献库](references.bib)
-- [两项定向实验修订与来源](../paper_results/revision_20261020/README.md)
-- [初版独立首轮审阅](REVIEW_ROUND1.md)；[初版验收记录](QA_REPORT.md)；[当前修订验收](REVISION_04.md)
-- [作者、基金、CRediT、利益冲突和AI声明确认表](SUBMISSION_DECLARATIONS.md)
+## 编译与验证
 
-## 编译与结果复现
-
-从仓库`chp_marketpower`目录执行定向数据核验：
-
-```powershell
-python -m paper_results.revise_20261020
-python -m paper_results.audit_revision_20261020
-python -m paper_results.revise_20261021
-python -m paper_results.competition_analysis_20261102
-python -m paper_results.audit_results
-```
-
-本机已有MiKTeX和Git附带的Perl。本轮通过LaTeX插件编译；只在该编译进程设置UTF-8、Perl路径和本稿BibTeX检索目录，未修改系统环境。示例（插件路径按已安装版本）：
+本机沿用已安装MiKTeX与LaTeX插件，使用多文件项目的本地编译流程。相对图件路径和BibTeX检索目录必须保留。从 `chp_marketpower` 执行：
 
 ```powershell
 $env:PYTHONUTF8='1'
@@ -39,10 +27,14 @@ $env:BIBINPUTS=(Resolve-Path manuscript).Path+';'
 python -X utf8 C:/Users/250010153/.codex/plugins/cache/openai-bundled/latex/0.2.8/scripts/compile_latex.py manuscript/main.tex --compiler texlive --output-directory manuscript/build --json
 ```
 
-输出`manuscript/build/main.pdf`；交付副本为`CHP_market_power_draft.pdf`。跨机器可采用标准IEEEtran/BibTeX构建，确保相对图件路径保留。构建缓存、预览PNG不纳入Git；交付PDF、源码、文献和验证摘要纳入Git。
+跨机器可使用标准IEEEtran/BibTeX构建。编译输出 `build/main.pdf`，交付副本为 `CHP_market_power_draft.pdf`。检查交付副本、全部图件、引用和源表：
 
-## 期刊与初稿边界
+```powershell
+python -X utf8 manuscript/check_draft.py
+```
 
-2026-10-20已查阅[IEEE T-EMPR官方页面](https://ieee-pes.org/publications/transactions-on-energy-markets-policy-and-regulation/)与[PES作者指南](https://ieee-pes.org/publications/authors-kit/information-for-authors-of-ieee-power-energy-society-transactions-papers/)：首次投稿不超过10页，摘要约150–200词。当前按用户要求先完成12–13页工作稿，未按正式投稿页数压缩方法。本文采用IEEEtran双栏；当前摘要词数、编译页数和引用核验见validation.json，初版QA报告保留为历史记录。
+`check_draft.py`不再设置页数上限；它核对两项贡献、图表数量、所有引用与关键公式、两表全部数值，以及网络/成本源数据。当前验证中的 `new_optimization_solves=0` 指本轮重构；`archived_factorial_optimization_solves=17` 指复用的11月2日实验。构建缓存、预览与编译过程输出不进入Git。
 
-当前第四版13页、英文摘要184词，引用与版面核验见validation.json。作者/单位暂沿用用户旧稿，基金、贡献分工与利益冲突需作者确认。本稿没有提交期刊；研究范围是已声明方向、报价域、选价和执行规则。IEEE118两个工作负载是独立测量，计时比例不是UC/LOC利润评价的整体加速；变化条件的利润结果为两个指定报价的比较，未计算各条件全域最大市场力。
+## 当前状态
+
+本轮完成英文论文、中文摘要、实验分析和图表的统一重构，数值均来自已验证的实验。独立修订核查针对首份建议及数学/证据一致性，不代表期刊正式评审。作者、基金、CRediT、利益冲突和最终AI声明由作者确认，具体记录在声明文件中。投稿页数整理将在用户要求时另行处理。

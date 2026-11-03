@@ -1,0 +1,28 @@
+{
+  "delta": 13.157492923942629,
+  "value": 203434.05205117384,
+  "lower_bound": 203434.0520511738,
+  "solver_info": {
+    "status": 2,
+    "objective": 203434.05205117384,
+    "lower_bound": 203434.0520511738,
+    "relative_gap": 0.0,
+    "requested_mip_gap": 0.0
+  },
+  "residual": {
+    "balance": 0.0,
+    "binary": 0.0,
+    "capacity": 0.0,
+    "initial_ramp": 0.0,
+    "later_ramp": 6.394884621840902e-14,
+    "residual_initial_duration": 0.0,
+    "minimum_up_down": 0.0,
+    "line_capacity": 7.105427357601002e-15
+  },
+  "candidate_gaps": [
+    0.10506956523749977,
+    2.9103830456733704e-11
+  ],
+  "selected_exposure": 1358.9913043478264,
+  "g5_online_hours": 24.0
+}

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="518.740157pt" height="238.110236pt" viewBox="0 0 518.740157 238.110236" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-03T12:08:31.109490</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.0, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 238.110236 
+L 518.740157 238.110236 
+L 518.740157 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 51.874016 166.677165 
+L 236.688323 166.677165 
+L 236.688323 38.097638 
+L 51.874016 38.097638 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m07beab064b" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m07beab064b" x="72.088081" y="166.677165" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="72.088081" y="178.687634" transform="rotate(-0 72.088081 178.687634)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m07beab064b" x="216.474258" y="166.677165" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="216.474258" y="178.687634" transform="rotate(-0 216.474258 178.687634)">5</text>
+     </g>
+    </g>
+    <g id="text_3">
+     <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="144.281169" y="189.902634" transform="rotate(-0 144.281169 189.902634)">G5 online-cost increase (USD/hour)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_3">
+      <defs>
+       <path id="m035ce24e44" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m035ce24e44" x="51.874016" y="143.818583" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="44.874016" y="146.323817" transform="rotate(-0 44.874016 146.323817)">13.2</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m035ce24e44" x="51.874016" y="115.245354" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="44.874016" y="117.750589" transform="rotate(-0 44.874016 117.750589)">13.3</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m035ce24e44" x="51.874016" y="86.672126" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="44.874016" y="89.17736" transform="rotate(-0 44.874016 89.17736)">13.4</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m035ce24e44" x="51.874016" y="58.098898" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="44.874016" y="60.604132" transform="rotate(-0 44.874016 60.604132)">13.5</text>
+     </g>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="25.567609" y="102.387402" transform="rotate(-90 25.567609 102.387402)">Physical switching offer (USD/MWh)</text>
+    </g>
+   </g>
+   <g id="line2d_7">
+    <path d="M 72.088081 142.652668 
+L 216.474258 74.666215 
+" clip-path="url(#pecf4fe1ba5)" style="fill: none; stroke: #326a92; stroke-width: 1.4; stroke-linecap: square"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 51.874016 166.677165 
+L 51.874016 38.097638 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 51.874016 166.677165 
+L 236.688323 166.677165 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m19d7edf9fd" d="M 0 2.828427 
+C 0.750108 2.828427 1.469594 2.530406 2 2 
+C 2.530406 1.469594 2.828427 0.750108 2.828427 0 
+C 2.828427 -0.750108 2.530406 -1.469594 2 -2 
+C 1.469594 -2.530406 0.750108 -2.828427 0 -2.828427 
+C -0.750108 -2.828427 -1.469594 -2.530406 -2 -2 
+C -2.530406 -1.469594 -2.828427 -0.750108 -2.828427 0 
+C -2.828427 0.750108 -2.530406 1.469594 -2 2 
+C -1.469594 2.530406 -0.750108 2.828427 0 2.828427 
+z
+" style="stroke: #326a92"/>
+    </defs>
+    <g clip-path="url(#pecf4fe1ba5)">
+     <use xlink:href="#m19d7edf9fd" x="72.088081" y="142.652668" style="fill: #ffffff; stroke: #326a92"/>
+     <use xlink:href="#m19d7edf9fd" x="216.474258" y="74.666215" style="fill: #ffffff; stroke: #326a92"/>
+    </g>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="72.088081" y="133.652668" transform="rotate(-0 72.088081 133.652668)">13.204</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="216.474258" y="65.666215" transform="rotate(-0 216.474258 65.666215)">13.442</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="144.281169" y="32.097638" transform="rotate(-0 144.281169 32.097638)">a  Cost of existing substitution</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_5">
+    <path d="M 323.551047 166.677165 
+L 508.365354 166.677165 
+L 508.365354 38.097638 
+L 323.551047 38.097638 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_3">
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m07beab064b" x="323.551047" y="166.677165" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="323.551047" y="178.687634" transform="rotate(-0 323.551047 178.687634)">0</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m07beab064b" x="411.595594" y="166.677165" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="411.595594" y="178.687634" transform="rotate(-0 411.595594 178.687634)">10</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m07beab064b" x="508.365354" y="166.677165" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="508.365354" y="178.687634" transform="rotate(-0 508.365354 178.687634)">20.991</text>
+     </g>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="415.958201" y="189.902634" transform="rotate(-0 415.958201 189.902634)">G1 offer adder (USD/MWh)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_5">
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="166.677165" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_16">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="169.1824" transform="rotate(-0 316.551047 169.1824)">0.0</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="147.768411" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_17">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="150.273646" transform="rotate(-0 316.551047 150.273646)">0.5</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="128.859657" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_18">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="131.364892" transform="rotate(-0 316.551047 131.364892)">1.0</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="109.950903" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_19">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="112.456138" transform="rotate(-0 316.551047 112.456138)">1.5</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="91.042149" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_20">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="93.547384" transform="rotate(-0 316.551047 93.547384)">2.0</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="72.133395" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_21">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="74.638629" transform="rotate(-0 316.551047 74.638629)">2.5</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#m035ce24e44" x="323.551047" y="53.224641" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_22">
+      <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end" x="316.551047" y="55.729875" transform="rotate(-0 316.551047 55.729875)">3.0</text>
+     </g>
+    </g>
+    <g id="text_23">
+     <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="301.137297" y="102.387402" transform="rotate(-90 301.137297 102.387402)">Offered system cost above C (thousand USD)</text>
+    </g>
+   </g>
+   <g id="line2d_18">
+    <path d="M 323.551047 104.827991 
+L 508.365354 71.093781 
+" clip-path="url(#p2618f79675)" style="fill: none; stroke: #326a92; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_19">
+    <path d="M 323.551047 104.638903 
+L 508.365354 70.904694 
+" clip-path="url(#p2618f79675)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #326a92; stroke-width: 1.5"/>
+   </g>
+   <g id="line2d_20">
+    <path d="M 323.551047 52.361985 
+L 508.365354 102.034866 
+" clip-path="url(#p2618f79675)" style="fill: none; stroke: #b87533; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_21">
+    <path d="M 323.551047 51.22746 
+L 508.365354 100.900341 
+" clip-path="url(#p2618f79675)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b87533; stroke-width: 1.5"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 323.551047 166.677165 
+L 323.551047 38.097638 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 323.551047 166.677165 
+L 508.365354 166.677165 
+" style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif" transform="translate(332.791763 148.615098)">Relaxed network: C is cheaper throughout</text>
+    <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif" transform="translate(332.791763 156.203317)">the specified offer and cost rectangle</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 8px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle" x="415.958201" y="32.097638" transform="rotate(-0 415.958201 32.097638)">b  A new feasible substitute</text>
+   </g>
+  </g>
+  <g id="legend_1">
+   <g id="line2d_22">
+    <path d="M 206.445779 214.495614 
+L 213.445779 214.495614 
+L 220.445779 214.495614 
+" style="fill: none; stroke: #326a92; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start" x="226.045779" y="216.945614" transform="rotate(-0 226.045779 216.945614)">A vs C, cost +0</text>
+   </g>
+   <g id="line2d_23">
+    <path d="M 206.445779 224.397333 
+L 213.445779 224.397333 
+L 220.445779 224.397333 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #326a92; stroke-width: 1.5"/>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start" x="226.045779" y="226.847333" transform="rotate(-0 226.045779 226.847333)">A vs C, cost +5</text>
+   </g>
+   <g id="line2d_24">
+    <path d="M 286.927185 214.495614 
+L 293.927185 214.495614 
+L 300.927185 214.495614 
+" style="fill: none; stroke: #b87533; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start" x="306.527185" y="216.945614" transform="rotate(-0 306.527185 216.945614)">B vs C, cost +0</text>
+   </g>
+   <g id="line2d_25">
+    <path d="M 286.927185 224.397333 
+L 293.927185 224.397333 
+L 300.927185 224.397333 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b87533; stroke-width: 1.5"/>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 7px; font-family: 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start" x="306.527185" y="226.847333" transform="rotate(-0 306.527185 226.847333)">B vs C, cost +5</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pecf4fe1ba5">
+   <rect x="51.874016" y="38.097638" width="184.814307" height="128.579528"/>
+  </clipPath>
+  <clipPath id="p2618f79675">
+   <rect x="323.551047" y="38.097638" width="184.814307" height="128.579528"/>
+  </clipPath>
+ </defs>
+</svg>
