@@ -1,6 +1,6 @@
 # CHP Research
 
-当前主线是多时段网络约束凸包定价下的连续策略利润评价，以及价格响应和竞争性发电替代如何共同形成获利机会。2026-11-03完成第五版论文与结果整合；主分支为 `master`。
+当前主线是多时段网络约束凸包定价下的连续策略利润评价，以及价格响应和竞争性发电替代如何共同形成获利机会。2026-11-03完成第五版论文与结果整合；研究主分支和默认分支为 `research/market-power-parametric-regimes`。
 
 - [英文论文 PDF](chp_marketpower/manuscript/CHP_market_power_draft.pdf)与[可编辑正文](chp_marketpower/manuscript/main.tex)
 - [当前进度与复现入口](chp_marketpower/README.md)
@@ -24,4 +24,4 @@ python -m paper_results.revise_20261021
 python -m paper_results.competition_analysis_20261102
 ```
 
-这些命令核对已有见证和源表，不新增优化求解。完整环境、论文编译和测试说明见市场力目录。原始算例与必要结果保留；本地 `energy-reserve/` 是未被当前代码导入的旧引擎副本，不纳入版本控制。旧研究分支保留历史，后续常规推进同步到 `master`。
+这些命令核对已有见证和源表，不新增优化求解。完整环境、论文编译和测试说明见市场力目录。原始算例与必要结果保留；本地 `energy-reserve/` 是未被当前代码导入的旧引擎副本，不纳入版本控制。后续常规推进直接同步既有主分支 `research/market-power-parametric-regimes`，不另建分支。

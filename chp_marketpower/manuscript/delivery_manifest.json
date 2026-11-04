@@ -2,7 +2,7 @@
   "date": "2026-11-03",
   "revision": "05",
   "previous_public_commit": "4a2c33ca5e245eabec4e3234e01a5f1c43430fb3",
-  "publication_target": "master",
+  "publication_target": "research/market-power-parametric-regimes",
   "new_optimization_solves": 0,
   "new_timing_runs": 0,
   "pages": 13,
@@ -28,12 +28,12 @@
   ],
   "files": {
     ".gitattributes": "15d0ad34efff3bad57b6943c00481132fb28f5252e604c6e8c0da7692db82ab1",
-    "README.md": "8b60533335c67af41accac2da1d8eb5da0a12b6d44f81db3e7b3c648e014843f",
-    "chp_marketpower/CLEANUP.md": "f42dd14d26925a19e4d9afa52302fcabf2c147e59510b76bac26ba2f176c7357",
+    "README.md": "472bf10ce6e48e5bdf126d2f73c707c7e33eda5c8b15972d21c90712fa6ee126",
+    "chp_marketpower/CLEANUP.md": "f1646b0df52cf0e95624d9d8b84789a333275e80159208de442472ad08db13fd",
     "chp_marketpower/PILOT_EVIDENCE.md": "73b462af480f09faee3e58bfcc51a63cec5ba54d6df306f7c4cd06db97d929ae",
-    "chp_marketpower/PUBLISHING_PREFERENCE.md": "233806d9b0a8c86e981d5dcb80f85d18eccd95a23c32ad58ffdc805034d84a4f",
+    "chp_marketpower/PUBLISHING_PREFERENCE.md": "743e62b0ea967465af6cffc1a24511548e0b88072ac0bc0cfa5ef3f9195ab088",
     "chp_marketpower/README.md": "e3298fc3c705b09e0855d0fb3054bd58f22827c0893c5d7c23c0c87deab622d8",
-    "chp_marketpower/RESEARCH_PLAN.md": "15f0ceff4a6086c8a3569fda19ff5993821a9e646826d09012e7d8c50e9bd93e",
+    "chp_marketpower/RESEARCH_PLAN.md": "26800f94ddaa48c766496b593577a9548006b1265b5eade5f7a47efc4dbf6561",
     "chp_marketpower/manuscript/ABSTRACT_ZH.md": "5356380cb97f8872727a8e8efdec986d24b9348b00c7a5247980db246d6f8ffb",
     "chp_marketpower/manuscript/CHP_market_power_draft.pdf": "fb1a5270aeda36f9c5c5167e0cb5ca392068ce19be954a82694663bb36ec93d3",
     "chp_marketpower/manuscript/DRAFT_PLAN.md": "0d1d1389cea954fe1cf6e0f07b58d26dbee9d97fcc9f74dbbe01f4bf18896add",
@@ -447,5 +447,6 @@
     "chp_marketpower/results/targeted_study_20261016/30_G1_profit_0to50/direct_validation.json": "f8913f3e946c79a4b279219bf7589d12a6dd5c5a2afd355de5f8fc8f7fd0f09e",
     "chp_marketpower/results/targeted_study_20261016/30_G1_profit_0to50/physical_plans.npz": "1483c58c40d45ec846c905d85e92d9aff9b1c72c27a17531d1de63e4a0caa993",
     "chp_marketpower/results/targeted_study_20261016/30_G1_profit_0to50/profit_range.json": "723dbfe0053f0713582055d570f517bd334623d0d2c73a7b8de485d7fde03178"
-  }
+  },
+  "publication_target_corrected_on": "2026-11-04"
 }
