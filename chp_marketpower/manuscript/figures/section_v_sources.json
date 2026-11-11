@@ -1,0 +1,130 @@
+{
+  "inputs_sha256": {
+    "source_data/nodal_price_components.csv": "b38fc0fa2aea7f7652b985c01e46bfa1d7a0a2253d3bb6cc3197de8ed1fac982",
+    "source_data/fig3_profit_uplift_curves.csv": "4ea34c67d41145ed1de90d65037ba4597793a3cfc27914f5b8b426ecb714a2e0",
+    "source_data/fig4_generation_substitution.csv": "cb243fa56f3eed511e5a806d7aa9e29b6031ded3312570a9ad5a25a9afc4ccce",
+    "revision_20261020/source_data/fig1_independent_query_streams.csv": "9e0f0249de0a320dd639523eaa065a5504e16b9094fecfea8cf523a6e0b90961"
+  },
+  "scope": "Archived deterministic results; no new solves or timing; all 24 hours retained.",
+  "reuse": "Style inheritance; timing and substitution structurally adapted from existing plots.",
+  "preserved_tex_regions_sha256": {
+    "before_section_V": "6277b8424e01460141195a3a47036f4a156d37f5c90a9fabd5f8536e59d55ebf",
+    "from_conclusion_onward": "48ab32c24304ece893b89f219cd7f760e08dc7659db6ad41c968ec0f719661d9"
+  },
+  "qa": [
+    {
+      "figure": "fig_v1_price_profit",
+      "check": "audit_pdf_text.py",
+      "exit_code": 0,
+      "report": "fig_v1_price_profit.text-audit.json"
+    },
+    {
+      "figure": "fig_v1_price_profit",
+      "check": "audit_figure_collisions.py",
+      "exit_code": 0,
+      "report": "fig_v1_price_profit.collision.json"
+    },
+    {
+      "figure": "fig_v3_substitution",
+      "check": "audit_pdf_text.py",
+      "exit_code": 0,
+      "report": "fig_v3_substitution.text-audit.json"
+    },
+    {
+      "figure": "fig_v3_substitution",
+      "check": "audit_figure_collisions.py",
+      "exit_code": 0,
+      "report": "fig_v3_substitution.collision.json"
+    },
+    {
+      "figure": "fig_v5_timing",
+      "check": "audit_pdf_text.py",
+      "exit_code": 0,
+      "report": "fig_v5_timing.text-audit.json"
+    },
+    {
+      "figure": "fig_v5_timing",
+      "check": "audit_figure_collisions.py",
+      "exit_code": 0,
+      "report": "fig_v5_timing.collision.json"
+    }
+  ],
+  "latex_compile": "Desktop built-in compiler: success. Existing main.pdf additionally converged with XeLaTeX + BibTeX + XeLaTeX twice; no undefined references, citation warnings, overfull boxes or rerun request.",
+  "figures_in_main_text": [
+    "fig_v1_price_profit",
+    "fig_v3_substitution",
+    "fig_v5_timing"
+  ],
+  "presentation": "Origin-style frame; inward ticks on bottom/left; percent-normalized additive offers; preserved archived data.",
+  "timing_display": [
+    {
+      "stream": "30-G1-Q1000",
+      "first_amortized_integer_query": 138,
+      "interpolated_crossing": 137.3127167855742,
+      "displayed_queries": [
+        1,
+        100,
+        137,
+        138,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000
+      ]
+    },
+    {
+      "stream": "118-G11-Q500",
+      "first_amortized_integer_query": 224,
+      "interpolated_crossing": 223.6438238935451,
+      "displayed_queries": [
+        1,
+        100,
+        200,
+        223,
+        224,
+        300,
+        400,
+        500
+      ]
+    }
+  ],
+  "timing_selection": "Only Q1000 30-G1 and Q500 118-G11 in main figure. Q200 and G2 retained in source archives; Every 100th cumulative observation, first query, and observations adjacent to the crossing displayed. Crossing uses full measured prefix.",
+  "style_exception": "Times New Roman follows the user-supplied Origin figure reference; the static validator only accepts sans-serif families.",
+  "table_inputs_sha256": {
+    "source_data\\absolute_generator_settlements.csv": "b2bce4f46ac937a61cd5bfead7f5032e2df752880200e4607f7138b417d5d31a",
+    "source_data\\table_II_settlement_changes.csv": "27e316e88f021ff76da12f3c017c705f26d2796cad8e3f3cc517c595c4f18260",
+    "source_data\\fig4_threshold_predictions.csv": "a03a162670123a1e1bbb28e409396bb2e2ffcec2a117e47473ef3fbb507b0ed2",
+    "revision_20261102\\source_data\\factorial_settlements.csv": "28270fec268128e53befeb5b9b121694ca6a519209d6fb851243453cc8859f78",
+    "revision_20261021/source_data/physical_switching_costs.csv": "0f8b2c3194d8178728d20783a33f6f4909afe9783fc3c0737c30f99752e741c3"
+  },
+  "static_preflight": {
+    "report": "section_v_source_preflight.json",
+    "exit_code": 1,
+    "exception": "Serif font requested by the user overrides the validator sans-serif rule. Actual exports and PDF font size audited."
+  },
+  "section_v_checks": {
+    "figures": 3,
+    "tables": 3,
+    "references_have_labels": true,
+    "protected_source_regions_unchanged": true,
+    "factorial_values_match_source_at_two_decimals": true,
+    "joint_intervals": 99,
+    "distinct_endpoints": 100,
+    "physical_switches": 16,
+    "endpoint_schedule_candidates": 116
+  },
+  "layout_check": "Three single-column tables and substitution plot inspected on local PDF pages 10-11; no table overflow. Final log has no overfull boxes; Section V references resolved.",
+  "local_terminal_compile": "Restricted-shell MiKTeX registry access and latexmk missing Perl prevented automatic local build. Direct installed XeLaTeX/BibTeX with approved access succeeded; no component installed.",
+  "local_pdf_unresolved_markers": {
+    "10": 0,
+    "11": 0,
+    "12": 0
+  },
+  "existing_font_warning": "Existing preamble under XeLaTeX substitutes some TU/ptm and TU/pcr font shapes. Preamble preserved as requested; figure fonts are Times New Roman.",
+  "renderer_sha256": "d2097a1f1ca899d7f73c2be9c7b972b8be65cf5091211284f85ef03ae03ddcc5"
+}

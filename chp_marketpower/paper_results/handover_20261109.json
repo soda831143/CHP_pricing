@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-09",
+  "writer": "local",
+  "branch": "research/market-power-parametric-regimes",
+  "baseline_commit": "e148e526f00f86f2886b14dc871229fb908a1b74",
+  "committed": false,
+  "pushed": false,
+  "cloud_receiver_verified": false,
+  "cloud_project_id": "g-p-6a8d1afd96e0819190fe8ec7bc09db1d",
+  "cloud_mirror": "C:\\Users\\250010153\\.codex\\.chatgpt-projects\\g-p-6a8d1afd96e0819190fe8ec7bc09db1d",
+  "cloud_mirror_freshness": "unknown; available synced snapshot, not guaranteed current cloud attachments",
+  "cloud_files": [
+    {
+      "name": "A Convex Primal Formulation for Convex Hull Pricing.pdf",
+      "sha256": "76bda7f20eee40e51f80b2396693a9654d588d7122096c98584526c57b3b4b5d",
+      "local_identical": [
+        "paper/primal/A Convex Primal Formulation for Convex Hull Pricing.pdf"
+      ]
+    },
+    {
+      "name": "A_BienstockZuckerberg-Based_Algorithm_for_Solving_a_Network-Flow_Formulation_of_the_Convex_Hull_Pricing_Problem_rootcopy.pdf",
+      "sha256": "06533709fdc2eab61b06e6c105865f60819a61312c7d8157c9640df40ecf33c3",
+      "local_identical": [
+        "paper/primal/A_BienstockZuckerberg-Based_Algorithm_for_Solving_a_Network-Flow_Formulation_of_the_Convex_Hull_Pricing_Problem_rootcopy.pdf"
+      ]
+    },
+    {
+      "name": "Convex Hull Pricing via An Explicit Formulation for the Lagrangian Dual of the Network-constrained Unit Commitment.pdf",
+      "sha256": "f05a58df0cd70c31e1029ea26f34b63ac39446261ab1d332127db72e64e727d7",
+      "local_identical": [
+        "paper/primal/Convex Hull Pricing via An Explicit Formulation for the Lagrangian Dual of the Network-constrained Unit Commitment.pdf"
+      ]
+    },
+    {
+      "name": "Convex_Hull_Pricing_in_Electricity_Markets_Formulation_Analysis_and_Implementation_Challenges.pdf",
+      "sha256": "97f5f0d8936c0adb8eb24016b6103b64d1e77fa12b8a5e70fde737dea71230cf",
+      "local_identical": [
+        "paper/primal/Convex_Hull_Pricing_in_Electricity_Markets_Formulation_Analysis_and_Implementation_Challenges.pdf"
+      ]
+    },
+    {
+      "name": "Convex_Hull_Pricing_via_Ramp-Constrained_Network-Flow_Unit_Commitment_Models.pdf",
+      "sha256": "9b97bae6999a96f14ffd90fe61f2b219f97e0719a852538e2d412f72f473151d",
+      "local_identical": [
+        "paper/primal/Convex_Hull_Pricing_via_Ramp-Constrained_Network-Flow_Unit_Commitment_Models.pdf"
+      ]
+    },
+    {
+      "name": "Exact_Characterization_of_Aggregate_Flexibility_via_Generalized_Polymatroids.pdf",
+      "sha256": "4443e7faa09b7ff0975561f8aca5bddbf386bd9187a09a6d2aae38eea7d3c3b1",
+      "local_identical": [
+        "tcl_feedback_revision/docs/Exact_Characterization_of_Aggregate_Flexibility_via_Generalized_Polymatroids.pdf",
+        "CHP_dual/materials/literature/Exact_Characterization_of_Aggregate_Flexibility_via_Generalized_Polymatroids.pdf"
+      ]
+    },
+    {
+      "name": "Network-Flow-Based_Formulations_for_Convex_Hull_Pricing_With_Maximum_Start-Ups.pdf",
+      "sha256": "e38b5831c8d5e6d33a41740610593c452a90cbf050850b0edd7b1f15b8eb1ba6",
+      "local_identical": [
+        "paper/primal/Network-Flow-Based_Formulations_for_Convex_Hull_Pricing_With_Maximum_Start-Ups.pdf"
+      ]
+    }
+  ],
+  "conversation_reads": [
+    {
+      "id": "6af12bbe-eecc-83ec-9333-bde43e14e60d",
+      "title": "研究工作流诊断᠎",
+      "scope": "recent 10 turns; responses may be truncated"
+    },
+    {
+      "id": "6ae956ab-2aa4-83ec-9656-a2b1f8648fa5",
+      "title": "重新评估市场力分析",
+      "scope": "recent 10 turns; truncated messages and 3 attachment paths; attachment contents not read"
+    },
+    {
+      "id": "6aaf9620-a024-83ec-966a-5040f7676a46",
+      "title": "算法方法与论文规划",
+      "scope": "recent 10 turns; truncated messages"
+    },
+    {
+      "id": "6ad38194-e7e8-83ec-8137-d1f0a656efb2",
+      "title": "分析导师意见制定研究路线",
+      "scope": "recent 10 turns; truncated messages"
+    }
+  ],
+  "checks": {
+    "settlement_rows": 12,
+    "factorial_rows": 12,
+    "max_profit_identity_residual_usd": 0.0,
+    "G1_profit_increment_usd": 7811.555102205166,
+    "scenario_own_baselines": "passed",
+    "thresholds": [
+      {
+        "cost_change": "-1.0",
+        "predicted_critical": "13.15649292394263",
+        "global_UC_support": "True",
+        "max_cost_gap": "2.9103830456733704e-11"
+      },
+      {
+        "cost_change": "0.0",
+        "predicted_critical": "13.204080443598345",
+        "global_UC_support": "True",
+        "max_cost_gap": "8.149072527885437e-10"
+      },
+      {
+        "cost_change": "1.0",
+        "predicted_critical": "13.251667963254059",
+        "global_UC_support": "True",
+        "max_cost_gap": "8.440110832452774e-10"
+      },
+      {
+        "cost_change": "5.0",
+        "predicted_critical": "13.442018041876917",
+        "global_UC_support": "True",
+        "max_cost_gap": "2.9103830456733704e-11"
+      }
+    ],
+    "frozen_min_advantage_usd": 1635.464037952188,
+    "network_labels": [
+      "original",
+      "relaxed"
+    ]
+  },
+  "source_hashes": {
+    "chp_marketpower/paper_results/source_data/absolute_generator_settlements.csv": "b2bce4f46ac937a61cd5bfead7f5032e2df752880200e4607f7138b417d5d31a",
+    "chp_marketpower/paper_results/source_data/table_II_settlement_changes.csv": "27e316e88f021ff76da12f3c017c705f26d2796cad8e3f3cc517c595c4f18260",
+    "chp_marketpower/paper_results/revision_20261102/source_data/factorial_settlements.csv": "28270fec268128e53befeb5b9b121694ca6a519209d6fb851243453cc8859f78",
+    "chp_marketpower/paper_results/source_data/fig4_threshold_predictions.csv": "a03a162670123a1e1bbb28e409396bb2e2ffcec2a117e47473ef3fbb507b0ed2",
+    "chp_marketpower/paper_results/revision_20261102/source_data/frozen_competition_predictions.csv": "ce095aab0b7c04bb4b09b3453148a1ec8f117ea1c3e09d8d183aa88a588d5fe1",
+    "chp_marketpower/manuscript/main.tex": "3df12a0c7d6a751342f8026aa7dfc50a94bffebfaed38c6a3894a594e25ffce4"
+  },
+  "skill_sha256": "59dcf76442faad15e7bb3b917ecea8efcce153f8fecd3fd66e967fc9c9c60a15",
+  "environment": {
+    "python": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:37:03) [MSC v.1929 64 bit (AMD64)]",
+    "executable": "C:\\Users\\250010153\\anaconda3\\python.exe",
+    "os": "Windows-11-10.0.26200-SP0",
+    "solver": "NOT RUN; arithmetic-only verification"
+  },
+  "optimization_runs": 0,
+  "independent_validation": "absent; same archived data arithmetic audit, not an independent solver implementation"
+}
