@@ -2,7 +2,8 @@
 
 当前主线是多时段网络约束凸包定价下的连续策略利润评价，以及价格响应和竞争性发电替代如何共同形成获利机会。2026-11-03完成第五版论文与结果整合；研究主分支和默认分支为 `research/market-power-parametric-regimes`。
 
-- [英文论文 PDF](chp_marketpower/manuscript/CHP_market_power_draft.pdf)与[可编辑正文](chp_marketpower/manuscript/main.tex)
+- [英文论文 PDF](chp_marketpower/manuscript/CHP_market_power_draft.pdf)与[可编辑正文](chp_marketpower/manuscript/main.tex)（第五版，②）
+- [当前论文基线（③，2026-11-26 起）](chp_marketpower/paper_results/paper_v6/README.md)
 - [当前进度与复现入口](chp_marketpower/README.md)
 - [统一实验分析](chp_marketpower/paper_results/RESULTS_ANALYSIS.md)
 - [论文修订与建议落实](chp_marketpower/manuscript/REVISION_05.md)

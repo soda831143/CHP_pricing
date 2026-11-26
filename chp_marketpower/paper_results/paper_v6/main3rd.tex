@@ -1,0 +1,685 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{graphicx,booktabs,array,multirow,cite}
+\usepackage{algorithm,algpseudocode}
+\usepackage{hyperref}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\R}{\mathbb R}
+\newcommand{\bp}{\bm p}
+\newcommand{\bu}{\bm u}
+\newcommand{\blambda}{\bm\lambda}
+\newcommand{\Pmin}{P^{\min}}
+\newcommand{\Pmax}{P^{\max}}
+\newcommand{\UC}{\mathrm{UC}}
+\newcommand{\SSched}{\mathrm{SS}}
+\newcommand{\CHP}{\mathrm{CHP}}
+
+\newcommand{\Rup}{R^{\uparrow}}
+\newcommand{\Rdn}{R^{\downarrow}}
+\newcommand{\Sup}{S^{\uparrow}}
+\newcommand{\Sdn}{S^{\downarrow}}
+\newcommand{\Mup}{M^{\mathrm{up}}}
+\newcommand{\Mdn}{M^{\mathrm{dn}}}
+
+\begin{document}
+
+\title{From Price Influence to Actual Profit: Strategic Offer under Multiperiod Convex Hull Pricing}
+\author{Chen Ling, and~Chenye Wu,~\IEEEmembership{Senior Member,~IEEE}%
+\thanks{C. Ling and C. Wu are with the School of Science and Engineering, The Chinese University of Hong Kong (Shenzhen), Shenzhen 518172, Guangdong, China, and also with Shenzhen Loop Area Institute, Shenzhen 518045, Guangdong, China.}}
+\maketitle
+
+\begin{abstract}
+High renewable penetration increases thermal cycling, turning fixed startup and no-load costs into recurring expenses and amplifying market-clearing nonconvexities. Because marginal prices hold commitments fixed, dispatched units may earn less than under their best independent schedules, incurring lost-opportunity costs (LOCs) covered by uplift. Convex hull pricing (CHP) minimizes uplift, yet generators can still raise actual profit through strategic energy offers. Evaluating maximum profit gains and their drivers poses two challenges. Structurally, an offer couples CHP prices, physical unit commitment (UC), and reported-cost uplift, so price sensitivity alone cannot explain actual profit. Computationally, maximizing profit over a continuous offer range requires repeated mixed-integer clearing, while schedule switches make coarse sampling unreliable. Since offers alter only objective costs under fixed constraints, we develop a parametric framework for multiperiod, network-constrained CHP markets. It constructs a continuous piecewise-affine price oracle and identifies intervals sharing an optimal UC schedule. Complete reported LOC settlement makes actual profit convex on each overlapping interval, reducing maximization to finitely many endpoint candidates. We also decompose profit changes and prove that switching schedules cuts profit by the additional system cost of substitution. Modified IEEE 30-bus studies verify these mechanisms, while 30- and 118-bus tests quantify oracle reuse savings.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Convex hull pricing, lost-opportunity cost, market power, parametric optimization, unit commitment, uplift payments.
+\end{IEEEkeywords}
+
+% =====================================================================
+% SECTION I: INTRODUCTION
+% =====================================================================
+\section{Introduction}
+\label{sec:introduction}
+
+\IEEEPARstart{H}{igh} renewable penetration forces thermal units to start up and shut down more frequently. Fixed startup and no-load charges are independent of output and, together with binary commitment decisions, make market clearing nonconvex, while frequent cycling amplifies their impact. Conventional locational marginal pricing (LMP), derived with commitments fixed, does not reflect these fixed charges in prices~\cite{schiro2016}. Under LMP, a generator following the independent system operator's (ISO's) unit commitment (UC) schedule may earn less than under its own profit-maximizing schedule, incurring a lost-opportunity cost (LOC) covered by uplift. Convex hull pricing (CHP) minimizes uplift by pricing the convexified system problem~\cite{gribik2007,schiro2016,hua2017}, yet minimizing uplift does not eliminate incentives to offer above cost~\cite{wang2023incentive}. A higher offer can lift nodal prices, but it also makes rivals relatively cheaper and can reduce cleared output. Two questions therefore arise: how much additional actual profit can a generator earn over a continuous offer range, and what drives and limits that gain?
+
+Answering these questions poses two distinct challenges. First, a \emph{structural challenge} obscures how an offer translates into actual profit because three market processes are coupled: convexified CHP sets nodal prices, mixed-integer physical UC chooses the executed schedule, and reported-cost LOC settlement determines uplift from the unit's best independent schedule. Because uplift uses reported offers while actual profit deducts true costs, higher prices or larger uplift need not raise profit. Moreover, replacing a unit depends on rivals' multiperiod commitments and network limits rather than single-hour merit order, so price-sensitivity indices cannot determine actual profit~\cite{palka2017,sun2021temporal}. Second, a \emph{computational challenge} arises in maximizing profit over a continuous offer range. Each offer evaluation requires solving pricing, mixed-integer UC, and the unit's own dispatch problem, while discrete schedule switches cause abrupt profit jumps. Coarse grids therefore risk missing peaks just before a switch, whereas dense re-solving is costly and offers no optimality guarantee over the continuous range.
+
+To address both challenges, we observe that a unilateral energy-offer markup alters only objective costs while leaving both pricing and physical operating constraints fixed. Exploiting this structure, we develop a parametric framework for multiperiod, network-constrained CHP markets that partitions the continuous offer range into intervals capturing both nodal price responses and persistent physical UC schedules. This joint partition resolves the computational challenge by enabling reusable price queries and reducing continuous profit maximization to finitely many certified candidates. Using the same partition, we resolve the structural challenge by disentangling how prices, uplift settlement, and schedule switches shape actual profit, revealing how rival operating costs and transmission limits govern multiperiod generation substitution.
+
+% ---------------------------------------------------------------------
+\subsection{Related Work}
+% ---------------------------------------------------------------------
+Nonconvex pricing draws a clear distinction between minimizing uplift and inducing truthful offers. Comparative studies show that alternative pricing rules and side payments induce distinct dispatch-following and bidding incentives~\cite{liberopoulos2016,wang2023incentive,chen2024comparison}. Within CHP and extended LMP, profit-based studies decompose strategic gains, characterize maximal markups, and analyze cost manipulation~\cite{sun2020market,sun2021strategic,wu2021potential}. These works evaluate a generator at a given offer or bound its gain, without tracking how actual profit evolves as the executed physical schedule changes.
+
+Alongside these profit-based studies, market power screening and mitigation have largely followed price-based and institutional routes. Nodal-price derivatives~\cite{palka2017} and temporal offer-to-price sensitivities under CHP~\cite{sun2021temporal} identify where an offer exerts strong price leverage, yet price leverage alone does not determine post-settlement profit. Multiperiod auction studies examine strategic self-commitment~\cite{byers2022auction}, while mitigation studies propose ex-ante default energy bids~\cite{simoglou2024mitigation}, without linking reported-cost LOC settlement to the multiperiod generation substitution that bounds actual profit.
+
+Evaluating these coupled effects also relies on an exact CHP formulation. Building on convex-primal unit hulls~\cite{hua2017}, interval network-flow models cast commitment-dependent intertemporal operation as polynomial-size linear programs (LPs)~\cite{pan2018,yu2019,networkflow}, alongside decomposition and state-transition alternatives~\cite{andrianesis2022dw,xiao2024}. Because unit modeling conventions affect convexified prices~\cite{zhao2023dependence}, aligning the pricing hull with physical UC ensures consistent valuation of prices and executed schedules. Although an incremental offer markup perturbs only the linear objective over a fixed polyhedral hull, existing formulations use these models only to clear a single offer.
+
+Parametric optimization characterizes how optimal solutions and values vary with problem data~\cite{bertsimas1997}. In convex LMP markets, multiparametric programming partitions parameter spaces into critical regions for price forecasting~\cite{ji2017probabilistic}, strategic investment~\cite{taheri2022strategic}, and pool bidding~\cite{zheng2023pool}. Under CHP, recent work maps demand variations to convexified prices via approximated Minkowski sums~\cite{jiang2026minkowski}. Extending these tools to strategic profit under multiperiod CHP leaves both challenges open. Existing parametric market models omit discrete physical UC switches and reported-cost LOC settlement, leaving the coupled profit mechanism unaddressed. Moreover, an offer markup perturbs generation costs rather than demand, and CHP nodal prices are nonunique dual multipliers that cannot be read directly from the primal value function. Existing literature thus lacks a framework that compiles valid continuous CHP price maps, certifies persistent physical UC schedules, and links settlement-consistent profit to multiperiod generation substitution.
+
+% ---------------------------------------------------------------------
+\subsection{Our Contributions}
+% ---------------------------------------------------------------------
+\textbf{1) Parametric CHP Price Oracle:}
+To address the computational challenge of repeated pricing solves, we exploit the offer-invariant feasible set to partition the offer range into intervals sharing one optimal convexified solution. Interpolating complete endpoint dual solutions yields a continuous, piecewise-affine path of valid CHP prices despite dual nonuniqueness. Once compiled, the oracle answers price queries across that range without further pricing LPs.
+
+\textbf{2) Exact Profit Evaluation Over a Continuous Offer Range:}
+To locate the most profitable offer without dense sampling, we certify intervals over which one physical UC schedule remains globally optimal and intersect them with the price intervals. Under complete reported LOC settlement, we derive a settlement identity proving that actual profit is convex on each joint interval, so its maximum lies at an endpoint. Maximization along a prescribed offer profile then reduces to finitely many certified offer-schedule candidates, even when the unit's profit-maximizing schedule changes inside an interval.
+
+\textbf{3) Economic Drivers and Limits of Strategic Profit:}
+To address the structural challenge, we use the same identity to attribute profit changes along the offer path. Within an interval, marginal profit combines a price-response term weighted by the unit's profit-maximizing output with the gap between cleared and profit-maximizing output, showing why strong price leverage need not raise actual profit. At a physical schedule switch along the constructed price path, actual profit drops by the additional system operating cost of the competing schedule. Rival operating costs shift the switching threshold, whereas transmission limits govern which competing schedules are feasible.
+
+% The remainder of this paper is organized as follows. Section~\ref{sec:model} defines the physical market-clearing, network-flow CHP, and settlement models. Section~\ref{sec:method} develops the parametric price oracle, physical UC regions, and finite profit evaluation. Section~\ref{sec:mechanism} analyzes profit accumulation and generation substitution under changed market conditions. Section~\ref{sec:results} presents numerical results and computational performance, and Section~\ref{sec:conclusion} concludes.
+
+% The remainder of this paper is organized as follows. Section~\ref{sec:model} formulates physical UC, network-flow CHP, and LOC settlement, and derives the settlement identity underlying our framework. Section~\ref{sec:method} addresses the computational challenge by constructing the price oracle and the finite candidate set. Section~\ref{sec:mechanism} addresses the structural challenge by decomposing profit accumulation and characterizing multiperiod generation substitution. Section~\ref{sec:results} validates the evaluation method and profit mechanisms on a modified IEEE 30-bus system and reports pricing reuse on modified IEEE 30- and 118-bus systems. Section~\ref{sec:conclusion} concludes.
+% =====================================================================
+% SECTION II: MARKET MODEL AND STRATEGIC OFFERS
+% =====================================================================
+\section{Market Model and Strategic Offers}
+\label{sec:model}
+This section defines the physical market-clearing, CHP, and settlement models used to evaluate strategic offers. Physical UC determines the executed schedule and actual operating cost, while an interval network-flow pricing LP derives CHP nodal prices over a fixed feasible polyhedron. Because the strategic offer enters linearly only in the objective of both problems, the underlying physical and convexified feasible sets remain fixed across the offer range. Complete reported LOC settlement then links CHP nodal prices and the physical UC schedule to actual profit.
+
+% ---------------------------------------------------------------------
+\subsection{Physical Market Clearing and Strategic Offers}
+% ---------------------------------------------------------------------
+Consider a day-ahead electricity market over hourly trading periods $\mathcal{T}=\{1,\ldots,T\}$, with generators $\mathcal{G}$, buses $\mathcal{B}$, and transmission lines $\mathcal{L}$. Each generator $i\in\mathcal{G}$ is located at bus $b(i)\in\mathcal{B}$, and its physical schedule is $s_i=(\bp_i,\bu_i)$, where $p_{i,t}\ge 0$ denotes active power output and $u_{i,t}\in\{0,1\}$ denotes binary commitment status in period $t\in\mathcal{T}$.
+
+Each generator is characterized by output limits $(\Pmin_i,\Pmax_i)$, normal ramp-up and ramp-down limits $(\Rup_i,\Rdn_i)$, startup and shutdown ramp capabilities $(R_i^{\mathrm{SU}},R_i^{\mathrm{SD}})$ satisfying $R_i^{\mathrm{SU}},R_i^{\mathrm{SD}}\ge\Pmin_i$, and minimum up and down times $(\Mup_i,\Mdn_i)$. The inherited commitment $u_{i,0}\in\{0,1\}$, initial output $p_{i,0}\ge 0$, and preceding online or offline duration fix the first-period transitions and any residual minimum up- or down-time requirements. With binary startup and shutdown indicators $v_{i,t}^{\mathrm{SU}},v_{i,t}^{\mathrm{SD}}\in\{0,1\}$, feasible commitment trajectories satisfy, for all $t\in\mathcal{T}$,
+\begin{subequations}\label{eq:commitment}
+\begin{align}
+ &u_{i,t}-u_{i,t-1} = v_{i,t}^{\mathrm{SU}}-v_{i,t}^{\mathrm{SD}},\\
+ &v_{i,t}^{\mathrm{SU}}+v_{i,t}^{\mathrm{SD}} \le 1,\\
+ &\sum\nolimits_{\tau=\max\{1,t-\Mup_i+1\}}^{t} v_{i,\tau}^{\mathrm{SU}} \le u_{i,t},\\
+ &\sum\nolimits_{\tau=\max\{1,t-\Mdn_i+1\}}^{t} v_{i,\tau}^{\mathrm{SD}} \le 1-u_{i,t}.
+\end{align}
+\end{subequations}
+
+Active power trajectories satisfy capacity and transition-dependent ramping constraints for all $t\in\mathcal{T}$:
+\begin{subequations}\label{eq:physical}
+\begin{align}
+ \Pmin_i u_{i,t} &\le p_{i,t}\le\Pmax_i u_{i,t},\\
+ p_{i,t}-p_{i,t-1} &\le \Rup_i u_{i,t-1} + R_i^{\mathrm{SU}} v_{i,t}^{\mathrm{SU}},\\
+ p_{i,t-1}-p_{i,t} &\le \Rdn_i u_{i,t} + R_i^{\mathrm{SD}} v_{i,t}^{\mathrm{SD}}.
+\end{align}
+\end{subequations}
+
+With no forced shutdown at $t=T$, let $\mathcal{S}_i$ denote the resulting set of physically feasible schedules $s_i=(\bp_i,\bu_i)$. The same operating conditions underpin UC clearing, unit self-scheduling, and the unit convex hulls used for CHP~\cite{zhao2023dependence}.
+
+Generator $i$ incurs fixed startup cost $C_i^{\mathrm{SU}}$, shutdown cost $C_i^{\mathrm{SD}}$, hourly no-load cost $C_i^{\mathrm{NL}}$ covering minimum-output operation at $\Pmin_i$, and convex piecewise-linear (PWL) incremental fuel cost $\phi_i(q)=\max\nolimits_{k\in\mathcal{K}_i}\{\sigma_{i,k}q+\gamma_{i,k}\}$ above $\Pmin_i$, with $\phi_i(0)=0$ and segment slopes $\sigma_{i,k}$ and intercepts $\gamma_{i,k}$. With startup and shutdown counts $n_i^{\mathrm{SU}}=\sum\nolimits_{t\in\mathcal{T}}v_{i,t}^{\mathrm{SU}}$ and $n_i^{\mathrm{SD}}=\sum\nolimits_{t\in\mathcal{T}}v_{i,t}^{\mathrm{SD}}$, the actual operating cost is
+\begin{align}
+C_i(s_i) ={}& C_i^{\mathrm{SU}}n_i^{\mathrm{SU}} + C_i^{\mathrm{SD}}n_i^{\mathrm{SD}}
++ C_i^{\mathrm{NL}}\!\sum\nolimits_{t\in\mathcal{T}}u_{i,t}\notag\\[-2pt]
+&+ \sum\nolimits_{t\in\mathcal{T}}\phi_i\!\left(p_{i,t}-\Pmin_i u_{i,t}\right).\label{eq:cost}
+\end{align}
+
+We designate generator $g\in\mathcal{G}$ as the strategic unit while competing generators $i\in\mathcal{G}\setminus\{g\}$ report their actual costs, $\widehat{C}_i(s_i)=C_i(s_i)$. Generator $g$ shifts every incremental energy-offer slope in period $t\in\mathcal{T}$ from $\sigma_{g,k}$ to $\sigma_{g,k}+\delta w_t$ for all $k\in\mathcal{K}_g$, where $\delta\in\mathcal{D}=[0,\bar\delta]$ is a scalar offer adder in \$/MWh and $\bm{w}=(w_t)_{t\in\mathcal{T}}\ge\bm{0}$ is a fixed temporal offer profile. Because this shift is common to all segments $k\in\mathcal{K}_g$, the reported operating cost is
+\begin{align}
+\widehat{C}_g(s_g;\delta) &= C_g(s_g) + \delta Q_g(s_g),\label{eq:reported-cost}\\
+Q_g(s_g) &= \sum\nolimits_{t\in\mathcal{T}} w_t\!\left(p_{g,t}-\Pmin_g u_{g,t}\right),\label{eq:exposure}
+\end{align}
+where $Q_g(s_g)$ (in MWh) is the weighted generation above minimum output exposed to the adder, hereafter called the offer-affected generation. Setting $w_t\!\!=\!\!1$ for all $t\!\!\in\!\!\mathcal{T}$ represents a uniform all-day markup, whereas nonzero weights in selected periods represent targeted hourly offers. Holding physical limits and fixed-cost parameters at their true values isolates market power exercised through incremental energy offers.
+
+Let $D_{b,t}$ denote price-inelastic demand at bus $b\in\mathcal{B}$, $H_{l,b}$ the lossless DC power transfer distribution factor (PTDF) of line $l\in\mathcal{L}$ with respect to bus $b$, and $f_l^{\max}$ the line flow limit. The system-feasible set $\mathcal{F}^{\UC}$ collects all schedules $s=(s_i)_{i\in\mathcal{G}}$ such that $s_i\in\mathcal{S}_i$ for every $i\in\mathcal{G}$ and
+\begin{align}
+&\sum\nolimits_{i\in\mathcal{G}} p_{i,t} = \sum\nolimits_{b\in\mathcal{B}} D_{b,t}, \ \forall t\in\mathcal{T},\label{eq:balance}\\
+&f_{l,t} \!\!=\!\! \sum\nolimits_{i\in\mathcal{G}} H_{l,b(i)}p_{i,t} \!\!- \!\!\sum\nolimits_{b\!\in\!\mathcal{B}} H_{l,b}D_{b,t}, \ \forall l\!\!\in\!\!\mathcal{L},\ \forall t\!\!\in\!\!\mathcal{T},\label{eq:network}\\
+&-f_l^{\max} \le f_{l,t} \le f_l^{\max}, \ \forall l\in\mathcal{L},\ \forall t\in\mathcal{T}.\label{eq:powerflow}
+\end{align}
+
+Writing $C_{\mathrm{sys}}(s)=\sum\nolimits_{i\in\mathcal{G}}C_i(s_i)$ for the actual system operating cost, the ISO clears the physical market by solving the mixed-integer linear program (MILP):
+\begin{equation}
+v^{\UC}(\delta) = \min\nolimits_{s\in\mathcal{F}^{\UC}}
+\left\{ C_{\mathrm{sys}}(s) + \delta Q_g(s_g) \right\},\label{eq:physical-clearing}
+\end{equation}
+whose solution $s^{\UC}(\delta)=(\bp^{\UC}(\delta),\bu^{\UC}(\delta))$ is the executable UC schedule. Because $\delta$ enters only the objective, the reported system cost of any fixed schedule $s\in\mathcal{F}^{\UC}$ rises affinely in $\delta$ with slope $Q_g(s_g)$. Raising $\delta$ therefore leaves physical feasibility unchanged while systematically penalizing schedules that rely more heavily on unit $g$'s offer-affected generation.
+
+% ---------------------------------------------------------------------
+\subsection{Network-Flow CHP and Its Parametric Form}
+\label{subsec:dag-model}
+% ---------------------------------------------------------------------
+Whereas physical clearing~\eqref{eq:physical-clearing} selects binary-feasible schedules, CHP derives nodal prices from a convexified system problem~\cite{gribik2007,hua2017}. Because $Q_g(s_g)$ in~\eqref{eq:exposure} depends on both output and commitment status, we introduce an epigraph cost variable $\eta_i\!\!\in\!\!\R$ bounding unit $i$'s actual operating cost $C_i(s_i)$ from above and define each unit's actual-cost epigraph in the lifted power--commitment--cost space:
+\begin{equation}
+\mathcal{Y}_i \!\!=\!\! \left\{ (\bp_i,\bu_i,\eta_i) \!\!:\!\! s_i\!\!=\!\!(\bp_i,\bu_i)\!\!\in\!\!\mathcal{S}_i,\ \eta_i\!\!\ge\!\! C_i(s_i) \right\}, \ \forall i\in\mathcal{G}.\label{eq:unit-hull}
+\end{equation}
+
+Under offer adder $\delta$, unit $g$'s reported cost in this lifted space is $\eta_g + \delta Q_g(\bp_g,\bu_g)$. Because $\delta Q_g$ is linear in $(\bp_g,\bu_g)$ and convexification commutes with linear transformations, convexifying unit $g$'s reported-cost epigraph is equivalent to shifting the cost coordinate of $\conv(\mathcal{Y}_g)$ by $\delta Q_g$. With $\bm\eta=(\eta_i)_{i\in\mathcal{G}}$, the convexified pricing problem therefore optimizes over the fixed unit hulls $\conv(\mathcal{Y}_i)$ for all $i\in\mathcal{G}$:
+\begin{subequations}\label{eq:hull-clearing}
+\begin{align}
+v^{\CHP}(\delta) = &\min_{\bp,\bu,\bm\eta,\bm f}\quad \sum\nolimits_{i\in\mathcal{G}}\eta_i + \delta Q_g(\bp_g,\bu_g)\\
+&\mathrm{s.t.}\quad (\bp_i,\bu_i,\eta_i)\in\conv(\mathcal{Y}_i), \quad \forall i\in\mathcal{G},\\
+& \eqref{eq:balance}\text{--}\eqref{eq:powerflow}.\notag
+\end{align}
+\end{subequations}
+
+
+
+To solve~\eqref{eq:hull-clearing} as a single LP whose feasible set stays fixed as $\delta$ varies, we adopt an interval network-flow representation of each unit hull $\conv(\mathcal{Y}_i)$~\cite{pan2018,yu2019,networkflow}; the same interval graph is later reused for exact unit self-scheduling. Specifically, any feasible commitment trajectory alternates between uninterrupted online (ON) and offline (OFF) intervals, which form the arcs of a time-expanded directed acyclic graph (DAG) $\mathfrak{G}_i=(\mathcal{V}_i,\mathcal{E}_i)$ with $\mathcal{E}_i=\mathcal{E}_i^{\mathrm{ON}}\cup\mathcal{E}_i^{\mathrm{OFF}}$ (Fig.~\ref{fig:dag-schematic}). An ON arc $e=[\underline{t}_e,\overline{t}_e]\in\mathcal{E}_i^{\mathrm{ON}}$ ($1\le\underline{t}_e\le\overline{t}_e\le T$) represents uninterrupted online operation from period $\underline{t}_e$ through $\overline{t}_e$ of duration $n_e=\overline{t}_e-\underline{t}_e+1$, and an OFF arc $a=[\underline{t}_a,\overline{t}_a]\in\mathcal{E}_i^{\mathrm{OFF}}$ represents an offline interval over $[\underline{t}_a,\overline{t}_a]$. The source node encodes the initial state at $t=0$ and the sink node closes the horizon at $t=T$. At each period $t\!\!\in\!\!\mathcal{T}^+\!\!=\!\!\{2,\ldots,T\}$, shutdown node $V_t^{\mathrm{off}}$ links ON arcs ending at $\overline{t}_e=t-1$ to OFF arcs starting at $\underline{t}_a=t$, while startup node $V_t^{\mathrm{on}}$ links OFF arcs ending at $\overline{t}_a=t-1$ to ON arcs starting at $\underline{t}_e=t$. Admissible arcs respect the minimum up/down times, ramping limits, and initial boundary conditions defining $\mathcal{S}_i$.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/parametric_chp_DAG_editable_1.jpg}
+\caption{Shared-interval DAG representation and parametric CHP. (a) Alternating ON and OFF interval arcs form complete source-to-sink commitment paths. For illustration, the three-period unit has one-period minimum up/down times and starts online; highlighted commitment trajectories $\bu_i=(1,0,1)$ and $(1,0,0)$ share the initial ON arc and branch into different subsequent OFF intervals. (b) Unit-level DAGs reconstruct convexified generation outputs coupled by system power balance and line limits, yielding an objective-parametric LP over a fixed polyhedron $\mathcal{P}$.}
+\label{fig:dag-schematic}
+\end{figure*}
+
+Routing one unit of nonnegative flow $z_{i,e}$ ($e\in\mathcal{E}_i^{\mathrm{ON}}$) and $z_{i,a}$ ($a\!\!\in\!\!\mathcal{E}_i^{\mathrm{OFF}}$) from source to sink enforces alternating transitions across $\mathcal{T}^{+}$:
+\begin{subequations}\label{eq:flow}
+\begin{align}
+&\sum\nolimits_{e\in\mathcal{E}_i^{\mathrm{ON}}:\overline{t}_e=t-1} z_{i,e} \!=\! \sum\nolimits_{a\in\mathcal{E}_i^{\mathrm{OFF}}:\underline{t}_a=t} z_{i,a}, \ \forall t\!\!\in\!\!\mathcal{T}^{+},\label{eq:flow-on-off}\\
+&\sum\nolimits_{a\in\mathcal{E}_i^{\mathrm{OFF}}:\overline{t}_a=t-1} z_{i,a} \!=\! \sum\nolimits_{e\in\mathcal{E}_i^{\mathrm{ON}}:\underline{t}_e=t} z_{i,e}, \ \forall t\!\!\in\!\!\mathcal{T}^{+},\label{eq:flow-off-on}\\
+&\sum\nolimits_{e\in\mathcal{E}_i^{\mathrm{ON}}:\underline{t}_e=1} z_{i,e} + \sum\nolimits_{a\in\mathcal{E}_i^{\mathrm{OFF}}:\underline{t}_a=1} z_{i,a} = 1,\label{eq:flow-source}\\
+&z_{i,e}\ge 0,\ \forall e\in\mathcal{E}_i^{\mathrm{ON}},\quad z_{i,a}\ge 0,\ \forall a\in\mathcal{E}_i^{\mathrm{OFF}}.
+\end{align}
+\end{subequations}
+
+Each source-to-sink path represents one feasible commitment trajectory, whereas fractional flows represent convex combinations of trajectories. Different paths may share an ON arc $e$, whose flow weight $z_{i,e}$ equals the total weight of the paths using it. To keep output and cost consistent with the arc weight while remaining linear, we introduce perspective-scaled active power $p_{i,e,t}$ and variable-cost epigraph $c_{i,e,t}$ on each ON arc $e$ for period $t\in e$. Multiplying the physical ON-interval constraints and PWL fuel-cost segments by $z_{i,e}$ gives this perspective (flow-weighted) scaling:
+\begin{subequations}\label{eq:interval}
+\begin{align}
+\Pmin_i z_{i,e} &\le p_{i,e,t}\le\Pmax_i z_{i,e}, && \underline{t}_e\le t\le\overline{t}_e,\\
+p_{i,e,t}-p_{i,e,t-1} &\le \Rup_i z_{i,e}, && \underline{t}_e<t\le\overline{t}_e,\\
+p_{i,e,t-1}-p_{i,e,t} &\le \Rdn_i z_{i,e}, && \underline{t}_e<t\le\overline{t}_e,\\
+p_{i,e,\underline{t}_e} &\le R_i^{\mathrm{SU}} z_{i,e}, && \text{startup at }\underline{t}_e,\\
+p_{i,e,\overline{t}_e} &\le R_i^{\mathrm{SD}} z_{i,e}, && \overline{t}_e<T,
+\end{align}
+\end{subequations}
+where for an inherited online interval ($\!\underline{t}_e\!\!=\!\!1$, $\!\!u_{i,0}\!\!=\!\!1$), the startup bound is replaced by $-\Rdn_i z_{i,e}\!\!\le\!\! p_{i,e,1}\!\!-\!\!p_{i,0}z_{i,e}\!\!\le\!\!\Rup_i z_{i,e}$, and
+\begin{equation}
+\!\!\!\!c_{i,e,t}\!\! \ge\!\! \sigma_{i,k}\!\left(p_{i,e,t}\!\!-\!\!\Pmin_i z_{i,e}\right) \!\!+\!\! \gamma_{i,k}z_{i,e},  \forall k\!\!\in\!\!\mathcal{K}_i,\ \underline{t}_e\!\!\le\!\! t\!\!\le\!\!\overline{t}_e.\label{eq:perspective}
+\end{equation}
+
+Let $\kappa_{i,e}$ denote the fixed cost of ON arc $e$ ($n_e C_i^{\mathrm{NL}}$ plus boundary startup and shutdown charges), and let $\kappa_{i,a}$ denote the fixed cost of OFF arc $a$ ($C_i^{\mathrm{SD}}$ for an immediate shutdown at $t=1$, and zero otherwise). Summing the scaled interval variables reconstructs $(\bp_i,\bu_i,\eta_i)$:
+\begin{subequations}\label{eq:aggregation}
+\begin{align}
+&p_{i,t} = \sum\nolimits_{e\in\mathcal{E}_i^{\mathrm{ON}}:t\in e} p_{i,e,t}, \ \forall t\in\mathcal{T},\label{eq:agg-power}\\
+&u_{i,t} = \sum\nolimits_{e\in\mathcal{E}_i^{\mathrm{ON}}:t\in e} z_{i,e}, \ \forall t\in\mathcal{T},\label{eq:agg-status}\\
+&\eta_i \!\!\ge\!\! \sum\nolimits_{e\!\in\mathcal{E}_i^{\mathrm{ON}}}\!\!\!\left(\kappa_{i,e}z_{i,e} \!\!+\!\! \sum\nolimits_{t\!\in e}\!\!c_{i,e,t}\right)\!\! +\!\! \sum\nolimits_{a\!\in\mathcal{E}_i^{\mathrm{OFF}}}\!\!\kappa_{i,a}z_{i,a}.\label{eq:agg-cost}
+\end{align}
+\end{subequations}
+For $z_{i,e}>0$, normalizing $(p_{i,e,t},c_{i,e,t})$ by $z_{i,e}$ recovers a feasible physical ON-interval trajectory and its PWL cost epigraph, and the projection of~\eqref{eq:flow}--\eqref{eq:aggregation} onto $(\bp_i,\bu_i,\eta_i)$ equals $\conv(\mathcal{Y}_i)$~\cite{pan2018,networkflow}.
+
+Stacking the unit-level network-flow variables across $i\in\mathcal{G}$ into the extended decision vector $x$, the unit constraints~\eqref{eq:flow}--\eqref{eq:aggregation} and system constraints~\eqref{eq:balance}--\eqref{eq:powerflow} define a polyhedron $\mathcal{P}$. Let $c^0$ satisfy $(c^0)^\top x\!\!=\!\!\sum\nolimits_{i\in\mathcal{G}}\eta_i$, and let $d$ satisfy $d^\top x\!\!=\!\!Q_g(\bp_g,\bu_g)$ for the convexified quantities $(\bp_g,\bu_g)$ represented by $x$. Problem~\eqref{eq:hull-clearing} then takes the objective-parametric LP form
+\begin{equation}
+v^{\CHP}(\delta) = \min\nolimits_{x\in\mathcal{P}} (c^0 + \delta d)^\top x.\label{eq:paramlp}
+\end{equation}
+
+The subsequent analysis exploits two properties of this formulation: the CHP feasible polyhedron $\mathcal{P}$ is independent of the offer adder $\delta$, and nodal prices are obtained from optimal dual multipliers. 
+Specifically, let $\lambda_t^E$ and $\mu_{l,t}^{+},\mu_{l,t}^{-}\ge 0$ denote the optimal dual multipliers under the Lagrangian terms $\lambda_t^E(\sum_b D_{b,t}-\sum_i p_{i,t})$ for~\eqref{eq:balance} and $\mu_{l,t}^{+}(f_{l,t}-f_l^{\max})+\mu_{l,t}^{-}(-f_{l,t}-f_l^{\max})$ for~\eqref{eq:powerflow}. The CHP nodal price at bus $b\in\mathcal{B}$ in period $t\in\mathcal{T}$ is
+\begin{equation}
+\lambda_{b,t}^{\CHP} = \lambda_t^E + \lambda_{b,t}^C, \
+\lambda_{b,t}^C = -\sum\nolimits_{l\in\mathcal{L}} H_{l,b}\!\left(\mu_{l,t}^{+}-\mu_{l,t}^{-}\right).\label{eq:lmp}
+\end{equation}
+
+While $\lambda_t^E$ and $\lambda_{b,t}^C$ depend on the chosen reference bus, the nodal prices $\lambda_{b,t}^{\CHP}$ and settlements are reference-invariant.
+
+% ---------------------------------------------------------------------
+\subsection{Self-Scheduling, Uplift, and Actual Profit}
+% ---------------------------------------------------------------------
+Actual producer profit depends on three distinct optimization objects: the executed physical UC schedule $s^{\UC}(\delta)$ from~\eqref{eq:physical-clearing}, the convexified pricing solution $x^{\CHP}(\delta)$ from~\eqref{eq:paramlp} whose duals define $\blambda^{\CHP}(\delta)$, and the strategic generator's profit-maximizing self-schedule $s_g^{\SSched}(\delta)$. Facing its bus price vector $\blambda_g(\delta)=(\lambda_{b(g),t}^{\CHP}(\delta))_{t\in\mathcal{T}}$, generator $g$ maximizes its reported self-scheduling profit over $\mathcal{S}_g$:
+\begin{equation}
+\widehat{\Pi}_g^{\SSched}(\blambda_g,\delta)
+= \max\nolimits_{s_g\in\mathcal{S}_g}
+\left\{ \blambda_g^\top\bp_g - \widehat{C}_g(s_g;\delta) \right\}.\label{eq:ss}
+\end{equation}
+
+Every physically feasible schedule in $\mathcal{S}_g$ corresponds to a single source-to-sink path in the DAG $\mathfrak{G}_g$ from Section~\ref{subsec:dag-model}. Because operating profit is additive across intervals,~\eqref{eq:ss} reduces to finding a maximum-profit path in $\mathfrak{G}_g$, where each ON arc is weighted by the optimal profit of its single-interval dispatch problem ($z_{g,e}=1$).
+
+Under the physical UC schedule $s_g^{\UC}(\delta)$ and CHP nodal prices $\blambda_g(\delta)$, generator $g$ receives energy revenue $R_g(\delta)$ and an uplift payment $U_g(\delta)$ under complete reported LOC settlement. Because the ISO observes only submitted offers, uplift is computed from reported costs $\widehat{C}_g$, whereas actual profit $\Pi_g(\delta)$ deducts actual operating cost $C_g$:
+\begin{align}
+R_g(\delta) &= \blambda_g(\delta)^\top\bp_g^{\UC}(\delta),\label{eq:revenue}\\
+U_g(\delta) &= \widehat{\Pi}_g^{\SSched}(\blambda_g(\delta),\delta)
+- \left[ R_g(\delta) - \widehat{C}_g(s_g^{\UC}(\delta);\delta) \right],\label{eq:uplift}\\
+\Pi_g(\delta) &= R_g(\delta) + U_g(\delta) - C_g(s_g^{\UC}(\delta)).\label{eq:profit}
+\end{align}
+
+Since $s_g^{\UC}(\delta)\in\mathcal{S}_g$ is feasible for~\eqref{eq:ss}, we have $U_g(\delta)\ge 0$. Substituting~\eqref{eq:reported-cost} and~\eqref{eq:uplift} into~\eqref{eq:profit} cancels $R_g(\delta)$ and yields the settlement identity
+\begin{equation}
+\Pi_g(\delta) = \widehat{\Pi}_g^{\SSched}(\blambda_g(\delta),\delta)
++ \delta Q_g(s_g^{\UC}(\delta)).\label{eq:identity}
+\end{equation}
+
+For a fixed physical schedule $s\!\!\in\!\!\mathcal{F}^{\UC}$, we write $\Pi_g(\delta;s)\!\!=\!\!\widehat{\Pi}_g^{\SSched}(\blambda_g(\delta),\delta)\!\!+\!\!\delta Q_g(s_g)$, so that $\Pi_g(\delta)\!\!=\!\!\Pi_g(\delta;s^{\UC}(\delta))$. Identity~\eqref{eq:identity} decouples actual profit into two distinct channels: a price-driven term $\widehat{\Pi}_g^{\SSched}$, reflecting the best reported self-schedule at prevailing CHP prices, and a schedule-driven term $\delta Q_g(s_g^{\UC})$, capturing the settlement surplus between reported and actual cost on the physically cleared output. Consequently, knowing how an offer moves prices alone cannot determine actual profit; evaluating strategic profit requires tracking both CHP price responses and physical UC schedules across $\mathcal{D}$.
+
+
+Holding competing offers fixed, we evaluate the strategic generator's maximum additional profit over the continuous offer domain $\mathcal{D}=[0,\bar\delta]$ relative to truthful bidding ($\delta=0$):
+\begin{equation}
+\mathcal{M}_g = \max\nolimits_{\delta\in\mathcal{D}}\Delta\Pi_g(\delta), \quad
+\Delta\Pi_g(\delta) = \Pi_g(\delta) - \Pi_g(0).\label{eq:marketpower}
+\end{equation}
+
+Because optimal CHP prices and optimal UC schedules need not be unique, this evaluation follows a specified price-selection and physical-execution rule formalized in Section~\ref{sec:method}.
+
+% =====================================================================
+% SECTION III: PARAMETRIC CHP ORACLE FOR STRATEGIC PROFIT EVALUATION
+% =====================================================================
+\section{Parametric CHP Oracle for Strategic Profit Evaluation}
+\label{sec:method}
+Evaluating strategic offers across a continuous range requires tracking both how CHP nodal prices move and when the ISO switches to a different physical UC schedule. Because a strategic offer changes only objective costs while leaving both the convexified pricing polyhedron and the physical feasible set fixed, pricing and physical clearing share the same piecewise-linear cost structure. This section exploits that structure to compile a reusable offline CHP price oracle, identify offer regions with persistent globally optimal physical UC schedules, and show that actual profit is convex on their intersection. Continuous profit maximization therefore reduces to evaluating finitely many certified candidates.
+
+% ---------------------------------------------------------------------
+\subsection{Affine CHP Price Response}
+% ---------------------------------------------------------------------
+For any fixed convexified solution $x\in\mathcal{P}$ in the pricing LP~\eqref{eq:paramlp}, the reported system cost is affine in $\delta\in\mathcal{D}$:
+\begin{equation}
+\ell_x^P(\delta) = (c^0)^\top x + \delta d^\top x.\label{eq:primal-line}
+\end{equation}
+
+The intercept $(c^0)^\top x$ is the truthful-offer convexified cost of $x$, and the slope $d^\top x=Q_g(\bp_g,\bu_g)$ is its convexified offer-affected generation. Minimizing~\eqref{eq:primal-line} over $\mathcal{P}$ makes the CHP value function $v^{\CHP}(\delta)\!\!=\!\!\min_{x\!\in\mathcal{P}}\ell_x^P(\delta)$ concave and piecewise affine on $\mathcal{D}$~\cite{bertsimas1997}, where each affine piece corresponds to an offer interval supported by a common primal optimum $\bar{x}\in\mathcal{P}$.
+
+While this primal envelope identifies persistent convexified solutions, market settlement requires CHP nodal prices derived from optimal dual multipliers, which need not be unique. To obtain a valid and consistent price rule across a certified interval without solving interior LPs, we interpolate complete optimal dual solutions from its endpoints. Let $\mathcal{F}^D(\delta)$ denote the feasible set of the full dual of~\eqref{eq:paramlp} (including variable-bound multipliers) and $L(y)$ its objective. Because $\delta$ enters only the primal objective, $\mathcal{F}^D(\delta)$ depends affinely on $\delta$, whereas $L(y)$ is independent of $\delta$.
+
+\begin{proposition}[Affine Selected CHP Prices]
+\label{prop:dual}
+Suppose a common primal solution $\bar{x}\!\!\in\!\!\mathcal{P}$ is optimal for~\eqref{eq:paramlp} at $\delta^-\!\!<\!\!\delta^+$, with complete optimal dual solutions $y^-\!\!\in\!\!\mathcal{F}^D(\delta^-)$ and $y^+\!\!\in\!\!\mathcal{F}^D(\delta^+)$. For any $\delta\!\in\![\delta^-,\delta^+]$, define $\theta\!\!=\!\!(\delta\!-\!\delta^-)\!/\!(\delta^+\!-\!\delta^-)\!\in\![0,1]$. Then the interpolated dual solution
+\begin{equation}
+y(\delta) = (1-\theta)y^- + \theta y^+\label{eq:dual-interpolation}
+\end{equation}
+is optimal throughout $[\delta^-,\delta^+]$. Consequently, its nodal-price projection~\eqref{eq:lmp} forms an affine selected-price function:
+\begin{equation}
+\blambda^{\CHP}(\delta) = (1-\theta)\blambda^- + \theta\blambda^+ = \bm{\alpha} + \delta\bm{\beta},\label{eq:interval-affine-price}
+\end{equation}
+where $\blambda^-$ and $\blambda^+$ are the nodal prices from $y^-$ and $y^+$, with $\bm{\alpha}=\blambda^--\delta^-\bm{\beta}$ and
+\begin{equation}
+\bm{\beta} = \frac{\blambda^+ - \blambda^-}{\delta^+ - \delta^-}.\label{eq:price-sensitivity}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The convex combination~\eqref{eq:dual-interpolation} preserves dual feasibility because $\mathcal{F}^D(\delta)$ depends affinely on $\delta$. By linearity of $L(\cdot)$ and strong duality at both endpoints,
+\begin{align*}
+L(y(\delta)) &= (1-\theta)L(y^-) + \theta L(y^+)\\
+&= (1-\theta)\ell_{\bar{x}}^P(\delta^-) + \theta\ell_{\bar{x}}^P(\delta^+) = \ell_{\bar{x}}^P(\delta).
+\end{align*}
+
+Since $\bar{x}$ is primal feasible and $y(\delta)$ attains the same objective value, both are optimal at $\delta$. Linearity of~\eqref{eq:lmp} in the dual multipliers then yields~\eqref{eq:interval-affine-price}--\eqref{eq:price-sensitivity}.
+\end{proof}
+
+Proposition~\ref{prop:dual} converts any common-primal interval into a closed-form price formula, regardless of dual nonuniqueness. Unlike the primal slope $d^\top\bar{x}$ (a generation quantity), $\bm{\beta}$ is an offer-to-price sensitivity vector: CHP nodal prices can shift affinely with $\delta$ even while the optimal convexified solution $\bar{x}$ stays fixed. Along the selected path, $\bm{\beta}$ equals $d\blambda^{\CHP}/d\delta$ on $(\delta^-,\delta^+)$ and the one-sided slope at the endpoints. Proposition~\ref{prop:dual} thus provides the optimality certificate for an affine price interval; we next construct these intervals across $\mathcal{D}$ without enumerating all optimal solutions.
+
+% ---------------------------------------------------------------------
+\subsection{Construction and Query of the CHP Price Oracle}
+% ---------------------------------------------------------------------
+
+
+To construct these certified price intervals offline across $\mathcal{D}=[0,\bar{\delta}]$, we first solve~\eqref{eq:paramlp} at $0$ and $\bar{\delta}$ and store each optimal primal-dual pair and optimal value in a solution pool. For any candidate interval $[\delta^-,\delta^+]$, we test whether a pooled primal solution $\bar{x}$ attains optimality at both ends, namely $\ell_{\bar{x}}^P(\delta^\pm)=v^{\CHP}(\delta^\pm)$. Because $\ell_{\bar{x}}^P(\delta)$ upper-bounds the concave function $v^{\CHP}(\delta)$ while the endpoint chord lower-bounds it, endpoint agreement forces $v^{\CHP}(\delta)=\ell_{\bar{x}}^P(\delta)$ throughout $[\delta^-,\delta^+]$. Proposition~\ref{prop:dual} then certifies an affine price rule on $[\delta^-,\delta^+]$ with no interior LP solve.
+
+% We begin by solving~\eqref{eq:paramlp} at the two endpoints $0$ and $\bar{\delta}$, storing each optimal primal solution, complete optimal dual solution, and optimal objective value in a pool of solved instances. To test whether a candidate interval $[\delta^-,\delta^+]$ can be certified without interior solves, we check whether any pooled primal solution $\bar{x}$ attains the optimal value at both endpoints, i.e., $\ell_{\bar{x}}^P(\delta^-)=v^{\CHP}(\delta^-)$ and $\ell_{\bar{x}}^P(\delta^+)=v^{\CHP}(\delta^+)$. Because $\bar{x}\in\mathcal{P}$ is feasible, its affine cost line $\ell_{\bar{x}}^P(\delta)$ upper-bounds $v^{\CHP}(\delta)$ on $[\delta^-,\delta^+]$, while concavity of $v^{\CHP}(\delta)$ places it on or above the chord joining its endpoint values. Agreement at both endpoints forces that chord and $\ell_{\bar{x}}^P(\delta)$ to coincide, establishing $v^{\CHP}(\delta)=\ell_{\bar{x}}^P(\delta)$ across the entire interval. Proposition~\ref{prop:dual} then interpolates the endpoint duals to yield a valid affine price function on $[\delta^-,\delta^+]$.
+
+If no pooled solution passes this test, the endpoint solutions $(x^-,y^-)$ and $(x^+,y^+)$ bracket $v^{\CHP}(\delta)$ from above by their cost lines and from below by the dual-objective chord:
+\begin{align}
+U^P(\delta) &= \min\{\ell_{x^-}^P(\delta),\ell_{x^+}^P(\delta)\},\label{eq:pricing-upper}\\
+L^P(\delta) &= \frac{\delta^+-\delta}{\delta^+-\delta^-}L(y^-) + \frac{\delta-\delta^-}{\delta^+-\delta^-}L(y^+),\label{eq:pricing-lower}
+\end{align}
+% so that $L^P(\delta)\le v^{\CHP}(\delta)\le U^P(\delta)$ on $[\delta^-,\delta^+]$. The vertical gap $U^P(\delta)-L^P(\delta)$ quantifies the remaining uncertainty in the cost envelope: it vanishes at both endpoints and, when the two endpoint cost lines cross inside $(\delta^-,\delta^+)$, reaches its maximum at their intersection.
+
+so that $L^P(\delta)\le v^{\CHP}(\delta)\le U^P(\delta)$ on $[\delta^-,\delta^+]$. Failing the certification test implies strictly distinct endpoint optimality and hence strictly decreasing slopes ($d^\top x^->d^\top x^+$) by concavity. The two endpoint lines therefore cross strictly inside $(\delta^-,\delta^+)$, where the envelope uncertainty gap $U^P(\delta)-L^P(\delta)$ is largest. Solving~\eqref{eq:paramlp} at this crossing either confirms that no cheaper solution exists there, allowing $x^-$ and $x^+$ to certify both subintervals immediately, or discovers a strictly cheaper solution that refines the envelope for further splitting. Adding each solved pair to the pool and sharing the solved dual vector across adjacent subintervals guarantees that the selected price path $\blambda^{\CHP}(\delta)$ is continuous everywhere on $\mathcal{D}$.
+
+% We therefore probe the intersection $\ell_{x^-}^P(\delta)=\ell_{x^+}^P(\delta)$ by solving~\eqref{eq:paramlp} at that offer. Importantly, two endpoint lines crossing at a point does not guarantee a true breakpoint of $v^{\CHP}(\delta)$, because an undiscovered feasible solution in $\mathcal{P}$ may undercut both lines there. Solving~\eqref{eq:paramlp} at the probe resolves this ambiguity with two possible outcomes: if the optimal cost equals $U^P(\delta)$, no cheaper solution exists at the crossing, so $x^-$ and $x^+$ immediately certify the left and right subintervals; if a strictly cheaper solution is found, it lowers the upper bound and subdivides $[\delta^-,\delta^+]$ for further refinement. In both cases, the new primal--dual pair is added to the pool, and the solved dual vector at the split offer is shared by both subintervals so that the selected price path $\blambda^{\CHP}(\delta)$ remains continuous across every breakpoint on $\mathcal{D}$.
+
+% Because $v^{\CHP}(\delta)$ has finitely many affine segments on $\mathcal{D}$, each probe either certifies a subinterval or resolves a new segment, so refinement terminates in finitely many LP solves. Since an intermediate probe need not coincide with an actual change in the price rule, adjacent certified subintervals whose selected price coefficients $(\bm{\alpha},\bm{\beta})$ match are merged into a single query interval while retaining their underlying primal certificates. This produces the ordered offline CHP price oracle:
+Because $v^{\CHP}(\delta)$ has finitely many affine segments on $\mathcal{D}$, refinement terminates in finitely many LP solves. Merging adjacent certified subintervals that share identical price coefficients $(\bm{\alpha},\bm{\beta})$ produces the ordered offline CHP price oracle
+\begin{equation}
+\mathcal{O}_g^{\CHP} = \left\{ \left(I_m^P,\bm{\alpha}^m,\bm{\beta}^m\right) \right\}_{m=1}^{M_P}, \qquad I_m^P = [\underline{\delta}_m^P,\overline{\delta}_m^P].\label{eq:price-oracle}
+\end{equation}
+
+For any subsequent query $\delta\in\mathcal{D}$, binary search locates the active interval $I_m^P$ in $O(\log M_P)$ comparisons and returns
+\begin{equation}
+\blambda^{\CHP}(\delta) = \bm{\alpha}^m + \delta\bm{\beta}^m, \qquad \forall\delta\in I_m^P，\label{eq:affine-price}
+\end{equation}
+trading offline compilation for fast repeated price queries.
+
+% ---------------------------------------------------------------------
+\subsection{Certification of Physical UC Regions}
+% ---------------------------------------------------------------------
+Because market settlement evaluates actual profit on the physical UC schedule $s^{\UC}(\delta)$ rather than the convexified pricing solution, we next partition $\mathcal{D}$ into regions of persistent physical clearing. Each complete schedule $s\in\mathcal{F}^{\UC}$ carries an affine reported system cost:
+\begin{equation}
+\ell_s^{\UC}(\delta) = C_{\mathrm{sys}}(s) + \delta Q_g(s_g),\label{eq:uc-line}
+\end{equation}
+whose intercept $C_{\mathrm{sys}}(s)$ is the actual system operating cost and slope $Q_g(s_g)$ is unit $g$'s offer-affected generation. As $\delta$ rises, the ISO may switch to a schedule with smaller $Q_g(s_g)$ even if competing units incur higher actual operating cost. Since $\mathcal{F}^{\UC}$ consists of finitely many binary commitment states, each with a polyhedral continuous dispatch and cost set, $v^{\UC}(\delta)\!\!=\!\!\min_{s\!\in\mathcal{F}^{\UC}}\ell_s^{\UC}(\delta)$ is the lower envelope of finitely many affine lines and is therefore concave and piecewise affine on $\mathcal{D}$.
+
+\begin{lemma}[Common Optimal Physical Schedule]
+\label{lem:uc}
+If a complete system-feasible schedule $\bar{s}\in\mathcal{F}^{\UC}$ is globally optimal for~\eqref{eq:physical-clearing} at both $\delta^-$ and $\delta^+$, then $\bar{s}$ remains globally optimal for every $\delta\in[\delta^-,\delta^+]$.
+\end{lemma}
+
+\begin{proof}
+The affine line $\ell_{\bar{s}}^{\UC}(\delta)$ upper-bounds $v^{\UC}(\delta)$ on $[\delta^-,\delta^+]$, while concavity lower-bounds $v^{\UC}(\delta)$ by the chord joining its endpoint values. Optimality of $\bar{s}$ at both endpoints forces that chord to coincide with $\ell_{\bar{s}}^{\UC}(\delta)$ across $[\delta^-,\delta^+]$.
+\end{proof}
+
+Applying the same envelope refinement as in the price oracle, with global MILP optimality in place of the LP primal-dual certificate, we solve~\eqref{eq:physical-clearing} at $0$ and $\bar{\delta}$ and certify any candidate interval $[\delta^-,\delta^+]$ whenever a retained schedule is globally optimal at both ends. Otherwise, concavity ensures $Q_g(s_g^-)>Q_g(s_g^+)$, so the endpoint cost lines cross strictly inside $(\delta^-,\delta^+)$. Probing~\eqref{eq:physical-clearing} at that crossing either certifies both subintervals or reveals a cheaper competing schedule for further subdivision. Finite termination yields the physical UC regions $\{I_r^{\UC}\}_{r=1}^{M_{\UC}}$, each supporting a persistent globally optimal physical UC schedule.
+
+Because pricing optimizes over convexified unit hulls whereas clearing optimizes over binary-feasible schedules, price breakpoints and physical switching offers need not coincide. We therefore intersect the two partitions.
+
+% ---------------------------------------------------------------------
+\subsection{Finite Strategic-Profit Evaluation}
+% ---------------------------------------------------------------------
+Intersecting $\{I_m^P\}_{m=1}^{M_P}$ with $\{I_r^{\UC}\}_{r=1}^{M_{\UC}}$ yields a covering set of joint intervals $I_j=[\underline{\delta}_j,\overline{\delta}_j]$ ($j=1,\ldots,M_J$) on which both the selected CHP price rule and the globally optimal physical UC schedule are fixed:
+\begin{align}
+&\blambda_g(\delta) = \bm{\alpha}_g^j + \delta\bm{\beta}_g^j,\notag\\
+&\bar{s}^{\,j} \in \arg\min\nolimits_{s\in\mathcal{F}^{\UC}}\{C_{\mathrm{sys}}(s) + \delta Q_g(s_g)\}, \ \forall\delta\in I_j,\label{eq:joint-region}
+\end{align}
+where $(\!\bm{\alpha}_g^j,\bm{\beta}_g^j\!)$ is the subvector of $(\!\bm{\alpha}^m,\bm{\beta}^m\!)$ at bus $b(g)$ on the price interval containing $I_j$. Let $\Pi_g^j\!(\delta)\!\!=\!\!\Pi_g\!(\delta;\bar{s}^{\,j})$ denote the actual profit branch on $I_j$ under schedule $\bar{s}^{\,j}$.
+
+Inside $I_j$, generator $g$'s profit-maximizing self-schedule $s_g^{\SSched}(\delta)$ in~\eqref{eq:ss} can still change repeatedly as $\delta$ and $\blambda_g(\delta)$ vary. Tracking every interior self-scheduling switch would require a third parametric partition. Proposition~\ref{prop:finite} eliminates that step completely under complete reported LOC settlement.
+
+\begin{proposition}[Finite Strategic-Profit Evaluation]
+\label{prop:finite}
+On any joint interval $I_j=[\underline{\delta}_j,\overline{\delta}_j]$ satisfying~\eqref{eq:joint-region}, the actual profit branch $\Pi_g^j(\delta)$ under complete reported LOC settlement is convex in $\delta$. Consequently,
+\begin{equation}
+\max\nolimits_{\delta\in I_j} \Pi_g^j(\delta)
+= \max\left\{ \Pi_g^j(\underline{\delta}_j),\ \Pi_g^j(\overline{\delta}_j) \right\}.\label{eq:endpoint}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Substituting~\eqref{eq:ss}, \eqref{eq:reported-cost}, and~\eqref{eq:joint-region} into the settlement identity~\eqref{eq:identity} yields
+\begin{equation}
+\begin{aligned}
+\!\!\!\!\Pi_g^j(\delta) \!=\! &\max_{s_g\in\mathcal{S}_g}\Bigl\{
+(\bm{\alpha}_g^j \!\!+\!\! \delta\bm{\beta}_g^j)^\top\bp_g \!\!-\!\! C_g(s_g) \!\!-\!\! \delta Q_g(s_g)
+\Bigr\}\\
+&+ \delta Q_g(\bar{s}_g^{\,j}), \ \forall\delta\!\!\in\!\! I_j.
+\end{aligned}\label{eq:convex-profit}
+\end{equation}
+
+For each fixed $s_g\!\!\in\!\!\mathcal{S}_g$, the bracketed expression is affine in $\delta$. Its pointwise maximum over $\mathcal{S}_g$ is convex on $I_j$, and adding the affine term $\delta Q_g(\bar{s}_g^{\,j})$ preserves convexity. A convex function on a closed interval attains its maximum at an endpoint.
+\end{proof}
+
+By Proposition~\ref{prop:finite}, maximizing actual profit on each $I_j$ requires solving self-scheduling~\eqref{eq:ss} only at its two endpoints. Continuous profit maximization over $\mathcal{D}$ therefore reduces to the finite candidate set
+\begin{equation}
+\mathcal{C} = \bigcup\nolimits_{j=1}^{M_J}
+\left\{ (\underline{\delta}_j,\bar{s}^{\,j}),\ (\overline{\delta}_j,\bar{s}^{\,j}) \right\},\label{eq:candidate-set}
+\end{equation}
+with maximum candidate additional profit
+\begin{equation}
+\mathcal{M}_g^{\mathrm{cand}} = \max\nolimits_{(\delta,s)\in\mathcal{C}}
+\left\{ \Pi_g(\delta;s) - \Pi_g(0) \right\}.\label{eq:candidate-value}
+\end{equation}
+
+Candidates in $\mathcal{C}$ are offer-schedule pairs rather than scalar offers. At a physical switching offer, the pre-switch and post-switch schedules tie in reported system cost and share the same continuous CHP price, so they yield the same optimal self-scheduling profit $\widehat{\Pi}_g^{\SSched}$. By~\eqref{eq:identity}, their actual profit differs by $\delta(Q_g(s_g^-)-Q_g(s_g^+))$, which is positive whenever the post-switch schedule clears less offer-affected generation. Retaining both schedules in $\mathcal{C}$ captures both sides of the jump: executing the pre-switch schedule at reported-cost indifference makes~\eqref{eq:marketpower} equal $\mathcal{M}_g^{\mathrm{cand}}$, while alternative tie-breaking rules approach the same supremum from the pre-switch interior.
+
+Constructed once for a given market instance, strategic unit, and offer profile, this joint partition replaces continuous search with fast oracle price lookups and at most $|\mathcal{C}|$ self-scheduling solves. Beyond computation, each joint interval directly supplies the price sensitivities $\bm{\beta}_g^j$ and persistent schedules $\bar{s}^{\,j}$ that explain how strategic profit forms and ends in Section~\ref{sec:mechanism}.
+
+% =====================================================================
+% SECTION IV: PROFIT ACCUMULATION AND GENERATION SUBSTITUTION
+% =====================================================================
+\section{Profit Accumulation and Generation Substitution}
+\label{sec:mechanism}
+The joint intervals constructed in Section~\ref{sec:method} pair an affine CHP price rule with a persistent physical UC schedule. Together, they answer two central questions about market power under CHP: where additional actual profit comes from while a physical schedule persists, and what limits that profit once competing generation can economically substitute for the strategic unit. We first decompose continuous profit accumulation and discrete switching losses, then link physical switching boundaries to the multiperiod operating cost of competing schedules, and finally contrast how rival operating costs and transmission limits reshape competition.
+
+% ---------------------------------------------------------------------
+\subsection{Profit Accumulation Under Complete LOC Settlement}
+% ---------------------------------------------------------------------
+Within a joint interval, the physical UC schedule stays fixed, so actual profit changes smoothly through CHP nodal prices and the generator's best self-schedule. On a joint interval $I_j$ satisfying~\eqref{eq:joint-region}, let $Q_g^{\UC,j}=Q_g(\bar{s}_g^{\,j})$ denote unit $g$'s cleared offer-affected generation, and let $Q_g^{\SSched}(\delta)=Q_g(s_g^{\SSched}(\delta))$ denote its offer-affected generation under the optimal self-schedule $s_g^{\SSched}(\delta)=(\bp_g^{\SSched}(\delta),\bu_g^{\SSched}(\delta))$ in~\eqref{eq:ss}. Applying the envelope theorem to the convex profit branch~\eqref{eq:convex-profit} gives the marginal profit response wherever $s_g^{\SSched}(\delta)$ is unique:
+\begin{equation}
+\frac{d\Pi_g^j}{d\delta}
+=
+\underbrace{(\bp_g^{\SSched}(\delta))^\top\bm{\beta}_g^j}_{\text{price-response effect}}
++
+\underbrace{Q_g^{\UC,j} - Q_g^{\SSched}(\delta)}_{\text{offer-affected generation difference}}.
+\label{eq:derivative}
+\end{equation}
+
+At offers where the optimal self-schedule switches, the one-sided slopes follow the same formula evaluated at the corresponding limiting self-schedules.
+
+Equation~\eqref{eq:derivative} reveals why strong price influence alone can misidentify market power under CHP. First, because complete reported LOC settlement guarantees the generator at least its best reported self-scheduling profit, CHP price shifts pass into actual profit weighted by self-scheduled output $\bp_g^{\SSched}(\delta)$, not by physically cleared output $\bp_g^{\UC}(\delta)$. Second, raising the offer increases the settlement surplus on cleared generation at rate $Q_g^{\UC,j}$, while reducing the reported self-scheduling benchmark at rate $Q_g^{\SSched}(\delta)$. A positive price sensitivity ($\bm{\beta}_g^j\neq\bm{0}$) therefore raises actual profit only when price gains on the unit's self-schedule outweigh any shortfall of cleared generation below self-scheduled generation.
+
+Actual profit also jumps discretely whenever the ISO switches to a competing physical UC schedule. Let $\delta^{\mathrm{sw}}$ denote a physical switching offer between adjacent joint intervals, with superscripts $-$ and $+$ labeling the pre-switch and post-switch branches and $Q_g^{\UC,\pm}$ their cleared offer-affected generation. Because the selected CHP price path $\blambda_g(\delta)$ is continuous at $\delta^{\mathrm{sw}}$, the best reported self-scheduling profit $\widehat{\Pi}_g^{\SSched}(\blambda_g(\delta),\delta)$ is also continuous there. By the settlement identity~\eqref{eq:identity}, the entire profit jump stems from the change in cleared offer-affected generation:
+\begin{equation}
+\begin{aligned}
+J_g(\delta^{\mathrm{sw}})
+\!\!=\!\! \Pi_g^+(\delta^{\mathrm{sw}}) \!\!-\!\! \Pi_g^-(\delta^{\mathrm{sw}})\!\!=\!\! \delta^{\mathrm{sw}}\!\left(Q_g^{\UC,+} \!\!-\!\! Q_g^{\UC,-}\right).
+\end{aligned}
+\label{eq:physical-jump}
+\end{equation}
+
+Writing $\bm{\beta}_g(\delta)=\bm{\beta}_g^j$ and $Q_g^{\UC}(\delta)=Q_g^{\UC,j}$ on the interior of each joint interval $I_j$, the net profit gain from truthful bidding ($\delta=0$) to any offer $\delta_f\in\mathcal{D}$ combines smooth accumulation and discrete jumps:
+\begin{align}
+\Delta\Pi_g(\delta_f)
+={}&\int_0^{\delta_f}\!
+\left[
+(\bp_g^{\SSched}(\delta))^\top\bm{\beta}_g(\delta)
++ Q_g^{\UC}(\delta) - Q_g^{\SSched}(\delta)
+\right]d\delta\notag\\
+&+ \sum\nolimits_{\substack{\delta^{\mathrm{sw}}\in(0,\delta_f)\\\text{physical switches}}}
+J_g(\delta^{\mathrm{sw}}).
+\label{eq:path-ledger}
+\end{align}
+If $\delta_f$ itself is a switching offer, $J_g(\delta_f)$ is omitted under the pre-switch rule and added if the post-switch schedule is executed.
+
+Comparing~\eqref{eq:path-ledger} with the ex-post settlement account derived from~\eqref{eq:profit}, where $\Delta X(\delta_f)=X(\delta_f)-X(0)$,
+\begin{equation}
+\Delta\Pi_g(\delta_f) = \Delta R_g(\delta_f) + \Delta U_g(\delta_f) - \Delta C_g(\delta_f).\label{eq:settlement-ledger}
+\end{equation}
+clarifies two complementary perspectives. Equation~\eqref{eq:settlement-ledger} records how realized changes in energy revenue, uplift, and actual cost sum to $\Delta\Pi_g(\delta_f)$, whereas~\eqref{eq:path-ledger} traces how that gain is generated along the offer path. In particular, the price-response integral in~\eqref{eq:path-ledger} weights price shifts by self-scheduled output $\bp_g^{\SSched}(\delta)$ rather than cleared output and therefore differs term by term from the energy-revenue change $\Delta R_g(\delta_f)$.
+
+% ---------------------------------------------------------------------
+\subsection{Costly Multiperiod Generation Substitution}
+% ---------------------------------------------------------------------
+Smooth profit accumulation lasts only while the current physical UC schedule stays optimal. To see what limits a strategic offer, note that under price-inelastic demand and intertemporal UC constraints, replacing unit $g$'s output is rarely a single-hour merit-order swap: rival generators may need to start earlier, remain online across minimum up-time windows, and respect ramping and PTDF transmission limits. Competition therefore occurs across complete system-feasible schedules in $\mathcal{F}^{\UC}$, and market power persists precisely while competing schedules remain more costly to clear.
+
+Consider two complete schedules $A,B\in\mathcal{F}^{\UC}$ with actual system operating costs $C_A=C_{\mathrm{sys}}(A)$, $C_B=C_{\mathrm{sys}}(B)$ and offer-affected generation $Q_A=Q_g(A_g)$, $Q_B=Q_g(B_g)$ for unit $g$. Suppose schedule $B$ incurs a higher actual system cost ($C_B>C_A$), for instance by running a rival unit for extra hours, while reducing unit $g$'s offer-affected generation ($Q_B<Q_A$). By~\eqref{eq:uc-line}, their reported system-cost difference is
+\begin{equation}
+\ell_B^{\UC}(\delta) - \ell_A^{\UC}(\delta)
+= (C_B - C_A) - \delta(Q_A - Q_B).\label{eq:substitution-comparison}
+\end{equation}
+
+Schedule $B$ becomes cheaper to clear than schedule $A$ once $\delta$ exceeds the pairwise substitution threshold
+\begin{equation}
+\delta_{AB}^{\UC} = \frac{C_B - C_A}{Q_A - Q_B}.\label{eq:threshold}
+\end{equation}
+
+Economically, $\delta_{AB}^{\UC}$ (in \$/MWh) is the unit cost barrier of substitution: the additional actual system cost $C_B-C_A$ per MWh of offer-affected generation $Q_A-Q_B$ displaced from unit $g$. Below $\delta_{AB}^{\UC}$, keeping schedule $A$ remains cheaper in reported cost than paying $B$'s extra real operating cost; above it, the ISO switches to $B$. Whenever $A$ and $B$ are adjacent global optima on $v^{\UC}(\delta)$, this ratio is the exact physical switching offer between them.
+
+\begin{proposition}[Monotone Substitution and Profit Jump]
+\label{cor:exposure}
+For fixed system feasibility $\mathcal{F}^{\UC}$ and fixed competing offers, globally optimal physical UC schedules at $\delta_1<\delta_2$ satisfy
+\begin{equation}
+Q_g^{\UC}(\delta_2) \le Q_g^{\UC}(\delta_1).\label{eq:exposure-monotonicity}
+\end{equation}
+Moreover, at a switching offer $\delta^{\mathrm{sw}}\!\!=\!\!\delta_{AB}^{\UC}\!\!\ge\!\! 0$ between adjacent globally optimal schedules $A$ and $B$ with $Q_B\!\!<\!\!Q_A$ and continuous selected CHP prices, the profit jump~\eqref{eq:physical-jump} satisfies
+\begin{equation}
+J_g(\delta^{\mathrm{sw}})
+= \delta^{\mathrm{sw}}(Q_B - Q_A)
+= -(C_B - C_A) \le 0.\label{eq:jump-replacement-cost}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Let $s_1,s_2\!\!\in\!\!\mathcal{F}^{\UC}$ be globally optimal at $\delta_1\!\!<\!\!\delta_2$. Optimality implies $C_{\mathrm{sys}}(s_1)\!\!+\!\!\delta_1 Q_g(s_{1,g})\le C_{\mathrm{sys}}(s_2)+\delta_1 Q_g(s_{2,g})$ and $C_{\mathrm{sys}}(s_2)\!\!+\!\!\delta_2 Q_g(s_{2,g})\!\!\le\!\! C_{\mathrm{sys}}(s_1)\!\!+\!\!\delta_2 Q_g(s_{1,g})$. Summing both inequalities gives $(\delta_2\!\!-\!\!\delta_1)[Q_g(s_{2,g})\!\!-\!\!Q_g(s_{1,g})]\!\!\le\!\! 0$, proving~\eqref{eq:exposure-monotonicity}. At $\delta^{\mathrm{sw}}\!\!=\!\!\delta_{AB}^{\UC}$, equal reported system costs imply $\delta^{\mathrm{sw}}(Q_A\!\!-\!\!Q_B)\!\!=\!\!C_B\!\!-\!\!C_A$; substituting this into~\eqref{eq:physical-jump} yields~\eqref{eq:jump-replacement-cost}.
+\end{proof}
+
+Proposition~\ref{cor:exposure} ties physical substitution barriers directly to strategic profit. Raising an offer can never expand cleared offer-affected generation, and once substitution becomes economic, switching from $A$ to $B$ cuts unit $g$'s actual profit by exactly the extra actual system cost $C_B-C_A$ required to replace it. Whenever profit builds up toward $\delta_{AB}^{\UC}$, the pre-switch offer-schedule pair $(\delta_{AB}^{\UC},A)$ forms a natural local peak, while the global maximizer across $\mathcal{D}$ is still identified by comparing all finite candidates in $\mathcal{C}$ via Proposition~\ref{prop:finite}.
+
+% ---------------------------------------------------------------------
+\subsection{Rival Operating Costs and Transmission Limits}
+% ---------------------------------------------------------------------
+The pairwise threshold~\eqref{eq:threshold} governs clearing only while schedules $A$ and $B$ remain adjacent global optima. Changing market fundamentals therefore reshapes competition through two distinct levers: shifting the switching point between existing competitors, or altering which competing schedules can enter the market at all.
+
+First, consider a rival operating-cost perturbation $\epsilon$ that shifts the actual system cost of any fixed schedule $s\in\mathcal{F}^{\UC}$ affinely as $C_{\mathrm{sys}}(s;\epsilon)=C_{\mathrm{sys}}(s;0)+\epsilon\chi_s$, with competing offers updated consistently. Because $Q_A$ and $Q_B$ remain constant for fixed schedules $A$ and $B$, their pairwise substitution threshold~\eqref{eq:threshold} shifts linearly with $\epsilon$:
+\begin{equation}
+\delta_{AB}^{\UC}(\epsilon)
+= \delta_{AB}^{\UC}(0) + \epsilon\frac{\chi_B - \chi_A}{Q_A - Q_B}.\label{eq:threshold-shift}
+\end{equation}
+
+For example, if $\epsilon$ (in \$ per online-hour) perturbs a rival generator's hourly online cost, then $\chi_s$ counts that rival's online hours under schedule $s$. When replacing unit $g$ requires $\chi_B-\chi_A>0$ extra online hours, higher rival online costs raise the substitution barrier and shift $\delta_{AB}^{\UC}(\epsilon)$ upward linearly while $A$ and $B$ stay adjacent global optima. Conversely, a cost parameter that enters both schedules identically ($\chi_B=\chi_A$, such as an unchanged startup count) leaves the switching threshold unchanged.
+
+Second, modifying transmission limits $f_l^{\max}$ in~\eqref{eq:powerflow} changes the physical feasible set $\mathcal{F}^{\UC}$ itself. Relaxing a binding line limit can admit a previously infeasible complete schedule $W\in\mathcal{F}^{\UC}$ whose reported system cost satisfies
+\begin{equation}
+\ell_W^{\UC}(\delta,\epsilon)
+< \min\left\{ \ell_A^{\UC}(\delta,\epsilon),\ \ell_B^{\UC}(\delta,\epsilon) \right\}.\label{eq:third-schedule}
+\end{equation}
+
+Wherever~\eqref{eq:third-schedule} holds, schedule $W$ strictly undercuts both $A$ and $B$, eliminating their crossing from the global UC lower envelope so that $\delta_{AB}^{\UC}(\epsilon)$ no longer governs physical clearing. Because the pairwise cost differences against $A$ and $B$ are affine in $(\delta,\epsilon)$ for fixed schedules $A,B,W$, verifying~\eqref{eq:third-schedule} at the four corners of any compact rectangle $\mathcal{R}=[\underline{\delta},\overline{\delta}]\times[\underline{\epsilon},\overline{\epsilon}]$ certifies dominance across the entire rectangle.
+
+Finally, because changing rival costs or transmission limits alters the truthful-offer outcome itself, additional actual profit under each market condition $\nu$ is measured relative to its own truthful baseline:
+\begin{equation}
+\Delta\Pi_g^{\nu}(\delta) = \Pi_g^{\nu}(\delta) - \Pi_g^{\nu}(0),\label{eq:condition-profit}
+\end{equation}
+combining the condition-specific CHP price oracle with complete reported LOC settlement. Section~\ref{sec:results} demonstrates these profit channels, substitution thresholds, and network effects numerically.
+
+
+
+
+\section{Numerical Results}\label{sec:results}
+
+The numerical studies trace strategic profit from price formation to multiperiod generation substitution and computational reuse. We first evaluate additional actual profit across a continuous offer range and reconcile it through settlement and offer-path accounts. We next identify the competing schedule whose multiperiod operating cost bounds the profitable branch, and then test how rival operating costs and transmission limits reshape competition and profit baselines. Finally, repeated pricing workloads on two test systems quantify the space-for-time benefit of the compiled price oracle.
+
+\subsection{Experimental Setup and Validation Scope}
+The main economic study uses a modified IEEE 30-bus system with six generators, while a modified IEEE 118-bus system with 54 generators supplies a larger repeated-pricing workload. Both systems span 24 hourly periods with three PWL fuel-cost segments per unit and PTDF transmission limits. Pricing LPs, physical UC MILPs, and DAG self-scheduling problems are solved using COPT~8.0.6 on an Intel Core i9-14900 workstation with 32~GB RAM.
+
+On the 30-bus system, strategic unit G1 raises its offer uniformly across all hours ($w_t=1$ for all $t\in\mathcal{T}$) over $\mathcal{D}=[0,20.991]$~\$/MWh, spanning $0\%$--$50\%$ of its reference incremental slope ($41.982$~\$/MWh). Figure~\ref{fig:profits} uses the percentage axis, whereas text and tables report offers and thresholds in~\$/MWh. The 118-bus workload evaluates unit G11 over $0\%$--$50\%$ of its reference slope ($36.330$~\$/MWh). Actual profit is measured under complete reported LOC settlement~\eqref{eq:profit} relative to each condition's truthful baseline ($\delta=0$), using the pre-switch rule of Section~\ref{sec:method} at reported-cost indifference.
+
+% ---------------------------------------------------------------------
+\subsection{Actual Profit Along Continuous Offers}\label{sec:results-profit}
+% ---------------------------------------------------------------------
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/heatmap-profit-uplift.jpg}
+\caption{Price, profit, and uplift responses to G1's uniform all-day offer in the modified IEEE 30-bus system, relative to $\delta=0$. (a)~Hourly CHP price change $\Delta\lambda_{G1,t}^{\CHP}$ (\$/MWh) at G1's bus. (b)~Additional actual profit $\Delta\Pi_g$ (\$) and (c)~uplift change $\Delta U_g$ (\$). Piecewise branches separate pre- and post-switch executions; the star marks pre-switch schedule~$A$ and the dot marks post-switch schedule~$B$.}
+\label{fig:profits}
+\end{figure}
+
+G1 achieves a maximum additional actual profit of $\$7{,}811.56$ at $\delta^{\Pi}=13.204$~\$/MWh ($31.45\%$), raising actual profit from $\$37{,}289.31$ to $\$45{,}100.87$ ($+20.95\%$). This peak occurs at an $A$/$B$ physical switching boundary where schedule~$A$ executes under the pre-switch rule.
+
+Figure~\ref{fig:profits} contrasts price, profit, and uplift across $\mathcal{D}$. In panel~(a), hourly CHP price changes differ in magnitude and sign, with hour~1 negative for all positive offers. In panel~(b), actual profit rises along convex branches within each joint interval and drops abruptly at physical switches; because the curve is nonmonotone and turns negative above $38\%$, sparse offer sampling can easily miss the peak. In ~(c), uplift falls by $\$578.36$ at $\delta^{\Pi}$, and at the $A$/$B$ boundary it jumps upward while actual profit drops by $\$1{,}387.35$, confirming that neither price shifts nor uplift trends alone identify profitable offers.
+
+
+\begin{table}[t]
+\centering
+\caption{G1's Additional Actual Profit at $\delta^{\Pi}=13.204$~\$/MWh: Settlement and Offer-Path Accounts}
+\label{tab:settlement}
+\footnotesize
+\textit{(a) Settlement account~\eqref{eq:settlement-ledger}}\\[2pt]
+\resizebox{\linewidth}{!}{
+\begin{tabular}{@{}lrrr@{}}\toprule
+ & Truthful $\delta=0$ & Strategic $\delta^{\Pi}=13.204$ & Change $\Delta$\\\midrule
+Cleared generation (MWh) & $2{,}519.06$ & $2{,}424.06$ & $-95.00$\\
+Offer-affected $Q_g$ (MWh) & $1{,}559.06$ & $1{,}464.06$ & $-95.00$\\
+Energy revenue $R_g$ (\$) & $143{,}815.44$ & $148{,}201.04$ & $+4{,}385.61$\\
+Uplift $U_g$ (\$) & $594.61$ & $16.26$ & $-578.36$\\
+Operating cost $C_g$ (\$) & $107{,}120.74$ & $103{,}116.43$ & $-4{,}004.31$\\
+Actual profit $\Pi_g$ (\$) & $37{,}289.31$ & $45{,}100.87$ & $+7{,}811.56$\\\bottomrule
+\end{tabular}}\\[2pt]
+\textit{(b) Offer-path account~\eqref{eq:path-ledger} along $0\to\delta^{\Pi}$}\\[2pt]
+\begin{tabular}{@{}lr@{}}\toprule
+Term in~\eqref{eq:path-ledger} & Amount (\$)\\\midrule
+Price response $\int (\bp_g^{\SSched})^\top\bm{\beta}_g\,d\delta$ & $+8{,}741.60$\\
+Generation difference $\int (Q_g^{\UC}-Q_g^{\SSched})\,d\delta$ & $-29.23$\\
+Preceding switches $\sum_{\delta^{\mathrm{sw}}<\delta^{\Pi}} J_g(\delta^{\mathrm{sw}})$ & $-900.82$\\\midrule
+Total additional profit $\Delta\Pi_g(\delta^{\Pi})$ & $+7{,}811.56$\\\bottomrule
+\end{tabular}
+\vspace{2pt}\parbox{\columnwidth}{\footnotesize Schedule~$A$ executes at $\delta^{\Pi}$ under the pre-switch rule.}
+\end{table}
+
+% Table~\ref{tab:settlement} reconciles the $\$7{,}811.56$ gain through both accounts. Ex post~\eqref{eq:settlement-ledger}, higher energy revenue ($+\$4{,}385.61$) and lower operating cost ($-\$4{,}004.31$, as cleared output drops by $95.00$~MWh) outweigh the $\$578.36$ uplift drop. Along the offer path~\eqref{eq:path-ledger}, nearly all gains come from the self-scheduling-weighted price-response integral ($+\$8{,}741.60$), which differs from $\Delta R_g$ because it weights price sensitivity by $\bp_g^{\SSched}$ rather than cleared output $\bp_g^{\UC}$. The generation-difference integral adds only $-\$29.23$, while earlier physical switches strictly below $\delta^{\Pi}$ subtract $-\$900.82$. Gains keep building only until a competing multiperiod schedule undercuts schedule~$A$ in reported system cost.
+
+Table~\ref{tab:settlement} reconciles the $\$7{,}811.56$ gain through both accounts. The settlement account~\eqref{eq:settlement-ledger} captures the ex-post financial outcome: energy revenue rises by $\$4{,}385.61$ and operating cost drops by $\$4{,}004.31$ (with cleared output $95.00$~MWh lower), together outweighing the $\$578.36$ drop in uplift.
+
+The offer-path account~\eqref{eq:path-ledger} traces how the curve in Fig.~\ref{fig:profits}(b) accumulates from $\delta=0$ to $\delta^{\Pi}$. First, the self-scheduling-weighted price-response integral contributes $+\$8{,}741.60$, driving almost all of the gain; because it weights price sensitivity by $\bp_g^{\SSched}$ rather than cleared output $\bp_g^{\UC}$, it differs from $\Delta R_g$. Second, the offer-affected generation difference subtracts only $-\$29.23$, showing that cleared and self-scheduled generation stay close along this path. Third, earlier physical switches strictly below $\delta^{\Pi}$ subtract $-\$900.82$. Profit keeps building along this branch only until a competing complete schedule becomes cheaper to clear than schedule~$A$.
+
+% ---------------------------------------------------------------------
+\subsection{Costly Generation Substitution and Profit Boundaries}\label{sec:results-substitution}
+% ---------------------------------------------------------------------
+Displacing G1 requires switching complete 24-hour physical UC schedules rather than making a single-hour swap. Relative to schedule~$A$ (G5 online in hours~6--24), schedule~$B$ starts G5 five hours earlier (hours~1--24, still one startup) at its $25.00$~MW minimum output (Table~\ref{tab:substitution}). Over hours~1--5, this extra $125.00$~MWh displaces $5.07$~MW from G1 and $19.93$~MW from G3 in hour~1, and $25.00$~MW/h from G1 in hours~2--5, with identical dispatch from hour~6 onward. Schedule~$B$ thus removes $105.07$~MWh of G1's offer-affected generation while raising 24-hour actual system operating cost by $\$1{,}387.35$.
+
+\begin{table}[t]
+\centering
+\caption{Competing Complete Physical Schedules at the $A$/$B$ Substitution Boundary}
+\label{tab:substitution}
+\setlength{\tabcolsep}{3.5pt}
+\footnotesize
+\begin{tabular}{@{}lrrr@{}}\toprule
+Quantity & Schedule~$A$ & Schedule~$B$ & $B-A$\\\midrule
+G5 online window & Hours~6--24 & Hours~1--24 & --\\
+G5 online hours & $19$ & $24$ & $+5$\\
+G5 startups & $1$ & $1$ & $0$\\
+Actual system cost $C_{\mathrm{sys}}$ (\$) & $184{,}189.79$ & $185{,}577.13$ & $+1{,}387.35$\\
+G1 offer-affected $Q_g$ (MWh) & $1{,}464.06$ & $1{,}358.99$ & $-105.07$\\\midrule
+\multicolumn{3}{@{}l}{Substitution threshold $\delta_{AB}^{\UC}$ (\$/MWh)} & $13.204$\\
+\multicolumn{3}{@{}l}{Profit jump $J_g(\delta_{AB}^{\UC})$ (\$)} & $-1{,}387.35$\\\bottomrule
+\end{tabular}
+\vspace{2pt}\parbox{\columnwidth}{\footnotesize $C_{\mathrm{sys}}$ is the 24-hour actual operating cost across all generators; $Q_g$ follows~\eqref{eq:exposure}.}
+\end{table}
+
+% Although schedule~$B$ costs more to operate in reality, physical UC clearing~\eqref{eq:physical-clearing} minimizes \emph{reported} system cost $C_{\mathrm{sys}}(s)+\delta Q_g(s_g)$. As $\delta$ rises, schedule~$A$'s reported cost grows faster than $B$'s because $A$ carries $105.07$~MWh more of G1's offer-affected generation. Below the unit substitution barrier $\delta_{AB}^{\UC}=1{,}387.35/105.07=13.204$~\$/MWh ($31.45\%$) in~\eqref{eq:threshold}, running G5 earlier is not worth its extra $\$1{,}387.35$ actual cost, so the ISO retains $A$. Above $13.204$~\$/MWh, avoiding G1's offer adder ($\delta\times 105.07$~MWh) saves more in reported cost than the $\$1{,}387.35$ real penalty, so the ISO switches to $B$ even though actual system cost rises. Global UC solves at and adjacent to this crossing confirm $A$ and $B$ as adjacent global optima on $v^{\UC}(\delta)$.
+
+% The exact same $\$1{,}387.35$ governs G1's profit drop at the switch. At $\delta_{AB}^{\UC}=13.204$~\$/MWh, schedules~$A$ and~$B$ tie in reported system cost and share the same continuous CHP price, yet executing $B$ drops G1's additional actual profit from $\$7{,}811.56$ to $\$6{,}424.21$, a downward jump of $-\$1{,}387.35$ that equals the negative of the additional actual system cost in~\eqref{eq:jump-replacement-cost}. Across all 16 archived switches over $\mathcal{D}$, cleared offer-affected generation is nonincreasing (from $1{,}559.06$ to $608.24$~MWh) and every switch satisfies Proposition~\ref{cor:exposure}. Comparing all finite candidates in $\mathcal{C}$ via Proposition~\ref{prop:finite} places the global maximizer $\delta^{\Pi}$ at $\delta_{AB}^{\UC}$ in this baseline case.
+
+Although schedule~$B$ costs more in reality, physical UC clearing~\eqref{eq:physical-clearing} minimizes \emph{reported} system cost $C_{\mathrm{sys}}(s)\!\!+\!\!\delta Q_g(s_g)$. Because $A$ relies on $105.07$~MWh more of G1's offer-affected generation, its reported cost climbs faster with $\delta$. Below the substitution threshold $\delta_{AB}^{\UC}\!\!=\!\!1{,}387.35/105.07\!\!=\!\!13.204$~\$/MWh ($31.45\%$) in~\eqref{eq:threshold}, the ISO retains $A$; above it, avoiding G1's offer adder saves more in reported cost than the $\$1{,}387.35$ real penalty, triggering the switch to $B$. Global UC solves confirm $A$ and $B$ as adjacent global optima across this crossing.
+
+At $\delta_{AB}^{\UC}$, schedules~$A$ and~$B$ tie in reported cost and share the same continuous CHP price, yet executing $B$ cuts G1's additional actual profit from $\$7{,}811.56$ to $\$6{,}424.21$. This $-\$1{,}387.35$ drop equals the negative of the extra actual system cost in~\eqref{eq:jump-replacement-cost}. Across all 16 switches in $\mathcal{D}$, cleared offer-affected generation is nonincreasing (from $1{,}559.06$ to $608.24$~MWh) and every jump satisfies Proposition~\ref{cor:exposure}. Comparing all finite candidates in $\mathcal{C}$ via Proposition~\ref{prop:finite} confirms $\delta^{\Pi}=\delta_{AB}^{\UC}$ in this baseline case.
+
+% ---------------------------------------------------------------------
+\subsection{Rival Operating Costs and Transmission Limits}\label{sec:results-conditions}
+% ---------------------------------------------------------------------
+We next contrast the two structural levers from Section~\ref{sec:mechanism}: perturbing a rival's operating cost shifts an active crossing, whereas relaxing a binding transmission limit changes which schedules can compete.
+
+First, we shift G5's hourly no-load cost $C_5^{\mathrm{NL}}$ by $\epsilon$ (\$/online-hour), updating its offer consistently. Since schedule~$B$ runs G5 five hours longer than $A$ ($\chi_B-\chi_A=5$~h) while $Q_A-Q_B=105.07$~MWh stays fixed,~\eqref{eq:threshold-shift} predicts a linear slope of $5/105.07$~\$/MWh per~\$/online-hour, shifting $\delta_{AB}^{\UC}$ from $13.204$~\$/MWh at $\epsilon=0$ to $13.442$~\$/MWh at $\epsilon=5$ ($+0.238$~\$/MWh). Global UC solves match this line at $\epsilon\in\{-1,0,1,5\}$ [Fig.~\ref{fig:regimes}(a)]. Conversely, raising G5's startup cost $C_5^{\mathrm{SU}}$ by $\$50.00$/start leaves the threshold unchanged because both schedules start G5 once ($\chi_B-\chi_A=0$).
+
+To trace this shift into settlement cleanly, we test two fixed probe offers placed $0.001$~\$/MWh below the $\epsilon=0$ and $\epsilon=5$ crossings: a control offer $\delta_1=13.203$~\$/MWh and a bracketed offer $\delta_2=13.441$~\$/MWh. On the original network, $\delta_1$ clears $A$ under both costs, whereas $\delta_2$ flips from $B$ back to $A$ once $\epsilon$ rises to $5$~\$/online-hour [Fig.~\ref{fig:regimes}(a)].
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_v3_competition.jpg}
+\caption{Competition thresholds and actual profit in the modified IEEE 30-bus system. (a)~Pairwise $A$/$B$ threshold versus G5's no-load cost shift $\epsilon$ on the original network, with globally verified crossings (diamonds) and cleared schedules at probe offers $\delta_1$ and $\delta_2$. (b)~Actual profit at $\delta_2=13.441$~\$/MWh across four network-cost cases: open circles mark truthful baselines $\Pi_g^{\nu}(0)$, filled markers mark strategic profit $\Pi_g^{\nu}(\delta_2)$ under schedule~$A$, $B$, or $W$, and bar lengths show additional profit $\Delta\Pi_g^{\nu}(\delta_2)$.}
+\label{fig:regimes}
+\end{figure}
+
+Second, relaxing line~30's $20.80$~MW thermal limit admits a new feasible schedule~$W$ (peak line-30 flow $39.01$~MW, G5 online 18~hours, $Q_W=1{,}421.57$~MWh). Verifying~\eqref{eq:third-schedule} at the four corners of $[0,20.991]\text{~\$/MWh}\times[0,5]\text{~\$/online-hour}$ certifies that $W$ undercuts both $A$ and $B$ by at least $\$1{,}635.46$ across the entire rectangle, removing the $A$/$B$ crossing from the global lower envelope. Separate global UC solves confirm that $W$ clears in all four relaxed-network cases below.
+
+\begin{table}[t]
+\centering
+\caption{Condition-Specific Truthful Baselines and Additional Actual Profit at Two Fixed Offers (\$)}
+\label{tab:factorial}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{tabular}{@{}lrrrc@{}}\toprule
+Network, $\epsilon$ (\$/h) & Truthful $\Pi_g^{\nu}(0)$ &
+Gain at $\delta_1$ & Gain at $\delta_2$ &
+UC at $\delta_1/\delta_2$\\\midrule
+Original, $0$ & $37{,}289.31$ & $7{,}810.84$ & $6{,}377.54$ & $A$/$B$\\
+Original, $5$ & $37{,}516.20$ & $7{,}529.10$ & $7{,}695.41$ & $A$/$A$\\
+Relaxed, $0$  & $31{,}911.46$ & $8{,}390.69$ & $8{,}600.35$ & $W$/$W$\\
+Relaxed, $5$  & $31{,}817.83$ & $8{,}488.31$ & $8{,}693.98$ & $W$/$W$\\\bottomrule
+\end{tabular}
+\vspace{2pt}\parbox{\columnwidth}{\footnotesize $\epsilon$ perturbs G5's hourly no-load cost $C_5^{\mathrm{NL}}$; $\delta_1=13.203$ and $\delta_2=13.441$~\$/MWh. Each gain subtracts its own row's truthful baseline $\Pi_g^{\nu}(0)$ following~\eqref{eq:condition-profit}.}
+\end{table}
+
+Figure~\ref{fig:regimes}(b) and Table~\ref{tab:factorial} link these physical shifts to actual profit. On the original network at $\delta_2$, raising $\epsilon$ from $0$ to $5$~\$/online-hour flips execution from $B$ back to $A$, retaining $105.07$~MWh of offer-affected generation and lifting additional profit by $+\$1{,}317.86$ (from $\$6{,}377.54$ to $\$7{,}695.41$). At $\delta_1$, both costs clear $A$, yet the gain still drops by $\$281.75$, showing that rival costs alter profit through CHP prices and complete LOC settlement even without a physical switch.
+
+Under transmission relaxation, schedule~$W$ replaces $A$/$B$ competition and eliminates the $B$-to-$A$ jump. In Fig.~\ref{fig:regimes}(b), the two green bars align at the exact same strategic profit ($\$40{,}511.81$), so the $+\$93.63$ rise in additional profit under $\epsilon=5$ comes purely from the lower truthful baseline. More notably, comparing the top and bottom panels at $\epsilon=0$ shows that relaxing line~30 lowers G1's absolute strategic profit (from $\$43{,}666.85$ to $\$40{,}511.81$) but widens its relative gain (from $\$6{,}377.54$ to $\$8{,}600.35$), because the truthful baseline drops even further (from $\$37{,}289.31$ to $\$31{,}911.46$). Transmission limits therefore reshape both the competing schedule set and the truthful baseline against which market power is assessed~\eqref{eq:condition-profit}.
+
+% ---------------------------------------------------------------------
+\subsection{Computational Reuse and Finite Offer Evaluation}\label{sec:results-computation}
+% ---------------------------------------------------------------------
+The parametric framework delivers two computational benefits: reducing continuous profit maximization to finitely many candidates, and trading one-time offline compilation for millisecond-scale online price queries.
+
+On IEEE~30-G1, 154 offline pricing LP solves merge into $M_P=83$ affine price intervals (82 interior cuts), while physical UC certification yields $M_{\UC}=17$ persistent regions (16 interior switches). Because the two cut sets are disjoint, superimposing them produces $82+16=98$ interior cuts, dividing $\mathcal{D}$ into 99 joint intervals with 100 distinct endpoint offers (98 interior points plus $0$ and $20.991$~\$/MWh). Retaining both adjacent schedules at the 16 physical switches gives $100+16=116$ offer-schedule candidates in $\mathcal{C}$. By Proposition~\ref{prop:finite}, checking these 116 candidates suffices for continuous profit maximization without locating interior self-scheduling switches.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_v4_timing.jpg}
+\caption{Cumulative pricing time versus query count on (a)~IEEE~30-G1 (1,000 queries) and (b)~IEEE~118-G11 (500 queries). Direct time sums repeated LP solves; oracle time includes one-time offline compilation and online lookups. Stars mark the first measured query where the oracle becomes faster ($N=138$ and $N=224$).}
+\label{fig:timing}
+\end{figure}
+
+For repeated pricing, offline compilation stores a compact lookup table: 83 rules for IEEE~30-G1 ($41.96$~s of LP solves plus $0.55$~s of postprocessing) and 103 rules for IEEE~118-G11 ($309.72$~s plus $1.87$~s). Online, each query performs an $O(\log M_P)$ binary search and one affine evaluation~\eqref{eq:affine-price}, completing all 1,000 queries on IEEE~30-G1 in $6.66$~ms and all 500 queries on IEEE~118-G11 in $6.21$~ms. Consequently, the oracle curves in Fig.~\ref{fig:timing} stay nearly flat after initialization. On IEEE~30-G1, the oracle breaks even at query~138 and runs $6.74\times$ faster over 1,000 queries ($42.52$~s versus $286.46$~s); on a second 30-bus unit (G2), 15 offline solves produce 8 intervals, breaking even at query~18 and achieving a $20.54\times$ speedup ($5.81$~s versus $119.28$~s). On IEEE~118-G11, the oracle breaks even at query~224 and runs $2.00\times$ faster over 500 queries ($311.60$~s versus $623.41$~s), confirming clear space-for-time savings for repeated continuous-offer assessments.
+
+% =====================================================================
+% SECTION VI: CONCLUSION
+% =====================================================================
+\section{Conclusion}\label{sec:conclusion}
+
+This paper developed a parametric framework to evaluate continuous strategic offers and explain market power under multiperiod, network-constrained CHP. Combining a reusable offline CHP price oracle with persistent physical UC regions renders actual profit convex under complete reported LOC settlement, collapsing continuous profit maximization into finitely many offer-schedule candidates. This framework shows why price leverage alone misidentifies market power and proves that switching to a competing schedule cuts actual profit by the exact extra system cost of substitution. Whereas rival operating costs shift an active switching threshold linearly, transmission limits determine which competing schedules can enter and reshape truthful baselines.
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+\end{document}

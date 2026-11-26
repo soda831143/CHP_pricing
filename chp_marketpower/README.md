@@ -5,6 +5,7 @@
 ## 当前成果
 
 - **论文：** [英文 PDF](manuscript/CHP_market_power_draft.pdf)、[LaTeX 正文](manuscript/main.tex)、[中文摘要](manuscript/ABSTRACT_ZH.md)。
+  - **修改基线（2026-11-26 起）：** [新稿 main3rd.tex](paper_results/paper_v6/main3rd.tex)，差异与待裁决见[该目录 README](paper_results/paper_v6/README.md)。
 - **结果：** [统一实验分析](paper_results/RESULTS_ANALYSIS.md)、[图表与源数据入口](paper_results/README.md)。
 - **进度：** [研究状态与后续选择](RESEARCH_PLAN.md)、[建议落实记录](manuscript/REVISION_05.md)、[独立修订核查](manuscript/REVIEW_REVISION_05.md)。
 - **整理：** [保留与删除范围](CLEANUP.md)、[主分支同步约定](PUBLISHING_PREFERENCE.md)。
@@ -24,6 +25,17 @@ G5 提前五小时启动的完整替代方案增加实际系统成本 1,387.35 U
 |`paper_results/`|统一图表、数值源表和独立核验|
 |`manuscript/`|唯一现行论文、术语、修订核查与声明|
 |`dashboard/`|[本地交互工作台](dashboard/README.md)|
+
+### 根目录 `run_*.py` 分工
+
+20 个入口脚本保留在根目录：其中 6 个被测试、`paper_results/`、`mechanism_study/`、`dashboard/` 直接 import（`run_profit_range`、`run_initial_condition_audit`、`run_scope_experiments`、`run_selector_settlement`、`run_oracle_paper_study`、`run_profit_interval`），且 `results/**/manifest.json` 以脚本名记录复现入口。移入子目录会同时破坏 import 与证据链，因此不做目录归并。
+
+| 分组 | 脚本 | 用途 |
+|---|---|---|
+| 价格 Oracle 与参数化 | `run_affine_oracle`、`run_price_oracle`、`run_region_oracle`、`run_value_oracle`、`run_basis_dual_audit` | 构造与核验分段仿射价格 |
+| 物理区间与利润 | `run_profit_range`、`run_profit_interval`、`run_initial_condition_audit`、`run_selector_settlement` | 当前主结果链路 |
+| 实验入口 | `run_scope_experiments`、`run_oracle_paper_study`、`run_unified_bid_experiment`、`run_matched_pricing_experiment`、`run_paper_case` | 有限候选与受控对照 |
+| 早期诊断 | `run_price_probe`、`run_price_vulnerability`、`run_pricing_diagnostics`、`run_profit_validation`、`run_hourly_vulnerability`、`run_parametric_regime_scan` | 历史口径，不承担当前结论 |
 
 [参数化模型](PARAMETRIC_FORMULATION.md)、[区域发现算法](PARAMETRIC_ORACLE_ALGORITHM_20261015.md)、[报价域口径](BID_DOMAIN_AND_SCALING_20261016.md)和[连续利润技术说明](TARGETED_STUDY_20261016.md)保留为技术参考。阶段性规划已整合到上述当前入口；历史版本可从 Git 历史恢复。
 

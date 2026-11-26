@@ -119,3 +119,23 @@
 用户决定自行绘图，已将归档数据整理为paper_results/outputs/section_v_20261111/plot_data.xlsx，共22工作表：使用说明、来源索引、G1价格热图/长表、分段利润、替代出力及原始方案、结算、路径贡献、16处切换、成本门槛、C竞争、条件结算与小时响应、四条独立计时流及两主案例直接绘图表、方向对照和区间证书。保留原精度，数值默认显示两位小数；按源数据逐格回读校验通过，替代出力页视觉核验通过。未新增优化求解或计时。
 
 用户已授权提交推送上述论文修订和Excel至既有主分支research/market-power-parametric-regimes。提交范围限论文、当前图件、绘图导出和相关研究记录；其他仪表板、IEEE118原始算例及无关改动保持工作区现场。远端fetch已完成且推送前本地/远端无分叉；最终提交及接收状态由本次Git推送后核验确认。
+
+## 10. 2026-11-17：当前本地第五部分收敛
+
+当前前文I–IV已更新，本轮只在实际本地稿中修订V：五小节、三图三表，统一pre-switch tie-breaking rule、条件ν和第三方案W（归档C）。核心叙事为利润与两套账目→完整A/B系统替代成本及同价跳降→成本门槛与网络竞争集合→有限评价与定价复用。数字结果两位小数，输入与0.001内侧偏移保留所需精度；保留各条件自身基准、负向δ1响应与Q200未摊销。
+
+plot_data.xlsx的22工作表继续有效。本轮将三图实际消费字段回对原始CSV：价格154×24、分段利润198条、六小时替代出力、两主案例完整1000/500条计时均一致；另核对结算、16跳变、门槛、条件基准及四角优势。完整对偶与全局最优支持仍按历史归档引用，不当作本轮重求。图件与Excel均未修改。绘图列、坐标、单位、跳点、交点和源名C/正文W映射已写入manuscript/DRAFT_PLAN.md第9节；无需新增大实验。
+
+编辑器内置编译已成功，源文件V外区域及现有图件哈希保持不变。最终本地PDF检查记录见manuscript/figures/section_v_revision_20261117.json。本轮执行位置为本地，不新增/切换分支，不修改无关代码；提交推送不在本轮已执行动作内。
+
+下一项最有价值行动：按DRAFT_PLAN第9节绘制三张最终图，优先确认利润跳点和计时交点标记，再替换对应既有图路径。
+
+## 11. 2026-11-26：交接入口与论文基线切换
+
+已建立仓库根 `../AGENTS.md`（agent 自动入口）与 ③ 稿的 `paper_results/paper_v6/README.md`（三稿差异、三项待裁决、编译入口）。本文件继续承担状态正文，不另建 PROJECT_STATE 副本；`manuscript/README.md` 顶部已标注其转为历史稿。
+
+直接核实：分支 `research/market-power-parametric-regimes`，HEAD=`0ed0b29`（11-11，已与远端同步）；工作区 `manuscript/main.tex`、`DRAFT_PLAN.md`、本文件存在未提交改动（main.tex 相对 HEAD 为 +217/−200）；③ 稿目录（11-26）整体未跟踪。论文修改基线由 ② `manuscript/main.tex` 改为 ③ `main3rd.tex`；② 保留为回写来源（附录 A–C、Q200 未摊销、PDF/SVG 图件）。
+
+本轮只读与文档：`pytest tests/test_competition_regimes.py tests/test_profit_identity.py tests/test_paper_components.py tests/test_predictive_mechanism.py` 18 项通过；`python -X utf8 -m paper_results.audit_results` 返回 passed（99 共同区间、116 候选、0 次新求解）。未编译 ③，未运行其余三个 audit，未改正文、图件或数值。
+
+下一项最有价值行动：编译 ③（当前无 PDF），再裁决附录 A–C 去留、Q200 未摊销是否保留、图件管线 JPG 与 PDF/SVG 的取舍。

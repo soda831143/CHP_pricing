@@ -1,5 +1,7 @@
 # 第五版论文与交付入口
 
+> **注意（2026-11-26）**：本目录是第五版及 11-17 工作区稿（②），**已不是当前修改基线**。新基线在 [`paper_v6/main3rd.tex`](../paper_results/paper_v6/main3rd.tex)（说明见[该目录 README](../paper_results/paper_v6/README.md)），论文修改只在那里进行；本目录作为回写来源（附录 A–C、Q200 未摊销、PDF/SVG 图件）保留。
+
 更新：2026-11-03。当前英文题目为 **Strategic Profit Evaluation and Generation Substitution under Multiperiod Convex Hull Pricing**。本轮以首份重评建议为准，暂不按十页压缩；当前编译稿为13页，英文摘要172词、15条引用、四图两表。
 
 - [可阅读 PDF](CHP_market_power_draft.pdf)、[可编辑 LaTeX](main.tex)、[中文摘要](ABSTRACT_ZH.md)

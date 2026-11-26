@@ -8,3 +8,7 @@ energy-reserve/
 *.lp
 *.mps
 
+# 2026-11-26：大体积图件导出暂不入库。需要时删除对应规则后 git add。
+chp_marketpower/paper_results/paper_v6/figures/*.jpg
+chp_marketpower/paper_results/figures/_superseded_*/
+
