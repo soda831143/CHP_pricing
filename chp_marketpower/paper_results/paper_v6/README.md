@@ -42,7 +42,7 @@
 
 ## 编译
 
-沿用 `manuscript/README.md` 的方法，把入口换成 `main3rd.tex`，并从本目录执行（`figures/` 为相对路径）：
+沿用 `manuscript/README.md` 的方法，把入口换成 `main3rd.tex`。在 `chp_marketpower` 下依次执行（先进入本目录，`figures/` 按相对路径解析）：
 
 ```powershell
 $env:PYTHONUTF8='1'
